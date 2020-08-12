@@ -1,0 +1,142 @@
+abbr {
+	text-decoration: none;
+}
+
+#app {
+	width: 100%;
+}
+
+#app-navigation {
+	color: #222;
+}
+
+#list-category {
+	height: auto !important;
+	border-bottom: 1px solid var(--color-border);
+}
+
+#list-category > li {
+	padding: 0.8em 1em;
+	cursor: pointer;
+	opacity: 0.57;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
+#list-category > li:hover,
+#list-category > .active {
+	opacity: 1;
+}
+
+#list-category > li > svg {
+	fill: #222;
+	width: 1.2em;
+	height: 1.5em;
+	vertical-align: baseline;
+	margin-right: 0.5em;
+}
+
+.app-settings-item {
+	background-position: 0 center;
+	opacity: 0.57;
+}
+
+.app-settings-item:hover {
+	opacity: 1;
+}
+
+.app-settings-item > button,
+.app-settings-item > button:active {
+	margin: 0;
+	padding: 0.25em 1.5em;
+	border: none;
+	background: none !important;
+	font-weight: inherit;
+	width: 100%;
+	text-align: left;
+}
+
+/* calendar */
+
+#calendar {
+	margin: 0.5em;
+}
+
+.pika-title {
+	display: flex;
+	justify-content: center;
+	position: relative;
+}
+
+.pika-title > button {
+	position: absolute;
+	width: 34px;
+	height: 34px;
+}
+
+.pika-title > .pika-prev {
+	left: 0;
+}
+
+.pika-title > .pika-next {
+	right: 0;
+}
+
+.pika-title > .pika-label {
+	font-size: 0;
+}
+
+#calendar table {
+	width: 100%;
+}
+
+#calendar tr:hover {
+	background: none;
+}
+
+#calendar th {
+	text-align: center;
+	font-weight: bold;
+	width: calc(100% / 7);
+	color: var(--color-primary);
+}
+
+#calendar td {
+	text-align: center;
+	vertical-align: middle;
+}
+
+#calendar td button {
+	border: 1px solid transparent;
+	background: none;
+	margin: 0;
+	padding: 0;
+	width: 34px;
+	height: 34px;
+	font-weight: normal;
+	opacity: 0.66;
+	transition: opacity 0.25s;
+}
+
+#calendar td.is-outside-current-month button {
+	opacity: 0.2;
+}
+
+#calendar td.is-today button {
+	border-color: var(--color-primary);
+	opacity: 1;
+}
+
+#calendar td.has-entries button {
+	font-weight: bold;
+	text-decoration: overline;
+}
+
+#calendar td button:hover {
+	opacity: 1;
+}
+
+#calendar td.is-selected button {
+	border-color: #888;
+}

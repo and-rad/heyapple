@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="32"
+   width="32"
+   version="1"
+   viewBox="0 0 32 32"
+   id="svg4"
+   sodipodi:docname="app.svg"
+   inkscape:version="1.0 (4035a4fb49, 2020-05-01)">
+  <path
+     sodipodi:nodetypes="ssssssssssss"
+     d="m 31.735852,16.955686 c 0,7.287186 -3.698378,12.762529 -10.02099,14.396288 -1.344286,0.347363 -3.932408,-1.531388 -5.481778,-1.531388 -1.576313,0 -4.894179,2.121232 -6.3328456,1.696496 C 3.2739762,29.560819 0,23.260243 0,16 0,10.894116 2.7481334,6.7015857 7.3899254,5.7502309 9.7480512,5.2669231 12.335738,6.6102506 15.787381,7.0250716 c 0.531271,0.063848 -0.204113,-6.58869506 0.293512,-6.58869506 0.123773,0 2.090068,-0.70077943 2.265166,0.0668958 C 18.730229,2.18757 17.641304,6.8183016 17.880806,6.802938 21.34405,6.5807785 22.446587,4.7448233 25.906097,6.0939943 c 3.898016,1.5201838 5.829755,6.3472827 5.829755,10.8616917 z"
+     style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:2.99999"
+     id="path904" />
+  <defs
+     id="defs8" />
+  <sodipodi:namedview
+     inkscape:pagecheckerboard="true"
+     showgrid="false"
+     inkscape:document-rotation="0"
+     id="namedview899"
+     inkscape:zoom="14.75"
+     inkscape:cx="10.715682"
+     inkscape:cy="20.425818"
+     inkscape:window-width="1920"
+     inkscape:window-height="1005"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg4" />
+  <metadata
+     id="metadata12154">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title></dc:title>
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+</svg>

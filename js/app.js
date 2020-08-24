@@ -4,13 +4,33 @@ if (!OCA.HeyApple) {
 
 OCA.HeyApple.Core = (function(){
 	var _data = {};
+	var _rxTrim = /\d+\s?(ml|l|g|kg)\s/;
+	var _rxAmount = /\d+\s?(ml|l|g|kg)/;
 
 	var _add = function(amount, name) {
-		return amount + 1;
+		let a1 = amount.split(" ");
+		let a2 = _amount(name).split(" ");
+		let n1 = parseInt(a1[0]);
+		let n2 = parseInt(a2[0]);
+		let u1 = a1[1];
+		let u2 = a2[1];
+
+		if (u1 == undefined && u2 == undefined) {
+			return n1 + n2;
+		}
+
+		if (["g","ml"].indexOf(u1) >= 0 && ["kg","l"].indexOf(u2) >= 0) {
+			n2 *= 1000;
+		}else if (["kg","l"].indexOf(u1) >= 0 && ["g","ml"].indexOf(u2) >= 0) {
+			n2 /= 1000;
+		}
+
+		return `${n1+n2} ${u1}`;
 	}
 
 	var _amount = function(name) {
-		return 1;
+		let out = name.match(_rxAmount);
+		return out ? out[0] : "1";
 	}
 
 	var _selected = function(listId, itemId) {
@@ -18,7 +38,7 @@ OCA.HeyApple.Core = (function(){
 	}
 
 	var _trim = function(name) {
-		return name;
+		return name.replace(_rxTrim, "");
 	}
 
 	return {

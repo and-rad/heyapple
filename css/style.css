@@ -59,55 +59,58 @@ abbr {
 
 /* calendar */
 
-#calendar {
+#calendar2 {
 	margin: 0.5em;
 }
 
-.pika-title {
+#calendar2 > div {
 	display: flex;
-	justify-content: center;
-	position: relative;
+	justify-content: space-between;
 }
 
-.pika-title > button {
-	position: absolute;
+#calendar2 > div > button {
 	width: 34px;
 	height: 34px;
 }
 
-.pika-title > .pika-prev {
-	left: 0;
+#calendar2 button .arrow {
+	border-top: 4px solid transparent;
+	border-bottom: 4px solid transparent;
+	display: block;
 }
 
-.pika-title > .pika-next {
-	right: 0;
+#calendar2 .arrow.prev {
+	border-right: 6px solid var(--color-main-text);
+	margin-right: 2px;
 }
 
-.pika-title > .pika-label {
-	font-size: 0;
+#calendar2 .arrow.next {
+	border-left: 6px solid var(--color-main-text);
+	margin-left: 2px;
 }
 
-#calendar table {
+#calendar2 table {
 	width: 100%;
 }
 
-#calendar tr:hover {
+#calendar2 tr:hover {
 	background: none;
 }
 
-#calendar th {
+#calendar2 th {
 	text-align: center;
 	font-weight: bold;
 	width: calc(100% / 7);
 	color: var(--color-primary);
 }
 
-#calendar td {
+#calendar2 td {
 	text-align: center;
 	vertical-align: middle;
+	padding: 0.2em 0;
 }
 
-#calendar td button {
+#calendar2 td button {
 	border: 1px solid transparent;
 	background: none;
 	margin: 0;
@@ -119,25 +122,25 @@ abbr {
 	transition: opacity 0.25s;
 }
 
-#calendar td.is-outside-current-month button {
+#calendar2 td button:hover {
+	opacity: 1 !important;
+}
+
+#calendar2 td.outside button {
 	opacity: 0.2;
 }
 
-#calendar td.is-today button {
+#calendar2 td.today button {
 	border-color: var(--color-primary);
 	opacity: 1;
 }
 
-#calendar td.has-entries button {
+#calendar2 td.has-entries button {
 	font-weight: bold;
 	text-decoration: overline;
 }
 
-#calendar td button:hover {
-	opacity: 1;
-}
-
-#calendar td.is-selected button {
+#calendar2 td.selected button {
 	border-color: #888;
 }
 

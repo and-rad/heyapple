@@ -99,6 +99,40 @@ OCA.HeyApple.Core = (function(){
 })();
 
 OCA.HeyApple.UI = (function(){
+	var _refreshCalendar = function() {
+		let month = document.querySelector("#calendar2 select.month").value;
+		let year = document.querySelector("#calendar2 select.year").value;
+		let date = new Date(year, month);
+		date.setDate(1 - date.getDay());
+
+		let today = new Date();
+		let d = today.getDate();
+		let m = today.getMonth();
+		let y = today.getFullYear();
+
+		let cells = document.querySelectorAll("#calendar2 tbody td");
+		for (let i = 0, cell; cell = cells[i]; i++) {
+			let day = date.getDate();
+
+			cell.firstElementChild.textContent = day;
+			cell.classList.remove("selected");
+
+			if (date.getMonth() != month) {
+				cell.classList.add("outside");
+			} else {
+				cell.classList.remove("outside");
+			}
+
+			if (day == d && month == m && year == y) {
+				cell.classList.add("today");
+			} else {
+				cell.classList.remove("today");
+			}
+
+			date.setDate(day+1);
+		}
+	};
+
 	var _refreshLists = function() {
 		let frag = document.createDocumentFragment();
 
@@ -161,23 +195,13 @@ OCA.HeyApple.UI = (function(){
 		OCA.HeyApple.Core.toggleBought(list.dataset.name, item.dataset.id);
 	};
 
+	var _onDateClicked = function(evt) {
+		let btn = evt.target.closest("td");
+		btn.classList.toggle("selected");
+	};
+
 	return {
 		init: function() {
-			let picker = new Pikaday({
-				field: document.getElementById("calendar"),
-				bound: false,
-				container: document.getElementById("calendar"),
-				showDaysInNextAndPreviousMonths: true,
-				firstDay: 1,
-				i18n: {
-					previousMonth : "←",
-					nextMonth     : "→",
-					months        : ["January","February","March","April","May","June","July","August","September","October","November","December"],
-					weekdays      : ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"],
-					weekdaysShort : ["Su","Mo","Tu","We","Th","Fr","Sa"]
-				}
-			});
-
 			document.querySelector("#settings-item-scan").addEventListener("click", function() {
 				OCA.HeyApple.Backend.scan(document.querySelector("#path-settings").value, function(obj) {
 					if (obj.success) {
@@ -186,7 +210,38 @@ OCA.HeyApple.UI = (function(){
 				});
 			});
 
+			let now = new Date();
+			let months = document.querySelector("#calendar2 select.month");
+			months.value = now.getMonth();
+			months.addEventListener("change", _refreshCalendar);
+
+			let years = document.querySelector("#calendar2 select.year");
+			years.value = now.getFullYear();
+			years.addEventListener("change", _refreshCalendar);
+
+			let btns = document.querySelectorAll("#calendar2 > div > button");
+			btns[0].addEventListener("click", function() {
+				months.selectedIndex = (months.selectedIndex + 11) % 12;
+				if (months.selectedIndex == 11) {
+					years.selectedIndex = (years.selectedIndex + 2) % 3;
+				}
+				_refreshCalendar();
+			});
+			btns[1].addEventListener("click", function() {
+				months.selectedIndex = (months.selectedIndex + 1) % 12;
+				if (months.selectedIndex == 0) {
+					years.selectedIndex = (years.selectedIndex + 1) % 3;
+				}
+				_refreshCalendar();
+			});
+
+			let days = document.querySelectorAll("#calendar2 tbody td button");
+			for (let i = 0, day; day = days[i]; i++) {
+				day.addEventListener("click", _onDateClicked);
+			}
+
 			_refreshLists();
+			_refreshCalendar();
 		},
 	};
 })();

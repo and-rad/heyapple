@@ -1,6 +1,5 @@
 <?php
 script('heyapple', 'app');
-script('heyapple', 'pikaday');
 style('heyapple', 'style');
 ?>
 

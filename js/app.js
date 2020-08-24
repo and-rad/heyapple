@@ -134,6 +134,7 @@ OCA.HeyApple.UI = (function(){
 	};
 
 	var _refreshLists = function() {
+		let activeItem = document.querySelector("#list-category .active");
 		let frag = document.createDocumentFragment();
 
 		OCA.HeyApple.Core.listNames().forEach(function(name) {
@@ -144,6 +145,10 @@ OCA.HeyApple.UI = (function(){
 				_showList(evt.target);
 			});
 
+			if (!activeItem || activeItem.dataset.name == name) {
+				activeItem = item;
+			}
+
 			frag.appendChild(item);
 		});
 
@@ -151,8 +156,8 @@ OCA.HeyApple.UI = (function(){
 		list.textContent = "";
 		list.appendChild(frag);
 
-		if (list.firstElementChild) {
-			_showList(list.firstElementChild);
+		if (activeItem) {
+			_showList(activeItem);
 		}
 	};
 

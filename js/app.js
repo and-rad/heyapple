@@ -4,6 +4,7 @@ if (!OCA.HeyApple) {
 
 OCA.HeyApple.Core = (function(){
 	var _data = {};
+	var _progress = {};
 	var _rxTrim = /\d+\s?(ml|l|g|kg)\s/;
 	var _rxAmount = /\d+\s?(ml|l|g|kg)/;
 
@@ -33,7 +34,11 @@ OCA.HeyApple.Core = (function(){
 		return out ? out[0] : "1";
 	}
 
-	var _selected = function(listId, itemId) {
+	var _bought = function(listId, itemId) {
+		let listInfo = _progress[listId];
+		if (listInfo) {
+			return listInfo[itemId] || false;
+		}
 		return false;
 	}
 
@@ -53,11 +58,11 @@ OCA.HeyApple.Core = (function(){
 			return Object.keys(_data);
 		},
 
-		list: function(name) {
+		list: function(listId) {
 			let out = {};
 
-			if (_data[name]) {
-				_data[name].forEach(function(elem) {
+			if (_data[listId]) {
+				_data[listId].forEach(function(elem) {
 					let name = elem[1];
 					let id = elem[2];
 					let amount = _amount(name);
@@ -67,7 +72,7 @@ OCA.HeyApple.Core = (function(){
 					} else {
 						out[id] = {
 							id: id,
-							selected: _selected(name, id),
+							bought: _bought(listId, id),
 							name: _trim(name),
 							amount: amount,
 							aisle: "None"
@@ -77,6 +82,14 @@ OCA.HeyApple.Core = (function(){
 			}
 
 			return Object.values(out);
+		},
+
+		toggleBought: function(listId, itemId) {
+			if (!_progress[listId]) {
+				_progress[listId] = {};
+			}
+			let bought = _progress[listId][itemId] || false;
+			_progress[listId][itemId] = !bought;
 		}
 	};
 })();
@@ -119,7 +132,7 @@ OCA.HeyApple.UI = (function(){
 			let row = tmpl.cloneNode(true);
 			row.dataset.id = item.id;
 			row.addEventListener("click", _onItemClicked);
-			if (item.selected) {
+			if (item.bought) {
 				row.classList.add("selected");
 			}
 
@@ -139,7 +152,9 @@ OCA.HeyApple.UI = (function(){
 	var _onItemClicked = function(evt) {
 		let item = evt.target.closest("tr");
 		item.classList.toggle("selected");
-		console.log(item.dataset.id);
+
+		let list = document.querySelector("#list-category li.active");
+		OCA.HeyApple.Core.toggleBought(list.dataset.name, item.dataset.id);
 	};
 
 	return {

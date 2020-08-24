@@ -1,5 +1,8 @@
 {
 	"translations": {
+		"err.nodir": "directory doesn't exist",
+		"err.notdir": "not a directory",
+		"err.rodir": "read-only directory",
 		"newlist": "New Shopping List"
 	},
 	"pluralForm": ""

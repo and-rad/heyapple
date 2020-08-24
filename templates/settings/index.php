@@ -4,5 +4,8 @@
 	</div>
 	<div id='app-settings-content'>
 		<input type='text' id='path-settings' placeholder='Directory'>
+		<ul>
+			<li class='app-settings-item icon-search'><button id='settings-item-scan'>Scan for lists</button></li>
+		</ul>
 	</div>
 </div>

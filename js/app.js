@@ -178,6 +178,14 @@ OCA.HeyApple.UI = (function(){
 				}
 			});
 
+			document.querySelector("#settings-item-scan").addEventListener("click", function() {
+				OCA.HeyApple.Backend.scan(document.querySelector("#path-settings").value, function(obj) {
+					if (obj.success) {
+						window.location.reload();
+					}
+				});
+			});
+
 			_refreshLists();
 		},
 	};
@@ -210,6 +218,13 @@ OCA.HeyApple.Backend = (function() {
 
 		getLists: function(callback) {
 			this.get(OC.generateUrl("apps/heyapple/api/0.1/lists"), function() {
+				callback(JSON.parse(this.response));
+			});
+		},
+
+		scan: function(dir, callback) {
+			let data = `dir=${dir}`;
+			this.post(OC.generateUrl("apps/heyapple/api/0.1/scan"), data, function() {
 				callback(JSON.parse(this.response));
 			});
 		},

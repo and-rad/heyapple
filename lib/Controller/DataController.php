@@ -30,22 +30,12 @@ class DataController extends Controller {
 	 */
 	public function lists() : JSONResponse {
 		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
-
-		$root = $this->root->getUserFolder($this->userId);
-		if (!$root->nodeExists($dir)) {
-			return new JSONResponse(['success' => false, 'message' => "directory doesn't exist"]);
+		list($ok, $msg) = $this->checkDirectory($dir);
+		if (!$ok) {
+			return new JSONResponse(['success' => $ok, 'message' => $msg]);
 		}
 
-		$node = $root->get($dir);
-		if ($node->getType() != \OCP\Files\FileInfo::TYPE_FOLDER) {
-			return new JSONResponse(['success' => false, 'message' => "not a directory"]);
-		}
-
-		if (!$node->isUpdateable()) {
-			return new JSONResponse(['success' => false, 'message' => "read-only directory"]);
-		}
-
-		$data = $this->loadLists($node);
+		$data = $this->loadLists($this->root->getUserFolder($this->userId)->get($dir));
 		$ok = count($data) > 0;
 		$msg = $ok ? "lists.ok" : "lists.err";
 
@@ -68,6 +58,38 @@ class DataController extends Controller {
 		return new JSONResponse([
 			'directory' => $dir,
 		]);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function scan(string $dir) : JSONResponse {
+		list($ok, $msg) = $this->checkDirectory($dir);
+
+		if ($ok) {
+			$this->config->setUserValue($this->userId, $this->appName, 'directory', $dir);
+			return $this->lists();
+		}
+
+		return new JSONResponse(['success' => $ok, 'message' => $msg]);
+	}
+
+	private function checkDirectory($dir) : array {
+		$root = $this->root->getUserFolder($this->userId);
+		if (!$root->nodeExists($dir)) {
+			return [false, "err.nodir"];
+		}
+
+		$node = $root->get($dir);
+		if ($node->getType() != \OCP\Files\FileInfo::TYPE_FOLDER) {
+			return [false, "err.notdir"];
+		}
+
+		if (!$node->isUpdateable()) {
+			return [false, "err.rodir"];
+		}
+
+		return [true, 'dir.ok'];
 	}
 
 	private function loadLists($node) : array {

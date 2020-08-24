@@ -72,6 +72,14 @@ OCA.HeyApple.Core = (function(){
 			});
 		},
 
+		listDates: function() {
+			let dates = {};
+			for (let key in _data) {
+				_data[key].forEach(item => dates[item[0]]= true);
+			}
+			return Object.keys(dates);
+		},
+
 		listNames: function() {
 			return Object.keys(_data);
 		},
@@ -131,6 +139,7 @@ OCA.HeyApple.UI = (function(){
 		let m = today.getMonth();
 		let y = today.getFullYear();
 
+		let dates = OCA.HeyApple.Core.listDates();
 		let cells = document.querySelectorAll("#calendar2 tbody td");
 		for (let i = 0, cell; cell = cells[i]; i++) {
 			let day = date.getDate();
@@ -155,6 +164,12 @@ OCA.HeyApple.UI = (function(){
 				cell.classList.add("today");
 			} else {
 				cell.classList.remove("today");
+			}
+
+			if (dates.indexOf(iso) != -1) {
+				cell.classList.add("has-entries");
+			} else {
+				cell.classList.remove("has-entries");
 			}
 
 			date.setDate(day+1);

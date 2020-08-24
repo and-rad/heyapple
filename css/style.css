@@ -145,7 +145,7 @@ abbr {
 
 #calendar2 td.has-entries button {
 	font-weight: bold;
-	text-decoration: overline;
+	text-decoration: underline double;
 }
 
 #calendar2 td.selected button {

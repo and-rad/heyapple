@@ -29,7 +29,7 @@ class DataController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function lists() : JSONResponse {
-		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory', 'FDDB');
+		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
 
 		$root = $this->root->getUserFolder($this->userId);
 		if (!$root->nodeExists($dir)) {
@@ -57,6 +57,17 @@ class DataController extends Controller {
 	 */
 	public function completed() : JSONResponse {
 		return new JSONResponse(['success' => $ok, 'message' => $msg, 'data' => $data]);
+	}
+
+	/**
+	 * @NoAdminRequired
+	 */
+	public function config() : JSONResponse {
+		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
+
+		return new JSONResponse([
+			'directory' => $dir,
+		]);
 	}
 
 	private function loadLists($node) : array {

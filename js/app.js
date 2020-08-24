@@ -48,8 +48,12 @@ OCA.HeyApple.Core = (function(){
 
 	return {
 		init: function() {
+			OCA.HeyApple.Backend.getConfig(function(obj) {
+				document.querySelector("#path-settings").value = obj.directory;
+			});
+
 			OCA.HeyApple.Backend.getLists(function(obj) {
-				_data = obj.data;
+				_data = obj.success ? obj.data : {};
 				OCA.HeyApple.UI.init();
 			});
 		},
@@ -196,6 +200,12 @@ OCA.HeyApple.Backend = (function() {
 			xhr.setRequestHeader("requesttoken", OC.requestToken);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send(data);
+		},
+
+		getConfig: function(callback) {
+			this.get(OC.generateUrl("apps/heyapple/api/0.1/config"), function() {
+				callback(JSON.parse(this.response));
+			});
 		},
 
 		getLists: function(callback) {

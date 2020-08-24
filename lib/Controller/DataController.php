@@ -67,7 +67,9 @@ class DataController extends Controller {
 				$csv = array_map(function($a){ return str_getcsv($a, ";"); }, file($this->abs($f)));
 				array_walk($csv, function(&$a) use ($csv) {
 					$a = array_slice($a, 0, 3);
-					$a[1] = utf8_encode($a[1]);
+					if (!mb_check_encoding($a[1],'UTF-8')) {
+						$a[1] = utf8_encode($a[1]);
+					}
 				});
 				array_shift($csv);
 				$data[basename($f->getName(), '.csv')] = $csv;

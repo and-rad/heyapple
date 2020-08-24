@@ -206,6 +206,18 @@ th:hover .sort-indicator.hidden {
 	opacity: 0.3;
 }
 
+#app-content tbody td > div {
+	display: flex;
+	align-items: center;
+}
+
+#app-content tbody td > div > span {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	width: 0;
+	flex-grow: 1;
+}
+
 #app-content tbody tr.selected .selection div,
 #app-content tbody tr:hover .selection div {
 	opacity: 1;
@@ -220,4 +232,15 @@ th:hover .sort-indicator.hidden {
 #app-content table .count {
 	width: 5em;
 	text-align: right;
+}
+
+#app-content table .aisle {
+	display: none;
+}
+
+@media only screen and (min-width: 640px) {
+	#app-content table .aisle {
+		display: table-cell;
+		width: 30%;
+	}
 }

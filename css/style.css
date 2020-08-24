@@ -1,5 +1,5 @@
-abbr {
-	text-decoration: none;
+button, a, select, input, div {
+	-webkit-tap-highlight-color: transparent;
 }
 
 #app {

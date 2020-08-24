@@ -42,6 +42,19 @@ OCA.HeyApple.Core = (function(){
 		return false;
 	}
 
+	var _formatDateStrings = function() {
+		Object.keys(_data).forEach(function(prop) {
+			let list = _data[prop];
+			for (let i = 0,item; item= list[i]; i++) {
+				let [d, m, y] = item[0].split(" ")[0].split(".");
+				let date = new Date(y, m-1, d);
+				if (!isNaN(date)) {
+					item[0] = date.toISOString().split("T")[0];
+				}
+			}
+		});
+	}
+
 	var _trim = function(name) {
 		return name.replace(_rxTrim, "");
 	}
@@ -54,6 +67,7 @@ OCA.HeyApple.Core = (function(){
 
 			OCA.HeyApple.Backend.getLists(function(obj) {
 				_data = obj.success ? obj.data : {};
+				_formatDateStrings();
 				OCA.HeyApple.UI.init();
 			});
 		},

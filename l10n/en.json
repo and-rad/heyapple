@@ -1,9 +1,6 @@
 {
 	"translations": {
-		"cart": "Shopping Lists",
-		"diary": "Diary",
-		"pantry": "Pantry",
-		"recipes": "Recipes"
+		"newlist": "New Shopping List"
 	},
 	"pluralForm": ""
 }

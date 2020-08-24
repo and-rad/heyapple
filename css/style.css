@@ -10,8 +10,8 @@ abbr {
 	color: #222;
 }
 
-#list-category {
-	height: auto !important;
+.app-navigation-new {
+	border-top: 1px solid var(--color-border);
 	border-bottom: 1px solid var(--color-border);
 }
 
@@ -139,4 +139,61 @@ abbr {
 
 #calendar td.is-selected button {
 	border-color: #888;
+}
+
+/* content */
+
+#app-content-wrapper > div {
+	width: 100%;
+}
+
+th.sort {
+	cursor: pointer;
+}
+
+th.sort * {
+	pointer-events: none;
+}
+
+th .sort-indicator {
+	width: 10px;
+	height: 8px;
+	margin-left: 5px;
+	display: inline-block;
+	vertical-align: text-bottom;
+	opacity: 0.3;
+}
+
+th .sort-indicator.hidden {
+	visibility: hidden;
+}
+
+th:hover .sort-indicator.hidden {
+	visibility: visible;
+}
+
+#app-content-wrapper table {
+	width: 100%;
+}
+
+#app-content-wrapper thead,
+#app-content-wrapper th {
+	position: sticky;
+	z-index: 60;
+	top: 50px;
+	background-color: var(--color-main-background-translucent);
+	color: var(--color-text-maxcontrast);
+	height: 4em;
+}
+
+#app-content-wrapper th,
+#app-content-wrapper td {
+	padding: 0.5em;
+	vertical-align: middle;
+	border-bottom: 1px solid var(--color-border);
+}
+
+#app-content-wrapper table .cover,
+#app-content-wrapper table .selection {
+	width: 4.5em;
 }

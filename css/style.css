@@ -143,10 +143,6 @@ abbr {
 
 /* content */
 
-#app-content-wrapper > div {
-	width: 100%;
-}
-
 th.sort {
 	cursor: pointer;
 }
@@ -172,12 +168,12 @@ th:hover .sort-indicator.hidden {
 	visibility: visible;
 }
 
-#app-content-wrapper table {
+#app-content table {
 	width: 100%;
 }
 
-#app-content-wrapper thead,
-#app-content-wrapper th {
+#app-content thead,
+#app-content th {
 	position: sticky;
 	z-index: 60;
 	top: 50px;
@@ -186,14 +182,42 @@ th:hover .sort-indicator.hidden {
 	height: 4em;
 }
 
-#app-content-wrapper th,
-#app-content-wrapper td {
+#app-content th,
+#app-content td {
 	padding: 0.5em;
 	vertical-align: middle;
 	border-bottom: 1px solid var(--color-border);
 }
 
-#app-content-wrapper table .cover,
-#app-content-wrapper table .selection {
-	width: 4.5em;
+#app-content table .selection {
+	padding: 1.2em;
+	width: 3.6em;
+}
+
+#app-content table .selection div {
+	width: 1.2em;
+	height: 1.2em;
+	border: 1px solid #878787;
+	opacity: 0.3;
+	background-position: center;
+}
+
+#app-content tbody tr.selected {
+	opacity: 0.3;
+}
+
+#app-content tbody tr.selected .selection div,
+#app-content tbody tr:hover .selection div {
+	opacity: 1;
+}
+
+#app-content tbody tr.selected .selection div {
+	background-color: var(--color-primary-element);
+	background-image: url('/core/css/../img/actions/checkbox-mark.svg');
+	border-color: var(--color-primary-element);
+}
+
+#app-content table .count {
+	width: 5em;
+	text-align: right;
 }

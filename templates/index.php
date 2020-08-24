@@ -16,3 +16,7 @@ style('heyapple', 'style');
 		</div>
 	</div>
 </div>
+
+<?php
+print_unescaped($this->inc('template/item'));
+?>

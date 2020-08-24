@@ -76,11 +76,16 @@ OCA.HeyApple.Core = (function(){
 			return Object.keys(_data);
 		},
 
-		list: function(listId) {
+		list: function(listId, days) {
 			let out = {};
 
 			if (_data[listId]) {
 				_data[listId].forEach(function(elem) {
+					let date = elem[0];
+					if (date.length != 0 && days.indexOf(date) == -1) {
+						return;
+					}
+
 					let name = elem[1];
 					let id = elem[2];
 					let amount = _amount(name);
@@ -113,6 +118,8 @@ OCA.HeyApple.Core = (function(){
 })();
 
 OCA.HeyApple.UI = (function(){
+	var _selection = {};
+
 	var _refreshCalendar = function() {
 		let month = document.querySelector("#calendar2 select.month").value;
 		let year = document.querySelector("#calendar2 select.year").value;
@@ -127,9 +134,16 @@ OCA.HeyApple.UI = (function(){
 		let cells = document.querySelectorAll("#calendar2 tbody td");
 		for (let i = 0, cell; cell = cells[i]; i++) {
 			let day = date.getDate();
+			let iso = date.toISOString().split("T")[0];
 
 			cell.firstElementChild.textContent = day;
-			cell.classList.remove("selected");
+			cell.firstElementChild.dataset.date = iso;
+
+			if (_selection[iso]) {
+				cell.classList.add("selected");
+			} else {
+				cell.classList.remove("selected");
+			}
 
 			if (date.getMonth() != month) {
 				cell.classList.add("outside");
@@ -184,7 +198,7 @@ OCA.HeyApple.UI = (function(){
 		let tmpl = document.createElement("tr");
 		tmpl.innerHTML = document.querySelector("#template-item").innerHTML;
 
-		let list = OCA.HeyApple.Core.list(elem.dataset.name);
+		let list = OCA.HeyApple.Core.list(elem.dataset.name, Object.keys(_selection));
 		for (let i = 0, item; item = list[i]; i++) {
 			let row = tmpl.cloneNode(true);
 			row.dataset.id = item.id;
@@ -215,8 +229,16 @@ OCA.HeyApple.UI = (function(){
 	};
 
 	var _onDateClicked = function(evt) {
-		let btn = evt.target.closest("td");
-		btn.classList.toggle("selected");
+		evt.target.closest("td").classList.toggle("selected");
+
+		let date = evt.target.dataset.date;
+		if (_selection[date]) {
+			delete _selection[date];
+		} else {
+			_selection[date] = true;
+		}
+
+		_refreshLists();
 	};
 
 	return {

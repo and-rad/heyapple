@@ -149,7 +149,15 @@ abbr {
 }
 
 #calendar2 td.selected button {
-	border-color: #888;
+	border-color: #bbbbbb;
+	background-color: #eeeeee;
+}
+
+#calendar2 td.today.selected button {
+	border-color: var(--color-primary);
+	background-color: var(--color-primary-element-light);
+	color: #ffffff;
+	opacity: 0.75;
 }
 
 /* content */

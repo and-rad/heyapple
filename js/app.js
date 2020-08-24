@@ -296,6 +296,16 @@ OCA.HeyApple.UI = (function(){
 				day.addEventListener("click", _onDateClicked);
 			}
 
+			let date = now;
+			let dates = OCA.HeyApple.Core.listDates();
+			for (let i = 0; i < 7; i++) {
+				let iso = date.toISOString().split("T")[0];
+				if (dates.indexOf(iso) != -1) {
+					_selection[iso] = true;
+				}
+				date.setDate(date.getDate() + 1);
+			}
+
 			_refreshLists();
 			_refreshCalendar();
 		},

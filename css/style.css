@@ -10,6 +10,10 @@ abbr {
 	color: #222;
 }
 
+#app-navigation > div:first-child {
+	overflow-y: auto;
+}
+
 .app-navigation-new {
 	border-top: 1px solid var(--color-border);
 	border-bottom: 1px solid var(--color-border);
@@ -24,8 +28,12 @@ abbr {
 	overflow: hidden;
 }
 
-#list-category > li:hover,
+#list-category > li:hover {
+	opacity: 1;
+}
+
 #list-category > .active {
+	box-shadow: inset 4px 0 var(--color-primary-element);
 	opacity: 1;
 }
 

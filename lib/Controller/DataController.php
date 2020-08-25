@@ -2,6 +2,7 @@
 namespace OCA\HeyApple\Controller;
 
 use OCP\IConfig;
+use OCP\IL10N;
 use OCP\IRequest;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Controller;
@@ -11,18 +12,21 @@ class DataController extends Controller {
 	private $userId;
 	private $config;
 	private $root;
+	private $l;
 
 	public function __construct(
 		$AppName,
 		IRequest $request,
 		$UserId,
 		IConfig $config,
-		IRootFolder $rootFolder
+		IRootFolder $rootFolder,
+		IL10N $l
 	) {
 		parent::__construct($AppName, $request);
 		$this->userId = $UserId;
 		$this->config = $config;
 		$this->root = $rootFolder;
+		$this->l = $l;
 	}
 
 	/**
@@ -30,12 +34,20 @@ class DataController extends Controller {
 	 */
 	public function lists() : JSONResponse {
 		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
-		list($ok, $msg) = $this->checkDirectory($dir);
-		if (!$ok) {
-			return new JSONResponse(['success' => $ok, 'message' => $msg]);
+		$data = $this->loadLists($dir);
+		$aisles = $this->loadAisles($dir);
+
+		foreach ($data as &$list) {
+			foreach ($list as &$item) {
+				foreach ($aisles as $aisle) {
+					if (in_array($item[2],$aisle->ids)) {
+						$item[] = $this->l->t($aisle->key);
+						break;
+					}
+				}
+			}
 		}
 
-		$data = $this->loadLists($this->root->getUserFolder($this->userId)->get($dir));
 		$ok = count($data) > 0;
 		$msg = $ok ? "msg.ok" : "err.empty";
 
@@ -110,9 +122,10 @@ class DataController extends Controller {
 		return [true, 'dir.ok'];
 	}
 
-	private function loadLists($node) : array {
+	private function loadLists(string $dir) : array {
 		$data = [];
 
+		$node = $this->root->getUserFolder($this->userId)->get($dir);
 		foreach ($node->getDirectoryListing() as $f) {
 			if (strcasecmp($f->getExtension(), 'csv') == 0) {
 				$csv = array_map(function($a){ return str_getcsv($a, ";"); }, file($this->abs($f)));
@@ -125,6 +138,17 @@ class DataController extends Controller {
 				array_shift($csv);
 				$data[basename($f->getName(), '.csv')] = $csv;
 			}
+		}
+
+		return $data;
+	}
+
+	private function loadAisles(string $dir) : array {
+		$data = [];
+
+		$node = $this->root->getUserFolder($this->userId)->get($dir);
+		if ($node->nodeExists('aisles.json')) {
+			$data = json_decode($node->get('aisles.json')->getContent());
 		}
 
 		return $data;

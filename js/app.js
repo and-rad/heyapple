@@ -110,7 +110,7 @@ OCA.HeyApple.Core = (function(){
 							bought: _bought(listId, id),
 							name: _trim(name),
 							amount: amount,
-							aisle: "None"
+							aisle: elem[3]
 						};
 					}
 				});

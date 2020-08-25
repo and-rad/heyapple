@@ -1,5 +1,8 @@
 {
 	"translations": {
+		"aisle.clean": "Cleaning Stuff",
+		"aisle.fruit": "Fruit & Vegetables",
+		"aisle.milk": "Milk & Dairy Products",
 		"day.1": "Mo",
 		"day.2": "Tu",
 		"day.3": "We",

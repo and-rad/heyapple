@@ -7,6 +7,7 @@
 		"day.5": "Fr",
 		"day.6": "Sa",
 		"day.7": "Su",
+		"err.empty": "empty dataset",
 		"err.nodir": "directory doesn't exist",
 		"err.notdir": "not a directory",
 		"err.rodir": "read-only directory",
@@ -22,6 +23,7 @@
 		"month.10": "October",
 		"month.11": "November",
 		"month.12": "December",
+		"msg.ok": "OK",
 		"newlist": "New Shopping List"
 	},
 	"pluralForm": ""

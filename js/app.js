@@ -37,7 +37,7 @@ OCA.HeyApple.Core = (function(){
 	var _bought = function(listId, itemId) {
 		let listInfo = _progress[listId];
 		if (listInfo) {
-			return listInfo[itemId] || false;
+			return listInfo.indexOf(itemId) != -1;
 		}
 		return false;
 	}
@@ -63,12 +63,16 @@ OCA.HeyApple.Core = (function(){
 		init: function() {
 			OCA.HeyApple.Backend.getConfig(function(obj) {
 				document.querySelector("#path-settings").value = obj.directory;
-			});
 
-			OCA.HeyApple.Backend.getLists(function(obj) {
-				_data = obj.success ? obj.data : {};
-				_formatDateStrings();
-				OCA.HeyApple.UI.init();
+				OCA.HeyApple.Backend.getCompleted(function(obj) {
+					_progress = obj.success ? obj.data : {};
+
+					OCA.HeyApple.Backend.getLists(function(obj) {
+						_data = obj.success ? obj.data : {};
+						_formatDateStrings();
+						OCA.HeyApple.UI.init();
+					});
+				});
 			});
 		},
 
@@ -117,10 +121,15 @@ OCA.HeyApple.Core = (function(){
 
 		toggleBought: function(listId, itemId) {
 			if (!_progress[listId]) {
-				_progress[listId] = {};
+				_progress[listId] = [];
 			}
-			let bought = _progress[listId][itemId] || false;
-			_progress[listId][itemId] = !bought;
+			let listInfo = _progress[listId];
+			let idx = listInfo.indexOf(itemId);
+			if (idx > -1) {
+				listInfo.splice(idx, 1);
+			} else {
+				listInfo.push(itemId);
+			}
 		}
 	};
 })();
@@ -329,6 +338,12 @@ OCA.HeyApple.Backend = (function() {
 			xhr.setRequestHeader("requesttoken", OC.requestToken);
 			xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
 			xhr.send(data);
+		},
+
+		getCompleted: function(callback) {
+			this.get(OC.generateUrl("apps/heyapple/api/0.1/completed"), function() {
+				callback(JSON.parse(this.response));
+			});
 		},
 
 		getConfig: function(callback) {

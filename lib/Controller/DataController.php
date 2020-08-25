@@ -37,7 +37,7 @@ class DataController extends Controller {
 
 		$data = $this->loadLists($this->root->getUserFolder($this->userId)->get($dir));
 		$ok = count($data) > 0;
-		$msg = $ok ? "lists.ok" : "lists.err";
+		$msg = $ok ? "msg.ok" : "err.empty";
 
 		return new JSONResponse(['success' => $ok, 'message' => $msg, 'data' => $data]);
 	}
@@ -46,6 +46,16 @@ class DataController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function completed() : JSONResponse {
+		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
+		list($ok, $msg) = $this->checkDirectory($dir);
+		if (!$ok) {
+			return new JSONResponse(['success' => $ok, 'message' => $msg]);
+		}
+
+		$data = $this->loadCompleted($this->root->getUserFolder($this->userId)->get($dir));
+		$ok = $data != NULL;
+		$msg = $ok ? "msg.ok" : "err.empty";
+
 		return new JSONResponse(['success' => $ok, 'message' => $msg, 'data' => $data]);
 	}
 
@@ -106,6 +116,19 @@ class DataController extends Controller {
 				});
 				array_shift($csv);
 				$data[basename($f->getName(), '.csv')] = $csv;
+			}
+		}
+
+		return $data;
+	}
+
+	private function loadCompleted($node) : object {
+		$data = NULL;
+
+		foreach ($node->getDirectoryListing() as $f) {
+			if (strcasecmp($f->getExtension(), 'json') == 0) {
+				$data = json_decode($f->getContent());
+				break;
 			}
 		}
 

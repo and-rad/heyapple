@@ -211,6 +211,10 @@ th:hover .sort-indicator.hidden {
 	padding: 1em 0.5em;
 }
 
+#app-content th.selection {
+	padding: 1em 0 1em 1.2em;
+}
+
 #app-content td.selection {
 	padding: 1.2em 0 1.2em 1.2em;
 	width: 2.4em;
@@ -242,11 +246,17 @@ th:hover .sort-indicator.hidden {
 }
 
 #app-content tbody tr.selected .selection div,
-#app-content tbody tr:hover .selection div {
+#app-content tbody tr:hover .selection div,
+#app-content th.selection div {
 	opacity: 1;
 }
 
-#app-content tbody tr.selected .selection div {
+#app-content table .selection div:hover {
+	border-color: var(--color-primary-element);
+}
+
+#app-content tbody tr.selected .selection div,
+#app-content th.selection.selected div {
 	background-color: var(--color-primary-element);
 	background-image: url('/core/css/../img/actions/checkbox-mark.svg');
 	border-color: var(--color-primary-element);

@@ -1,7 +1,7 @@
 <table>
 	<thead>
 		<tr>
-			<th class='selection'></th>
+			<th class='selection'><div></div></th>
 			<th class='count sort' data-sort='count'>
 				<span class='sort-indicator hidden icon-triangle-s'></span><?php p($l->t('amount')); ?>
 			</th>

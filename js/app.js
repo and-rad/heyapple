@@ -296,6 +296,22 @@ OCA.HeyApple.UI = (function(){
 		OCA.HeyApple.Core.toggleBought(list.dataset.name, item.dataset.id);
 	};
 
+	var _onHeadClicked = function(evt) {
+		let box = evt.target.closest("th");
+		box.classList.toggle("selected");
+
+		let on = box.classList.contains("selected");
+		let list = document.querySelector("#list-category li.active");
+		let items = document.querySelectorAll("#app-content tbody tr");
+
+		for (let i = 0, item; item = items[i]; i++) {
+			if (item.classList.contains("selected") != on) {
+				item.classList.toggle("selected");
+				OCA.HeyApple.Core.toggleBought(list.dataset.name, item.dataset.id);
+			}
+		}
+	};
+
 	var _onDateClicked = function(evt) {
 		evt.target.closest("td").classList.toggle("selected");
 
@@ -318,6 +334,8 @@ OCA.HeyApple.UI = (function(){
 					}
 				});
 			});
+
+			document.querySelector('#app-content th.selection').addEventListener("click", _onHeadClicked);
 
 			let cols = document.querySelectorAll("th.sort");
 			for (let i = 0, col; col = cols[i]; i++) {

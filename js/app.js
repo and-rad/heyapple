@@ -136,6 +136,8 @@ OCA.HeyApple.Core = (function(){
 
 OCA.HeyApple.UI = (function(){
 	var _selection = {};
+	var _sortBy = "name";
+	var _sortAsc = true;
 
 	var _refreshCalendar = function() {
 		let month = document.querySelector("#calendar2 select.month").value;
@@ -242,6 +244,47 @@ OCA.HeyApple.UI = (function(){
 		let table = document.querySelector("#app-content tbody");
 		table.textContent = "";
 		table.appendChild(frag);
+		_sortTable(_sortBy);
+	};
+
+	var _sortTable = function(cat, toggle) {
+		_sortBy = cat;
+
+		if (toggle) {
+			if (document.querySelector(`#app-content th.${_sortBy} > span:not(.hidden)`)) {
+				_sortAsc = !_sortAsc;
+			}
+		}
+
+		let heads = document.querySelectorAll("#app-content th.sort");
+		for (let i = 0, head; head = heads[i]; i++) {
+			if (head.classList.contains(_sortBy)) {
+				head.firstElementChild.classList.remove("hidden");
+			} else {
+				head.firstElementChild.classList.add("hidden");
+			}
+
+			if (_sortAsc) {
+				head.firstElementChild.classList.remove("icon-triangle-s");
+				head.firstElementChild.classList.add("icon-triangle-n");
+			} else {
+				head.firstElementChild.classList.remove("icon-triangle-n");
+				head.firstElementChild.classList.add("icon-triangle-s");
+			}
+		}
+
+		let body = document.querySelector("#app-content tbody");
+		let tr = Array.from(body.querySelectorAll('tr'));
+		tr.sort(function(a,b){
+			let text1 = a.querySelector(`.${_sortBy} > div > span`).textContent;
+			let text2 = b.querySelector(`.${_sortBy} > div > span`).textContent;
+			let locale = document.documentElement.dataset.locale || "en";
+			let out = text1.localeCompare(text2, locale, {numeric: true});
+			if (!_sortAsc) out *= -1;
+			return out;
+		});
+
+		tr.forEach(t => {body.appendChild(t)});
 	};
 
 	var _onItemClicked = function(evt) {
@@ -274,6 +317,13 @@ OCA.HeyApple.UI = (function(){
 					}
 				});
 			});
+
+			let cols = document.querySelectorAll("th.sort");
+			for (let i = 0, col; col = cols[i]; i++) {
+				col.addEventListener("click", function(evt) {
+					_sortTable(evt.target.dataset.sort, true);
+				});
+			}
 
 			let now = new Date();
 			let months = document.querySelector("#calendar2 select.month");

@@ -193,6 +193,7 @@ th:hover .sort-indicator.hidden {
 
 #app-content thead,
 #app-content th {
+	position: -webkit-sticky;
 	position: sticky;
 	z-index: 60;
 	top: 94px;

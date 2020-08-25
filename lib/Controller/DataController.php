@@ -133,11 +133,8 @@ class DataController extends Controller {
 	private function loadCompleted($node) : ?object {
 		$data = NULL;
 
-		foreach ($node->getDirectoryListing() as $f) {
-			if (strcasecmp($f->getExtension(), 'json') == 0) {
-				$data = json_decode($f->getContent());
-				break;
-			}
+		if ($node->nodeExists('completed.json')) {
+			$data = json_decode($node->get('completed.json')->getContent());
 		}
 
 		return $data;
@@ -147,20 +144,16 @@ class DataController extends Controller {
 		unset($data["_route"]);
 		$data = json_encode($data);
 
-		list($ok, $msg) = $this->checkDirectory($dir);
-		if ($ok) {
-			$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
-			$node = $this->root->getUserFolder($this->userId)->get($dir);
-			if (!$node->nodeExists('bought.json')) {
-				if (!$node->newFile('bought.json')) {
-					$ok = false; $msg = 'err.fnew';
-				}
+		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
+		$node = $this->root->getUserFolder($this->userId)->get($dir);
+		if (!$node->nodeExists('completed.json')) {
+			if (!$node->newFile('completed.json')) {
+				return [false, 'err.fnew'];
 			}
-			$node->get('bought.json')->putContent($data);
-			$msg = 'msg.ok';
 		}
 
-		return [$ok, $msg];
+		$node->get('completed.json')->putContent($data);
+		return [true, 'msg.ok'];
 	}
 
 	private function abs($node) : string {

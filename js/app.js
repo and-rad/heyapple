@@ -5,6 +5,7 @@ if (!OCA.HeyApple) {
 OCA.HeyApple.Core = (function(){
 	var _data = {};
 	var _progress = {};
+	var _progressTimeout = undefined;
 	var _rxTrim = /\d+\s?(ml|l|g|kg)\s/;
 	var _rxAmount = /\d+\s?(ml|l|g|kg)/;
 
@@ -117,6 +118,8 @@ OCA.HeyApple.Core = (function(){
 		},
 
 		toggleBought: function(listId, itemId) {
+			clearTimeout(_progressTimeout);
+
 			if (!_progress[listId]) {
 				_progress[listId] = [];
 			}
@@ -129,7 +132,9 @@ OCA.HeyApple.Core = (function(){
 				listInfo.push(itemId);
 			}
 
-			OCA.HeyApple.Backend.setCompleted(_progress, function() {});
+			_progressTimeout = setTimeout(function(){
+				OCA.HeyApple.Backend.setCompleted(_progress, function(){});
+			}, 1000);
 		}
 	};
 })();

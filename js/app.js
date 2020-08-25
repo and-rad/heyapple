@@ -228,7 +228,7 @@ OCA.HeyApple.UI = (function(){
 		for (let i = 0, item; item = list[i]; i++) {
 			let row = tmpl.cloneNode(true);
 			row.dataset.id = item.id;
-			row.addEventListener("click", _onItemClicked);
+			row.firstElementChild.addEventListener("click", _onItemClicked);
 			if (item.bought) {
 				row.classList.add("selected");
 			}

@@ -219,6 +219,7 @@ th:hover .sort-indicator.hidden {
 	border: 1px solid #878787;
 	opacity: 0.3;
 	background-position: center;
+	cursor: pointer;
 }
 
 #app-content tbody tr.selected {

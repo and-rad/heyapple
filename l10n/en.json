@@ -1,9 +1,15 @@
 {
 	"translations": {
 		"aisle": "Aisle",
-		"aisle.clean": "Cleaning Stuff",
+		"aisle.bread": "Bread & Cereals",
+		"aisle.clean": "Cleaning Supplies",
+		"aisle.frozen": "Frozen Food",
 		"aisle.fruit": "Fruit & Vegetables",
+		"aisle.health": "Health & Beauty",
+		"aisle.meat": "Meat",
 		"aisle.milk": "Milk & Dairy Products",
+		"aisle.sea": "Seafood",
+		"aisle.spice": "Spices & Seasonings",
 		"amount": "Amount",
 		"day.1": "Mo",
 		"day.2": "Tu",

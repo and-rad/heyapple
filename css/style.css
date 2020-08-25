@@ -14,9 +14,9 @@ button, a, select, input, div {
 	overflow-y: auto;
 }
 
-.app-navigation-new {
+.app-navigation-new,
+#list-category {
 	border-top: 1px solid var(--color-border);
-	border-bottom: 1px solid var(--color-border);
 }
 
 #list-category > li {

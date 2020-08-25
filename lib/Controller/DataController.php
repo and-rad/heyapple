@@ -90,7 +90,6 @@ class DataController extends Controller {
 
 		if ($ok) {
 			$this->config->setUserValue($this->userId, $this->appName, 'directory', $dir);
-			return $this->lists();
 		}
 
 		return new JSONResponse(['success' => $ok, 'message' => $msg]);

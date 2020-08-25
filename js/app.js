@@ -216,6 +216,13 @@ OCA.HeyApple.UI = (function(){
 		}
 	};
 
+	var _refreshHeadToggle = function() {
+		let x = document.querySelectorAll("#app-content tbody tr").length;
+		let y = document.querySelectorAll("#app-content tbody tr.selected").length;
+		let head = document.querySelector("#app-content th.selection");
+		x == y ? head.classList.add("selected") : head.classList.remove("selected");
+	}
+
 	var _showList = function(elem) {
 		for (let i = 0, e; e = elem.parentNode.children[i]; i++) {
 			e == elem ? e.classList.add("active") : e.classList.remove("active");
@@ -242,11 +249,11 @@ OCA.HeyApple.UI = (function(){
 			frag.appendChild(row);
 		}
 
-		document.querySelector("th.selection").classList.remove("selected");
 		let table = document.querySelector("#app-content tbody");
 		table.textContent = "";
 		table.appendChild(frag);
 		_sortTable(_sortBy);
+		_refreshHeadToggle();
 	};
 
 	var _sortTable = function(cat, toggle) {
@@ -292,6 +299,7 @@ OCA.HeyApple.UI = (function(){
 	var _onItemClicked = function(evt) {
 		let item = evt.target.closest("tr");
 		item.classList.toggle("selected");
+		_refreshHeadToggle();
 
 		let list = document.querySelector("#list-category li.active");
 		OCA.HeyApple.Core.toggleBought(list.dataset.name, item.dataset.id);

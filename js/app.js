@@ -296,7 +296,7 @@ OCA.HeyApple.UI = (function(){
 				day.addEventListener("click", _onDateClicked);
 			}
 
-			let date = now;
+			let date = new Date(now.getFullYear(), now.getMonth(), now.getDate());
 			let dates = OCA.HeyApple.Core.listDates();
 			for (let i = 0; i < 7; i++) {
 				let iso = date.toISOString().split("T")[0];

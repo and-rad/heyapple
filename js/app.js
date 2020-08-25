@@ -242,6 +242,7 @@ OCA.HeyApple.UI = (function(){
 			frag.appendChild(row);
 		}
 
+		document.querySelector("th.selection").classList.remove("selected");
 		let table = document.querySelector("#app-content tbody");
 		table.textContent = "";
 		table.appendChild(frag);

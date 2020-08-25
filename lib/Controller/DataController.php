@@ -84,6 +84,14 @@ class DataController extends Controller {
 		return new JSONResponse(['success' => $ok, 'message' => $msg]);
 	}
 
+	/**
+	 * @NoAdminRequired
+	 */
+	public function complete() : JSONResponse {
+		list($ok, $msg) = $this->saveCompleted($body = $this->request->getParams());
+		return new JSONResponse(['success' => $ok, 'message' => $msg]);
+	}
+
 	private function checkDirectory($dir) : array {
 		$root = $this->root->getUserFolder($this->userId);
 		if (!$root->nodeExists($dir)) {
@@ -133,6 +141,26 @@ class DataController extends Controller {
 		}
 
 		return $data;
+	}
+
+	private function saveCompleted($data) : array {
+		unset($data["_route"]);
+		$data = json_encode($data);
+
+		list($ok, $msg) = $this->checkDirectory($dir);
+		if ($ok) {
+			$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
+			$node = $this->root->getUserFolder($this->userId)->get($dir);
+			if (!$node->nodeExists('bought.json')) {
+				if (!$node->newFile('bought.json')) {
+					$ok = false; $msg = 'err.fnew';
+				}
+			}
+			$node->get('bought.json')->putContent($data);
+			$msg = 'msg.ok';
+		}
+
+		return [$ok, $msg];
 	}
 
 	private function abs($node) : string {

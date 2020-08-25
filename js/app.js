@@ -123,6 +123,7 @@ OCA.HeyApple.Core = (function(){
 			if (!_progress[listId]) {
 				_progress[listId] = [];
 			}
+
 			let listInfo = _progress[listId];
 			let idx = listInfo.indexOf(itemId);
 			if (idx > -1) {
@@ -130,6 +131,8 @@ OCA.HeyApple.Core = (function(){
 			} else {
 				listInfo.push(itemId);
 			}
+
+			OCA.HeyApple.Backend.setCompleted(_progress, function() {});
 		}
 	};
 })();
@@ -340,6 +343,15 @@ OCA.HeyApple.Backend = (function() {
 			xhr.send(data);
 		},
 
+		postJSON: function(uri, data, callback) {
+			let xhr = new XMLHttpRequest();
+			xhr.addEventListener("load", callback);
+			xhr.open("POST", uri);
+			xhr.setRequestHeader("requesttoken", OC.requestToken);
+			xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
+			xhr.send(JSON.stringify(data));
+		},
+
 		getCompleted: function(callback) {
 			this.get(OC.generateUrl("apps/heyapple/api/0.1/completed"), function() {
 				callback(JSON.parse(this.response));
@@ -354,6 +366,12 @@ OCA.HeyApple.Backend = (function() {
 
 		getLists: function(callback) {
 			this.get(OC.generateUrl("apps/heyapple/api/0.1/lists"), function() {
+				callback(JSON.parse(this.response));
+			});
+		},
+
+		setCompleted: function(completed, callback) {
+			this.postJSON(OC.generateUrl("apps/heyapple/api/0.1/complete"), completed, function() {
 				callback(JSON.parse(this.response));
 			});
 		},

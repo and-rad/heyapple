@@ -209,8 +209,8 @@ th:hover .sort-indicator.hidden {
 }
 
 #app-content table .selection {
-	padding: 1.2em;
-	width: 3.6em;
+	padding: 1.2em 0 1.2em 1.2em;
+	width: 2.4em;
 }
 
 #app-content table .selection div {

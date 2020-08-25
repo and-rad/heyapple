@@ -8,6 +8,7 @@
 		"day.6": "Sa",
 		"day.7": "Su",
 		"err.empty": "empty dataset",
+		"err.fnew": "file creation failed",
 		"err.nodir": "directory doesn't exist",
 		"err.notdir": "not a directory",
 		"err.rodir": "read-only directory",

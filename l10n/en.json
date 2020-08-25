@@ -1,8 +1,10 @@
 {
 	"translations": {
+		"aisle": "Aisle",
 		"aisle.clean": "Cleaning Stuff",
 		"aisle.fruit": "Fruit & Vegetables",
 		"aisle.milk": "Milk & Dairy Products",
+		"amount": "Amount",
 		"day.1": "Mo",
 		"day.2": "Tu",
 		"day.3": "We",
@@ -28,6 +30,7 @@
 		"month.11": "November",
 		"month.12": "December",
 		"msg.ok": "OK",
+		"name": "Name",
 		"newlist": "New Shopping List"
 	},
 	"pluralForm": ""

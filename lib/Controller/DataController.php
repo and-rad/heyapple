@@ -34,10 +34,11 @@ class DataController extends Controller {
 	 */
 	public function lists() : JSONResponse {
 		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
-		$data = $this->loadLists($dir);
+		$lists = $this->loadLists($dir);
 		$aisles = $this->loadAisles($dir);
+		$completed = $this->loadCompleted($dir);
 
-		foreach ($data as &$list) {
+		foreach ($lists as &$list) {
 			foreach ($list as &$item) {
 				foreach ($aisles as $aisle) {
 					if (in_array($item[2],$aisle->ids)) {
@@ -48,27 +49,17 @@ class DataController extends Controller {
 			}
 		}
 
-		$ok = count($data) > 0;
+		$ok = count($lists) > 0;
 		$msg = $ok ? "msg.ok" : "err.empty";
 
-		return new JSONResponse(['success' => $ok, 'message' => $msg, 'data' => $data]);
-	}
-
-	/**
-	 * @NoAdminRequired
-	 */
-	public function completed() : JSONResponse {
-		$dir = $this->config->getUserValue($this->userId, $this->appName, 'directory');
-		list($ok, $msg) = $this->checkDirectory($dir);
-		if (!$ok) {
-			return new JSONResponse(['success' => $ok, 'message' => $msg]);
-		}
-
-		$data = $this->loadCompleted($this->root->getUserFolder($this->userId)->get($dir));
-		$ok = $data != NULL;
-		$msg = $ok ? "msg.ok" : "err.empty";
-
-		return new JSONResponse(['success' => $ok, 'message' => $msg, 'data' => $data]);
+		return new JSONResponse([
+			'success' => $ok,
+			'message' => $msg,
+			'data' => [
+				'lists' => $lists,
+				'completed' => $completed,
+			],
+		]);
 	}
 
 	/**
@@ -153,9 +144,10 @@ class DataController extends Controller {
 		return $data;
 	}
 
-	private function loadCompleted($node) : ?object {
+	private function loadCompleted(string $dir) : ?object {
 		$data = NULL;
 
+		$node = $this->root->getUserFolder($this->userId)->get($dir);
 		if ($node->nodeExists('completed.json')) {
 			$data = json_decode($node->get('completed.json')->getContent());
 		}

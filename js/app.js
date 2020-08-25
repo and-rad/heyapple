@@ -63,16 +63,13 @@ OCA.HeyApple.Core = (function(){
 		init: function() {
 			OCA.HeyApple.Backend.getConfig(function(obj) {
 				document.querySelector("#path-settings").value = obj.directory;
+			});
 
-				OCA.HeyApple.Backend.getCompleted(function(obj) {
-					_progress = obj.success ? obj.data : {};
-
-					OCA.HeyApple.Backend.getLists(function(obj) {
-						_data = obj.success ? obj.data : {};
-						_formatDateStrings();
-						OCA.HeyApple.UI.init();
-					});
-				});
+			OCA.HeyApple.Backend.getLists(function(obj) {
+				_data = obj.success ? obj.data.lists : {};
+				_progress = obj.success ? obj.data.completed || {} : {};
+				_formatDateStrings();
+				OCA.HeyApple.UI.init();
 			});
 		},
 
@@ -350,12 +347,6 @@ OCA.HeyApple.Backend = (function() {
 			xhr.setRequestHeader("requesttoken", OC.requestToken);
 			xhr.setRequestHeader("Content-Type", "application/json; charset=UTF-8");
 			xhr.send(JSON.stringify(data));
-		},
-
-		getCompleted: function(callback) {
-			this.get(OC.generateUrl("apps/heyapple/api/0.1/completed"), function() {
-				callback(JSON.parse(this.response));
-			});
 		},
 
 		getConfig: function(callback) {

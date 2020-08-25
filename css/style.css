@@ -195,10 +195,9 @@ th:hover .sort-indicator.hidden {
 #app-content th {
 	position: sticky;
 	z-index: 60;
-	top: 50px;
+	top: 94px;
 	background-color: var(--color-main-background-translucent);
 	color: var(--color-text-maxcontrast);
-	height: 4em;
 }
 
 #app-content th,
@@ -208,7 +207,11 @@ th:hover .sort-indicator.hidden {
 	border-bottom: 1px solid var(--color-border);
 }
 
-#app-content table .selection {
+#app-content th {
+	padding: 1em 0.5em;
+}
+
+#app-content td.selection {
 	padding: 1.2em 0 1.2em 1.2em;
 	width: 2.4em;
 }

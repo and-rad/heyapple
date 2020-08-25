@@ -150,11 +150,7 @@ OCA.HeyApple.UI = (function(){
 		let date = new Date(year, month);
 		date.setDate(1 - date.getDay());
 
-		let today = new Date();
-		let d = today.getDate();
-		let m = today.getMonth();
-		let y = today.getFullYear();
-
+		let today = (new Date()).toISOString().split("T")[0];
 		let dates = OCA.HeyApple.Core.listDates();
 		let cells = document.querySelectorAll("#calendar2 tbody td");
 		for (let i = 0, cell; cell = cells[i]; i++) {
@@ -176,7 +172,7 @@ OCA.HeyApple.UI = (function(){
 				cell.classList.remove("outside");
 			}
 
-			if (day == d && month == m && year == y) {
+			if (iso == today) {
 				cell.classList.add("today");
 			} else {
 				cell.classList.remove("today");

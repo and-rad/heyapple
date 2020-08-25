@@ -130,7 +130,7 @@ class DataController extends Controller {
 		return $data;
 	}
 
-	private function loadCompleted($node) : object {
+	private function loadCompleted($node) : ?object {
 		$data = NULL;
 
 		foreach ($node->getDirectoryListing() as $f) {

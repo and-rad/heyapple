@@ -100,9 +100,6 @@
 			</tbody>
 		</table>
 	</div>
-	<div class='app-navigation-new' style='display:none;'>
-		<button class='icon-add'><?php p($l->t('newlist')); ?></button>
-	</div>
 	<ul id='list-category'></ul>
 </div>
 

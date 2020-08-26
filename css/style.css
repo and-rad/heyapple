@@ -157,6 +157,11 @@ button, a, select, input, div {
 
 /* content */
 
+#controls .list-title {
+	font-size: 1.2em;
+	align-self: center;
+}
+
 th.sort {
 	cursor: pointer;
 }
@@ -271,5 +276,11 @@ th:hover .sort-indicator.hidden {
 	#app-content table .aisle {
 		display: table-cell;
 		width: 30%;
+	}
+}
+
+@media only screen and (min-width: 1025px) {
+	#controls .list-title {
+		display: none;
 	}
 }

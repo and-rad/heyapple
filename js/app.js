@@ -257,9 +257,13 @@ OCA.HeyApple.UI = (function(){
 			frag.appendChild(row);
 		}
 
+		let title = document.querySelector("#controls .list-title");
+		title.textContent = elem.dataset.name;
+
 		let table = document.querySelector("#app-content tbody");
 		table.textContent = "";
 		table.appendChild(frag);
+
 		_sortTable(_sortBy);
 		_refreshHeadToggle();
 	};

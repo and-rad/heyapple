@@ -10,7 +10,9 @@ style('heyapple', 'style');
 	</div>
 
 	<div id='app-content'>
-		<div id='controls'></div>
+		<div id='controls'>
+			<?php print_unescaped($this->inc('content/controls')); ?>
+		</div>
 		<div id='app-content-wrapper'>
 			<?php print_unescaped($this->inc('content/index')); ?>
 		</div>

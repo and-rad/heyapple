@@ -158,6 +158,7 @@ button, a, select, input, div {
 
 #controls .list-title {
 	font-size: 1.2em;
+	-webkit-align-self: center;
 	align-self: center;
 }
 

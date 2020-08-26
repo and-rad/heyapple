@@ -191,13 +191,16 @@ OCA.HeyApple.UI = (function(){
 	var _refreshLists = function() {
 		let activeItem = document.querySelector("#list-category .active");
 		let frag = document.createDocumentFragment();
+		let tmpl = document.createElement("li");
+		tmpl.innerHTML = document.querySelector("#template-menu-item").innerHTML;
 
 		OCA.HeyApple.Core.listNames().forEach(function(name) {
-			let item = document.createElement("li");
-			item.textContent = name;
+			let item = tmpl.cloneNode(true);
 			item.dataset.name = name;
-			item.addEventListener("click", function(evt) {
-				_showList(evt.target);
+			item.firstElementChild.textContent = name;
+			item.firstElementChild.addEventListener("click", function(evt) {
+				_showList(evt.target.parentNode);
+				evt.preventDefault();
 			});
 
 			if (!activeItem || activeItem.dataset.name == name) {

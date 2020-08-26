@@ -13,4 +13,6 @@
 	</td>
 </template>
 
-
+<template id='template-menu-item'>
+	<a href='#'></a>
+</template>

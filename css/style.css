@@ -20,12 +20,15 @@ button, a, select, input, div {
 }
 
 #list-category > li {
-	padding: 0.8em 1em;
-	cursor: pointer;
 	opacity: 0.57;
 	white-space: nowrap;
 	text-overflow: ellipsis;
 	overflow: hidden;
+}
+
+#list-category > li > a {
+	display: block;
+	padding: 0.8em 1em;
 }
 
 #list-category > li:hover {
@@ -35,14 +38,6 @@ button, a, select, input, div {
 #list-category > .active {
 	box-shadow: inset 4px 0 var(--color-primary-element);
 	opacity: 1;
-}
-
-#list-category > li > svg {
-	fill: #222;
-	width: 1.2em;
-	height: 1.5em;
-	vertical-align: baseline;
-	margin-right: 0.5em;
 }
 
 .app-settings-item {

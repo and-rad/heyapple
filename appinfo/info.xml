@@ -1,23 +1,30 @@
 <?xml version="1.0"?>
-<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
-    <id>heyapple</id>
-    <name>Hey Apple</name>
-    <summary>Manage your diet</summary>
-    <description><![CDATA[An app for managing nutrients & recipes ]]></description>
-    <version>0.0.1</version>
-    <licence>agpl</licence>
-    <author mail="and.rad@posteo.de" >Andreas Raddau</author>
-    <namespace>HeyApple</namespace>
-    <category>organization</category>
-    <bugs>https://github.com/and-rad/heyapple/issues</bugs>
-    <dependencies>
-        <nextcloud min-version="15" max-version="19"/>
-    </dependencies>
-    <navigations>
-        <navigation>
-            <name>Hey Apple</name>
-            <route>heyapple.page.index</route>
-        </navigation>
-    </navigations>
+<info xmlns:xsi= "http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
+	<id>heyapple</id>
+	<name>Hey Apple</name>
+	<summary>Manage your FDDB grocery list</summary>
+	<description><![CDATA[An app for creating & managing grocery lists from data exported from https://fddb.info.
+
+FDDB is an online calorie tracker that does a lot of things well, but it lacks a convenient way of creating grocery
+lists from the diary or any of the recipes. It allows exporting to CSV, though, which is what this app uses to
+provie the missing functionality.
+
+A shopping list is created from data exported in CSV format and stored in the cloud. Items from different days
+are combined into one entry, showing the total amount needed for the selected time frame. Food can be associated
+with store aisles and sorted by name or aisle.]]></description>
+	<version>0.5.0</version>
+	<licence>agpl</licence>
+	<author mail="and.rad@posteo.de" >Andreas Raddau</author>
+	<namespace>HeyApple</namespace>
+	<category>organization</category>
+	<bugs>https://github.com/and-rad/heyapple/issues</bugs>
+	<dependencies>
+		<nextcloud min-version="15" max-version="19"/>
+	</dependencies>
+	<navigations>
+		<navigation>
+			<name>Hey Apple</name>
+			<route>heyapple.page.index</route>
+		</navigation>
+	</navigations>
 </info>

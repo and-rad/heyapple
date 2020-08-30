@@ -2,6 +2,12 @@ button, a, select, input, div {
 	-webkit-tap-highlight-color: transparent;
 }
 
+svg.icon {
+	height: 1.2em;
+	width: 1.2em;
+	fill: var(--color-main-text);
+}
+
 #app {
 	width: 100%;
 }
@@ -156,10 +162,28 @@ button, a, select, input, div {
 
 /* content */
 
+#controls {
+	align-items: center;
+}
+
+#controls > div {
+	margin-right: 1em;
+}
+
+#controls > label {
+	display: none;
+}
+
+#controls > .spacer {
+	flex-grow: 1;
+}
+
+#controls > .selection {
+	margin-left: 0.5em;
+}
+
 #controls .list-title {
 	font-size: 1.2em;
-	-webkit-align-self: center;
-	align-self: center;
 }
 
 th.sort {
@@ -221,7 +245,8 @@ th:hover .sort-indicator.hidden {
 	width: 2.4em;
 }
 
-#app-content table .selection div {
+#app-content table .selection div,
+#controls .selection div {
 	width: 1.2em;
 	height: 1.2em;
 	border: 1px solid #878787;
@@ -248,7 +273,8 @@ th:hover .sort-indicator.hidden {
 
 #app-content tbody tr.selected .selection div,
 #app-content tbody tr:hover .selection div,
-#app-content th.selection div {
+#app-content th.selection div,
+#controls .selection div.selected {
 	opacity: 1;
 }
 
@@ -257,7 +283,8 @@ th:hover .sort-indicator.hidden {
 }
 
 #app-content tbody tr.selected .selection div,
-#app-content th.selection.selected div {
+#app-content th.selection.selected div,
+#controls .selection div.selected {
 	background-color: var(--color-primary-element);
 	background-image: url('/core/css/../img/actions/checkbox-mark.svg');
 	border-color: var(--color-primary-element);
@@ -276,6 +303,14 @@ th:hover .sort-indicator.hidden {
 	#app-content table .aisle {
 		display: table-cell;
 		width: 30%;
+	}
+
+	#controls > label {
+		display: block;
+	}
+
+	#controls > .icon {
+		display: none;
 	}
 }
 

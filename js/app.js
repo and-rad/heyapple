@@ -143,6 +143,7 @@ OCA.HeyApple.UI = (function(){
 	var _selection = {};
 	var _sortBy = "name";
 	var _sortAsc = true;
+	var _hideSelected = false;
 
 	var _refreshCalendar = function() {
 		let month = document.querySelector("#calendar2 select.month").value;
@@ -315,6 +316,10 @@ OCA.HeyApple.UI = (function(){
 
 		let list = document.querySelector("#list-category li.active");
 		OCA.HeyApple.Core.toggleBought(list.dataset.name, item.dataset.id);
+
+		if (_hideSelected && item.classList.contains("selected")) {
+			item.style.display = "none";
+		}
 	};
 
 	var _onHeadClicked = function(evt) {
@@ -328,6 +333,7 @@ OCA.HeyApple.UI = (function(){
 		for (let i = 0, item; item = items[i]; i++) {
 			if (item.classList.contains("selected") != on) {
 				item.classList.toggle("selected");
+				item.style.display = _hideSelected && item.classList.contains("selected") ? "none" : "table-row";
 				OCA.HeyApple.Core.toggleBought(list.dataset.name, item.dataset.id);
 			}
 		}
@@ -346,6 +352,16 @@ OCA.HeyApple.UI = (function(){
 		_refreshLists();
 	};
 
+	var _onHideClicked = function(evt) {
+		evt.target.classList.toggle("selected");
+		_hideSelected = evt.target.classList.contains("selected");
+
+		let rows = document.querySelectorAll("#app-content tbody tr.selected");
+		for (let i = 0, row; row = rows[i]; i++) {
+			row.style.display = _hideSelected ? "none" : "table-row";
+		}
+	};
+
 	return {
 		init: function() {
 			document.querySelector("#settings-item-scan").addEventListener("click", function() {
@@ -357,6 +373,7 @@ OCA.HeyApple.UI = (function(){
 			});
 
 			document.querySelector('#app-content th.selection').addEventListener("click", _onHeadClicked);
+			document.querySelector("#controls .selection > div").addEventListener("click", _onHideClicked);
 
 			let cols = document.querySelectorAll("th.sort");
 			for (let i = 0, col; col = cols[i]; i++) {

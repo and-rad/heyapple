@@ -248,6 +248,9 @@ OCA.HeyApple.UI = (function(){
 			row.firstElementChild.addEventListener("click", _onItemClicked);
 			if (item.bought) {
 				row.classList.add("selected");
+				if (_hideSelected) {
+					row.style.display = "none";
+				}
 			}
 
 			let fields = row.querySelectorAll("td span");

@@ -1,0 +1,11 @@
+# binaries & published files
+/out
+
+# file manager metadata
+.desktop.ini
+.directory
+.ds_store
+.DS_Store
+
+# client-specific make environment
+.make/env.mk

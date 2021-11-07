@@ -1,3 +1,5 @@
+// Package mock supplies various stubs and mock objects that can be
+// used for unit testing and development deployments.
 package mock
 
 import (
@@ -31,6 +33,30 @@ type DB struct {
 	LastFoodID uint32
 
 	FailFood bool
+}
+
+func NewDB() *DB {
+	return &DB{
+		FoodInfo: []core.Food{},
+	}
+}
+
+// Fail is a convenience function for method chaining
+// configuration parameters
+func (db *DB) Fail(fail bool) *DB {
+	db.FailFood = fail
+	return db
+}
+
+func (db *DB) Prefill() *DB {
+	db.FoodInfo = []core.Food{
+		{ID: 1, KCal: 100, Fat: 15, Carbs: 20, Protein: 5},
+		{ID: 2, KCal: 443, Fat: 30, Carbs: 60, Protein: 10},
+	}
+
+	db.LastFoodID = 2
+
+	return db
 }
 
 func (db *DB) Food(id uint32) (core.Food, error) {

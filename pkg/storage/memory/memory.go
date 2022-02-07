@@ -16,26 +16,48 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package main
+package memory
 
 import (
-	"heyapple/internal/mock"
-	"heyapple/pkg/api/v1"
-	"heyapple/pkg/middleware"
-	"log"
-	"net/http"
-
-	"github.com/julienschmidt/httprouter"
+	"heyapple/pkg/core"
+	"sync"
 )
 
-func main() {
-	db := mock.NewDB().Prefill().Fail(false) // uncomment for testing
-	//db := &memory.DB{} // uncomment for production
+type DB struct {
+	mtx  sync.RWMutex
+	food map[uint32]core.Food
+}
 
-	router := httprouter.New()
-	router.GlobalOPTIONS = http.HandlerFunc(middleware.Options)
-	router.GET("/api/v1/foods", api.Foods(db))
+func NewDB() *DB {
+	return &DB{
+		food: make(map[uint32]core.Food),
+	}
+}
 
-	handler := middleware.Headers(router)
-	log.Fatal(http.ListenAndServe(":8080", handler))
+func (db *DB) Food(uint32) (core.Food, error) {
+	panic("not imlemented")
+}
+
+func (db *DB) Foods() ([]core.Food, error) {
+	panic("not implemented")
+}
+
+func (db *DB) NewFood() (uint32, error) {
+	panic("not implemented")
+}
+
+func (db *DB) SetFood(core.Food) error {
+	panic("not implemented")
+}
+
+func (db *DB) Set(c core.Command) error {
+	db.mtx.Lock()
+	defer db.mtx.Unlock()
+	return c.Execute(db)
+}
+
+func (db *DB) Get(q core.Query) error {
+	db.mtx.RLock()
+	defer db.mtx.RUnlock()
+	return q.Fetch(db)
 }

@@ -19,19 +19,56 @@
 // Package core defines core structs and interfaces.
 package core
 
-import "time"
+import (
+	"time"
+)
 
 // Food represents an edible object. All nutrients are
 // stored per 100 base units. The base unit is either gram
 // or milliliter. The actual unit of measurement for
 // nutrients is grams.
 type Food struct {
-	ID uint32 `json:"id"`
+	ID    uint32 `json:"id"`
+	Brand uint32 `json:"brand"`
 
-	KCal    float32 `json:"cal"`
+	KCal    float32 `json:"kcal"`
 	Fat     float32 `json:"fat"`
-	Carbs   float32 `json:"carbs"`
-	Protein float32 `json:"protein"`
+	FatSat  float32 `json:"fatsat"`
+	FatO3   float32 `json:"fato3"`
+	FatO6   float32 `json:"fato6"`
+	Carbs   float32 `json:"carb"`
+	Sugar   float32 `json:"sug"`
+	Protein float32 `json:"prot"`
+	Fiber   float32 `json:"fib"`
+
+	Potassium  float32 `json:"pot"`
+	Chlorine   float32 `json:"chl"`
+	Sodium     float32 `json:"sod"`
+	Calcium    float32 `json:"calc"`
+	Phosphorus float32 `json:"phos"`
+	Magnesium  float32 `json:"mag"`
+	Iron       float32 `json:"iron"`
+	Zinc       float32 `json:"zinc"`
+	Manganse   float32 `json:"mang"`
+	Copper     float32 `json:"cop"`
+	Iodine     float32 `json:"iod"`
+	Chromium   float32 `json:"chr"`
+	Molybdenum float32 `json:"mol"`
+	Selenium   float32 `json:"sel"`
+
+	VitA   float32 `json:"vita"`
+	VitB1  float32 `json:"vitb1"`
+	VitB2  float32 `json:"vitb2"`
+	VitB3  float32 `json:"vitb3"`
+	VitB5  float32 `json:"vitb5"`
+	VitB6  float32 `json:"vitb6"`
+	VitB7  float32 `json:"vitb7"`
+	VitB9  float32 `json:"vitb9"`
+	VitB12 float32 `json:"vitb12"`
+	VitC   float32 `json:"vitc"`
+	VitD   float32 `json:"vitd"`
+	VitE   float32 `json:"vite"`
+	VitK   float32 `json:"vitk"`
 }
 
 // Ingredient represents a single ingredient in a recipe.

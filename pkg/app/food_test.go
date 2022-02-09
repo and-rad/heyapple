@@ -104,11 +104,13 @@ func TestSaveFood_Execute(t *testing.T) {
 		{ //04// change some values
 			indb: &mock.DB{FoodInfo: []core.Food{
 				{ID: 1, KCal: 2, Fat: 3, Carbs: 4, Protein: 5},
+				{ID: 2, KCal: 6, Fat: 7, Carbs: 8, Protein: 9},
 			}},
 			outdb: &mock.DB{FoodInfo: []core.Food{
 				{ID: 1, KCal: 120, Fat: 3, Carbs: 33.3, Protein: 5},
+				{ID: 2, KCal: 6, Fat: 7, Carbs: 8, Protein: 9},
 			}},
-			data: map[string]float32{"cal": 120, "carbs": 33.3},
+			data: map[string]float32{"kcal": 120, "carb": 33.3},
 			id:   1,
 		},
 		{ //05// change all values
@@ -116,13 +118,16 @@ func TestSaveFood_Execute(t *testing.T) {
 				{ID: 1, KCal: 2, Fat: 3, Carbs: 4, Protein: 5},
 			}},
 			outdb: &mock.DB{FoodInfo: []core.Food{
-				{ID: 1, KCal: 100, Fat: 30, Carbs: 20, Protein: 50},
+				{
+					ID: 1, KCal: 10, Fat: 11, FatSat: 12, FatO3: 13, FatO6: 14, Carbs: 15, Sugar: 16, Protein: 17, Fiber: 18,
+					Potassium: 19, Chlorine: 20, Sodium: 21, Calcium: 22, Phosphorus: 23, Magnesium: 24, Iron: 25, Zinc: 26, Manganse: 27, Copper: 28, Iodine: 29, Chromium: 30, Molybdenum: 31, Selenium: 32,
+					VitA: 33, VitB1: 34, VitB2: 35, VitB3: 36, VitB5: 37, VitB6: 38, VitB7: 39, VitB9: 40, VitB12: 41, VitC: 42, VitD: 43, VitE: 44, VitK: 45,
+				},
 			}},
 			data: map[string]float32{
-				"cal":     100,
-				"fat":     30,
-				"carbs":   20,
-				"protein": 50,
+				"kcal": 10, "fat": 11, "fatsat": 12, "fato3": 13, "fato6": 14, "carb": 15, "sug": 16, "prot": 17, "fib": 18,
+				"pot": 19, "chl": 20, "sod": 21, "calc": 22, "phos": 23, "mag": 24, "iron": 25, "zinc": 26, "mang": 27, "cop": 28, "iod": 29, "chr": 30, "mol": 31, "sel": 32,
+				"vita": 33, "vitb1": 34, "vitb2": 35, "vitb3": 36, "vitb5": 37, "vitb6": 38, "vitb7": 39, "vitb9": 40, "vitb12": 41, "vitc": 42, "vitd": 43, "vite": 44, "vitk": 45,
 			},
 			id: 1,
 		},

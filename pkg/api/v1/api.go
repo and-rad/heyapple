@@ -18,6 +18,11 @@
 
 // Package api implements a REST API to interact with the app over
 // HTTP requests. This is v1 of the API.
+//
+// All objects returned from the functions in this package are valid
+// JSON values, including strings, numbers, objects, arrays, and null.
+// Look at the documentation for individual functions to learn about
+// API endpoints, possible status codes, and example output.
 package api
 
 import (

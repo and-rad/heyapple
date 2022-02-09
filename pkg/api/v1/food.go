@@ -27,7 +27,24 @@ import (
 )
 
 // Foods returns a JSON-formatted list of all the food
-// items stored in the database.
+// items stored in the database. The function body is
+// empty when errors occur and will always be an array
+// on success, even when there are no food items in the
+// database.
+//
+// Endpoint:
+//   /api/v1/foods
+// Methods:
+//   GET
+// Possible status codes:
+//   200 - OK
+//   500 - Internal Server Error
+// Example output:
+//   [
+//     { "id": 1, "kcal": 230, ... },
+//     { "id": 6, "kcal": 522, ... },
+//     ...
+//   ]
 func Foods(db core.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.GetFoods{}

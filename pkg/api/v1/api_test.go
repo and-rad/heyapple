@@ -18,7 +18,9 @@
 
 package api_test
 
-import "heyapple/pkg/core"
+import (
+	"heyapple/pkg/core"
+)
 
 var (
 	food1 = core.Food{ID: 1, KCal: 2, Fat: 3, Carbs: 4, Protein: 5}

@@ -19,7 +19,6 @@
 package api
 
 import (
-	"encoding/json"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"net/http"
@@ -34,10 +33,8 @@ func Foods(db core.DB) httprouter.Handle {
 		cmd := &app.GetFoods{}
 		if err := cmd.Fetch(db); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-		} else if data, err := json.Marshal(cmd.Items); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
 		} else {
-			w.Write(data)
+			sendResponse(cmd.Items, w)
 		}
 	}
 }

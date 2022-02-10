@@ -25,8 +25,11 @@ import (
 	"heyapple/pkg/core"
 	"net/http"
 	"net/http/httptest"
+	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func TestFoods(t *testing.T) {
@@ -90,6 +93,71 @@ func TestNewFood(t *testing.T) {
 
 		if body := res.Body.String(); body != data.out {
 			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}
+
+func TestSaveFood(t *testing.T) {
+	for idx, data := range []struct {
+		db     *mock.DB
+		params httprouter.Params
+		in     url.Values
+
+		food   core.Food
+		status int
+	}{
+		{ //00// missing mandatory form values
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// missing mandatory form values
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "name", Value: "12"}},
+			status: http.StatusBadRequest,
+		},
+		{ //02// wrong data type for id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "someone"}},
+			status: http.StatusBadRequest,
+		},
+		{ //03// connection failure
+			db:     mock.NewDB().WithError(mock.ErrDOS),
+			params: httprouter.Params{{Key: "id", Value: "42"}},
+			status: http.StatusInternalServerError,
+		},
+		{ //04// item doesn't exist
+			db:     mock.NewDB().WithFood(mock.Food1),
+			params: httprouter.Params{{Key: "id", Value: "42"}},
+			in:     url.Values{"kcal": {"360"}},
+			status: http.StatusNotFound,
+			food:   mock.Food1,
+		},
+		{ //05// success
+			db:     mock.NewDB().WithFood(mock.Food1),
+			params: httprouter.Params{{Key: "id", Value: "1"}},
+			in:     url.Values{"kcal": {"360"}},
+			status: http.StatusNoContent,
+			food:   func() core.Food { f := mock.Food1; f.KCal = 360; return f }(),
+		},
+		{ //06// ignore invalid values
+			db:     mock.NewDB().WithFood(mock.Food1),
+			params: httprouter.Params{{Key: "id", Value: "1"}},
+			in:     url.Values{"prot": {"34.5"}, "fat": {"alot"}, "power": {"9000"}},
+			status: http.StatusNoContent,
+			food:   func() core.Food { f := mock.Food1; f.Protein = 34.5; return f }(),
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		api.SaveFood(data.db)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if data.db.FoodItem != data.food {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, data.db.FoodItem, data.food)
 		}
 	}
 }

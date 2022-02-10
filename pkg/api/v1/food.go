@@ -21,6 +21,7 @@ package api
 import (
 	"heyapple/pkg/app"
 	"net/http"
+	"strconv"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -37,7 +38,7 @@ import (
 //   GET
 // Possible status codes:
 //   200 - OK
-//   500 - Internal Server Error
+//   500 - Internal server error
 // Example output:
 //   [
 //     { "id": 1, "kcal": 230, ... },
@@ -57,7 +58,7 @@ func Foods(db app.DB) httprouter.Handle {
 }
 
 // NewFood creates a new food item and returns the item's
-// id on success. The response body will be empty if any
+// ID on success. The response body will be empty if any
 // errors occur.
 //
 // Endpoint:
@@ -65,8 +66,8 @@ func Foods(db app.DB) httprouter.Handle {
 // Methods:
 //   POST
 // Possible status codes:
-//   201 - Created
-//   500 - Internal Server Error
+//   201 - Creation successful
+//   500 - Internal server error
 // Example output:
 //   42
 func NewFood(db app.DB) httprouter.Handle {
@@ -77,6 +78,55 @@ func NewFood(db app.DB) httprouter.Handle {
 		} else {
 			w.WriteHeader(http.StatusCreated)
 			sendResponse(cmd.ID, w)
+		}
+	}
+}
+
+// SaveFood updates a food item in the database identified
+// by the {id} parameter. The nutrient values are passed in
+// the request body. The response body will always be
+// empty, success or failure is communicated by the status
+// codes.
+//
+// Invalid form data does not trigger an error and will
+// just be dropped silently. As long as data is valid and
+// corresponds to an existing nutrient, it's parsed and
+// stored.
+//
+// Endpoint:
+//   /api/v1/food/{id}
+// Methods:
+//   PUT
+// Possible status codes:
+//   204 - Update successful
+//   400 - Malformed form data
+//   404 - Food item doesn't exist
+//   500 - Internal server error
+// Example input:
+//   kcal=123&fat=4.5&vitb1=0.06
+func SaveFood(db app.DB) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		cmd := &app.SaveFood{}
+		if id, err := strconv.ParseUint(ps.ByName("id"), 10, 32); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			cmd.ID = uint32(id)
+		}
+
+		r.ParseForm()
+		cmd.Data = make(map[string]float32)
+		for k, v := range r.PostForm {
+			if val, err := strconv.ParseFloat(v[0], 32); err == nil {
+				cmd.Data[k] = float32(val)
+			}
+		}
+
+		if err := db.Execute(cmd); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusNoContent)
 		}
 	}
 }

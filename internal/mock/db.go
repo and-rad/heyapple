@@ -28,8 +28,7 @@ import (
 
 // Error definitions
 var (
-	ErrNotFound = errors.New("not found")
-	ErrDOS      = errors.New("dos")
+	ErrDOS = errors.New("dos")
 )
 
 type DB struct {
@@ -79,7 +78,7 @@ func (db *DB) Food(id uint32) (core.Food, error) {
 		return core.Food{}, db.Err
 	}
 	if db.FoodItem.ID != id {
-		return core.Food{}, ErrNotFound
+		return core.Food{}, app.ErrNotFound
 	}
 	return db.FoodItem, nil
 }
@@ -103,7 +102,7 @@ func (db *DB) SetFood(food core.Food) error {
 		return db.Err
 	}
 	if db.FoodItem.ID != food.ID {
-		return ErrNotFound
+		return app.ErrNotFound
 	}
 	db.FoodItem = food
 	return nil

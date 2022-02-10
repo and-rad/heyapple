@@ -25,7 +25,14 @@
 // write (command) actions.
 package app
 
-import "heyapple/pkg/core"
+import (
+	"errors"
+	"heyapple/pkg/core"
+)
+
+var (
+	ErrNotFound = errors.New("notfound")
+)
 
 // DB provides access to persistent storage.
 type DB interface {

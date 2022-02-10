@@ -69,7 +69,7 @@ func TestSaveFood_Execute(t *testing.T) {
 			id:   2,
 			db:   mock.NewDB().WithFood(mock.Food1),
 			food: mock.Food1,
-			err:  mock.ErrNotFound,
+			err:  app.ErrNotFound,
 		},
 		{ //02// empty data, no changes
 			id:   1,
@@ -125,13 +125,13 @@ func TestGetFood_Fetch(t *testing.T) {
 		{ //01// empty db
 			id:   1,
 			db:   mock.NewDB(),
-			err:  mock.ErrNotFound,
+			err:  app.ErrNotFound,
 			food: core.Food{ID: 1},
 		},
 		{ //02// id not found
 			id:   1,
 			db:   mock.NewDB().WithFood(mock.Food2),
-			err:  mock.ErrNotFound,
+			err:  app.ErrNotFound,
 			food: core.Food{ID: 1},
 		},
 		{ //03// success

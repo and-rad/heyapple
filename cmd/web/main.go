@@ -35,6 +35,7 @@ func main() {
 	router.GlobalOPTIONS = http.HandlerFunc(middleware.Options)
 	router.GET("/api/v1/foods", api.Foods(db))
 	router.POST("/api/v1/food", api.NewFood(db))
+	router.PUT("/api/v1/food/:id", api.SaveFood(db))
 
 	handler := middleware.Headers(router)
 	log.Fatal(http.ListenAndServe(":8080", handler))

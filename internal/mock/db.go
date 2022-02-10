@@ -32,39 +32,37 @@ var (
 	ErrDOS      = errors.New("dos")
 )
 
-var (
-	nilFood = core.Food{}
-)
-
 type DB struct {
-	FoodInfo []core.Food
+	FoodItem  core.Food
+	FoodItems []core.Food
 
-	LastFoodID uint32
-
-	FailFood bool
+	Err error
+	ID  uint32
 }
 
 func NewDB() *DB {
 	return &DB{
-		FoodInfo: []core.Food{},
+		FoodItems: []core.Food{},
 	}
 }
 
-// Fail is a convenience function for method chaining
-// configuration parameters
-func (db *DB) Fail(fail bool) *DB {
-	db.FailFood = fail
+func (db *DB) WithError(e error) *DB {
+	db.Err = e
 	return db
 }
 
-func (db *DB) Prefill() *DB {
-	db.FoodInfo = []core.Food{
-		Food1,
-		Food2,
-	}
+func (db *DB) WithID(id uint32) *DB {
+	db.ID = id
+	return db
+}
 
-	db.LastFoodID = 2
+func (db *DB) WithFood(food core.Food) *DB {
+	db.FoodItem = food
+	return db
+}
 
+func (db *DB) WithFoods(foods []core.Food) *DB {
+	db.FoodItems = foods
 	return db
 }
 
@@ -77,48 +75,36 @@ func (db *DB) Fetch(q app.Query) error {
 }
 
 func (db *DB) Food(id uint32) (core.Food, error) {
-	if db.FailFood {
-		return nilFood, ErrDOS
+	if db.Err != nil {
+		return core.Food{}, db.Err
 	}
-
-	for _, f := range db.FoodInfo {
-		if f.ID == id {
-			return f, nil
-		}
+	if db.FoodItem.ID != id {
+		return core.Food{}, ErrNotFound
 	}
-
-	return nilFood, ErrNotFound
+	return db.FoodItem, nil
 }
 
 func (db *DB) Foods() ([]core.Food, error) {
-	if db.FailFood {
-		return []core.Food{}, ErrDOS
+	if db.Err != nil {
+		return nil, db.Err
 	}
-	return db.FoodInfo, nil
+	return db.FoodItems, nil
 }
 
 func (db *DB) NewFood() (uint32, error) {
-	if db.FailFood {
-		return 0, ErrDOS
+	if db.Err != nil {
+		return 0, db.Err
 	}
-
-	db.LastFoodID++
-	db.FoodInfo = append(db.FoodInfo, core.Food{ID: db.LastFoodID})
-
-	return db.LastFoodID, nil
+	return db.ID, nil
 }
 
 func (db *DB) SetFood(food core.Food) error {
-	if db.FailFood {
-		return ErrDOS
+	if db.Err != nil {
+		return db.Err
 	}
-
-	for i, f := range db.FoodInfo {
-		if f.ID == food.ID {
-			db.FoodInfo[i] = food
-			return nil
-		}
+	if db.FoodItem.ID != food.ID {
+		return ErrNotFound
 	}
-
-	return ErrNotFound
+	db.FoodItem = food
+	return nil
 }

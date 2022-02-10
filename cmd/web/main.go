@@ -19,9 +19,9 @@
 package main
 
 import (
-	"heyapple/internal/mock"
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/middleware"
+	"heyapple/pkg/storage/memory"
 	"log"
 	"net/http"
 
@@ -29,8 +29,7 @@ import (
 )
 
 func main() {
-	db := mock.NewDB().Prefill().Fail(false) // uncomment for testing
-	//db := &memory.DB{} // uncomment for production
+	db := memory.NewDB()
 
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(middleware.Options)

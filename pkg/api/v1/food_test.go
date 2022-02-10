@@ -36,7 +36,7 @@ func TestFoods(t *testing.T) {
 		status int
 	}{
 		{ //00// connection failure
-			db:     mock.NewDB().Fail(true),
+			db:     mock.NewDB().WithError(mock.ErrDOS),
 			status: http.StatusInternalServerError,
 		},
 		{ //01// empty set
@@ -45,9 +45,9 @@ func TestFoods(t *testing.T) {
 			out:    "[]",
 		},
 		{ //02// success
-			db:     &mock.DB{FoodInfo: []core.Food{mock.Food1, mock.Food2}},
-			status: http.StatusOK,
+			db:     mock.NewDB().WithFoods([]core.Food{mock.Food1, mock.Food2}),
 			out:    fmt.Sprintf(`[%s,%s]`, mock.Food1Json, mock.Food2Json),
+			status: http.StatusOK,
 		},
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))

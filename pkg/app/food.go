@@ -30,7 +30,7 @@ type CreateFood struct {
 	ID uint32
 }
 
-func (c *CreateFood) Execute(db core.DB) error {
+func (c *CreateFood) Execute(db DB) error {
 	if id, err := db.NewFood(); err != nil {
 		return err
 	} else {
@@ -47,7 +47,7 @@ type SaveFood struct {
 	ID   uint32
 }
 
-func (c *SaveFood) Execute(db core.DB) error {
+func (c *SaveFood) Execute(db DB) error {
 	food, err := db.Food(c.ID)
 	if err != nil {
 		return err
@@ -72,7 +72,7 @@ type GetFood struct {
 	Item core.Food
 }
 
-func (q *GetFood) Fetch(db core.DB) error {
+func (q *GetFood) Fetch(db DB) error {
 	if food, err := db.Food(q.Item.ID); err != nil {
 		return err
 	} else {
@@ -88,7 +88,7 @@ type GetFoods struct {
 	Items []core.Food
 }
 
-func (q *GetFoods) Fetch(db core.DB) error {
+func (q *GetFoods) Fetch(db DB) error {
 	if foods, err := db.Foods(); err != nil {
 		return err
 	} else {

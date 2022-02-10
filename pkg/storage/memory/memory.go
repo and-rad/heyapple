@@ -16,9 +16,13 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
+// Package memory provides an implementation of the app.DB interface
+// that lives entirely in the application's runtime memory. It can be
+// saved to and loaded from JSON files for persistence.
 package memory
 
 import (
+	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"sync"
 )
@@ -50,13 +54,13 @@ func (db *DB) SetFood(core.Food) error {
 	panic("not implemented")
 }
 
-func (db *DB) Set(c core.Command) error {
+func (db *DB) Execute(c app.Command) error {
 	db.mtx.Lock()
 	defer db.mtx.Unlock()
 	return c.Execute(db)
 }
 
-func (db *DB) Get(q core.Query) error {
+func (db *DB) Fetch(q app.Query) error {
 	db.mtx.RLock()
 	defer db.mtx.RUnlock()
 	return q.Fetch(db)

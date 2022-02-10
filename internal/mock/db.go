@@ -22,6 +22,7 @@ package mock
 
 import (
 	"errors"
+	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 )
 
@@ -34,16 +35,6 @@ var (
 var (
 	nilFood = core.Food{}
 )
-
-/*
-type Food struct {
-	ID      uint32
-	KCal    float32
-	Fat     float32
-	Carbs   float32
-	Protein float32
-}
-*/
 
 type DB struct {
 	FoodInfo []core.Food
@@ -75,6 +66,14 @@ func (db *DB) Prefill() *DB {
 	db.LastFoodID = 2
 
 	return db
+}
+
+func (db *DB) Execute(c app.Command) error {
+	return c.Execute(db)
+}
+
+func (db *DB) Fetch(q app.Query) error {
+	return q.Fetch(db)
 }
 
 func (db *DB) Food(id uint32) (core.Food, error) {

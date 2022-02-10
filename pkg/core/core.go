@@ -93,25 +93,3 @@ type Meal struct {
 	Items  []Ingredient `json:"items"`
 	Recipe uint32       `json:"recipe"`
 }
-
-// DB defines an interface that provides access to the
-// food data for reading and writing.
-type DB interface {
-	Food(uint32) (Food, error)
-	Foods() ([]Food, error)
-	NewFood() (uint32, error)
-	SetFood(Food) error
-}
-
-// A Command encapsulates a single action that changes the
-// underlying data. It can carry input and output parameters.
-type Command interface {
-	Execute(db DB) error
-}
-
-// A Query encapsulates a single read action on the underlying
-// data. It should not make any changes to the data. It can
-// carry input and output parameters.
-type Query interface {
-	Fetch(db DB) error
-}

@@ -16,6 +16,37 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-// Package app contains the core functionality of the aplication. Commands
-// and queries that operate on food, recipes, and meals can be found here.
+// Package app contains the core functionality of the aplication.
+//
+// This package makes heavy use of the Command pattern: Functions are
+// encapsulated in individual small structs that do exactly one thing and
+// nothing else. The Command and Query types are both commands in this
+// sense, their names reflecting whether they perform read (query) or
+// write (command) actions.
 package app
+
+import "heyapple/pkg/core"
+
+// DB provides access to persistent storage.
+type DB interface {
+	Execute(Command) error
+	Fetch(Query) error
+
+	Food(uint32) (core.Food, error)
+	Foods() ([]core.Food, error)
+	NewFood() (uint32, error)
+	SetFood(core.Food) error
+}
+
+// A Command encapsulates a single action that changes the
+// underlying data. It can carry input and output parameters.
+type Command interface {
+	Execute(db DB) error
+}
+
+// A Query encapsulates a single read action on the underlying
+// data. It should not make any changes to the data. It can
+// carry input and output parameters.
+type Query interface {
+	Fetch(db DB) error
+}

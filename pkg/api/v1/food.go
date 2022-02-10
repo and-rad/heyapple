@@ -20,7 +20,6 @@ package api
 
 import (
 	"heyapple/pkg/app"
-	"heyapple/pkg/core"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -45,13 +44,13 @@ import (
 //     { "id": 6, "kcal": 522, ... },
 //     ...
 //   ]
-func Foods(db core.DB) httprouter.Handle {
+func Foods(db app.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		cmd := &app.GetFoods{}
-		if err := cmd.Fetch(db); err != nil {
+		query := &app.GetFoods{}
+		if err := db.Fetch(query); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
-			sendResponse(cmd.Items, w)
+			sendResponse(query.Items, w)
 		}
 	}
 }

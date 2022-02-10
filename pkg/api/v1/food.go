@@ -50,7 +50,33 @@ func Foods(db app.DB) httprouter.Handle {
 		if err := db.Fetch(query); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
+			w.WriteHeader(http.StatusOK)
 			sendResponse(query.Items, w)
+		}
+	}
+}
+
+// NewFood creates a new food item and returns the item's
+// id on success. The response body will be empty if any
+// errors occur.
+//
+// Endpoint:
+//   /api/v1/food
+// Methods:
+//   POST
+// Possible status codes:
+//   201 - Created
+//   500 - Internal Server Error
+// Example output:
+//   42
+func NewFood(db app.DB) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		cmd := &app.CreateFood{}
+		if err := db.Execute(cmd); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusCreated)
+			sendResponse(cmd.ID, w)
 		}
 	}
 }

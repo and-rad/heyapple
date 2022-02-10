@@ -63,3 +63,33 @@ func TestFoods(t *testing.T) {
 		}
 	}
 }
+
+func TestNewFood(t *testing.T) {
+	for idx, data := range []struct {
+		db     *mock.DB
+		out    string
+		status int
+	}{
+		{ //00// connection failure
+			db:     mock.NewDB().WithError(mock.ErrDOS),
+			status: http.StatusInternalServerError,
+		},
+		{ //01// success
+			db:     mock.NewDB().WithID(23),
+			status: http.StatusCreated,
+			out:    "23",
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		api.NewFood(data.db)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}

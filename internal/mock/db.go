@@ -59,8 +59,8 @@ func (db *DB) Fail(fail bool) *DB {
 
 func (db *DB) Prefill() *DB {
 	db.FoodInfo = []core.Food{
-		{ID: 1, KCal: 100, Fat: 15, Carbs: 20, Protein: 5},
-		{ID: 2, KCal: 443, Fat: 30, Carbs: 60, Protein: 10},
+		Food1,
+		Food2,
 	}
 
 	db.LastFoodID = 2

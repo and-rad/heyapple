@@ -91,14 +91,14 @@ func TestSaveFood_Execute(t *testing.T) {
 			err:   mock.ErrNotFound,
 		},
 		{ //02// id not found
-			indb:  &mock.DB{FoodInfo: []core.Food{food1}},
-			outdb: &mock.DB{FoodInfo: []core.Food{food1}},
+			indb:  &mock.DB{FoodInfo: []core.Food{mock.Food1}},
+			outdb: &mock.DB{FoodInfo: []core.Food{mock.Food1}},
 			id:    2,
 			err:   mock.ErrNotFound,
 		},
 		{ //03// empty data, no changes
-			indb:  &mock.DB{FoodInfo: []core.Food{food1}},
-			outdb: &mock.DB{FoodInfo: []core.Food{food1}},
+			indb:  &mock.DB{FoodInfo: []core.Food{mock.Food1}},
+			outdb: &mock.DB{FoodInfo: []core.Food{mock.Food1}},
 			id:    1,
 		},
 		{ //04// change some values
@@ -166,8 +166,8 @@ func TestGetFood_Fetch(t *testing.T) {
 			err: mock.ErrNotFound,
 		},
 		{ //03// success
-			db:  &mock.DB{FoodInfo: []core.Food{food1}},
-			out: food1,
+			db:  &mock.DB{FoodInfo: []core.Food{mock.Food1}},
+			out: mock.Food1,
 		},
 	} {
 		qry := &app.GetFood{Item: core.Food{ID: data.out.ID}}
@@ -198,8 +198,8 @@ func TestGetFoods_Fetch(t *testing.T) {
 			out: []core.Food{},
 		},
 		{ //02// success
-			db:  &mock.DB{FoodInfo: []core.Food{food1, food2}},
-			out: []core.Food{food1, food2},
+			db:  &mock.DB{FoodInfo: []core.Food{mock.Food1, mock.Food2}},
+			out: []core.Food{mock.Food1, mock.Food2},
 		},
 	} {
 		qry := &app.GetFoods{}

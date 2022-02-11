@@ -3,6 +3,7 @@ package memory
 import (
 	"os"
 	"testing"
+	"time"
 )
 
 func Test_getConfig(t *testing.T) {
@@ -12,27 +13,32 @@ func Test_getConfig(t *testing.T) {
 	}{
 		{ //00// empty environment, default values
 			cfg: config{
-				storageDir: "/tmp/heyapple/store",
-				backupDir:  "/tmp/heyapple/backup",
+				backupDir:       "/tmp/heyapple/backup",
+				storageDir:      "/tmp/heyapple/store",
+				storageInterval: time.Minute * 15,
 			},
 		},
 		{ //01// ignore other vars
 			env: map[string]string{
-				"PATH": "/usr/bin",
+				"PATH":             "/usr/bin",
+				envStorageInterval: "5m",
 			},
 			cfg: config{
-				storageDir: "/tmp/heyapple/store",
-				backupDir:  "/tmp/heyapple/backup",
+				backupDir:       "/tmp/heyapple/backup",
+				storageDir:      "/tmp/heyapple/store",
+				storageInterval: time.Minute * 5,
 			},
 		},
 		{ //02// load all vars
 			env: map[string]string{
-				envStorageDir: "/path/to/store",
-				envBackupDir:  "/backup/is/here",
+				envStorageDir:      "/path/to/store",
+				envBackupDir:       "/backup/is/here",
+				envStorageInterval: "1h25m",
 			},
 			cfg: config{
-				storageDir: "/path/to/store",
-				backupDir:  "/backup/is/here",
+				storageDir:      "/path/to/store",
+				backupDir:       "/backup/is/here",
+				storageInterval: time.Hour + time.Minute*25,
 			},
 		},
 	} {

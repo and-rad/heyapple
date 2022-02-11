@@ -28,8 +28,11 @@ import (
 )
 
 type DB struct {
-	mtx  sync.RWMutex
 	food map[uint32]core.Food
+
+	foodID uint32
+
+	mtx sync.RWMutex
 }
 
 func NewDB() *DB {
@@ -46,15 +49,25 @@ func (db *DB) Food(id uint32) (core.Food, error) {
 }
 
 func (db *DB) Foods() ([]core.Food, error) {
-	panic("not implemented")
+	foods := []core.Food{}
+	for _, f := range db.food {
+		foods = append(foods, f)
+	}
+	return foods, nil
 }
 
 func (db *DB) NewFood() (uint32, error) {
-	panic("not implemented")
+	db.foodID++
+	db.food[db.foodID] = core.Food{ID: db.foodID}
+	return db.foodID, nil
 }
 
-func (db *DB) SetFood(core.Food) error {
-	panic("not implemented")
+func (db *DB) SetFood(food core.Food) error {
+	if _, ok := db.food[food.ID]; ok {
+		db.food[food.ID] = food
+		return nil
+	}
+	return app.ErrNotFound
 }
 
 func (db *DB) Execute(c app.Command) error {

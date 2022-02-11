@@ -53,6 +53,11 @@ func (db *DB) Foods() ([]core.Food, error) {
 	for _, f := range db.food {
 		foods = append(foods, f)
 	}
+
+	sort.Slice(foods, func(i, j int) bool {
+		return foods[i].ID < foods[j].ID
+	})
+
 	return foods, nil
 }
 

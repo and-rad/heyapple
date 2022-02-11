@@ -33,13 +33,14 @@ func Headers(next http.Handler) http.Handler {
 	})
 }
 
+// Options tells clients about CORS capabilities.
 func Options(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 
 	// check for CORS headers
 	if r.Header.Get("Access-Control-Request-Method") != "" {
 		header.Set("Access-Control-Allow-Headers", "Content-Type")
-		header.Set("Access-Control-Allow-Methods", "DELETE, GET, OPTIONS, POST")
+		header.Set("Access-Control-Allow-Methods", "DELETE, GET, OPTIONS, POST, PUT")
 		header.Set("Access-Control-Allow-Origin", "*")
 		header.Set("Access-Control-Max-Age", "86400")
 	}

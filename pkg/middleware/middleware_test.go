@@ -82,7 +82,7 @@ func TestOptions(t *testing.T) {
 			},
 			outhead: http.Header{
 				"Access-Control-Allow-Headers": {"Content-Type"},
-				"Access-Control-Allow-Methods": {"DELETE, GET, OPTIONS, POST"},
+				"Access-Control-Allow-Methods": {"DELETE, GET, OPTIONS, POST, PUT"},
 				"Access-Control-Allow-Origin":  {"*"},
 				"Access-Control-Max-Age":       {"86400"},
 			},

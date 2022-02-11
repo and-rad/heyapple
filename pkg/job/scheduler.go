@@ -27,10 +27,10 @@ type Job interface {
 
 // Scheduler handles automatic ticket creation and resolution.
 type Scheduler struct {
-	jobs     []Job
-	tick     time.Duration
-	delta    time.Duration
 	shutdown chan bool
+	jobs     []Job
+	delta    time.Duration
+	tick     time.Duration
 }
 
 // NewScheduler returns a new Scheduler instance.

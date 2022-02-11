@@ -38,8 +38,11 @@ func NewDB() *DB {
 	}
 }
 
-func (db *DB) Food(uint32) (core.Food, error) {
-	panic("not imlemented")
+func (db *DB) Food(id uint32) (core.Food, error) {
+	if food, ok := db.food[id]; ok {
+		return food, nil
+	}
+	return core.Food{}, app.ErrNotFound
 }
 
 func (db *DB) Foods() ([]core.Food, error) {

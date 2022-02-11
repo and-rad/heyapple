@@ -107,10 +107,10 @@ func NewFood(db app.DB) httprouter.Handle {
 func SaveFood(db app.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.SaveFood{}
-		if id, err := strconv.ParseUint(ps.ByName("id"), 10, 32); err != nil {
+		if id, err := strconv.Atoi(ps.ByName("id")); err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 		} else {
-			cmd.ID = uint32(id)
+			cmd.ID = id
 		}
 
 		r.ParseForm()

@@ -36,7 +36,7 @@ type DB struct {
 	FoodItems []core.Food
 
 	Err error
-	ID  uint32
+	ID  int
 }
 
 func NewDB() *DB {
@@ -50,7 +50,7 @@ func (db *DB) WithError(e error) *DB {
 	return db
 }
 
-func (db *DB) WithID(id uint32) *DB {
+func (db *DB) WithID(id int) *DB {
 	db.ID = id
 	return db
 }
@@ -73,7 +73,7 @@ func (db *DB) Fetch(q app.Query) error {
 	return q.Fetch(db)
 }
 
-func (db *DB) Food(id uint32) (core.Food, error) {
+func (db *DB) Food(id int) (core.Food, error) {
 	if db.Err != nil {
 		return core.Food{}, db.Err
 	}
@@ -90,7 +90,7 @@ func (db *DB) Foods() ([]core.Food, error) {
 	return db.FoodItems, nil
 }
 
-func (db *DB) NewFood() (uint32, error) {
+func (db *DB) NewFood() (int, error) {
 	if db.Err != nil {
 		return 0, db.Err
 	}

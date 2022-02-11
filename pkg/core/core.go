@@ -28,8 +28,8 @@ import (
 // or milliliter. The actual unit of measurement for
 // nutrients is grams.
 type Food struct {
-	ID    uint32 `json:"id"`
-	Brand uint32 `json:"brand"`
+	ID    int `json:"id"`
+	Brand int `json:"brand"`
 
 	KCal    float32 `json:"kcal"`
 	Fat     float32 `json:"fat"`
@@ -75,14 +75,14 @@ type Food struct {
 // It's a combination of a food item and how much of that
 // food is used, measured in grams.
 type Ingredient struct {
-	ID     uint32  `json:"id"`
+	ID     int     `json:"id"`
 	Amount float32 `json:"amount"`
 }
 
 // Recipe is a collection of ingredients.
 type Recipe struct {
 	Items []Ingredient `json:"items"`
-	ID    uint32       `json:"id"`
+	ID    int          `json:"id"`
 }
 
 // Meal is a collection of food items that were consumed at
@@ -91,5 +91,5 @@ type Recipe struct {
 type Meal struct {
 	Date   time.Time    `json:"date"`
 	Items  []Ingredient `json:"items"`
-	Recipe uint32       `json:"recipe"`
+	Recipe int          `json:"recipe"`
 }

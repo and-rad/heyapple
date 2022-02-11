@@ -28,20 +28,20 @@ import (
 )
 
 type DB struct {
-	food map[uint32]core.Food
+	food map[int]core.Food
 
-	foodID uint32
+	foodID int
 
 	mtx sync.RWMutex
 }
 
 func NewDB() *DB {
 	return &DB{
-		food: make(map[uint32]core.Food),
+		food: make(map[int]core.Food),
 	}
 }
 
-func (db *DB) Food(id uint32) (core.Food, error) {
+func (db *DB) Food(id int) (core.Food, error) {
 	if food, ok := db.food[id]; ok {
 		return food, nil
 	}
@@ -56,7 +56,7 @@ func (db *DB) Foods() ([]core.Food, error) {
 	return foods, nil
 }
 
-func (db *DB) NewFood() (uint32, error) {
+func (db *DB) NewFood() (int, error) {
 	db.foodID++
 	db.food[db.foodID] = core.Food{ID: db.foodID}
 	return db.foodID, nil

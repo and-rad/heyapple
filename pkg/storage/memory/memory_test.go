@@ -63,12 +63,12 @@ func TestDB_Fetch(t *testing.T) {
 			err: app.ErrNotFound,
 		},
 		{ //01// food item doesn't exist
-			db:  &DB{food: map[uint32]core.Food{2: {ID: 2}}},
+			db:  &DB{food: map[int]core.Food{2: {ID: 2}}},
 			cmd: &app.GetFood{Item: core.Food{ID: 1}},
 			err: app.ErrNotFound,
 		},
 		{ //02// success
-			db:  &DB{food: map[uint32]core.Food{2: {ID: 2}}},
+			db:  &DB{food: map[int]core.Food{2: {ID: 2}}},
 			cmd: &app.GetFood{Item: core.Food{ID: 2}},
 		},
 	} {
@@ -96,7 +96,7 @@ func TestDB_NewFood(t *testing.T) {
 			food: core.Food{ID: 1},
 		},
 		{ //01// increment id
-			db:   &DB{food: map[uint32]core.Food{2: {ID: 2}, 3: {ID: 3}}, foodID: 3},
+			db:   &DB{food: map[int]core.Food{2: {ID: 2}, 3: {ID: 3}}, foodID: 3},
 			food: core.Food{ID: 4},
 		},
 	} {
@@ -124,7 +124,7 @@ func TestDB_Foods(t *testing.T) {
 			foods: []core.Food{},
 		},
 		{ //01// all items returned
-			db:    &DB{food: map[uint32]core.Food{1: mock.Food1, 2: mock.Food2}},
+			db:    &DB{food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}},
 			foods: []core.Food{mock.Food1, mock.Food2},
 		},
 	} {
@@ -143,7 +143,7 @@ func TestDB_Foods(t *testing.T) {
 func TestDB_Food(t *testing.T) {
 	for idx, data := range []struct {
 		db *DB
-		id uint32
+		id int
 
 		food core.Food
 		err  error
@@ -153,11 +153,11 @@ func TestDB_Food(t *testing.T) {
 			err: app.ErrNotFound,
 		},
 		{ //01// item doesn't exist
-			db:  &DB{food: map[uint32]core.Food{1: mock.Food1}},
+			db:  &DB{food: map[int]core.Food{1: mock.Food1}},
 			err: app.ErrNotFound,
 		},
 		{ //02// success
-			db:   &DB{food: map[uint32]core.Food{1: mock.Food1, 2: mock.Food2}},
+			db:   &DB{food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}},
 			id:   2,
 			food: mock.Food2,
 		},
@@ -186,12 +186,12 @@ func TestDB_SetFood(t *testing.T) {
 			err: app.ErrNotFound,
 		},
 		{ //01// food item doesn't exist
-			db:   &DB{food: map[uint32]core.Food{1: mock.Food1}},
+			db:   &DB{food: map[int]core.Food{1: mock.Food1}},
 			food: mock.Food2,
 			err:  app.ErrNotFound,
 		},
 		{ //02// success
-			db:   &DB{food: map[uint32]core.Food{1: mock.Food1, 2: mock.Food2}},
+			db:   &DB{food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}},
 			food: core.Food{ID: 2, KCal: 200, Fat: 30, Sugar: 45.6},
 		},
 	} {

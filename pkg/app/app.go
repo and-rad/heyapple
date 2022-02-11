@@ -39,9 +39,9 @@ type DB interface {
 	Execute(Command) error
 	Fetch(Query) error
 
-	Food(uint32) (core.Food, error)
+	Food(int) (core.Food, error)
 	Foods() ([]core.Food, error)
-	NewFood() (uint32, error)
+	NewFood() (int, error)
 	SetFood(core.Food) error
 }
 

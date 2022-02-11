@@ -55,7 +55,7 @@ func TestCreateFood_Execute(t *testing.T) {
 func TestSaveFood_Execute(t *testing.T) {
 	for idx, data := range []struct {
 		data map[string]float32
-		id   uint32
+		id   int
 		db   *mock.DB
 
 		food core.Food
@@ -112,7 +112,7 @@ func TestSaveFood_Execute(t *testing.T) {
 
 func TestGetFood_Fetch(t *testing.T) {
 	for idx, data := range []struct {
-		id uint32
+		id int
 		db *mock.DB
 
 		food core.Food

@@ -26,6 +26,10 @@ import (
 	"testing"
 )
 
+const (
+	testStorageDir = "/tmp/heyappletest/memory/config"
+)
+
 func TestDB_Execute(t *testing.T) {
 	for idx, data := range []struct {
 		db  *DB

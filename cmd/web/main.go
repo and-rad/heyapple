@@ -34,6 +34,7 @@ func main() {
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(middleware.Options)
 	router.GET("/api/v1/foods", api.Foods(db))
+	router.GET("/api/v1/food/:id", api.Food(db))
 	router.POST("/api/v1/food", api.NewFood(db))
 	router.PUT("/api/v1/food/:id", api.SaveFood(db))
 

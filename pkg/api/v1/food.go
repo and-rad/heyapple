@@ -57,6 +57,41 @@ func Foods(db app.DB) httprouter.Handle {
 	}
 }
 
+// Food returns a JSON-formatted food item identified
+// by {id}. The function body is empty when errors occur
+// and will be a single JSON object on success.
+//
+// Endpoint:
+//   /api/v1/food/{id}
+// Methods:
+//   GET
+// Possible status codes:
+//   200 - OK
+//   400 - Missing or malformed id
+//   404 - Food item doesn't exist
+//   500 - Internal server error
+// Example output:
+//     { "id": 1, "kcal": 230, ... }
+func Food(db app.DB) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		query := &app.GetFood{}
+		if id, err := strconv.Atoi(ps.ByName("id")); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+		} else {
+			query.Item.ID = id
+		}
+
+		if err := db.Fetch(query); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(query.Item, w)
+		}
+	}
+}
+
 // NewFood creates a new food item and returns the item's
 // ID on success. The response body will be empty if any
 // errors occur.

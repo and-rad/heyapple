@@ -67,6 +67,59 @@ func TestFoods(t *testing.T) {
 	}
 }
 
+func TestFood(t *testing.T) {
+	for idx, data := range []struct {
+		db     *mock.DB
+		params httprouter.Params
+
+		out    string
+		status int
+	}{
+		{ //00// missing id
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// missing id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "name", Value: "12"}},
+			status: http.StatusBadRequest,
+		},
+		{ //02// wrong data type for id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "someone"}},
+			status: http.StatusBadRequest,
+		},
+		{ //03// connection failure
+			db:     mock.NewDB().WithError(mock.ErrDOS),
+			params: httprouter.Params{{Key: "id", Value: "42"}},
+			status: http.StatusInternalServerError,
+		},
+		{ //04// item doesn't exist
+			db:     mock.NewDB().WithFood(mock.Food1),
+			params: httprouter.Params{{Key: "id", Value: "42"}},
+			status: http.StatusNotFound,
+		},
+		{ //05// success
+			db:     mock.NewDB().WithFood(mock.Food1),
+			params: httprouter.Params{{Key: "id", Value: "1"}},
+			status: http.StatusOK,
+			out:    mock.Food1Json,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		api.Food(data.db)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}
+
 func TestNewFood(t *testing.T) {
 	for idx, data := range []struct {
 		db     *mock.DB

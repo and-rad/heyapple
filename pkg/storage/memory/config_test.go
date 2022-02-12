@@ -42,6 +42,7 @@ func Test_getConfig(t *testing.T) {
 			},
 		},
 	} {
+		os.Clearenv()
 		for k, v := range data.env {
 			os.Setenv(k, v)
 			defer os.Unsetenv(k)

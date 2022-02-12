@@ -24,6 +24,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"time"
 )
 
 const (
@@ -32,7 +33,8 @@ const (
 )
 
 type backup struct {
-	db *DB
+	db         *DB
+	lastBackup string
 }
 
 type backupData struct {
@@ -43,6 +45,12 @@ type backupData struct {
 func (b *backup) Run() {
 	if err := b.save(); err != nil {
 		println(err.Error()) // TODO: implement proper error logging
+	}
+
+	if now := time.Now().Format("2006-01-02"); now != b.lastBackup {
+		if err := b.backUp(); err != nil {
+			println(err.Error()) // TODO: implement proper error logging
+		}
 	}
 }
 
@@ -76,4 +84,29 @@ func (b *backup) save() error {
 
 	path := filepath.Join(dir, storageFile+".json")
 	return os.WriteFile(path, data, 0644)
+}
+
+func (b *backup) backUp() error {
+	b.db.mtx.RLock()
+	defer b.db.mtx.RUnlock()
+
+	dir := getConfig().backupDir
+	if err := os.MkdirAll(dir, 0750); err != nil {
+		return err
+	}
+
+	data, _ := json.Marshal(backupData{
+		Food:   b.db.food,
+		FoodID: b.db.foodID,
+	})
+
+	now := time.Now().Format("2006-01-02")
+	path := filepath.Join(dir, backupFile+now+".json")
+	err := os.WriteFile(path, data, 0644)
+
+	if err == nil {
+		b.lastBackup = now
+	}
+
+	return err
 }

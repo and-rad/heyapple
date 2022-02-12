@@ -28,6 +28,7 @@ import (
 	"path/filepath"
 	"reflect"
 	"testing"
+	"time"
 )
 
 var (
@@ -60,12 +61,20 @@ func Test_backup_Run(t *testing.T) {
 		},
 	} {
 		os.Setenv(envStorageDir, data.dir)
+		os.Setenv(envBackupDir, data.dir)
 		defer os.Unsetenv(envStorageDir)
+		defer os.Unsetenv(envBackupDir)
 		defer os.RemoveAll(data.dir)
 
 		(&backup{db: data.db}).Run()
 
 		file, _ := ioutil.ReadFile(filepath.Join(data.dir, storageFile+".json"))
+		if contents := string(file); contents != data.file {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, contents, data.file)
+		}
+
+		now := time.Now().Format("2006-01-02")
+		file, _ = ioutil.ReadFile(filepath.Join(data.dir, backupFile+now+".json"))
 		if contents := string(file); contents != data.file {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, contents, data.file)
 		}
@@ -153,6 +162,59 @@ func Test_backup_save(t *testing.T) {
 
 			if contents := string(file); contents != data.file {
 				t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, contents, data.file)
+			}
+		}
+	}
+}
+
+func Test_backup_backUp(t *testing.T) {
+	for idx, data := range []struct {
+		db  *DB
+		dir string
+
+		file string
+		err  error
+	}{
+		{ //00// no directory permission
+			dir: "/opt/tmp/heyapple",
+			db:  NewDB(),
+			err: &fs.PathError{},
+		},
+		{ //01// empty database
+			dir:  testStorageDir,
+			db:   NewDB(),
+			file: backup0,
+		},
+		{ //02// save filled database
+			dir:  testStorageDir,
+			db:   database1,
+			file: backup1,
+		},
+	} {
+		os.Setenv(envBackupDir, data.dir)
+		defer os.Unsetenv(envBackupDir)
+		defer os.RemoveAll(data.dir)
+
+		backup := &backup{db: data.db}
+		err := backup.backUp()
+
+		if reflect.TypeOf(err) != reflect.TypeOf(data.err) {
+			t.Errorf("test case %d: error mismatch \nhave: %#v\nwant: %#v", idx, err, data.err)
+		}
+
+		if err == nil {
+			now := time.Now().Format("2006-01-02")
+			file, err := ioutil.ReadFile(filepath.Join(data.dir, backupFile+now+".json"))
+			if err != nil {
+				t.Errorf("test case %d: couldn't read storage file", idx)
+			}
+
+			if contents := string(file); contents != data.file {
+				t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, contents, data.file)
+			}
+
+			if backup.lastBackup != now {
+				t.Errorf("test case %d: date mismatch \nhave: %v\nwant: %v", idx, backup.lastBackup, now)
 			}
 		}
 	}

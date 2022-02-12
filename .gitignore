@@ -7,5 +7,5 @@
 .ds_store
 .DS_Store
 
-# client-specific make environment
+# client-specific build environment
 .make/env.mk

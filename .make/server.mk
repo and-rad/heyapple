@@ -4,7 +4,6 @@ build-server:
 	@rm -rf ./out/server
 	@CGO_ENABLED=0 GOARCH=amd64 go build -o ./out/server/${BINARY_NAME}-amd64 heyapple/cmd/web
 
-
 run-server:
 	@./out/server/${BINARY_NAME}-${TEST_ARCH}
 

@@ -1,0 +1,13 @@
+[Unit]
+Description=Hey Apple
+After=network.target
+After=mariadb.service mysqld.service
+
+[Service]
+User=heyapple
+ExecStart=/home/heyapple/server/heyapple-amd64
+EnvironmentFile=/home/heyapple/server/.env
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target

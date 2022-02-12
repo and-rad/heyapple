@@ -20,16 +20,23 @@ package main
 
 import (
 	"heyapple/pkg/api/v1"
+	"heyapple/pkg/app"
 	"heyapple/pkg/middleware"
 	"heyapple/pkg/storage/memory"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
-	db := memory.NewDBWithBackup()
+	out := app.NewLog(os.Stdout)
+	out.Log("######################")
+	out.Log("# Starting Hey Apple #")
+	out.Log("######################")
+
+	db := memory.NewDBWithBackup(out)
 
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(middleware.Options)

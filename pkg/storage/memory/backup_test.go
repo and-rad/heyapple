@@ -35,7 +35,7 @@ var (
 	backup0 = `{"food":{},"foodid":0}`
 	backup1 = fmt.Sprintf(`{"food":{"1":%s,"2":%s},"foodid":2}`, mock.Food1Json, mock.Food2Json)
 
-	database1 = &DB{food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}, foodID: 2}
+	database1 = &DB{log: mock.NewLog(), food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}, foodID: 2}
 )
 
 func Test_backup_Run(t *testing.T) {
@@ -47,11 +47,11 @@ func Test_backup_Run(t *testing.T) {
 	}{
 		{ //00// no directory permission
 			dir: "/opt/tmp/heyapple",
-			db:  NewDB(),
+			db:  NewDB(mock.NewLog()),
 		},
 		{ //01// empty database
 			dir:  testStorageDir,
-			db:   NewDB(),
+			db:   NewDB(mock.NewLog()),
 			file: backup0,
 		},
 		{ //02// save filled database
@@ -90,11 +90,11 @@ func Test_backup_load(t *testing.T) {
 		db   *DB
 	}{
 		{ //00// empty file
-			db: NewDB(),
+			db: NewDB(mock.NewLog()),
 		},
 		{ //01// invalid JSON
 			file: `{"food":`,
-			db:   NewDB(),
+			db:   NewDB(mock.NewLog()),
 		},
 		{ //02// success
 			file: backup1,
@@ -111,7 +111,7 @@ func Test_backup_load(t *testing.T) {
 			t.Error(err)
 		}
 
-		db := NewDB()
+		db := NewDB(mock.NewLog())
 		(&backup{db: db}).load()
 
 		if !reflect.DeepEqual(db, data.db) {
@@ -130,12 +130,12 @@ func Test_backup_save(t *testing.T) {
 	}{
 		{ //00// no directory permission
 			dir: "/opt/tmp/heyapple",
-			db:  NewDB(),
+			db:  NewDB(mock.NewLog()),
 			err: &fs.PathError{},
 		},
 		{ //01// empty database
 			dir:  testStorageDir,
-			db:   NewDB(),
+			db:   NewDB(mock.NewLog()),
 			file: backup0,
 		},
 		{ //02// save filled database
@@ -177,12 +177,12 @@ func Test_backup_backUp(t *testing.T) {
 	}{
 		{ //00// no directory permission
 			dir: "/opt/tmp/heyapple",
-			db:  NewDB(),
+			db:  NewDB(mock.NewLog()),
 			err: &fs.PathError{},
 		},
 		{ //01// empty database
 			dir:  testStorageDir,
-			db:   NewDB(),
+			db:   NewDB(mock.NewLog()),
 			file: backup0,
 		},
 		{ //02// save filled database

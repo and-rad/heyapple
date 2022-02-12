@@ -30,6 +30,7 @@ import (
 )
 
 type DB struct {
+	log  app.Logger
 	jobs *job.Scheduler
 
 	food map[int]core.Food
@@ -39,14 +40,15 @@ type DB struct {
 	mtx sync.RWMutex
 }
 
-func NewDB() *DB {
+func NewDB(log app.Logger) *DB {
 	return &DB{
+		log:  log,
 		food: make(map[int]core.Food),
 	}
 }
 
-func NewDBWithBackup() *DB {
-	backupper := &backup{db: NewDB()}
+func NewDBWithBackup(log app.Logger) *DB {
+	backupper := &backup{db: NewDB(log)}
 	backupper.load()
 
 	db := backupper.db

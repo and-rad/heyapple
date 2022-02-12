@@ -18,6 +18,7 @@
 
 // Package mock supplies various stubs and mock objects that can be
 // used for unit testing and development deployments.
+// nolint
 package mock
 
 import (

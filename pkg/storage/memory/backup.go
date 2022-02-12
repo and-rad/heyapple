@@ -44,12 +44,12 @@ type backupData struct {
 
 func (b *backup) Run() {
 	if err := b.save(); err != nil {
-		println(err.Error()) // TODO: implement proper error logging
+		b.db.log.Error(err)
 	}
 
 	if now := time.Now().Format("2006-01-02"); now != b.lastBackup {
 		if err := b.backUp(); err != nil {
-			println(err.Error()) // TODO: implement proper error logging
+			b.db.log.Error(err)
 		}
 	}
 }

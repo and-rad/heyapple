@@ -55,7 +55,7 @@ func TestNewDBWithBackup(t *testing.T) {
 		defer os.Unsetenv(envStorageDir)
 		defer os.RemoveAll(data.dir)
 
-		db := NewDBWithBackup()
+		db := NewDBWithBackup(mock.NewLog())
 		time.Sleep(time.Millisecond * 500)
 		db.Close()
 
@@ -74,7 +74,7 @@ func TestDB_Execute(t *testing.T) {
 		err error
 	}{
 		{ //00//
-			db:  NewDB(),
+			db:  NewDB(mock.NewLog()),
 			cmd: &app.CreateFood{},
 		},
 	} {
@@ -98,7 +98,7 @@ func TestDB_Fetch(t *testing.T) {
 		err error
 	}{
 		{ //00// empty database
-			db:  NewDB(),
+			db:  NewDB(mock.NewLog()),
 			cmd: &app.GetFood{Item: core.Food{ID: 1}},
 			err: app.ErrNotFound,
 		},
@@ -132,7 +132,7 @@ func TestDB_NewFood(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:   NewDB(),
+			db:   NewDB(mock.NewLog()),
 			food: core.Food{ID: 1},
 		},
 		{ //01// increment id
@@ -160,7 +160,7 @@ func TestDB_Foods(t *testing.T) {
 		err   error
 	}{
 		{ //00// empty database
-			db:    NewDB(),
+			db:    NewDB(mock.NewLog()),
 			foods: []core.Food{},
 		},
 		{ //01// all items returned
@@ -189,7 +189,7 @@ func TestDB_Food(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:  NewDB(),
+			db:  NewDB(mock.NewLog()),
 			err: app.ErrNotFound,
 		},
 		{ //01// item doesn't exist
@@ -222,7 +222,7 @@ func TestDB_SetFood(t *testing.T) {
 		err error
 	}{
 		{ //00// empty database
-			db:  NewDB(),
+			db:  NewDB(mock.NewLog()),
 			err: app.ErrNotFound,
 		},
 		{ //01// food item doesn't exist

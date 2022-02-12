@@ -10,3 +10,5 @@ build: test-all-server build-server build-nextcloud
 run: run-server
 
 test: test-server
+
+install: install-server

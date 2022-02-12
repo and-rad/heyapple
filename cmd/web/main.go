@@ -29,7 +29,7 @@ import (
 )
 
 func main() {
-	db := memory.NewDB()
+	db := memory.NewDBWithBackup()
 
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(middleware.Options)

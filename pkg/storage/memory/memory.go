@@ -24,11 +24,14 @@ package memory
 import (
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
+	"heyapple/pkg/job"
 	"sort"
 	"sync"
 )
 
 type DB struct {
+	jobs *job.Scheduler
+
 	food map[int]core.Food
 
 	foodID int
@@ -40,6 +43,27 @@ func NewDB() *DB {
 	return &DB{
 		food: make(map[int]core.Food),
 	}
+}
+
+func NewDBWithBackup() *DB {
+	backupper := &backup{db: NewDB()}
+	backupper.load()
+
+	db := backupper.db
+	db.jobs = job.NewScheduler(
+		getConfig().storageInterval,
+		backupper,
+	)
+
+	go db.jobs.Run()
+	return db
+}
+
+func (db *DB) Close() error {
+	if db.jobs != nil {
+		db.jobs.Stop()
+	}
+	return nil
 }
 
 func (db *DB) Food(id int) (core.Food, error) {

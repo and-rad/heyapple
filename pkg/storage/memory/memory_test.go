@@ -22,13 +22,49 @@ import (
 	"heyapple/internal/mock"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
+	"io/ioutil"
+	"os"
+	"path/filepath"
 	"reflect"
 	"testing"
+	"time"
 )
 
 const (
 	testStorageDir = "/tmp/heyappletest/memory/config"
 )
+
+func TestNewDBWithBackup(t *testing.T) {
+	os.Setenv(envStorageInterval, "200ms")
+	defer os.Unsetenv(envStorageInterval)
+
+	for idx, data := range []struct {
+		dir  string
+		file string
+	}{
+		{ //00// no write permission
+			dir:  "/opt/tmp/heyapple",
+			file: "",
+		},
+		{ //01// job scheduler successful
+			dir:  testStorageDir,
+			file: backup0,
+		},
+	} {
+		os.Setenv(envStorageDir, data.dir)
+		defer os.Unsetenv(envStorageDir)
+		defer os.RemoveAll(data.dir)
+
+		db := NewDBWithBackup()
+		time.Sleep(time.Millisecond * 500)
+		db.Close()
+
+		file, _ := ioutil.ReadFile(filepath.Join(data.dir, storageFile+".json"))
+		if contents := string(file); contents != data.file {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, contents, data.file)
+		}
+	}
+}
 
 func TestDB_Execute(t *testing.T) {
 	for idx, data := range []struct {

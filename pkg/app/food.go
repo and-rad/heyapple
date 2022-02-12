@@ -48,6 +48,10 @@ type SaveFood struct {
 }
 
 func (c *SaveFood) Execute(db DB) error {
+	if c.ID == 0 {
+		return ErrNotFound
+	}
+
 	food, err := db.Food(c.ID)
 	if err != nil {
 		return err
@@ -73,6 +77,10 @@ type GetFood struct {
 }
 
 func (q *GetFood) Fetch(db DB) error {
+	if q.Item.ID == 0 {
+		return ErrNotFound
+	}
+
 	if food, err := db.Food(q.Item.ID); err != nil {
 		return err
 	} else {

@@ -61,28 +61,33 @@ func TestSaveFood_Execute(t *testing.T) {
 		food core.Food
 		err  error
 	}{
-		{ //00// connection failed
+		{ //00// id missing or invalid
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// connection failed
+			id:  1,
 			db:  mock.NewDB().WithError(mock.ErrDOS),
 			err: mock.ErrDOS,
 		},
-		{ //01// id not found
+		{ //02// id not found
 			id:   2,
 			db:   mock.NewDB().WithFood(mock.Food1),
 			food: mock.Food1,
 			err:  app.ErrNotFound,
 		},
-		{ //02// empty data, no changes
+		{ //03// empty data, no changes
 			id:   1,
 			db:   mock.NewDB().WithFood(mock.Food1),
 			food: mock.Food1,
 		},
-		{ //03// change some values
+		{ //04// change some values
 			id:   1,
 			db:   mock.NewDB().WithFood(mock.Food1),
 			data: map[string]float32{"kcal": 120, "carb": 33.3},
 			food: func() core.Food { f := mock.Food1; f.KCal = 120; f.Carbs = 33.3; return f }(),
 		},
-		{ //04// change all values
+		{ //05// change all values
 			id: 1,
 			db: mock.NewDB().WithFood(mock.Food1),
 			data: map[string]float32{
@@ -118,23 +123,29 @@ func TestGetFood_Fetch(t *testing.T) {
 		food core.Food
 		err  error
 	}{
-		{ //00// connection failed
-			db:  mock.NewDB().WithError(mock.ErrDOS),
-			err: mock.ErrDOS,
+		{ //00// id missing or invalid
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
 		},
-		{ //01// empty db
+		{ //01// connection failed
+			id:   1,
+			db:   mock.NewDB().WithError(mock.ErrDOS),
+			err:  mock.ErrDOS,
+			food: core.Food{ID: 1},
+		},
+		{ //02// empty db
 			id:   1,
 			db:   mock.NewDB(),
 			err:  app.ErrNotFound,
 			food: core.Food{ID: 1},
 		},
-		{ //02// id not found
+		{ //03// id not found
 			id:   1,
 			db:   mock.NewDB().WithFood(mock.Food2),
 			err:  app.ErrNotFound,
 			food: core.Food{ID: 1},
 		},
-		{ //03// success
+		{ //04// success
 			id:   1,
 			db:   mock.NewDB().WithFood(mock.Food1),
 			food: mock.Food1,

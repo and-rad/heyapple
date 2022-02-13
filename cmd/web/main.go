@@ -21,7 +21,7 @@ package main
 import (
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
-	"heyapple/pkg/middleware"
+	"heyapple/pkg/handler"
 	"heyapple/pkg/storage/memory"
 	"log"
 	"net/http"
@@ -39,12 +39,11 @@ func main() {
 	db := memory.NewDBWithBackup(out)
 
 	router := httprouter.New()
-	router.GlobalOPTIONS = http.HandlerFunc(middleware.Options)
-	router.GET("/api/v1/foods", api.Foods(db))
-	router.GET("/api/v1/food/:id", api.Food(db))
-	router.POST("/api/v1/food", api.NewFood(db))
-	router.PUT("/api/v1/food/:id", api.SaveFood(db))
+	router.GlobalOPTIONS = http.HandlerFunc(handler.Options)
+	router.GET("/api/v1/foods", handler.JSON(api.Foods(db)))
+	router.GET("/api/v1/food/:id", handler.JSON(api.Food(db)))
+	router.POST("/api/v1/food", handler.JSON(api.NewFood(db)))
+	router.PUT("/api/v1/food/:id", handler.JSON(api.SaveFood(db)))
 
-	handler := middleware.Headers(router)
-	log.Fatal(http.ListenAndServe(":8080", handler))
+	log.Fatal(http.ListenAndServe(":8080", router))
 }

@@ -19,7 +19,11 @@
 // nolint
 package mock
 
-import "net/http"
+import (
+	"net/http"
+
+	"github.com/julienschmidt/httprouter"
+)
 
 type Handler struct {
 	Body string
@@ -27,4 +31,10 @@ type Handler struct {
 
 func (h Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(h.Body))
+}
+
+func (h Handler) Handle() func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		w.Write([]byte(h.Body))
+	}
 }

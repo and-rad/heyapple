@@ -16,11 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package middleware_test
+package handler_test
 
 import (
 	"heyapple/internal/mock"
-	"heyapple/pkg/middleware"
+	"heyapple/pkg/handler"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -28,7 +28,7 @@ import (
 	"testing"
 )
 
-func TestHeaders(t *testing.T) {
+func TestJSON(t *testing.T) {
 	for idx, data := range []struct {
 		header http.Header
 		next   mock.Handler
@@ -45,7 +45,7 @@ func TestHeaders(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		middleware.Headers(data.next).ServeHTTP(res, req)
+		handler.JSON(data.next.Handle())(res, req, nil)
 
 		if header := res.Result().Header; !reflect.DeepEqual(header, data.header) {
 			t.Errorf("test case %d: header mismatch \nhave: %v \nwant: %v", idx, header, data.header)
@@ -92,7 +92,7 @@ func TestOptions(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		req.Header = data.inhead
 		res := httptest.NewRecorder()
-		middleware.Options(res, req)
+		handler.Options(res, req)
 
 		if header := res.Result().Header; !reflect.DeepEqual(header, data.outhead) {
 			t.Errorf("test case %d: header mismatch \nhave: %v \nwant: %v", idx, header, data.outhead)

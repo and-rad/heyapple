@@ -16,24 +16,27 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-// Package middleware defines various pieces of middleware that conform
-// to the http.Handler interface. Most of these deal with headers,
-// security and authentication.
-package middleware
+// Package web defines handlers for static web content as well as
+// various pieces of middleware that conform to the http.Handler and the
+// httprouter.Handle interfaces.
+package handler
 
-import "net/http"
+import (
+	"net/http"
 
-// Headers sets response headers that are important for the
-// API to function properly.
-func Headers(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	"github.com/julienschmidt/httprouter"
+)
+
+// JSON is a middleware to identify response bodies as JSON data.
+func JSON(next httprouter.Handle) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		next.ServeHTTP(w, r)
-	})
+		next(w, r, ps)
+	}
 }
 
-// Options tells clients about CORS capabilities.
+// Options is a middleware that tells clients about CORS capabilities.
 func Options(w http.ResponseWriter, r *http.Request) {
 	header := w.Header()
 

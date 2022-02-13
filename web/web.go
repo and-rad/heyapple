@@ -2,7 +2,7 @@ package web
 
 import (
 	"embed"
-	"text/template"
+	"html/template"
 )
 
 var (

@@ -40,6 +40,10 @@ func main() {
 
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(handler.Options)
+	router.GET("/", handler.Home(db))
+	router.GET("/app", handler.App(db))
+	router.GET("/login", handler.Login(db))
+
 	router.GET("/api/v1/foods", handler.JSON(api.Foods(db)))
 	router.GET("/api/v1/food/:id", handler.JSON(api.Food(db)))
 	router.POST("/api/v1/food", handler.JSON(api.NewFood(db)))

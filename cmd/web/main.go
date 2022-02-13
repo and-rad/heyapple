@@ -23,6 +23,8 @@ import (
 	"heyapple/pkg/app"
 	"heyapple/pkg/handler"
 	"heyapple/pkg/storage/memory"
+	"heyapple/web"
+	"io/fs"
 	"log"
 	"net/http"
 	"os"
@@ -48,6 +50,10 @@ func main() {
 	router.GET("/api/v1/food/:id", handler.JSON(api.Food(db)))
 	router.POST("/api/v1/food", handler.JSON(api.NewFood(db)))
 	router.PUT("/api/v1/food/:id", handler.JSON(api.SaveFood(db)))
+
+	if sub, err := fs.Sub(web.Static, "static"); err == nil {
+		router.ServeFiles("/static/*filepath", http.FS(sub))
+	}
 
 	log.Fatal(http.ListenAndServe(":8080", router))
 }

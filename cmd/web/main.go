@@ -51,6 +51,10 @@ func main() {
 	router.POST("/api/v1/food", handler.JSON(api.NewFood(db)))
 	router.PUT("/api/v1/food/:id", handler.JSON(api.SaveFood(db)))
 
+	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {
+		router.ServeFiles("/data/*filepath", http.Dir(dir))
+	}
+
 	if sub, err := fs.Sub(web.Static, "static"); err == nil {
 		router.ServeFiles("/static/*filepath", http.FS(sub))
 	}

@@ -21,6 +21,7 @@ package main
 import (
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
+	"heyapple/pkg/auth"
 	"heyapple/pkg/handler"
 	"heyapple/pkg/storage/memory"
 	"heyapple/web"
@@ -29,6 +30,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -39,12 +41,16 @@ func main() {
 	out.Log("######################")
 
 	db := memory.NewDBWithBackup(out)
+	sm := scs.New()
 
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(handler.Options)
 	router.GET("/", handler.Home(db))
-	router.GET("/app", handler.App(db))
-	router.GET("/login", handler.Login(db))
+	router.GET("/app", handler.Auth(sm, "/login", handler.App(db)))
+	router.GET("/login", handler.Anon(sm, "/app", handler.Login(db)))
+
+	router.POST("/auth/local", auth.LocalLogin(db))
+	router.DELETE("/auth/local", auth.LocalLogout(db))
 
 	router.GET("/api/v1/foods", handler.JSON(api.Foods(db)))
 	router.GET("/api/v1/food/:id", handler.JSON(api.Food(db)))
@@ -59,5 +65,5 @@ func main() {
 		router.ServeFiles("/static/*filepath", http.FS(sub))
 	}
 
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe(":8080", sm.LoadAndSave(router)))
 }

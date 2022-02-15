@@ -31,13 +31,16 @@ import (
 )
 
 var (
-	ErrNotFound = errors.New("notfound")
+	ErrCredentials = errors.New("nomatch")
+	ErrNotFound    = errors.New("notfound")
 )
 
 // DB provides access to persistent storage.
 type DB interface {
 	Execute(Command) error
 	Fetch(Query) error
+
+	UserByName(string) (User, error)
 
 	Food(int) (core.Food, error)
 	Foods() ([]core.Food, error)

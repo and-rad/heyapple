@@ -33,7 +33,9 @@ type DB struct {
 	log  app.Logger
 	jobs *job.Scheduler
 
-	food map[int]core.Food
+	users  map[int]app.User
+	emails map[string]int
+	food   map[int]core.Food
 
 	foodID int
 
@@ -66,6 +68,15 @@ func (db *DB) Close() error {
 		db.jobs.Stop()
 	}
 	return nil
+}
+
+func (db *DB) UserByName(name string) (app.User, error) {
+	if id, ok := db.emails[name]; ok {
+		if user, ok := db.users[id]; ok {
+			return user, nil
+		}
+	}
+	return app.User{}, app.ErrNotFound
 }
 
 func (db *DB) Food(id int) (core.Food, error) {

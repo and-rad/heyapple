@@ -194,6 +194,7 @@ func TestDB_Food(t *testing.T) {
 		},
 		{ //01// item doesn't exist
 			db:  &DB{food: map[int]core.Food{1: mock.Food1}},
+			id:  2,
 			err: app.ErrNotFound,
 		},
 		{ //02// success
@@ -243,6 +244,53 @@ func TestDB_SetFood(t *testing.T) {
 
 		if f, err := data.db.Food(data.food.ID); err == nil && f != data.food {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, f, data.food)
+		}
+	}
+}
+
+func TestDB_UserByName(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		name string
+
+		user app.User
+		err  error
+	}{
+		{ //00// empty database
+			db:  NewDB(mock.NewLog()),
+			err: app.ErrNotFound,
+		},
+		{ //01// user doesn't exist
+			db: &DB{
+				users:  map[int]app.User{1: {ID: 1, Email: "a@a.a"}},
+				emails: map[string]int{"a@a.a": 1},
+			},
+			name: "b@b.b",
+			err:  app.ErrNotFound,
+		},
+		{ //02// success
+			db: &DB{
+				users: map[int]app.User{
+					1: {ID: 1, Email: "a@a.a"},
+					2: {ID: 2, Email: "b@b.b"},
+				},
+				emails: map[string]int{
+					"a@a.a": 1,
+					"b@b.b": 2,
+				},
+			},
+			name: "b@b.b",
+			user: app.User{ID: 2, Email: "b@b.b"},
+		},
+	} {
+		user, err := data.db.UserByName(data.name)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if user != data.user {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, user, data.user)
 		}
 	}
 }

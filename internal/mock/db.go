@@ -33,6 +33,7 @@ var (
 )
 
 type DB struct {
+	User      app.User
 	FoodItem  core.Food
 	FoodItems []core.Food
 
@@ -66,12 +67,27 @@ func (db *DB) WithFoods(foods []core.Food) *DB {
 	return db
 }
 
+func (db *DB) WithUser(user app.User) *DB {
+	db.User = user
+	return db
+}
+
 func (db *DB) Execute(c app.Command) error {
 	return c.Execute(db)
 }
 
 func (db *DB) Fetch(q app.Query) error {
 	return q.Fetch(db)
+}
+
+func (db *DB) UserByName(name string) (app.User, error) {
+	if db.Err != nil {
+		return app.User{}, db.Err
+	}
+	if db.User.Email != name {
+		return app.User{}, app.ErrNotFound
+	}
+	return db.User, nil
 }
 
 func (db *DB) Food(id int) (core.Food, error) {

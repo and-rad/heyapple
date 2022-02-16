@@ -48,8 +48,14 @@ func LocalLogin(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 	}
 }
 
-func LocalLogout(db app.DB) httprouter.Handle {
+func LocalLogout(sm *scs.SessionManager) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-
+		if err := sm.Destroy(r.Context()); err == scs.ErrNoSession {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
 	}
 }

@@ -79,3 +79,22 @@ func TestLocalLogin(t *testing.T) {
 		}
 	}
 }
+
+func TestLocalLogout(t *testing.T) {
+	for idx, data := range []struct {
+		status int
+	}{
+		{ //00//
+			status: http.StatusNotFound,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+
+		auth.LocalLogout(scs.New())(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+	}
+}

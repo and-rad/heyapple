@@ -51,7 +51,7 @@ func main() {
 	router.GET("/login", mw.Anon(sm, "/app", handler.Login(db)))
 
 	router.POST("/auth/local", auth.LocalLogin(sm, db))
-	router.DELETE("/auth/local", auth.LocalLogout(db))
+	router.DELETE("/auth/local", auth.LocalLogout(sm))
 
 	router.GET("/api/v1/foods", mw.JSON(api.Foods(db)))
 	router.GET("/api/v1/food/:id", mw.JSON(api.Food(db)))

@@ -26,6 +26,8 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/and-rad/scs/v2"
 )
 
 func TestJSON(t *testing.T) {
@@ -100,6 +102,88 @@ func TestOptions(t *testing.T) {
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+	}
+}
+
+func TestAnon(t *testing.T) {
+	for idx, data := range []struct {
+		setCookie bool
+
+		target string
+		status int
+	}{
+		{ //00// anonymous user
+			setCookie: false,
+			status:    200,
+		},
+		{ //01// authenticated user
+			setCookie: true,
+			target:    "/overhere",
+			status:    303,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+
+		sm := scs.New()
+		if data.setCookie {
+			ctx, err := sm.Load(req.Context(), "abc")
+			if err == nil {
+				req = req.WithContext(ctx)
+				sm.Put(req.Context(), "id", "hi")
+			}
+		}
+
+		handler.Anon(sm, data.target, (mock.Handler{}).Handle())(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if loc, err := res.Result().Location(); err == nil && loc.Path != data.target {
+			t.Errorf("test case %d: location mismatch \nhave: %v\nwant: %v", idx, loc.Path, data.target)
+		}
+	}
+}
+
+func TestAuth(t *testing.T) {
+	for idx, data := range []struct {
+		setCookie bool
+
+		target string
+		status int
+	}{
+		{ //00// anonymous user
+			setCookie: false,
+			target:    "/somewhere",
+			status:    303,
+		},
+		{ //01// authenticated
+			setCookie: true,
+			status:    200,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+
+		sm := scs.New()
+		if data.setCookie {
+			ctx, err := sm.Load(req.Context(), "abc")
+			if err == nil {
+				req = req.WithContext(ctx)
+				sm.Put(req.Context(), "id", "hi")
+			}
+		}
+
+		handler.Auth(sm, data.target, (mock.Handler{}).Handle())(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if loc, err := res.Result().Location(); err == nil && loc.Path != data.target {
+			t.Errorf("test case %d: location mismatch \nhave: %v\nwant: %v", idx, loc.Path, data.target)
 		}
 	}
 }

@@ -74,6 +74,10 @@ func TestAuthenticate_Fetch(t *testing.T) {
 			t.Errorf("test case %d: error mismatch \nhave: %v \nwant: %v", idx, err, data.err)
 		}
 
+		if err == nil && qry.Pass != "" {
+			t.Errorf("test case %d: password not cleared", idx)
+		}
+
 		if qry.ID != data.id {
 			t.Errorf("test case %d: id mismatch \nhave: %v \nwant: %v", idx, qry.ID, data.id)
 		}

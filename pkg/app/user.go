@@ -36,13 +36,14 @@ type Authenticate struct {
 	ID    int
 }
 
-func (c *Authenticate) Fetch(db DB) error {
-	if user, err := db.UserByName(c.Email); err != nil {
+func (q *Authenticate) Fetch(db DB) error {
+	if user, err := db.UserByName(q.Email); err != nil {
 		return err
-	} else if !NewCrypter().Match(user.Pass, c.Pass) {
+	} else if !NewCrypter().Match(user.Pass, q.Pass) {
 		return ErrCredentials
 	} else {
-		c.ID = user.ID
+		q.ID = user.ID
+		q.Pass = ""
 	}
 
 	return nil

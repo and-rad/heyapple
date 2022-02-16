@@ -83,3 +83,49 @@ func TestAuthenticate_Fetch(t *testing.T) {
 		}
 	}
 }
+
+func TestCreateUser_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db    *mock.DB
+		email string
+		pass  string
+
+		err error
+	}{
+		{ //00// database failure
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			err: mock.ErrDOS,
+		},
+		{ //01// username already exists
+			db:    mock.NewDB().WithUser(app.User{Email: "a@a.a"}),
+			email: "a@a.a",
+			err:   app.ErrExists,
+		},
+		{ //02// deferred database failure
+			db:    mock.NewDB().WithError(nil, mock.ErrDOS),
+			email: "b@b.b",
+			pass:  "topsecret",
+			err:   mock.ErrDOS,
+		},
+		{ //03// success
+			db:    mock.NewDB().WithUser(app.User{Email: "a@a.a"}),
+			email: "b@b.b",
+			pass:  "topsecret",
+		},
+	} {
+		cmd := &app.CreateUser{Email: data.email, Pass: data.pass}
+		err := cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if cmd.ID != data.db.ID {
+			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, cmd.ID, data.db.ID)
+		}
+
+		if err == nil && !app.NewCrypter().Match(data.db.User.Pass, data.pass) {
+			t.Errorf("test case %d: password mismatch", idx)
+		}
+	}
+}

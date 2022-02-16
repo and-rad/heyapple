@@ -27,6 +27,33 @@ type User struct {
 	ID    int    `json:"id"`
 }
 
+// CreateUser is a command to create a new user with a
+// unique id and e-mail address. If successful, the new
+// user's id is stored in the command.
+type CreateUser struct {
+	Email string
+	Pass  string
+	ID    int
+}
+
+func (c *CreateUser) Execute(db DB) error {
+	if _, err := db.UserByName(c.Email); err == nil {
+		return ErrExists
+	} else if err != ErrNotFound {
+		return err
+	}
+
+	hash := NewCrypter().Encrypt(c.Pass)
+	if id, err := db.NewUser(c.Email, hash); err != nil {
+		return err
+	} else {
+		c.ID = id
+		c.Pass = ""
+	}
+
+	return nil
+}
+
 // Authenticate is a query that authenticates a user by
 // checking against e-mail and password. If successful,
 // the user's id is stored in the command.

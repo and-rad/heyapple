@@ -37,7 +37,7 @@ type DB struct {
 	FoodItem  core.Food
 	FoodItems []core.Food
 
-	Err error
+	Err []error
 	ID  int
 }
 
@@ -47,7 +47,7 @@ func NewDB() *DB {
 	}
 }
 
-func (db *DB) WithError(e error) *DB {
+func (db *DB) WithError(e ...error) *DB {
 	db.Err = e
 	return db
 }
@@ -80,9 +80,17 @@ func (db *DB) Fetch(q app.Query) error {
 	return q.Fetch(db)
 }
 
+func (db *DB) NewUser(email string, hash string) (int, error) {
+	if err := db.popError(); err != nil {
+		return 0, err
+	}
+	db.User = app.User{ID: db.ID, Email: email, Pass: hash}
+	return db.ID, nil
+}
+
 func (db *DB) UserByName(name string) (app.User, error) {
-	if db.Err != nil {
-		return app.User{}, db.Err
+	if err := db.popError(); err != nil {
+		return app.User{}, err
 	}
 	if db.User.Email != name {
 		return app.User{}, app.ErrNotFound
@@ -91,8 +99,8 @@ func (db *DB) UserByName(name string) (app.User, error) {
 }
 
 func (db *DB) Food(id int) (core.Food, error) {
-	if db.Err != nil {
-		return core.Food{}, db.Err
+	if err := db.popError(); err != nil {
+		return core.Food{}, err
 	}
 	if db.FoodItem.ID != id {
 		return core.Food{}, app.ErrNotFound
@@ -101,26 +109,35 @@ func (db *DB) Food(id int) (core.Food, error) {
 }
 
 func (db *DB) Foods() ([]core.Food, error) {
-	if db.Err != nil {
-		return nil, db.Err
+	if err := db.popError(); err != nil {
+		return nil, err
 	}
 	return db.FoodItems, nil
 }
 
 func (db *DB) NewFood() (int, error) {
-	if db.Err != nil {
-		return 0, db.Err
+	if err := db.popError(); err != nil {
+		return 0, err
 	}
 	return db.ID, nil
 }
 
 func (db *DB) SetFood(food core.Food) error {
-	if db.Err != nil {
-		return db.Err
+	if err := db.popError(); err != nil {
+		return err
 	}
 	if db.FoodItem.ID != food.ID {
 		return app.ErrNotFound
 	}
 	db.FoodItem = food
 	return nil
+}
+
+func (db *DB) popError() error {
+	var err error
+	if len(db.Err) > 0 {
+		err = db.Err[0]
+		db.Err = db.Err[1:]
+	}
+	return err
 }

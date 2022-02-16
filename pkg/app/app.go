@@ -32,6 +32,7 @@ import (
 
 var (
 	ErrCredentials = errors.New("nomatch")
+	ErrExists      = errors.New("exists")
 	ErrNotFound    = errors.New("notfound")
 )
 
@@ -40,9 +41,10 @@ type DB interface {
 	Execute(Command) error
 	Fetch(Query) error
 
-	UserByName(string) (User, error)
+	NewUser(name string, hash string) (int, error)
+	UserByName(name string) (User, error)
 
-	Food(int) (core.Food, error)
+	Food(id int) (core.Food, error)
 	Foods() ([]core.Food, error)
 	NewFood() (int, error)
 	SetFood(core.Food) error

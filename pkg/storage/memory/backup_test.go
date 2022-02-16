@@ -21,6 +21,7 @@ package memory
 import (
 	"fmt"
 	"heyapple/internal/mock"
+	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"io/fs"
 	"io/ioutil"
@@ -32,10 +33,16 @@ import (
 )
 
 var (
-	backup0 = `{"food":{},"foodid":0}`
-	backup1 = fmt.Sprintf(`{"food":{"1":%s,"2":%s},"foodid":2}`, mock.Food1Json, mock.Food2Json)
+	backup0 = `{"users":{},"food":{},"foodid":0}`
+	backup1 = fmt.Sprintf(`{"users":{"1":%s},"food":{"1":%s,"2":%s},"foodid":2}`, mock.User1Json, mock.Food1Json, mock.Food2Json)
 
-	database1 = &DB{log: mock.NewLog(), food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}, foodID: 2}
+	database1 = &DB{
+		log:    mock.NewLog(),
+		users:  map[int]app.User{mock.User1.ID: mock.User1},
+		emails: map[string]int{mock.User1.Email: mock.User1.ID},
+		food:   map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},
+		foodID: 2,
+	}
 )
 
 func Test_backup_Run(t *testing.T) {

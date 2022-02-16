@@ -20,6 +20,7 @@ package memory
 
 import (
 	"encoding/json"
+	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"io/ioutil"
 	"os"
@@ -38,6 +39,7 @@ type backup struct {
 }
 
 type backupData struct {
+	Users  map[int]app.User  `json:"users"`
 	Food   map[int]core.Food `json:"food"`
 	FoodID int               `json:"foodid"`
 }
@@ -62,6 +64,11 @@ func (b *backup) load() {
 	if data, err := ioutil.ReadFile(path); err == nil {
 		var db backupData
 		if err = json.Unmarshal(data, &db); err == nil {
+			b.db.users = db.Users
+			for k, v := range b.db.users {
+				b.db.emails[v.Email] = k
+			}
+
 			b.db.food = db.Food
 			b.db.foodID = db.FoodID
 		}
@@ -78,6 +85,7 @@ func (b *backup) save() error {
 	}
 
 	data, _ := json.Marshal(backupData{
+		Users:  b.db.users,
 		Food:   b.db.food,
 		FoodID: b.db.foodID,
 	})
@@ -96,6 +104,7 @@ func (b *backup) backUp() error {
 	}
 
 	data, _ := json.Marshal(backupData{
+		Users:  b.db.users,
 		Food:   b.db.food,
 		FoodID: b.db.foodID,
 	})

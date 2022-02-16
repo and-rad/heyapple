@@ -4,9 +4,9 @@ package app
 // by their e-mail address or id. The password is always
 // stored as an encrypted hash.
 type User struct {
-	Email string
-	Pass  string
-	ID    int
+	Email string `json:"email"`
+	Pass  string `json:"pass"`
+	ID    int    `json:"id"`
 }
 
 // Authenticate is a query that authenticates a user by

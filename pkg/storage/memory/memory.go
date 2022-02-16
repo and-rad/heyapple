@@ -44,8 +44,10 @@ type DB struct {
 
 func NewDB(log app.Logger) *DB {
 	return &DB{
-		log:  log,
-		food: make(map[int]core.Food),
+		log:    log,
+		users:  make(map[int]app.User),
+		emails: make(map[string]int),
+		food:   make(map[int]core.Food),
 	}
 }
 

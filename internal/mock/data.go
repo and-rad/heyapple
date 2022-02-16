@@ -19,6 +19,7 @@
 package mock
 
 import (
+	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 )
 
@@ -82,4 +83,10 @@ var (
 
 	Food1Json = `{"id":1,"brand":0,"kcal":54,"fat":0.1,"fatsat":0,"fato3":0,"fato6":0,"carb":14.4,"sug":10.3,"prot":0.3,"fib":2,"pot":0.119,"chl":0.0022,"sod":0,"calc":0.0053,"phos":0.011,"mag":0.005,"iron":0.0002,"zinc":0.0001,"mang":0,"cop":0.0001,"iod":0.000008,"chr":0,"mol":0,"sel":0,"vita":0.00001,"vitb1":0.00004,"vitb2":0.00003,"vitb3":0,"vitb5":0,"vitb6":0.0001,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0.012,"vitd":0,"vite":0.00049,"vitk":0}`
 	Food2Json = `{"id":2,"brand":0,"kcal":93,"fat":0.2,"fatsat":0,"fato3":0,"fato6":0,"carb":20,"sug":17,"prot":1,"fib":2,"pot":0.367,"chl":0.109,"sod":0,"calc":0.007,"phos":0.022,"mag":0.03,"iron":0.0004,"zinc":0.0002,"mang":0.0003,"cop":0.0001,"iod":0.000003,"chr":0,"mol":0,"sel":0,"vita":0.00001,"vitb1":0.00004,"vitb2":0.00006,"vitb3":0,"vitb5":0,"vitb6":0.00036,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0.011,"vitd":0,"vite":0.00027,"vitk":0}`
+)
+
+var (
+	User1 = app.User{ID: 1, Email: "a@a.a", Pass: "$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC"}
+
+	User1Json = `{"email":"a@a.a","pass":"$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC","id":1}`
 )

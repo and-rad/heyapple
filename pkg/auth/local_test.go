@@ -29,6 +29,7 @@ import (
 	"testing"
 
 	"github.com/and-rad/scs/v2"
+	"github.com/and-rad/scs/v2/memstore"
 )
 
 func TestLocalLogin(t *testing.T) {
@@ -82,16 +83,37 @@ func TestLocalLogin(t *testing.T) {
 
 func TestLocalLogout(t *testing.T) {
 	for idx, data := range []struct {
-		status int
+		setSession bool
+		store      scs.Store
+		status     int
 	}{
-		{ //00//
-			status: http.StatusNotFound,
+		{ //00// no session
+			setSession: false,
+			status:     http.StatusNotFound,
+		},
+		{ //01// fail for internal reasons
+			setSession: true,
+			store:      mock.NewSessionStore().WithFailDestroy(),
+			status:     http.StatusInternalServerError,
+		},
+		{ //02// success
+			setSession: true,
+			store:      memstore.New(),
+			status:     http.StatusOK,
 		},
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
 
-		auth.LocalLogout(scs.New())(res, req, nil)
+		sm := scs.New()
+		if data.setSession {
+			sm.Store = data.store
+			if ctx, err := sm.Load(req.Context(), ""); err == nil {
+				req = req.WithContext(ctx)
+			}
+		}
+
+		auth.LocalLogout(sm)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

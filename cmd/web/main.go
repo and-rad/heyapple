@@ -49,7 +49,7 @@ func main() {
 	router.GET("/app", handler.Auth(sm, "/login", handler.App(db)))
 	router.GET("/login", handler.Anon(sm, "/app", handler.Login(db)))
 
-	router.POST("/auth/local", auth.LocalLogin(db))
+	router.POST("/auth/local", auth.LocalLogin(sm, db))
 	router.DELETE("/auth/local", auth.LocalLogout(db))
 
 	router.GET("/api/v1/foods", handler.JSON(api.Foods(db)))

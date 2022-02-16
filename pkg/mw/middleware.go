@@ -16,10 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-// Package web defines handlers for static web content as well as
-// various pieces of middleware that conform to the http.Handler and the
-// httprouter.Handle interfaces.
-package handler
+// Package mw defines various pieces of middleware that conform to the
+// http.Handler and the httprouter.Handle interfaces.
+package mw
 
 import (
 	"net/http"

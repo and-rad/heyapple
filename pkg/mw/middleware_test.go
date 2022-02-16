@@ -16,11 +16,11 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package handler_test
+package mw_test
 
 import (
 	"heyapple/internal/mock"
-	"heyapple/pkg/handler"
+	"heyapple/pkg/mw"
 	"net/http"
 	"net/http/httptest"
 	"reflect"
@@ -47,7 +47,7 @@ func TestJSON(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		handler.JSON(data.next.Handle())(res, req, nil)
+		mw.JSON(data.next.Handle())(res, req, nil)
 
 		if header := res.Result().Header; !reflect.DeepEqual(header, data.header) {
 			t.Errorf("test case %d: header mismatch \nhave: %v \nwant: %v", idx, header, data.header)
@@ -94,7 +94,7 @@ func TestOptions(t *testing.T) {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		req.Header = data.inhead
 		res := httptest.NewRecorder()
-		handler.Options(res, req)
+		mw.Options(res, req)
 
 		if header := res.Result().Header; !reflect.DeepEqual(header, data.outhead) {
 			t.Errorf("test case %d: header mismatch \nhave: %v \nwant: %v", idx, header, data.outhead)
@@ -135,7 +135,7 @@ func TestAnon(t *testing.T) {
 			}
 		}
 
-		handler.Anon(sm, data.target, (mock.Handler{}).Handle())(res, req, nil)
+		mw.Anon(sm, data.target, (mock.Handler{}).Handle())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -176,7 +176,7 @@ func TestAuth(t *testing.T) {
 			}
 		}
 
-		handler.Auth(sm, data.target, (mock.Handler{}).Handle())(res, req, nil)
+		mw.Auth(sm, data.target, (mock.Handler{}).Handle())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

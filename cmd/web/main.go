@@ -23,6 +23,7 @@ import (
 	"heyapple/pkg/app"
 	"heyapple/pkg/auth"
 	"heyapple/pkg/handler"
+	"heyapple/pkg/mw"
 	"heyapple/pkg/storage/memory"
 	"heyapple/web"
 	"io/fs"
@@ -44,18 +45,18 @@ func main() {
 	sm := scs.New()
 
 	router := httprouter.New()
-	router.GlobalOPTIONS = http.HandlerFunc(handler.Options)
+	router.GlobalOPTIONS = http.HandlerFunc(mw.Options)
 	router.GET("/", handler.Home(db))
-	router.GET("/app", handler.Auth(sm, "/login", handler.App(db)))
-	router.GET("/login", handler.Anon(sm, "/app", handler.Login(db)))
+	router.GET("/app", mw.Auth(sm, "/login", handler.App(db)))
+	router.GET("/login", mw.Anon(sm, "/app", handler.Login(db)))
 
 	router.POST("/auth/local", auth.LocalLogin(sm, db))
 	router.DELETE("/auth/local", auth.LocalLogout(db))
 
-	router.GET("/api/v1/foods", handler.JSON(api.Foods(db)))
-	router.GET("/api/v1/food/:id", handler.JSON(api.Food(db)))
-	router.POST("/api/v1/food", handler.JSON(api.NewFood(db)))
-	router.PUT("/api/v1/food/:id", handler.JSON(api.SaveFood(db)))
+	router.GET("/api/v1/foods", mw.JSON(api.Foods(db)))
+	router.GET("/api/v1/food/:id", mw.JSON(api.Food(db)))
+	router.POST("/api/v1/food", mw.JSON(api.NewFood(db)))
+	router.PUT("/api/v1/food/:id", mw.JSON(api.SaveFood(db)))
 
 	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {
 		router.ServeFiles("/data/*filepath", http.Dir(dir))

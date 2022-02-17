@@ -2,6 +2,7 @@ package email
 
 import (
 	"errors"
+	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
 	"net/smtp"
 	"net/textproto"
@@ -17,24 +18,36 @@ var (
 )
 
 // Notifier provides messaging & notification capabilities via e-mail.
-type Notifier struct{}
-
-// NewNotifier returns a default-initialized Notifier.
-func NewNotifier() *Notifier {
-	return &Notifier{}
+type Notifier struct {
+	tr api.Translator
 }
 
-func (n *Notifier) Send(to string, msg app.Notification, data interface{}) error {
+// NewNotifier returns a default-initialized Notifier.
+func NewNotifier(tr api.Translator) *Notifier {
+	return &Notifier{
+		tr: tr,
+	}
+}
+
+func (n *Notifier) Send(to string, msg app.Notification, data app.NotificationData) error {
 	conf := getConfig()
 	mail := &email.Email{
 		To:      []string{to},
 		From:    conf.from(),
-		Subject: "subject",
-		HTML:    []byte(""),
+		Subject: n.subject(msg, data),
+		HTML:    n.message(msg, data),
 		Headers: textproto.MIMEHeader{},
 	}
 
 	return n.send(mail, conf.server(), conf.auth())
+}
+
+func (n *Notifier) subject(msg app.Notification, data app.NotificationData) string {
+	return ""
+}
+
+func (n *Notifier) message(msg app.Notification, data app.NotificationData) []byte {
+	return []byte("")
 }
 
 func (n *Notifier) send(e *email.Email, server string, auth smtp.Auth) error {

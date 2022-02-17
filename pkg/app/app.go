@@ -30,7 +30,10 @@ import (
 	"heyapple/pkg/core"
 )
 
-type Notification int
+type (
+	Notification     int
+	NotificationData map[string]interface{}
+)
 
 const (
 	RegisterNotification Notification = iota
@@ -74,5 +77,5 @@ type Query interface {
 // Notifier provides functions for sending messages to users
 // of the application.
 type Notifier interface {
-	Send(to string, msg Notification, data interface{}) error
+	Send(to string, msg Notification, data NotificationData) error
 }

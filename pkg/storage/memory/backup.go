@@ -41,6 +41,7 @@ type backup struct {
 type backupData struct {
 	Users  map[int]app.User  `json:"users"`
 	Food   map[int]core.Food `json:"food"`
+	UserID int               `json:"userid"`
 	FoodID int               `json:"foodid"`
 }
 
@@ -64,6 +65,7 @@ func (b *backup) load() {
 	if data, err := ioutil.ReadFile(path); err == nil {
 		var db backupData
 		if err = json.Unmarshal(data, &db); err == nil {
+			b.db.userID = db.UserID
 			b.db.users = db.Users
 			for k, v := range b.db.users {
 				b.db.emails[v.Email] = k
@@ -86,6 +88,7 @@ func (b *backup) save() error {
 
 	data, _ := json.Marshal(backupData{
 		Users:  b.db.users,
+		UserID: b.db.userID,
 		Food:   b.db.food,
 		FoodID: b.db.foodID,
 	})
@@ -105,6 +108,7 @@ func (b *backup) backUp() error {
 
 	data, _ := json.Marshal(backupData{
 		Users:  b.db.users,
+		UserID: b.db.userID,
 		Food:   b.db.food,
 		FoodID: b.db.foodID,
 	})

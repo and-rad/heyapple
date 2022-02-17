@@ -37,6 +37,7 @@ type DB struct {
 	emails map[string]int
 	food   map[int]core.Food
 
+	userID int
 	foodID int
 
 	mtx sync.RWMutex
@@ -70,6 +71,18 @@ func (db *DB) Close() error {
 		db.jobs.Stop()
 	}
 	return nil
+}
+
+func (db *DB) NewUser(name string, hash string) (int, error) {
+	if _, ok := db.emails[name]; ok {
+		return 0, app.ErrExists
+	}
+
+	db.userID++
+	db.users[db.userID] = app.User{ID: db.userID, Email: name, Pass: hash}
+	db.emails[name] = db.userID
+
+	return db.userID, nil
 }
 
 func (db *DB) UserByName(name string) (app.User, error) {

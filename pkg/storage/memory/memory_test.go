@@ -294,3 +294,56 @@ func TestDB_UserByName(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_NewUser(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		name string
+		hash string
+
+		user app.User
+		err  error
+	}{
+		{ //00// empty database
+			db:   NewDB(mock.NewLog()),
+			name: "a@a.a",
+			hash: "djwrifkgh",
+			user: app.User{ID: 1, Email: "a@a.a", Pass: "djwrifkgh"},
+		},
+		{ //01// username already exists
+			db: &DB{
+				emails: map[string]int{"a@a.a": 1},
+				users:  map[int]app.User{1: {ID: 1, Email: "a@a.a", Pass: "qpwoeirutz"}},
+				userID: 1,
+			},
+			name: "a@a.a",
+			hash: "djwrifkgh",
+			user: app.User{ID: 1, Email: "a@a.a", Pass: "qpwoeirutz"},
+			err:  app.ErrExists,
+		},
+		{ //02// success
+			db: &DB{
+				emails: map[string]int{"a@a.a": 1},
+				users:  map[int]app.User{1: {ID: 1, Email: "a@a.a", Pass: "qpwoeirutz"}},
+				userID: 1,
+			},
+			name: "b@b.b",
+			hash: "djwrifkgh",
+			user: app.User{ID: 2, Email: "b@b.b", Pass: "djwrifkgh"},
+		},
+	} {
+		id, err := data.db.NewUser(data.name, data.hash)
+
+		if err == nil && id != data.db.userID {
+			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, id, data.db.userID)
+		}
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if u, _ := data.db.UserByName(data.name); u != data.user {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, u, data.user)
+		}
+	}
+}

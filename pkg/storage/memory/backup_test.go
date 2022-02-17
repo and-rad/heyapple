@@ -33,14 +33,15 @@ import (
 )
 
 var (
-	backup0 = `{"users":{},"food":{},"foodid":0}`
-	backup1 = fmt.Sprintf(`{"users":{"1":%s},"food":{"1":%s,"2":%s},"foodid":2}`, mock.User1Json, mock.Food1Json, mock.Food2Json)
+	backup0 = `{"users":{},"food":{},"userid":0,"foodid":0}`
+	backup1 = fmt.Sprintf(`{"users":{"1":%s},"food":{"1":%s,"2":%s},"userid":1,"foodid":2}`, mock.User1Json, mock.Food1Json, mock.Food2Json)
 
 	database1 = &DB{
 		log:    mock.NewLog(),
 		users:  map[int]app.User{mock.User1.ID: mock.User1},
 		emails: map[string]int{mock.User1.Email: mock.User1.ID},
 		food:   map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},
+		userID: 1,
 		foodID: 2,
 	}
 )

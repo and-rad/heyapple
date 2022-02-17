@@ -30,6 +30,14 @@ import (
 	"heyapple/pkg/core"
 )
 
+type Notification int
+
+const (
+	RegisterNotification Notification = iota
+	RenameNotification
+	ResetNotification
+)
+
 var (
 	ErrCredentials = errors.New("nomatch")
 	ErrExists      = errors.New("exists")
@@ -41,7 +49,7 @@ type DB interface {
 	Execute(Command) error
 	Fetch(Query) error
 
-	NewUser(name string, hash string) (int, error)
+	NewUser(name, hash string) (int, error)
 	UserByName(name string) (User, error)
 
 	Food(id int) (core.Food, error)
@@ -61,4 +69,10 @@ type Command interface {
 // carry input and output parameters.
 type Query interface {
 	Fetch(db DB) error
+}
+
+// Notifier provides functions for sending messages to users
+// of the application.
+type Notifier interface {
+	Send(to string, msg Notification, data interface{}) error
 }

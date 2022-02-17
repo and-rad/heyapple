@@ -1,0 +1,70 @@
+package email
+
+import (
+	"fmt"
+	"net/smtp"
+	"os"
+	"strconv"
+)
+
+const (
+	envAddr     = "HEYAPPLE_EMAIL_ADDR"
+	envFromAddr = "HEYAPPLE_EMAIL_FROMADDR"
+	envFromName = "HEYAPPLE_EMAIL_FROMNAME"
+	envHost     = "HEYAPPLE_EMAIL_HOST"
+	envPass     = "HEYAPPLE_EMAIL_PASS"
+	envPort     = "HEYAPPLE_EMAIL_PORT"
+)
+
+type config struct {
+	addr     string
+	fromAddr string
+	fromName string
+	host     string
+	pass     string
+	port     int
+}
+
+func getConfig() config {
+	cfg := config{
+		addr:     "user@example.com",
+		fromAddr: "user@example.com",
+		fromName: "User",
+		host:     "example.com",
+		pass:     "topsecret",
+		port:     587,
+	}
+
+	if addr := os.Getenv(envAddr); addr != "" {
+		cfg.addr = addr
+	}
+	if fromAddr := os.Getenv(envFromAddr); fromAddr != "" {
+		cfg.fromAddr = fromAddr
+	}
+	if fromName := os.Getenv(envFromName); fromName != "" {
+		cfg.fromName = fromName
+	}
+	if host := os.Getenv(envHost); host != "" {
+		cfg.host = host
+	}
+	if pass := os.Getenv(envPass); pass != "" {
+		cfg.pass = pass
+	}
+	if port, err := strconv.Atoi((os.Getenv(envPort))); err == nil {
+		cfg.port = port
+	}
+
+	return cfg
+}
+
+func (c config) server() string {
+	return fmt.Sprintf("%s:%v", c.host, c.port)
+}
+
+func (c config) auth() smtp.Auth {
+	return smtp.PlainAuth("", c.addr, c.pass, c.host)
+}
+
+func (c config) from() string {
+	return fmt.Sprintf("%s <%s>", c.fromName, c.fromAddr)
+}

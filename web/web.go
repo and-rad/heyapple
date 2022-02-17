@@ -32,7 +32,7 @@ var (
 )
 
 var (
-	App   = template.Must(template.ParseFS(Templates, "templates/app.html"))
-	Home  = template.Must(template.ParseFS(Templates, "templates/home.html"))
-	Login = template.Must(template.ParseFS(Templates, "templates/login.html"))
+	App   = template.Must(template.ParseFS(Templates, "templates/web/app.html"))
+	Home  = template.Must(template.ParseFS(Templates, "templates/web/home.html"))
+	Login = template.Must(template.ParseFS(Templates, "templates/web/login.html"))
 )

@@ -124,6 +124,10 @@ func TestCreateUser_Execute(t *testing.T) {
 			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, cmd.ID, data.db.ID)
 		}
 
+		if id := data.db.Token.ID; id != cmd.ID {
+			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, id, cmd.ID)
+		}
+
 		if err == nil && !app.NewCrypter().Match(data.db.User.Pass, data.pass) {
 			t.Errorf("test case %d: password mismatch", idx)
 		}

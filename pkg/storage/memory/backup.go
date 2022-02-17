@@ -39,10 +39,11 @@ type backup struct {
 }
 
 type backupData struct {
-	Users  map[int]app.User  `json:"users"`
-	Food   map[int]core.Food `json:"food"`
-	UserID int               `json:"userid"`
-	FoodID int               `json:"foodid"`
+	Users  map[int]app.User     `json:"users"`
+	Tokens map[string]app.Token `json:"tokens"`
+	Food   map[int]core.Food    `json:"food"`
+	UserID int                  `json:"userid"`
+	FoodID int                  `json:"foodid"`
 }
 
 func (b *backup) Run() {
@@ -67,6 +68,7 @@ func (b *backup) load() {
 		if err = json.Unmarshal(data, &db); err == nil {
 			b.db.userID = db.UserID
 			b.db.users = db.Users
+			b.db.tokens = db.Tokens
 			for k, v := range b.db.users {
 				b.db.emails[v.Email] = k
 			}
@@ -86,15 +88,8 @@ func (b *backup) save() error {
 		return err
 	}
 
-	data, _ := json.Marshal(backupData{
-		Users:  b.db.users,
-		UserID: b.db.userID,
-		Food:   b.db.food,
-		FoodID: b.db.foodID,
-	})
-
 	path := filepath.Join(dir, storageFile+".json")
-	return os.WriteFile(path, data, 0644)
+	return os.WriteFile(path, b.bytes(), 0644)
 }
 
 func (b *backup) backUp() error {
@@ -106,20 +101,25 @@ func (b *backup) backUp() error {
 		return err
 	}
 
-	data, _ := json.Marshal(backupData{
-		Users:  b.db.users,
-		UserID: b.db.userID,
-		Food:   b.db.food,
-		FoodID: b.db.foodID,
-	})
-
 	now := time.Now().Format("2006-01-02")
 	path := filepath.Join(dir, backupFile+now+".json")
-	err := os.WriteFile(path, data, 0644)
+	err := os.WriteFile(path, b.bytes(), 0644)
 
 	if err == nil {
 		b.lastBackup = now
 	}
 
 	return err
+}
+
+func (b *backup) bytes() []byte {
+	data, _ := json.Marshal(backupData{
+		Users:  b.db.users,
+		UserID: b.db.userID,
+		Food:   b.db.food,
+		FoodID: b.db.foodID,
+		Tokens: b.db.tokens,
+	})
+
+	return data
 }

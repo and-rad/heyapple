@@ -297,9 +297,10 @@ func TestDB_UserByName(t *testing.T) {
 
 func TestDB_NewUser(t *testing.T) {
 	for idx, data := range []struct {
-		db   *DB
-		name string
-		hash string
+		db    *DB
+		name  string
+		hash  string
+		token string
 
 		user app.User
 		err  error
@@ -325,17 +326,23 @@ func TestDB_NewUser(t *testing.T) {
 			db: &DB{
 				emails: map[string]int{"a@a.a": 1},
 				users:  map[int]app.User{1: {ID: 1, Email: "a@a.a", Pass: "qpwoeirutz"}},
+				tokens: map[string]app.Token{},
 				userID: 1,
 			},
-			name: "b@b.b",
-			hash: "djwrifkgh",
-			user: app.User{ID: 2, Email: "b@b.b", Pass: "djwrifkgh"},
+			name:  "b@b.b",
+			hash:  "djwrifkgh",
+			token: "aabbccdd",
+			user:  app.User{ID: 2, Email: "b@b.b", Pass: "djwrifkgh"},
 		},
 	} {
-		id, err := data.db.NewUser(data.name, data.hash)
+		id, err := data.db.NewUser(data.name, data.hash, data.token)
 
 		if err == nil && id != data.db.userID {
 			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, id, data.db.userID)
+		}
+
+		if err == nil && id != data.db.tokens[data.token].ID {
+			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, data.db.tokens[data.token].ID, id)
 		}
 
 		if err != data.err {

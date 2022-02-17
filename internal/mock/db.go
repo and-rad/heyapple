@@ -34,6 +34,7 @@ var (
 
 type DB struct {
 	User      app.User
+	Token     app.Token
 	FoodItem  core.Food
 	FoodItems []core.Food
 
@@ -80,11 +81,12 @@ func (db *DB) Fetch(q app.Query) error {
 	return q.Fetch(db)
 }
 
-func (db *DB) NewUser(email string, hash string) (int, error) {
+func (db *DB) NewUser(email, hash, token string) (int, error) {
 	if err := db.popError(); err != nil {
 		return 0, err
 	}
 	db.User = app.User{ID: db.ID, Email: email, Pass: hash}
+	db.Token = app.Token{ID: db.ID}
 	return db.ID, nil
 }
 

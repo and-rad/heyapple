@@ -33,6 +33,7 @@ type User struct {
 type CreateUser struct {
 	Email string
 	Pass  string
+	Token string
 	ID    int
 }
 
@@ -44,11 +45,13 @@ func (c *CreateUser) Execute(db DB) error {
 	}
 
 	hash := NewCrypter().Encrypt(c.Pass)
-	if id, err := db.NewUser(c.Email, hash); err != nil {
+	token := NewTokenizer().Create()
+	if id, err := db.NewUser(c.Email, hash, token); err != nil {
 		return err
 	} else {
 		c.ID = id
 		c.Pass = ""
+		c.Token = token
 	}
 
 	return nil

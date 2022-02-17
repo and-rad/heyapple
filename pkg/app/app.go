@@ -52,7 +52,7 @@ type DB interface {
 	Execute(Command) error
 	Fetch(Query) error
 
-	NewUser(name, hash string) (int, error)
+	NewUser(name, hash, token string) (int, error)
 	UserByName(name string) (User, error)
 
 	Food(id int) (core.Food, error)

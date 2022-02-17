@@ -35,6 +35,7 @@ type DB struct {
 
 	users  map[int]app.User
 	emails map[string]int
+	tokens map[string]app.Token
 	food   map[int]core.Food
 
 	userID int
@@ -47,6 +48,7 @@ func NewDB(log app.Logger) *DB {
 	return &DB{
 		log:    log,
 		users:  make(map[int]app.User),
+		tokens: make(map[string]app.Token),
 		emails: make(map[string]int),
 		food:   make(map[int]core.Food),
 	}
@@ -73,7 +75,7 @@ func (db *DB) Close() error {
 	return nil
 }
 
-func (db *DB) NewUser(name string, hash string) (int, error) {
+func (db *DB) NewUser(name, hash, token string) (int, error) {
 	if _, ok := db.emails[name]; ok {
 		return 0, app.ErrExists
 	}
@@ -81,6 +83,7 @@ func (db *DB) NewUser(name string, hash string) (int, error) {
 	db.userID++
 	db.users[db.userID] = app.User{ID: db.userID, Email: name, Pass: hash}
 	db.emails[name] = db.userID
+	db.tokens[token] = app.Token{ID: db.userID}
 
 	return db.userID, nil
 }

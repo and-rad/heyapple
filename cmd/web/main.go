@@ -19,6 +19,7 @@
 package main
 
 import (
+	"fmt"
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
 	"heyapple/pkg/auth"
@@ -30,6 +31,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strconv"
 
 	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
@@ -66,5 +68,14 @@ func main() {
 		router.ServeFiles("/static/*filepath", http.FS(sub))
 	}
 
-	log.Fatal(http.ListenAndServe(":8080", sm.LoadAndSave(router)))
+	log.Fatal(http.ListenAndServe(address(), sm.LoadAndSave(router)))
+}
+
+func address() string {
+	host := os.Getenv("HEYAPPLE_WEB_HOST")
+	port, err := strconv.Atoi(os.Getenv("HEYAPPLE_WEB_PORT"))
+	if err != nil {
+		port = 8080
+	}
+	return fmt.Sprintf("%s:%d", host, port)
 }

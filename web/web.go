@@ -47,5 +47,7 @@ var (
 )
 
 var funcs = template.FuncMap{
+	"all":  func(i ...interface{}) []interface{} { return i },
 	"l10n": func(interface{}) string { return "" },
+	"raw":  func(s string) template.HTML { return template.HTML(s) },
 }

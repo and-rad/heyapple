@@ -24,8 +24,8 @@ import (
 )
 
 const (
-	envDebug   = "HEYAPPLE_DEBUG_MODE"
-	envDefault = "HEYAPPLE_LANG_DEFAULT"
+	envDebug   = "HEYAPPLE_APP_DEBUG"
+	envDefault = "HEYAPPLE_APP_LANG"
 )
 
 type config struct {

@@ -36,7 +36,7 @@ type (
 )
 
 const (
-	RegisterNotification Notification = iota
+	RegisterNotification Notification = iota + 1
 	RenameNotification
 	ResetNotification
 )

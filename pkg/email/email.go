@@ -1,31 +1,48 @@
+////////////////////////////////////////////////////////////////////////
+//
+// Copyright (C) 2021-2022 The HeyApple Authors.
+//
+// Use of this source code is governed by the GNU Affero General
+// Public License as published by the Free Software Foundation,
+// either version 3 of the License, or any later version.
+//
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program. If not, see <https://www.gnu.org/licenses/>.
+//
+////////////////////////////////////////////////////////////////////////
+
+// Package email provides an implementation of the app.Notifier interface
+// that sends notifications over standard e-mail.
 package email
 
 import (
-	"errors"
-	"heyapple/pkg/api/v1"
+	"bytes"
+	"fmt"
 	"heyapple/pkg/app"
+	"heyapple/web"
+	"html/template"
 	"net/smtp"
 	"net/textproto"
 
 	"github.com/jordan-wright/email"
 )
 
-// Error definitions
-var (
-	ErrNoTemplate      = errors.New("no template")
-	ErrParseTemplate   = errors.New("parse")
-	ErrExecuteTemplate = errors.New("execute")
-)
-
 // Notifier provides messaging & notification capabilities via e-mail.
 type Notifier struct {
-	tr api.Translator
+	sendFunc func(e *email.Email, server string, auth smtp.Auth) error
+	tr       app.Translator
 }
 
 // NewNotifier returns a default-initialized Notifier.
-func NewNotifier(tr api.Translator) *Notifier {
+func NewNotifier(tr app.Translator) *Notifier {
 	return &Notifier{
-		tr: tr,
+		sendFunc: send,
+		tr:       tr,
 	}
 }
 
@@ -39,17 +56,44 @@ func (n *Notifier) Send(to string, msg app.Notification, data app.NotificationDa
 		Headers: textproto.MIMEHeader{},
 	}
 
-	return n.send(mail, conf.server(), conf.auth())
+	return n.sendFunc(mail, conf.server(), conf.auth())
 }
 
 func (n *Notifier) subject(msg app.Notification, data app.NotificationData) string {
-	return ""
+	lang, ok := data["lang"].(string)
+	if !ok {
+		lang = n.tr.Default()
+	}
+
+	return n.tr.Translate(fmt.Sprintf("email.sub.%d", msg), lang)
 }
 
 func (n *Notifier) message(msg app.Notification, data app.NotificationData) []byte {
-	return []byte("")
+	lang, ok := data["lang"].(string)
+	if !ok {
+		lang = n.tr.Default()
+	}
+
+	var tpl *template.Template
+	switch msg {
+	case app.RegisterNotification:
+		tpl = web.MailRegister
+	case app.RenameNotification:
+		tpl = web.MailRename
+	case app.ResetNotification:
+		tpl = web.MailReset
+	}
+
+	var buf bytes.Buffer
+	if err := template.Must(tpl.Clone()).Funcs(template.FuncMap{
+		"l10n": func(in interface{}) string { return n.tr.Translate(in, lang) },
+	}).Execute(&buf, data); err != nil {
+		return []byte("")
+	}
+
+	return buf.Bytes()
 }
 
-func (n *Notifier) send(e *email.Email, server string, auth smtp.Auth) error {
-	return nil //e.Send(server, auth)
+func send(e *email.Email, server string, auth smtp.Auth) error {
+	return e.Send(server, auth)
 }

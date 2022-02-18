@@ -39,3 +39,13 @@ var (
 	Home  = template.Must(template.ParseFS(Templates, "templates/web/home.html"))
 	Login = template.Must(template.ParseFS(Templates, "templates/web/login.html"))
 )
+
+var (
+	MailRegister = template.Must(template.New("base").Funcs(funcs).ParseFS(Templates, "templates/email/base.html", "templates/email/register.html"))
+	MailRename   = template.Must(template.New("base").Funcs(funcs).ParseFS(Templates, "templates/email/base.html", "templates/email/rename.html"))
+	MailReset    = template.Must(template.New("base").Funcs(funcs).ParseFS(Templates, "templates/email/base.html", "templates/email/reset.html"))
+)
+
+var funcs = template.FuncMap{
+	"l10n": func(interface{}) string { return "" },
+}

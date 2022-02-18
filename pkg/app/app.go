@@ -79,3 +79,10 @@ type Query interface {
 type Notifier interface {
 	Send(to string, msg Notification, data NotificationData) error
 }
+
+// Translator defines functions for text localization.
+type Translator interface {
+	Translate(input interface{}, lang string) string
+	Get(lang string) map[string]string
+	Default() string
+}

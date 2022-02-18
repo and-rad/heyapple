@@ -16,26 +16,35 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package web
+package l10n
 
 import (
-	"embed"
-	"html/template"
+	"os"
+	"strconv"
 )
 
-var (
-	//go:embed templates
-	Templates embed.FS
-
-	//go:embed static
-	Static embed.FS
-
-	//go:embed l10n
-	L10n embed.FS
+const (
+	envDebug   = "HEYAPPLE_DEBUG_MODE"
+	envDefault = "HEYAPPLE_LANG_DEFAULT"
 )
 
-var (
-	App   = template.Must(template.ParseFS(Templates, "templates/web/app.html"))
-	Home  = template.Must(template.ParseFS(Templates, "templates/web/home.html"))
-	Login = template.Must(template.ParseFS(Templates, "templates/web/login.html"))
-)
+type config struct {
+	defaultLang string
+	debugMode   bool
+}
+
+func getConfig() config {
+	cfg := config{
+		debugMode:   false,
+		defaultLang: "en",
+	}
+
+	if lang := os.Getenv(envDefault); lang != "" {
+		cfg.defaultLang = lang
+	}
+	if debug, err := strconv.ParseBool(os.Getenv(envDebug)); err == nil {
+		cfg.debugMode = debug
+	}
+
+	return cfg
+}

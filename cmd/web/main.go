@@ -23,7 +23,9 @@ import (
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
 	"heyapple/pkg/auth"
+	"heyapple/pkg/email"
 	"heyapple/pkg/handler"
+	"heyapple/pkg/l10n"
 	"heyapple/pkg/mw"
 	"heyapple/pkg/storage/memory"
 	"heyapple/web"
@@ -44,6 +46,8 @@ func main() {
 	out.Log("######################")
 
 	db := memory.NewDBWithBackup(out)
+	tr := l10n.NewTranslator()
+	nf := email.NewNotifier(tr)
 	sm := scs.New()
 
 	router := httprouter.New()
@@ -58,6 +62,7 @@ func main() {
 	router.GET("/api/v1/foods", mw.JSON(api.Foods(db)))
 	router.GET("/api/v1/food/:id", mw.JSON(api.Food(db)))
 	router.POST("/api/v1/food", mw.JSON(api.NewFood(db)))
+	router.POST("/api/v1/user", mw.JSON(api.NewUser(out, nf, db)))
 	router.PUT("/api/v1/food/:id", mw.JSON(api.SaveFood(db)))
 
 	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {

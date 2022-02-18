@@ -3,11 +3,35 @@ var HA = HA || {};
 HA.Auth = (function () {
 	var _initSubmitButtons = function () {
 		document
-			.querySelectorAll("form.auth[method='post'] input[type='submit']")
+			.querySelectorAll("form.signup input[type='submit']")
+			.forEach((s) => s.addEventListener("click", _onSignupButtonClicked));
+		document
+			.querySelectorAll("form.login input[type='submit']")
 			.forEach((s) => s.addEventListener("click", _onLoginButtonClicked));
 		document
-			.querySelectorAll("form.auth[method='delete'] input[type='submit']")
+			.querySelectorAll("form.logout input[type='submit']")
 			.forEach((s) => s.addEventListener("click", _onLogoutButtonClicked));
+	};
+
+	var _onSignupButtonClicked = function (evt) {
+		evt.preventDefault();
+		let form = new FormData(evt.target.closest("form"));
+		if (!form.getAll("pass").every((v, i, a) => v === a[0])) {
+			window.dispatchEvent(new CustomEvent("passmatchfail"));
+			return;
+		}
+
+		fetch("/api/v1/user", {
+			method: "POST",
+			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			body: new URLSearchParams(form),
+		}).then((response) => {
+			let event = new CustomEvent("signup");
+			if (!response.ok) {
+				event = new CustomEvent("signupfail", { detail: { code: response.status } });
+			}
+			window.dispatchEvent(event);
+		});
 	};
 
 	var _onLoginButtonClicked = function (evt) {

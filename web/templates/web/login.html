@@ -1,16 +1,25 @@
-<!doctype html>
-<html lang="en" dir='ltr'>
-<head>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<script src="/static/js/auth.js"></script>
-</head>
-<body>
-LOGIN
-<form action="/auth/local" method="post" class="auth">
-	<input type="text" name="email">
-	<input type="password" name="pass">
-	<input type="submit" value="Go">
-</form>
-</body>
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<script src="/static/js/auth.js"></script>
+	</head>
+
+	<body>
+		LOGIN
+		<form class="auth login">
+			<input type="text" name="email" />
+			<input type="password" name="pass" />
+			<input type="submit" value="Go" />
+		</form>
+
+		SIGNUP
+		<form class="auth signup">
+			<input type="text" name="email" />
+			<input type="password" name="pass" />
+			<input type="password" name="pass" />
+			<input type="submit" value="Go" />
+		</form>
+	</body>
 </html>

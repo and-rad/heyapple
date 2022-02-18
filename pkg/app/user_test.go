@@ -135,7 +135,7 @@ func TestCreateUser_Execute(t *testing.T) {
 			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, cmd.ID, data.db.ID)
 		}
 
-		if id := data.db.Token.ID; id != cmd.ID {
+		if id := data.db.Tok.ID; id != cmd.ID {
 			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, id, cmd.ID)
 		}
 
@@ -145,6 +145,59 @@ func TestCreateUser_Execute(t *testing.T) {
 
 		if err == nil && data.db.User.Perm != app.PermNone {
 			t.Errorf("test case %d: permission mismatch \nhave: %v\nwant: %v", idx, data.db.User.Perm, app.PermNone)
+		}
+	}
+}
+
+func TestActivate_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db    *mock.DB
+		token string
+
+		perm int
+		err  error
+	}{
+		{ //00// database failure
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			err: mock.ErrDOS,
+		},
+		{ //01// no token
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //02// user doesn't exist
+			db:  mock.NewDB().WithToken(app.Token{ID: 1}),
+			err: app.ErrNotFound,
+		},
+		{ //03// apply activation token
+			db:   mock.NewDB().WithToken(app.Token{ID: 1}).WithUser(app.User{ID: 1}),
+			perm: app.PermLogin,
+		},
+		{ //04// unexpected data type
+			db:  mock.NewDB().WithToken(app.Token{ID: 1, Data: 12}).WithUser(app.User{ID: 1}),
+			err: app.ErrNotFound,
+		},
+		{ //05// not a valid email address
+			db:  mock.NewDB().WithToken(app.Token{ID: 1, Data: "noemail"}).WithUser(app.User{ID: 1}),
+			err: app.ErrNotFound,
+		},
+		{ //06// apply email token
+			db: mock.NewDB().WithToken(app.Token{ID: 1, Data: "a@a.a"}).WithUser(app.User{ID: 1}),
+		},
+	} {
+		cmd := &app.Activate{Token: data.token}
+		err := cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if data.db.User.Perm != data.perm {
+			t.Errorf("test case %d: permission mismatch \nhave: %v\nwant: %v", idx, data.db.User.Perm, data.perm)
+		}
+
+		if err == nil && data.db.Tok != (app.Token{}) {
+			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, data.db.Tok, app.Token{})
 		}
 	}
 }

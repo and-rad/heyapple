@@ -53,7 +53,11 @@ type DB interface {
 	Fetch(Query) error
 
 	NewUser(name, hash, token string) (int, error)
+	SetUser(User) error
 	UserByName(name string) (User, error)
+	UserByID(id int) (User, error)
+	Token(string) (Token, error)
+	DeleteToken(string) error
 
 	Food(id int) (core.Food, error)
 	Foods() ([]core.Food, error)

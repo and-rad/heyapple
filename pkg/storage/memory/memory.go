@@ -88,6 +88,16 @@ func (db *DB) NewUser(name, hash, token string) (int, error) {
 	return db.userID, nil
 }
 
+func (db *DB) SetUser(user app.User) error {
+	if u, ok := db.users[user.ID]; ok {
+		delete(db.emails, u.Email)
+		db.users[user.ID] = user
+		db.emails[user.Email] = user.ID
+		return nil
+	}
+	return app.ErrNotFound
+}
+
 func (db *DB) UserByName(name string) (app.User, error) {
 	if id, ok := db.emails[name]; ok {
 		if user, ok := db.users[id]; ok {
@@ -95,6 +105,25 @@ func (db *DB) UserByName(name string) (app.User, error) {
 		}
 	}
 	return app.User{}, app.ErrNotFound
+}
+
+func (db *DB) UserByID(id int) (app.User, error) {
+	if user, ok := db.users[id]; ok {
+		return user, nil
+	}
+	return app.User{}, app.ErrNotFound
+}
+
+func (db *DB) Token(hash string) (app.Token, error) {
+	if token, ok := db.tokens[hash]; ok {
+		return token, nil
+	}
+	return app.Token{}, app.ErrNotFound
+}
+
+func (db *DB) DeleteToken(hash string) error {
+	delete(db.tokens, hash)
+	return nil
 }
 
 func (db *DB) Food(id int) (core.Food, error) {

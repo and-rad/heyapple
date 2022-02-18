@@ -34,7 +34,7 @@ var (
 
 type DB struct {
 	User      app.User
-	Token     app.Token
+	Tok       app.Token
 	FoodItem  core.Food
 	FoodItems []core.Food
 
@@ -73,6 +73,11 @@ func (db *DB) WithUser(user app.User) *DB {
 	return db
 }
 
+func (db *DB) WithToken(tok app.Token) *DB {
+	db.Tok = tok
+	return db
+}
+
 func (db *DB) Execute(c app.Command) error {
 	return c.Execute(db)
 }
@@ -86,8 +91,29 @@ func (db *DB) NewUser(email, hash, token string) (int, error) {
 		return 0, err
 	}
 	db.User = app.User{ID: db.ID, Email: email, Pass: hash}
-	db.Token = app.Token{ID: db.ID}
+	db.Tok = app.Token{ID: db.ID}
 	return db.ID, nil
+}
+
+func (db *DB) SetUser(user app.User) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+	if db.User.ID != user.ID {
+		return app.ErrNotFound
+	}
+	db.User = user
+	return nil
+}
+
+func (db *DB) UserByID(id int) (app.User, error) {
+	if err := db.popError(); err != nil {
+		return app.User{}, err
+	}
+	if db.User.ID != id {
+		return app.User{}, app.ErrNotFound
+	}
+	return db.User, nil
 }
 
 func (db *DB) UserByName(name string) (app.User, error) {
@@ -98,6 +124,21 @@ func (db *DB) UserByName(name string) (app.User, error) {
 		return app.User{}, app.ErrNotFound
 	}
 	return db.User, nil
+}
+
+func (db *DB) Token(string) (app.Token, error) {
+	if err := db.popError(); err != nil {
+		return app.Token{}, err
+	}
+	if db.Tok.ID == 0 {
+		return app.Token{}, app.ErrNotFound
+	}
+	return db.Tok, nil
+}
+
+func (db *DB) DeleteToken(string) error {
+	db.Tok = app.Token{}
+	return nil
 }
 
 func (db *DB) Food(id int) (core.Food, error) {

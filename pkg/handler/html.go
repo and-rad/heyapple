@@ -49,3 +49,22 @@ func App(db app.DB) httprouter.Handle {
 		}
 	}
 }
+
+func Confirm(db app.DB) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data := make(map[string]interface{})
+		if token := ps.ByName("token"); token == "" {
+			data["status"] = http.StatusBadRequest
+		} else if err := db.Execute(&app.Activate{Token: token}); err == app.ErrNotFound {
+			data["status"] = http.StatusNotFound
+		} else if err != nil {
+			data["status"] = http.StatusInternalServerError
+		} else {
+			data["status"] = http.StatusOK
+		}
+
+		if err := web.Confirm.ExecuteTemplate(w, "confirm.html", data); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
+}

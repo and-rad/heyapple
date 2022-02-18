@@ -354,3 +354,155 @@ func TestDB_NewUser(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_SetUser(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		user app.User
+
+		err error
+	}{
+		{ //00// empty database
+			db:  NewDB(mock.NewLog()),
+			err: app.ErrNotFound,
+		},
+		{ //01// user doesn't exist
+			db:   &DB{users: map[int]app.User{2: {ID: 2}}},
+			user: mock.User1,
+			err:  app.ErrNotFound,
+		},
+		{ //02// success
+			db: &DB{
+				users:  map[int]app.User{1: mock.User1},
+				emails: map[string]int{mock.User1.Email: 1},
+			},
+			user: app.User{ID: 1, Email: "b@b.b", Pass: "kdjfhghr", Perm: app.PermLogin},
+		},
+	} {
+		err := data.db.SetUser(data.user)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if u, err := data.db.UserByID(data.user.ID); err == nil && u != data.user {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, u, data.user)
+		}
+
+		if err == nil && data.db.emails[data.user.Email] != data.user.ID {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.emails, data.user.Email)
+		}
+	}
+}
+
+func TestDB_UserByID(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+
+		user app.User
+		err  error
+	}{
+		{ //00// empty database
+			db:  NewDB(mock.NewLog()),
+			err: app.ErrNotFound,
+		},
+		{ //01// user doesn't exist
+			db: &DB{
+				users: map[int]app.User{1: {ID: 1, Email: "a@a.a"}},
+			},
+			id:  2,
+			err: app.ErrNotFound,
+		},
+		{ //02// success
+			db: &DB{
+				users: map[int]app.User{
+					1: {ID: 1, Email: "a@a.a"},
+					2: {ID: 2, Email: "b@b.b"},
+				},
+			},
+			id:   2,
+			user: app.User{ID: 2, Email: "b@b.b"},
+		},
+	} {
+		user, err := data.db.UserByID(data.id)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if user != data.user {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, user, data.user)
+		}
+	}
+}
+
+func TestDB_Token(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		hash string
+
+		token app.Token
+		err   error
+	}{
+		{ //00// empty database
+			db:  NewDB(mock.NewLog()),
+			err: app.ErrNotFound,
+		},
+		{ //01// token not found
+			db:   &DB{tokens: map[string]app.Token{"abcd": {ID: 1}}},
+			hash: "bbbb",
+			err:  app.ErrNotFound,
+		},
+		{ //02// success
+			db:    &DB{tokens: map[string]app.Token{"abcd": {ID: 1, Data: "hi"}}},
+			hash:  "abcd",
+			token: app.Token{ID: 1, Data: "hi"},
+		},
+	} {
+		token, err := data.db.Token(data.hash)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if token != data.token {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, token, data.token)
+		}
+	}
+}
+
+func TestDB_DeleteToken(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		hash string
+
+		tokens map[string]app.Token
+		err    error
+	}{
+		{ //00// empty database, no error
+			db:     NewDB(mock.NewLog()),
+			tokens: make(map[string]app.Token),
+		},
+		{ //01// token deleted
+			db: &DB{tokens: map[string]app.Token{
+				"abcd": {ID: 1, Data: "hi"},
+				"efef": {ID: 2, Data: 9000},
+			}},
+			hash: "abcd",
+			tokens: map[string]app.Token{
+				"efef": {ID: 2, Data: 9000},
+			},
+		},
+	} {
+		err := data.db.DeleteToken(data.hash)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.db.tokens, data.tokens) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.tokens, data.tokens)
+		}
+	}
+}

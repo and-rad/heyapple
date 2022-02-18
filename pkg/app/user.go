@@ -86,3 +86,40 @@ func (q *Authenticate) Fetch(db DB) error {
 
 	return nil
 }
+
+// Activate is a command to unlock a user's ability
+// to log into the application and to change their
+// e-mail address after a change request was issued.
+// If successful, the token is deleted and cannot be
+// used again.
+type Activate struct {
+	Token string
+}
+
+func (c *Activate) Execute(db DB) error {
+	tok, err := db.Token(c.Token)
+	if err != nil {
+		return err
+	}
+
+	user, err := db.UserByID(tok.ID)
+	if err != nil {
+		return err
+	}
+
+	if tok.Data == nil {
+		user.Perm |= PermLogin
+	} else if data, ok := tok.Data.(string); !ok {
+		return ErrNotFound
+	} else if !NewValidator().MatchEmail(data) {
+		return ErrNotFound
+	} else {
+		user.Email = data
+	}
+
+	if err = db.SetUser(user); err == nil {
+		err = db.DeleteToken(c.Token)
+	}
+
+	return err
+}

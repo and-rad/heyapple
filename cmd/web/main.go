@@ -55,14 +55,16 @@ func main() {
 	router.GET("/", handler.Home(db))
 	router.GET("/app", mw.Auth(sm, "/login", handler.App(db)))
 	router.GET("/login", mw.Anon(sm, "/app", handler.Login(db)))
+	router.GET("/confirm/:token", handler.Confirm(db))
 
 	router.POST("/auth/local", auth.LocalLogin(sm, db))
 	router.DELETE("/auth/local", auth.LocalLogout(sm))
 
+	router.POST("/api/v1/user", mw.JSON(api.NewUser(out, nf, db)))
+
 	router.GET("/api/v1/foods", mw.JSON(api.Foods(db)))
 	router.GET("/api/v1/food/:id", mw.JSON(api.Food(db)))
 	router.POST("/api/v1/food", mw.JSON(api.NewFood(db)))
-	router.POST("/api/v1/user", mw.JSON(api.NewUser(out, nf, db)))
 	router.PUT("/api/v1/food/:id", mw.JSON(api.SaveFood(db)))
 
 	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {

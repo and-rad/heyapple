@@ -54,7 +54,7 @@ func TestNotifier_Send(t *testing.T) {
 			sender: mock.NewEmailNotifier().WithError(mock.ErrDOS),
 			err:    mock.ErrDOS,
 		},
-		{ //00// success
+		{ //01// success
 			to:     "a@a.a",
 			msg:    app.RegisterNotification,
 			sender: mock.NewEmailNotifier(),
@@ -62,12 +62,12 @@ func TestNotifier_Send(t *testing.T) {
 				To:      []string{"a@a.a"},
 				From:    getConfig().from(),
 				Subject: "email.sub.1",
-				HTML:    []byte("Hello!"),
+				HTML:    []byte("Hello from http://localhost:8080"),
 				Headers: textproto.MIMEHeader{},
 			},
 		},
 	} {
-		web.MailRegister, _ = template.New("base").Funcs(funcs).Parse("Hello!")
+		web.MailRegister, _ = template.New("base").Funcs(funcs).Parse("Hello from {{ .domain }}")
 
 		notifier := NewNotifier(mock.NewTranslator())
 		notifier.sendFunc = data.sender.SendFunc

@@ -37,6 +37,7 @@ func Test_getConfig(t *testing.T) {
 	}{
 		{ //00// empty environment, default values
 			cfg: config{
+				domain:   "http://localhost:8080",
 				addr:     "user@example.com",
 				fromAddr: "user@example.com",
 				fromName: "User",
@@ -51,6 +52,7 @@ func Test_getConfig(t *testing.T) {
 				envFromName: "Dude Dudeson",
 			},
 			cfg: config{
+				domain:   "http://localhost:8080",
 				addr:     "user@example.com",
 				fromAddr: "user@example.com",
 				fromName: "Dude Dudeson",
@@ -64,6 +66,7 @@ func Test_getConfig(t *testing.T) {
 				envPort: "Port",
 			},
 			cfg: config{
+				domain:   "http://localhost:8080",
 				addr:     "user@example.com",
 				fromAddr: "user@example.com",
 				fromName: "User",
@@ -74,6 +77,7 @@ func Test_getConfig(t *testing.T) {
 		},
 		{ //03// load all vars
 			env: map[string]string{
+				envDomain:   "http://here",
 				envAddr:     "a@a.a",
 				envFromAddr: "b@b.b",
 				envFromName: "Slickback",
@@ -82,6 +86,7 @@ func Test_getConfig(t *testing.T) {
 				envPort:     "22",
 			},
 			cfg: config{
+				domain:   "http://here",
 				addr:     "a@a.a",
 				fromAddr: "b@b.b",
 				fromName: "Slickback",

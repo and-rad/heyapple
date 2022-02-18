@@ -32,9 +32,11 @@ const (
 	envHost     = "HEYAPPLE_EMAIL_HOST"
 	envPass     = "HEYAPPLE_EMAIL_PASS"
 	envPort     = "HEYAPPLE_EMAIL_PORT"
+	envDomain   = "HEYAPPLE_APP_DOMAIN"
 )
 
 type config struct {
+	domain   string
 	addr     string
 	fromAddr string
 	fromName string
@@ -45,6 +47,7 @@ type config struct {
 
 func getConfig() config {
 	cfg := config{
+		domain:   "http://localhost:8080",
 		addr:     "user@example.com",
 		fromAddr: "user@example.com",
 		fromName: "User",
@@ -53,6 +56,9 @@ func getConfig() config {
 		port:     587,
 	}
 
+	if domain := os.Getenv(envDomain); domain != "" {
+		cfg.domain = domain
+	}
 	if addr := os.Getenv(envAddr); addr != "" {
 		cfg.addr = addr
 	}

@@ -47,7 +47,13 @@ func NewNotifier(tr app.Translator) *Notifier {
 }
 
 func (n *Notifier) Send(to string, msg app.Notification, data app.NotificationData) error {
+	if data == nil {
+		data = make(app.NotificationData)
+	}
+
 	conf := getConfig()
+	data["domain"] = conf.domain
+
 	mail := &email.Email{
 		To:      []string{to},
 		From:    conf.from(),

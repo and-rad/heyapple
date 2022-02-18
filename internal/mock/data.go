@@ -86,7 +86,7 @@ var (
 )
 
 var (
-	User1 = app.User{ID: 1, Email: "a@a.a", Pass: "$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC"}
+	User1 = app.User{ID: 1, Email: "a@a.a", Pass: "$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC", Perm: 1}
 
-	User1Json = `{"email":"a@a.a","pass":"$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC","id":1}`
+	User1Json = `{"email":"a@a.a","pass":"$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC","perm":1,"id":1}`
 )

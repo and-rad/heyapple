@@ -56,13 +56,24 @@ func TestAuthenticate_Fetch(t *testing.T) {
 			}),
 			err: app.ErrCredentials,
 		},
-		{ //04// success
+		{ //04// missing login permissions
 			email: "a@a.a",
 			pass:  "password123",
 			db: mock.NewDB().WithUser(app.User{
 				ID:    42,
 				Email: "a@a.a",
 				Pass:  "$2a$10$ADm2JBRbt8UvB0uI7NNFBupOdTq7XKae6Dvc7NfVCnw89rPZr3.zK",
+			}),
+			err: app.ErrCredentials,
+		},
+		{ //05// success
+			email: "a@a.a",
+			pass:  "password123",
+			db: mock.NewDB().WithUser(app.User{
+				ID:    42,
+				Email: "a@a.a",
+				Pass:  "$2a$10$ADm2JBRbt8UvB0uI7NNFBupOdTq7XKae6Dvc7NfVCnw89rPZr3.zK",
+				Perm:  app.PermLogin,
 			}),
 			id: 42,
 		},
@@ -130,6 +141,10 @@ func TestCreateUser_Execute(t *testing.T) {
 
 		if err == nil && !app.NewCrypter().Match(data.db.User.Pass, data.pass) {
 			t.Errorf("test case %d: password mismatch", idx)
+		}
+
+		if err == nil && data.db.User.Perm != app.PermNone {
+			t.Errorf("test case %d: permission mismatch \nhave: %v\nwant: %v", idx, data.db.User.Perm, app.PermNone)
 		}
 	}
 }

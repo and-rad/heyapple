@@ -18,12 +18,18 @@
 
 package app
 
+const (
+	PermNone  = 0x00000000
+	PermLogin = 0x00000001
+)
+
 // User represents a human user of the system, identified
 // by their e-mail address or id. The password is always
 // stored as an encrypted hash.
 type User struct {
 	Email string `json:"email"`
 	Pass  string `json:"pass"`
+	Perm  int    `json:"perm"`
 	ID    int    `json:"id"`
 }
 
@@ -70,6 +76,8 @@ func (q *Authenticate) Fetch(db DB) error {
 	if user, err := db.UserByName(q.Email); err != nil {
 		return err
 	} else if !NewCrypter().Match(user.Pass, q.Pass) {
+		return ErrCredentials
+	} else if user.Perm&PermLogin != PermLogin {
 		return ErrCredentials
 	} else {
 		q.ID = user.ID

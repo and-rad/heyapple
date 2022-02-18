@@ -64,7 +64,7 @@ func TestLocalLogin(t *testing.T) {
 			status: http.StatusUnauthorized,
 		},
 		{ //05// success
-			db:     mock.NewDB().WithUser(app.User{ID: 1, Email: "a@a.a", Pass: "$2a$10$ADm2JBRbt8UvB0uI7NNFBupOdTq7XKae6Dvc7NfVCnw89rPZr3.zK"}),
+			db:     mock.NewDB().WithUser(app.User{ID: 1, Perm: app.PermLogin, Email: "a@a.a", Pass: "$2a$10$ADm2JBRbt8UvB0uI7NNFBupOdTq7XKae6Dvc7NfVCnw89rPZr3.zK"}),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
 			status: http.StatusOK,
 		},

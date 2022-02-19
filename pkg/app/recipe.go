@@ -18,15 +18,16 @@
 
 package app
 
-// CreateRecipe is a command to create a new recipe in the
-// food database. If successful, the new item id is stored
-// in the command.
+// CreateRecipe is a command to create a new named recipe
+// in the food database. If successful, the new item id is
+// stored in the command.
 type CreateRecipe struct {
-	ID int
+	Name string
+	ID   int
 }
 
 func (c *CreateRecipe) Execute(db DB) error {
-	if id, err := db.NewRecipe(); err != nil {
+	if id, err := db.NewRecipe(c.Name); err != nil {
 		return err
 	} else {
 		c.ID = id

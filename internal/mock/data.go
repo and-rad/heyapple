@@ -92,14 +92,24 @@ var (
 		Items: []core.Ingredient{{ID: 2, Amount: 150}},
 	}
 
+	RecMeta1 = core.RecipeMeta{
+		Name: "Apple Pie",
+	}
+
 	Recipe2 = core.Recipe{
 		ID:    2,
 		Size:  3,
 		Items: []core.Ingredient{{ID: 1, Amount: 300}, {ID: 2, Amount: 250}},
 	}
 
-	Recipe1Json = `{"items":[{"id":2,"amount":150}],"size":1,"id":1}`
-	Recipe2Json = `{"items":[{"id":1,"amount":300},{"id":2,"amount":250}],"size":3,"id":2}`
+	RecMeta2 = core.RecipeMeta{
+		Name: "Fruit Cake",
+	}
+
+	Recipe1Json  = `{"items":[{"id":2,"amount":150}],"size":1,"id":1}`
+	Recipe2Json  = `{"items":[{"id":1,"amount":300},{"id":2,"amount":250}],"size":3,"id":2}`
+	RecMeta1Json = `{"name":"Apple Pie","instructions":"","id":0,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":0,"fat":0,"carb":0,"prot":0}`
+	RecMeta2Json = `{"name":"Fruit Cake","instructions":"","id":0,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":0,"fat":0,"carb":0,"prot":0}`
 )
 
 var (

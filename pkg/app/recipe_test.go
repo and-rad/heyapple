@@ -26,7 +26,9 @@ import (
 
 func TestCreateRecipe_Execute(t *testing.T) {
 	for idx, data := range []struct {
-		db  *mock.DB
+		db   *mock.DB
+		name string
+
 		err error
 	}{
 		{ //00//
@@ -34,10 +36,11 @@ func TestCreateRecipe_Execute(t *testing.T) {
 			err: mock.ErrDOS,
 		},
 		{ //01//
-			db: mock.NewDB().WithID(42),
+			db:   mock.NewDB().WithID(42),
+			name: "Apple Pie",
 		},
 	} {
-		cmd := &app.CreateRecipe{}
+		cmd := &app.CreateRecipe{Name: data.name}
 		err := cmd.Execute(data.db)
 
 		if err != data.err {
@@ -46,6 +49,10 @@ func TestCreateRecipe_Execute(t *testing.T) {
 
 		if cmd.ID != data.db.ID {
 			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, cmd.ID, data.db.ID)
+		}
+
+		if cmd.Name != data.db.Name {
+			t.Errorf("test case %d: name mismatch \nhave: %v\nwant: %v", idx, data.db.Name, cmd.Name)
 		}
 	}
 }

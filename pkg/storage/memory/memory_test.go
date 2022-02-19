@@ -509,21 +509,40 @@ func TestDB_DeleteToken(t *testing.T) {
 
 func TestDB_NewRecipe(t *testing.T) {
 	for idx, data := range []struct {
-		db *DB
+		db   *DB
+		name string
 
-		rec core.Recipe
-		err error
+		rec  core.Recipe
+		meta core.RecipeMeta
+		err  error
 	}{
 		{ //00// empty database, nameless recipe
-			db:  NewDB(mock.NewLog()),
-			rec: core.Recipe{ID: 1, Size: 1},
+			db:   NewDB(mock.NewLog()),
+			rec:  core.Recipe{ID: 1, Size: 1},
+			meta: core.RecipeMeta{ID: 1},
 		},
 		{ //01// increment id
-			db:  &DB{recipes: map[int]core.Recipe{2: {ID: 2}, 3: {ID: 3}}, recID: 3},
-			rec: core.Recipe{ID: 4, Size: 1},
+			db: &DB{
+				recipes: map[int]core.Recipe{2: {ID: 2}, 3: {ID: 3}},
+				recMeta: map[int]core.RecipeMeta{2: {ID: 2, Name: "Food"}, 3: {ID: 3, Name: "Drink"}},
+				recID:   3,
+			},
+			name: "Pie",
+			rec:  core.Recipe{ID: 4, Size: 1},
+			meta: core.RecipeMeta{ID: 4, Name: "Pie"},
+		},
+		{ //02// duplicate names allowed
+			db: &DB{
+				recipes: map[int]core.Recipe{1: {ID: 1}},
+				recMeta: map[int]core.RecipeMeta{1: {ID: 1, Name: "Apple Pie"}},
+				recID:   1,
+			},
+			name: "Apple Pie",
+			rec:  core.Recipe{ID: 2, Size: 1},
+			meta: core.RecipeMeta{ID: 2, Name: "Apple Pie"},
 		},
 	} {
-		id, err := data.db.NewRecipe()
+		id, err := data.db.NewRecipe(data.name)
 
 		if err != data.err {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
@@ -531,6 +550,10 @@ func TestDB_NewRecipe(t *testing.T) {
 
 		if r, _ := data.db.Recipe(id); !reflect.DeepEqual(r, data.rec) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, r, data.rec)
+		}
+
+		if m, _ := data.db.RecipeMeta(id); m != data.meta {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, m, data.meta)
 		}
 	}
 }
@@ -599,6 +622,41 @@ func TestDB_Recipe(t *testing.T) {
 
 		if !reflect.DeepEqual(rec, data.rec) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, rec, data.rec)
+		}
+	}
+}
+
+func TestDB_RecipeMeta(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+
+		meta core.RecipeMeta
+		err  error
+	}{
+		{ //00// empty database
+			db:  NewDB(mock.NewLog()),
+			err: app.ErrNotFound,
+		},
+		{ //01// recipe doesn't exist
+			db:  &DB{recMeta: map[int]core.RecipeMeta{1: mock.RecMeta1}},
+			id:  2,
+			err: app.ErrNotFound,
+		},
+		{ //02// success
+			db:   &DB{recMeta: map[int]core.RecipeMeta{1: mock.RecMeta1, 2: mock.RecMeta2}},
+			id:   2,
+			meta: mock.RecMeta2,
+		},
+	} {
+		meta, err := data.db.RecipeMeta(data.id)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if meta != data.meta {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, meta, data.meta)
 		}
 	}
 }

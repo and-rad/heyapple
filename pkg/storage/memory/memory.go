@@ -38,6 +38,7 @@ type DB struct {
 	tokens  map[string]app.Token
 	food    map[int]core.Food
 	recipes map[int]core.Recipe
+	recMeta map[int]core.RecipeMeta
 
 	userID int
 	foodID int
@@ -54,6 +55,7 @@ func NewDB(log app.Logger) *DB {
 		emails:  make(map[string]int),
 		food:    make(map[int]core.Food),
 		recipes: make(map[int]core.Recipe),
+		recMeta: make(map[int]core.RecipeMeta),
 	}
 }
 
@@ -163,9 +165,10 @@ func (db *DB) SetFood(food core.Food) error {
 	return app.ErrNotFound
 }
 
-func (db *DB) NewRecipe() (int, error) {
+func (db *DB) NewRecipe(name string) (int, error) {
 	db.recID++
 	db.recipes[db.recID] = core.Recipe{ID: db.recID, Size: 1}
+	db.recMeta[db.recID] = core.RecipeMeta{ID: db.recID, Name: name}
 	return db.recID, nil
 }
 
@@ -182,6 +185,13 @@ func (db *DB) Recipe(id int) (core.Recipe, error) {
 		return rec, nil
 	}
 	return core.Recipe{}, app.ErrNotFound
+}
+
+func (db *DB) RecipeMeta(id int) (core.RecipeMeta, error) {
+	if meta, ok := db.recMeta[id]; ok {
+		return meta, nil
+	}
+	return core.RecipeMeta{}, app.ErrNotFound
 }
 
 func (db *DB) Execute(c app.Command) error {

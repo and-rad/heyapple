@@ -23,6 +23,17 @@ import (
 	"time"
 )
 
+const (
+	FlagNone    = 0x00000000
+	FlagVegan   = 0x11111100
+	FlagEgg     = 0x00000001
+	FlagDairy   = 0x00000002
+	FlagFish    = 0x00000004
+	FlagPoultry = 0x00000008
+	FlagPork    = 0x00000010
+	FlagBeef    = 0x00000020
+)
+
 // Food represents an edible object. All nutrients are
 // stored per 100 base units. The base unit is either gram
 // or milliliter. The actual unit of measurement for
@@ -88,11 +99,37 @@ type Recipe struct {
 	ID    int          `json:"id"`
 }
 
+// RecipeMeta stores additional and computed information
+// about a recipe. Some is entered manually, like the name
+// and preparation instructions, and some is computed
+// automatically, like macro nutrients and flags.
+type RecipeMeta struct {
+	Name         string `json:"name"`
+	Instructions string `json:"instructions"`
+
+	ID       int `json:"id"`
+	Flags    int `json:"flags"`
+	PrepTime int `json:"preptime"`
+	CookTime int `json:"cooktime"`
+	MiscTime int `json:"misctime"`
+
+	KCal    float32 `json:"kcal"`
+	Fat     float32 `json:"fat"`
+	Carbs   float32 `json:"carb"`
+	Protein float32 `json:"prot"`
+}
+
 // Meal is a collection of food items that were consumed at
 // a specific point in time. The food can be provided by a
 // recipe, but this is not required.
+//
+// The recipe is stored by name, not by id. The reason is
+// persistence: Recipes can be renamed, repurposed, deleted.
+// Storing just the id would be less useful to a user in
+// these situations. The name provides the most useful
+// information even after the original recipe is gone.
 type Meal struct {
+	Recipe string       `json:"recipe"`
 	Date   time.Time    `json:"date"`
 	Items  []Ingredient `json:"items"`
-	Recipe int          `json:"recipe"`
 }

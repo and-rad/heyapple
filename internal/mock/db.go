@@ -39,9 +39,11 @@ type DB struct {
 	FoodItems   []core.Food
 	RecipeItem  core.Recipe
 	RecipeItems []core.Recipe
+	RecMetaItem core.RecipeMeta
 
-	Err []error
-	ID  int
+	Err  []error
+	ID   int
+	Name string
 }
 
 func NewDB() *DB {
@@ -77,6 +79,16 @@ func (db *DB) WithUser(user app.User) *DB {
 
 func (db *DB) WithToken(tok app.Token) *DB {
 	db.Tok = tok
+	return db
+}
+
+func (db *DB) WithName(name string) *DB {
+	db.Name = name
+	return db
+}
+
+func (db *DB) WithRecMeta(meta core.RecipeMeta) *DB {
+	db.RecMetaItem = meta
 	return db
 }
 
@@ -178,10 +190,11 @@ func (db *DB) SetFood(food core.Food) error {
 	return nil
 }
 
-func (db *DB) NewRecipe() (int, error) {
+func (db *DB) NewRecipe(name string) (int, error) {
 	if err := db.popError(); err != nil {
 		return 0, err
 	}
+	db.Name = name
 	return db.ID, nil
 }
 
@@ -204,6 +217,16 @@ func (db *DB) Recipe(id int) (core.Recipe, error) {
 		return core.Recipe{}, app.ErrNotFound
 	}
 	return db.RecipeItem, nil
+}
+
+func (db *DB) RecipeMeta(id int) (core.RecipeMeta, error) {
+	if err := db.popError(); err != nil {
+		return core.RecipeMeta{}, err
+	}
+	if db.RecMetaItem.ID != id {
+		return core.RecipeMeta{}, app.ErrNotFound
+	}
+	return db.RecMetaItem, nil
 }
 
 func (db *DB) popError() error {

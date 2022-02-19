@@ -33,24 +33,27 @@ type DB struct {
 	log  app.Logger
 	jobs *job.Scheduler
 
-	users  map[int]app.User
-	emails map[string]int
-	tokens map[string]app.Token
-	food   map[int]core.Food
+	users   map[int]app.User
+	emails  map[string]int
+	tokens  map[string]app.Token
+	food    map[int]core.Food
+	recipes map[int]core.Recipe
 
 	userID int
 	foodID int
+	recID  int
 
 	mtx sync.RWMutex
 }
 
 func NewDB(log app.Logger) *DB {
 	return &DB{
-		log:    log,
-		users:  make(map[int]app.User),
-		tokens: make(map[string]app.Token),
-		emails: make(map[string]int),
-		food:   make(map[int]core.Food),
+		log:     log,
+		users:   make(map[int]app.User),
+		tokens:  make(map[string]app.Token),
+		emails:  make(map[string]int),
+		food:    make(map[int]core.Food),
+		recipes: make(map[int]core.Recipe),
 	}
 }
 
@@ -158,6 +161,27 @@ func (db *DB) SetFood(food core.Food) error {
 		return nil
 	}
 	return app.ErrNotFound
+}
+
+func (db *DB) NewRecipe() (int, error) {
+	db.recID++
+	db.recipes[db.recID] = core.Recipe{ID: db.recID, Size: 1}
+	return db.recID, nil
+}
+
+func (db *DB) SetRecipe(rec core.Recipe) error {
+	if _, ok := db.recipes[rec.ID]; ok {
+		db.recipes[rec.ID] = rec
+		return nil
+	}
+	return app.ErrNotFound
+}
+
+func (db *DB) Recipe(id int) (core.Recipe, error) {
+	if rec, ok := db.recipes[id]; ok {
+		return rec, nil
+	}
+	return core.Recipe{}, app.ErrNotFound
 }
 
 func (db *DB) Execute(c app.Command) error {

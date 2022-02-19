@@ -86,6 +86,23 @@ var (
 )
 
 var (
+	Recipe1 = core.Recipe{
+		ID:    1,
+		Size:  1,
+		Items: []core.Ingredient{{ID: 2, Amount: 150}},
+	}
+
+	Recipe2 = core.Recipe{
+		ID:    2,
+		Size:  3,
+		Items: []core.Ingredient{{ID: 1, Amount: 300}, {ID: 2, Amount: 250}},
+	}
+
+	Recipe1Json = `{"items":[{"id":2,"amount":150}],"size":1,"id":1}`
+	Recipe2Json = `{"items":[{"id":1,"amount":300},{"id":2,"amount":250}],"size":3,"id":2}`
+)
+
+var (
 	User1 = app.User{ID: 1, Email: "a@a.a", Pass: "$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC", Perm: 1}
 
 	User1Json = `{"email":"a@a.a","pass":"$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC","perm":1,"id":1}`

@@ -33,20 +33,22 @@ import (
 )
 
 var (
-	backup0 = `{"users":{},"tokens":{},"food":{},"userid":0,"foodid":0}`
+	backup0 = `{"users":{},"tokens":{},"food":{},"recipes":{},"userid":0,"foodid":0,"recid":0}`
 	backup1 = fmt.Sprintf(
-		`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"userid":1,"foodid":2}`,
-		mock.User1Json, mock.Food1Json, mock.Food2Json,
+		`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"userid":1,"foodid":2,"recid":1}`,
+		mock.User1Json, mock.Food1Json, mock.Food2Json, mock.Recipe1Json,
 	)
 
 	database1 = &DB{
-		log:    mock.NewLog(),
-		users:  map[int]app.User{mock.User1.ID: mock.User1},
-		emails: map[string]int{mock.User1.Email: mock.User1.ID},
-		tokens: map[string]app.Token{"abcd": {ID: 1}},
-		food:   map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},
-		userID: 1,
-		foodID: 2,
+		log:     mock.NewLog(),
+		users:   map[int]app.User{mock.User1.ID: mock.User1},
+		emails:  map[string]int{mock.User1.Email: mock.User1.ID},
+		tokens:  map[string]app.Token{"abcd": {ID: mock.User1.ID}},
+		food:    map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},
+		recipes: map[int]core.Recipe{mock.Recipe1.ID: mock.Recipe1},
+		userID:  1,
+		foodID:  2,
+		recID:   1,
 	}
 )
 

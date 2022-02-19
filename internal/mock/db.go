@@ -33,10 +33,12 @@ var (
 )
 
 type DB struct {
-	User      app.User
-	Tok       app.Token
-	FoodItem  core.Food
-	FoodItems []core.Food
+	User        app.User
+	Tok         app.Token
+	FoodItem    core.Food
+	FoodItems   []core.Food
+	RecipeItem  core.Recipe
+	RecipeItems []core.Recipe
 
 	Err []error
 	ID  int
@@ -174,6 +176,34 @@ func (db *DB) SetFood(food core.Food) error {
 	}
 	db.FoodItem = food
 	return nil
+}
+
+func (db *DB) NewRecipe() (int, error) {
+	if err := db.popError(); err != nil {
+		return 0, err
+	}
+	return db.ID, nil
+}
+
+func (db *DB) SetRecipe(rec core.Recipe) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+	if db.RecipeItem.ID != rec.ID {
+		return app.ErrNotFound
+	}
+	db.RecipeItem = rec
+	return nil
+}
+
+func (db *DB) Recipe(id int) (core.Recipe, error) {
+	if err := db.popError(); err != nil {
+		return core.Recipe{}, err
+	}
+	if db.RecipeItem.ID != id {
+		return core.Recipe{}, app.ErrNotFound
+	}
+	return db.RecipeItem, nil
 }
 
 func (db *DB) popError() error {

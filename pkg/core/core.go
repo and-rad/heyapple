@@ -80,9 +80,11 @@ type Ingredient struct {
 	Amount float32 `json:"amount"`
 }
 
-// Recipe is a collection of ingredients.
+// Recipe is a named collection of ingredients. The serving
+// size stores how many servings the recipe yields.
 type Recipe struct {
 	Items []Ingredient `json:"items"`
+	Size  int          `json:"size"`
 	ID    int          `json:"id"`
 }
 

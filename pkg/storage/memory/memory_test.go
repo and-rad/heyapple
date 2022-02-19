@@ -506,3 +506,99 @@ func TestDB_DeleteToken(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_NewRecipe(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+
+		rec core.Recipe
+		err error
+	}{
+		{ //00// empty database, nameless recipe
+			db:  NewDB(mock.NewLog()),
+			rec: core.Recipe{ID: 1, Size: 1},
+		},
+		{ //01// increment id
+			db:  &DB{recipes: map[int]core.Recipe{2: {ID: 2}, 3: {ID: 3}}, recID: 3},
+			rec: core.Recipe{ID: 4, Size: 1},
+		},
+	} {
+		id, err := data.db.NewRecipe()
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if r, _ := data.db.Recipe(id); !reflect.DeepEqual(r, data.rec) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, r, data.rec)
+		}
+	}
+}
+
+func TestDB_SetRecipe(t *testing.T) {
+	for idx, data := range []struct {
+		db  *DB
+		rec core.Recipe
+
+		err error
+	}{
+		{ //00// empty database
+			db:  NewDB(mock.NewLog()),
+			err: app.ErrNotFound,
+		},
+		{ //01// recipe doesn't exist
+			db:  &DB{recipes: map[int]core.Recipe{1: mock.Recipe1}},
+			rec: mock.Recipe2,
+			err: app.ErrNotFound,
+		},
+		{ //02// success
+			db:  &DB{recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2}},
+			rec: core.Recipe{ID: 2, Size: 5, Items: []core.Ingredient{{ID: 1, Amount: 600}}},
+		},
+	} {
+		err := data.db.SetRecipe(data.rec)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if r, err := data.db.Recipe(data.rec.ID); err == nil && !reflect.DeepEqual(r, data.rec) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, r, data.rec)
+		}
+	}
+}
+
+func TestDB_Recipe(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+
+		rec core.Recipe
+		err error
+	}{
+		{ //00// empty database
+			db:  NewDB(mock.NewLog()),
+			err: app.ErrNotFound,
+		},
+		{ //01// recipe doesn't exist
+			db:  &DB{recipes: map[int]core.Recipe{1: mock.Recipe1}},
+			id:  2,
+			err: app.ErrNotFound,
+		},
+		{ //02// success
+			db:  &DB{recipes: map[int]core.Recipe{2: mock.Recipe2}},
+			id:  2,
+			rec: mock.Recipe2,
+		},
+	} {
+		rec, err := data.db.Recipe(data.id)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(rec, data.rec) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, rec, data.rec)
+		}
+	}
+}

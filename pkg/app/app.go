@@ -63,6 +63,10 @@ type DB interface {
 	Foods() ([]core.Food, error)
 	NewFood() (int, error)
 	SetFood(core.Food) error
+
+	NewRecipe() (int, error)
+	SetRecipe(core.Recipe) error
+	Recipe(id int) (core.Recipe, error)
 }
 
 // A Command encapsulates a single action that changes the

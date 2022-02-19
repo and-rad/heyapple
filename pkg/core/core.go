@@ -26,7 +26,8 @@ import (
 // Food represents an edible object. All nutrients are
 // stored per 100 base units. The base unit is either gram
 // or milliliter. The actual unit of measurement for
-// nutrients is grams.
+// macronutrients is grams while micronutrients are stored
+// in milligrams for a smaller memory footprint.
 type Food struct {
 	ID    int `json:"id"`
 	Brand int `json:"brand"`

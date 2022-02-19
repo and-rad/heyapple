@@ -34,22 +34,22 @@ var (
 		Protein: 0.3,
 		Fiber:   2,
 
-		Iron:       0.0002,
-		Zinc:       0.0001,
-		Magnesium:  0.005,
-		Chlorine:   0.0022,
-		Calcium:    0.0053,
-		Potassium:  0.119,
-		Phosphorus: 0.011,
-		Copper:     0.0001,
-		Iodine:     0.000008,
+		Iron:       0.2,
+		Zinc:       0.1,
+		Magnesium:  5,
+		Chlorine:   2.2,
+		Calcium:    5.3,
+		Potassium:  119,
+		Phosphorus: 11,
+		Copper:     0.1,
+		Iodine:     0.008,
 
-		VitA:  0.00001,
-		VitB1: 0.00004,
-		VitB2: 0.00003,
-		VitB6: 0.0001,
-		VitC:  0.012,
-		VitE:  0.00049,
+		VitA:  0.01,
+		VitB1: 0.04,
+		VitB2: 0.03,
+		VitB6: 0.1,
+		VitC:  12,
+		VitE:  0.49,
 	}
 
 	// banana
@@ -62,27 +62,27 @@ var (
 		Protein: 1,
 		Fiber:   2,
 
-		Iron:       0.0004,
-		Zinc:       0.0002,
-		Magnesium:  0.03,
-		Chlorine:   0.109,
-		Calcium:    0.007,
-		Potassium:  0.367,
-		Phosphorus: 0.022,
-		Copper:     0.0001,
-		Iodine:     0.000003,
-		Manganse:   0.0003,
+		Iron:       0.4,
+		Zinc:       0.2,
+		Magnesium:  30,
+		Chlorine:   109,
+		Calcium:    7,
+		Potassium:  367,
+		Phosphorus: 22,
+		Copper:     0.1,
+		Iodine:     0.003,
+		Manganse:   0.3,
 
-		VitA:  0.00001,
-		VitB1: 0.00004,
-		VitB2: 0.00006,
-		VitB6: 0.00036,
-		VitC:  0.011,
-		VitE:  0.00027,
+		VitA:  0.01,
+		VitB1: 0.04,
+		VitB2: 0.06,
+		VitB6: 0.36,
+		VitC:  11,
+		VitE:  0.27,
 	}
 
-	Food1Json = `{"id":1,"brand":0,"kcal":54,"fat":0.1,"fatsat":0,"fato3":0,"fato6":0,"carb":14.4,"sug":10.3,"prot":0.3,"fib":2,"pot":0.119,"chl":0.0022,"sod":0,"calc":0.0053,"phos":0.011,"mag":0.005,"iron":0.0002,"zinc":0.0001,"mang":0,"cop":0.0001,"iod":0.000008,"chr":0,"mol":0,"sel":0,"vita":0.00001,"vitb1":0.00004,"vitb2":0.00003,"vitb3":0,"vitb5":0,"vitb6":0.0001,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0.012,"vitd":0,"vite":0.00049,"vitk":0}`
-	Food2Json = `{"id":2,"brand":0,"kcal":93,"fat":0.2,"fatsat":0,"fato3":0,"fato6":0,"carb":20,"sug":17,"prot":1,"fib":2,"pot":0.367,"chl":0.109,"sod":0,"calc":0.007,"phos":0.022,"mag":0.03,"iron":0.0004,"zinc":0.0002,"mang":0.0003,"cop":0.0001,"iod":0.000003,"chr":0,"mol":0,"sel":0,"vita":0.00001,"vitb1":0.00004,"vitb2":0.00006,"vitb3":0,"vitb5":0,"vitb6":0.00036,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0.011,"vitd":0,"vite":0.00027,"vitk":0}`
+	Food1Json = `{"id":1,"brand":0,"kcal":54,"fat":0.1,"fatsat":0,"fato3":0,"fato6":0,"carb":14.4,"sug":10.3,"prot":0.3,"fib":2,"pot":119,"chl":2.2,"sod":0,"calc":5.3,"phos":11,"mag":5,"iron":0.2,"zinc":0.1,"mang":0,"cop":0.1,"iod":0.008,"chr":0,"mol":0,"sel":0,"vita":0.01,"vitb1":0.04,"vitb2":0.03,"vitb3":0,"vitb5":0,"vitb6":0.1,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":12,"vitd":0,"vite":0.49,"vitk":0}`
+	Food2Json = `{"id":2,"brand":0,"kcal":93,"fat":0.2,"fatsat":0,"fato3":0,"fato6":0,"carb":20,"sug":17,"prot":1,"fib":2,"pot":367,"chl":109,"sod":0,"calc":7,"phos":22,"mag":30,"iron":0.4,"zinc":0.2,"mang":0.3,"cop":0.1,"iod":0.003,"chr":0,"mol":0,"sel":0,"vita":0.01,"vitb1":0.04,"vitb2":0.06,"vitb3":0,"vitb5":0,"vitb6":0.36,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":11,"vitd":0,"vite":0.27,"vitk":0}`
 )
 
 var (

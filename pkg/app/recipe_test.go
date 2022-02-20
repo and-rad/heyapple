@@ -108,3 +108,56 @@ func TestSaveRecipe_Execute(t *testing.T) {
 		}
 	}
 }
+
+func TestSaveRecipeAccess_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db    *mock.DB
+		user  int
+		rec   int
+		perms int
+
+		err error
+	}{
+		{ //00// id missing or invalid
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// invalid permissions
+			db:    mock.NewDB(),
+			user:  1,
+			rec:   1,
+			perms: app.PermCreate - 1,
+			err:   app.ErrPermission,
+		},
+		{ //02// connection failed
+			db:    mock.NewDB().WithError(mock.ErrDOS),
+			user:  1,
+			rec:   2,
+			perms: app.PermCreate,
+			err:   mock.ErrDOS,
+		},
+		{ //03// empty db
+			db:    mock.NewDB(),
+			user:  1,
+			rec:   2,
+			perms: app.PermCreate | app.PermEdit,
+		},
+		{ //04// override existing permissions
+			db:    mock.NewDB().WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermCreate}),
+			user:  1,
+			rec:   2,
+			perms: app.PermCreate | app.PermDelete,
+		},
+	} {
+		cmd := &app.SaveRecipeAccess{UserID: data.user, RecID: data.rec, Permission: data.perms}
+		err := cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if err == nil && data.db.Access.Perms != data.perms {
+			t.Errorf("test case %d: permission mismatch \nhave: %v \nwant: %v", idx, data.db.Access.Perms, data.perms)
+		}
+	}
+}

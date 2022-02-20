@@ -45,6 +45,7 @@ var (
 	ErrCredentials = errors.New("nomatch")
 	ErrExists      = errors.New("exists")
 	ErrNotFound    = errors.New("notfound")
+	ErrPermission  = errors.New("permission")
 )
 
 // DB provides access to persistent storage.

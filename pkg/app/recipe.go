@@ -71,3 +71,22 @@ func (c *SaveRecipe) Execute(db DB) error {
 
 	return db.SetRecipe(rec)
 }
+
+// SaveRecipeAccess is a command that changes a user's
+// access rights for a given recipe.
+type SaveRecipeAccess struct {
+	UserID     int
+	RecID      int
+	Permission int
+}
+
+func (c *SaveRecipeAccess) Execute(db DB) error {
+	if c.UserID == 0 || c.RecID == 0 {
+		return ErrNotFound
+	}
+	if c.Permission < PermCreate || PermCreateFood <= c.Permission {
+		return ErrPermission
+	}
+	return db.SetRecipeAccess(c.UserID, c.RecID, c.Permission)
+}
+

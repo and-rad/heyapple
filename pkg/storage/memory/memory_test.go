@@ -563,7 +563,8 @@ func TestDB_SetRecipe(t *testing.T) {
 		db  *DB
 		rec core.Recipe
 
-		err error
+		meta core.RecipeMeta
+		err  error
 	}{
 		{ //00// empty database
 			db:  NewDB(mock.NewLog()),
@@ -575,8 +576,20 @@ func TestDB_SetRecipe(t *testing.T) {
 			err: app.ErrNotFound,
 		},
 		{ //02// success
-			db:  &DB{recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2}},
+			db: &DB{
+				food:    map[int]core.Food{1: mock.Food1},
+				recipes: map[int]core.Recipe{2: mock.Recipe2},
+				recMeta: map[int]core.RecipeMeta{2: mock.RecMeta2},
+			},
 			rec: core.Recipe{ID: 2, Size: 5, Items: []core.Ingredient{{ID: 1, Amount: 600}}},
+			meta: func() core.RecipeMeta {
+				m := mock.RecMeta2
+				m.KCal = mock.Food1.KCal * 6
+				m.Fat = mock.Food1.Fat * 6
+				m.Carbs = mock.Food1.Carbs * 6
+				m.Protein = mock.Food1.Protein * 6
+				return m
+			}(),
 		},
 	} {
 		err := data.db.SetRecipe(data.rec)
@@ -587,6 +600,10 @@ func TestDB_SetRecipe(t *testing.T) {
 
 		if r, err := data.db.Recipe(data.rec.ID); err == nil && !reflect.DeepEqual(r, data.rec) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, r, data.rec)
+		}
+
+		if m, _ := data.db.RecipeMeta(data.rec.ID); m != data.meta {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, m, data.meta)
 		}
 	}
 }

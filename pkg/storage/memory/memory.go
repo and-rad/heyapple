@@ -173,11 +173,28 @@ func (db *DB) NewRecipe(name string) (int, error) {
 }
 
 func (db *DB) SetRecipe(rec core.Recipe) error {
-	if _, ok := db.recipes[rec.ID]; ok {
-		db.recipes[rec.ID] = rec
-		return nil
+	if _, ok := db.recipes[rec.ID]; !ok {
+		return app.ErrNotFound
 	}
-	return app.ErrNotFound
+
+	meta := db.recMeta[rec.ID]
+	meta.KCal = 0
+	meta.Fat = 0
+	meta.Carbs = 0
+	meta.Protein = 0
+	for _, v := range rec.Items {
+		food := db.food[v.ID]
+		amount := v.Amount * 0.01
+		meta.KCal += food.KCal * amount
+		meta.Fat += food.Fat * amount
+		meta.Carbs += food.Carbs * amount
+		meta.Protein += food.Protein * amount
+	}
+
+	db.recipes[rec.ID] = rec
+	db.recMeta[rec.ID] = meta
+
+	return nil
 }
 
 func (db *DB) Recipe(id int) (core.Recipe, error) {

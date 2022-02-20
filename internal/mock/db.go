@@ -32,6 +32,12 @@ var (
 	ErrDOS = errors.New("dos")
 )
 
+type Access struct {
+	User     int
+	Resource int
+	Perms    int
+}
+
 type DB struct {
 	User        app.User
 	Tok         app.Token
@@ -40,6 +46,7 @@ type DB struct {
 	RecipeItem  core.Recipe
 	RecipeItems []core.Recipe
 	RecMetaItem core.RecipeMeta
+	Access      Access
 
 	Err  []error
 	ID   int
@@ -94,6 +101,11 @@ func (db *DB) WithRecipe(rec core.Recipe) *DB {
 
 func (db *DB) WithRecMeta(meta core.RecipeMeta) *DB {
 	db.RecMetaItem = meta
+	return db
+}
+
+func (db *DB) WithAccess(a Access) *DB {
+	db.Access = a
 	return db
 }
 
@@ -226,6 +238,14 @@ func (db *DB) SetRecipe(rec core.Recipe) error {
 	return nil
 }
 
+func (db *DB) SetRecipeAccess(user, rec, perms int) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+	db.Access = Access{User: user, Resource: rec, Perms: perms}
+	return nil
+}
+
 func (db *DB) Recipe(id int) (core.Recipe, error) {
 	if err := db.popError(); err != nil {
 		return core.Recipe{}, err
@@ -244,6 +264,16 @@ func (db *DB) RecipeMeta(id int) (core.RecipeMeta, error) {
 		return core.RecipeMeta{}, app.ErrNotFound
 	}
 	return db.RecMetaItem, nil
+}
+
+func (db *DB) RecipeAccess(user, rec int) (int, error) {
+	if err := db.popError(); err != nil {
+		return 0, err
+	}
+	if db.Access.User == user && db.Access.Resource == rec {
+		return db.Access.Perms, nil
+	}
+	return 0, nil
 }
 
 func (db *DB) popError() error {

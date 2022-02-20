@@ -712,3 +712,99 @@ func TestDB_FoodExists(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_RecipeAccess(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		user int
+		rec  int
+
+		perms int
+		err   error
+	}{
+		{ //00// empty database
+			db:    NewDB(mock.NewLog()),
+			perms: app.PermNone,
+		},
+		{ //01// user doesn't exist
+			db:    &DB{userRec: map[int]map[int]int{1: {5: app.PermRead}}},
+			user:  2,
+			rec:   5,
+			perms: app.PermNone,
+		},
+		{ //02// success
+			db:    &DB{userRec: map[int]map[int]int{1: {5: app.PermRead}}},
+			user:  1,
+			rec:   5,
+			perms: app.PermRead,
+		},
+	} {
+		perms, err := data.db.RecipeAccess(data.user, data.rec)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if perms != data.perms {
+			t.Errorf("test case %d: permission mismatch \nhave: %v\nwant: %v", idx, perms, data.perms)
+		}
+	}
+}
+
+func TestDB_SetRecipeAccess(t *testing.T) {
+	for idx, data := range []struct {
+		db    *DB
+		user  int
+		rec   int
+		perms int
+
+		err error
+	}{
+		{ //00// empty database
+			db:  NewDB(mock.NewLog()),
+			err: app.ErrNotFound,
+		},
+		{ //01// recipe doesn't exist
+			db: &DB{
+				users:   map[int]app.User{1: mock.User1},
+				userRec: map[int]map[int]int{},
+				recUser: map[int]map[int]int{},
+			},
+			user: 1,
+			rec:  2,
+			err:  app.ErrNotFound,
+		},
+		{ //02// set new permission
+			db: &DB{
+				users:   map[int]app.User{1: mock.User1},
+				recipes: map[int]core.Recipe{2: mock.Recipe2},
+				userRec: map[int]map[int]int{},
+				recUser: map[int]map[int]int{},
+			},
+			user:  1,
+			rec:   2,
+			perms: app.PermRead,
+		},
+		{ //03// update existing permissions
+			db: &DB{
+				users:   map[int]app.User{1: mock.User1},
+				recipes: map[int]core.Recipe{2: mock.Recipe2},
+				userRec: map[int]map[int]int{1: {2: app.PermNone}},
+				recUser: map[int]map[int]int{2: {1: app.PermNone}},
+			},
+			user:  1,
+			rec:   2,
+			perms: app.PermRead | app.PermEdit,
+		},
+	} {
+		err := data.db.SetRecipeAccess(data.user, data.rec, data.perms)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if perms, _ := data.db.RecipeAccess(data.user, data.rec); perms != data.perms {
+			t.Errorf("test case %d: permission mismatch \nhave: %v\nwant: %v", idx, perms, data.perms)
+		}
+	}
+}

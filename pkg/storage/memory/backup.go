@@ -33,6 +33,11 @@ const (
 	storageFile = "db"
 )
 
+type access struct {
+	Resource int `json:"res"`
+	Perms    int `json:"perms"`
+}
+
 type backup struct {
 	db         *DB
 	lastBackup string
@@ -44,6 +49,7 @@ type backupData struct {
 	Food    map[int]core.Food       `json:"food"`
 	Recipes map[int]core.Recipe     `json:"recipes"`
 	RecMeta map[int]core.RecipeMeta `json:"recmeta"`
+	UserRec map[int][]access        `json:"recaccess"`
 	UserID  int                     `json:"userid"`
 	FoodID  int                     `json:"foodid"`
 	RecID   int                     `json:"recid"`
@@ -72,15 +78,26 @@ func (b *backup) load() {
 			b.db.userID = db.UserID
 			b.db.users = db.Users
 			b.db.tokens = db.Tokens
-			for k, v := range b.db.users {
-				b.db.emails[v.Email] = k
-			}
-
 			b.db.food = db.Food
 			b.db.foodID = db.FoodID
 			b.db.recipes = db.Recipes
 			b.db.recMeta = db.RecMeta
 			b.db.recID = db.RecID
+
+			for k, v := range b.db.users {
+				b.db.emails[v.Email] = k
+			}
+
+			for k, v := range db.UserRec {
+				b.db.userRec[k] = map[int]int{}
+				for _, a := range v {
+					b.db.userRec[k][a.Resource] = a.Perms
+					if _, ok := b.db.recUser[a.Resource]; !ok {
+						b.db.recUser[a.Resource] = map[int]int{}
+					}
+					b.db.recUser[a.Resource][k] = a.Perms
+				}
+			}
 		}
 	}
 }
@@ -119,6 +136,13 @@ func (b *backup) backUp() error {
 }
 
 func (b *backup) bytes() []byte {
+	recAccess := map[int][]access{}
+	for k, v := range b.db.userRec {
+		for r, p := range v {
+			recAccess[k] = append(recAccess[k], access{Resource: r, Perms: p})
+		}
+	}
+
 	data, _ := json.Marshal(backupData{
 		Users:   b.db.users,
 		UserID:  b.db.userID,
@@ -128,6 +152,7 @@ func (b *backup) bytes() []byte {
 		RecMeta: b.db.recMeta,
 		RecID:   b.db.recID,
 		Tokens:  b.db.tokens,
+		UserRec: recAccess,
 	})
 
 	return data

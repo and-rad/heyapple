@@ -67,8 +67,10 @@ type DB interface {
 
 	NewRecipe(string) (int, error)
 	SetRecipe(core.Recipe) error
+	SetRecipeAccess(user, rec, perms int) error
 	Recipe(id int) (core.Recipe, error)
 	RecipeMeta(id int) (core.RecipeMeta, error)
+	RecipeAccess(user, rec int) (int, error)
 }
 
 // A Command encapsulates a single action that changes the

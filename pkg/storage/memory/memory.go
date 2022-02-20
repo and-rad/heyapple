@@ -40,6 +40,9 @@ type DB struct {
 	recipes map[int]core.Recipe
 	recMeta map[int]core.RecipeMeta
 
+	userRec map[int]map[int]int
+	recUser map[int]map[int]int
+
 	userID int
 	foodID int
 	recID  int
@@ -56,6 +59,8 @@ func NewDB(log app.Logger) *DB {
 		food:    make(map[int]core.Food),
 		recipes: make(map[int]core.Recipe),
 		recMeta: make(map[int]core.RecipeMeta),
+		userRec: make(map[int]map[int]int),
+		recUser: make(map[int]map[int]int),
 	}
 }
 
@@ -202,6 +207,24 @@ func (db *DB) SetRecipe(rec core.Recipe) error {
 	return nil
 }
 
+func (db *DB) SetRecipeAccess(user, rec, perms int) error {
+	if _, ok := db.users[user]; !ok {
+		return app.ErrNotFound
+	}
+	if _, ok := db.recipes[rec]; !ok {
+		return app.ErrNotFound
+	}
+	if _, ok := db.userRec[user]; !ok {
+		db.userRec[user] = make(map[int]int)
+	}
+	if _, ok := db.recUser[rec]; !ok {
+		db.recUser[rec] = make(map[int]int)
+	}
+	db.userRec[user][rec] = perms
+	db.recUser[rec][user] = perms
+	return nil
+}
+
 func (db *DB) Recipe(id int) (core.Recipe, error) {
 	if rec, ok := db.recipes[id]; ok {
 		return rec, nil
@@ -214,6 +237,13 @@ func (db *DB) RecipeMeta(id int) (core.RecipeMeta, error) {
 		return meta, nil
 	}
 	return core.RecipeMeta{}, app.ErrNotFound
+}
+
+func (db *DB) RecipeAccess(user, rec int) (int, error) {
+	if acc, ok := db.userRec[user]; ok {
+		return acc[rec], nil
+	}
+	return app.PermNone, nil
 }
 
 func (db *DB) Execute(c app.Command) error {

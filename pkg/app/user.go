@@ -30,6 +30,7 @@ const (
 
 	PermCreateFood = 0x00010000
 	PermEditFood   = 0x00020000
+	PermAdmin      = PermCreateFood | PermEditFood
 )
 
 // User represents a human user of the system, identified

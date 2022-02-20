@@ -206,3 +206,37 @@ func TestSaveRecipeAccess_Execute(t *testing.T) {
 		}
 	}
 }
+
+func TestRecipeAccess_HasPerms(t *testing.T) {
+	for idx, data := range []struct {
+		query app.RecipeAccess
+		perms int
+
+		ok bool
+	}{
+		{ //00// empty, default is "none"
+			query: app.RecipeAccess{},
+			perms: app.PermNone,
+			ok:    true,
+		},
+		{ //01// exact match
+			query: app.RecipeAccess{Permission: app.PermDelete},
+			perms: app.PermDelete,
+			ok:    true,
+		},
+		{ //02// sub match
+			query: app.RecipeAccess{Permission: app.PermOwner},
+			perms: app.PermDelete | app.PermEdit,
+			ok:    true,
+		},
+		{ //03// no match
+			query: app.RecipeAccess{Permission: app.PermRead},
+			perms: app.PermEdit,
+			ok:    false,
+		},
+	} {
+		if ok := data.query.HasPerms(data.perms); ok != data.ok {
+			t.Errorf("test case %d: result mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
+		}
+	}
+}

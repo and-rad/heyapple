@@ -69,15 +69,29 @@ func NewRecipe(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 // Possible status codes:
 //   204 - Update successful
 //   400 - Malformed or missing form data
+//   401 - Insufficient permission
 //   404 - Recipe doesn't exist
 //   500 - Internal server error
 // Example input:
 //   size=12&item=1&item=4&amount=150&amount=255
-func SaveRecipe(db app.DB) httprouter.Handle {
+func SaveRecipe(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		recID, err := strconv.Atoi(ps.ByName("id"))
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		var hasPermission bool
+		if id, ok := sm.Get(r.Context(), "id").(int); ok {
+			query := &app.RecipeAccess{UserID: id, RecID: recID}
+			if db.Fetch(query) == nil {
+				hasPermission = query.HasPerms(app.PermEdit)
+			}
+		}
+
+		if !hasPermission {
+			w.WriteHeader(http.StatusUnauthorized)
 			return
 		}
 

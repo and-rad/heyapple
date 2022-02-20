@@ -87,9 +87,10 @@ func TestNewRecipe(t *testing.T) {
 
 func TestSaveRecipe(t *testing.T) {
 	for idx, data := range []struct {
-		db     *mock.DB
-		params httprouter.Params
-		in     url.Values
+		db        *mock.DB
+		params    httprouter.Params
+		in        url.Values
+		setCookie bool
 
 		rec    core.Recipe
 		status int
@@ -108,44 +109,79 @@ func TestSaveRecipe(t *testing.T) {
 			params: httprouter.Params{{Key: "id", Value: "someone"}},
 			status: http.StatusBadRequest,
 		},
-		{ //03// connection failure
-			db:     mock.NewDB().WithError(mock.ErrDOS),
+		{ //03// no session
+			db:     mock.NewDB(),
 			params: httprouter.Params{{Key: "id", Value: "42"}},
-			status: http.StatusInternalServerError,
+			status: http.StatusUnauthorized,
 		},
-		{ //04// item doesn't exist
-			db:     mock.NewDB().WithRecipe(mock.Recipe1),
-			params: httprouter.Params{{Key: "id", Value: "42"}},
-			in:     url.Values{"size": {"9"}},
-			status: http.StatusNotFound,
-			rec:    mock.Recipe1,
+		{ //04// connection failure
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 42, Perms: app.PermEdit}).
+				WithError(nil, mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "42"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
 		},
-		{ //05// success
-			db:     mock.NewDB().WithRecipe(mock.Recipe1),
-			params: httprouter.Params{{Key: "id", Value: "1"}},
-			in:     url.Values{"size": {"9"}},
-			status: http.StatusNoContent,
-			rec:    core.Recipe{ID: 1, Size: 9, Items: []core.Ingredient{}},
+		{ //05// item doesn't exist
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithRecipe(mock.Recipe1).
+				WithAccess(mock.Access{User: 1, Resource: 42, Perms: app.PermEdit}),
+			params:    httprouter.Params{{Key: "id", Value: "42"}},
+			in:        url.Values{"size": {"9"}},
+			setCookie: true,
+			status:    http.StatusNotFound,
+			rec:       mock.Recipe1,
 		},
-		{ //06// ignore invalid values
-			db:     mock.NewDB().WithRecipe(mock.Recipe1).WithFoods(mock.Food1, mock.Food2),
-			params: httprouter.Params{{Key: "id", Value: "1"}},
-			in:     url.Values{"item": {"1", "2", "34"}, "amount": {"100", "alot", "340"}},
-			status: http.StatusNoContent,
-			rec:    core.Recipe{ID: 1, Size: 1, Items: []core.Ingredient{{ID: 1, Amount: 100}}},
+		{ //06// success
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithRecipe(mock.Recipe1).
+				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
+			params:    httprouter.Params{{Key: "id", Value: "1"}},
+			in:        url.Values{"size": {"9"}},
+			setCookie: true,
+			status:    http.StatusNoContent,
+			rec:       core.Recipe{ID: 1, Size: 9, Items: []core.Ingredient{}},
 		},
-		{ //07// array sizes don't match
-			db:     mock.NewDB().WithRecipe(mock.Recipe1),
-			params: httprouter.Params{{Key: "id", Value: "1"}},
-			in:     url.Values{"item": {"1", "2"}, "amount": {"100", "250", "340"}},
-			status: http.StatusBadRequest,
-			rec:    mock.Recipe1,
+		{ //07// ignore invalid values
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithRecipe(mock.Recipe1).
+				WithFoods(mock.Food1, mock.Food2).
+				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
+			params:    httprouter.Params{{Key: "id", Value: "1"}},
+			in:        url.Values{"item": {"1", "2", "34"}, "amount": {"100", "alot", "340"}},
+			setCookie: true,
+			status:    http.StatusNoContent,
+			rec:       core.Recipe{ID: 1, Size: 1, Items: []core.Ingredient{{ID: 1, Amount: 100}}},
+		},
+		{ //08// array sizes don't match
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithRecipe(mock.Recipe1).
+				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
+			params:    httprouter.Params{{Key: "id", Value: "1"}},
+			in:        url.Values{"item": {"1", "2"}, "amount": {"100", "250", "340"}},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+			rec:       mock.Recipe1,
 		},
 	} {
 		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		res := httptest.NewRecorder()
-		api.SaveRecipe(data.db)(res, req, data.params)
+
+		sm := scs.New()
+		if data.setCookie {
+			if ctx, err := sm.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				sm.Put(req.Context(), "id", data.db.User.ID)
+			}
+		}
+
+		api.SaveRecipe(sm, data.db)(res, req, data.params)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

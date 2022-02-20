@@ -112,3 +112,7 @@ func (q *RecipeAccess) Fetch(db DB) error {
 
 	return nil
 }
+
+func (q *RecipeAccess) HasPerms(perms int) bool {
+	return q.Permission&perms == perms
+}

@@ -48,7 +48,7 @@ func TestFoods(t *testing.T) {
 			out:    "[]",
 		},
 		{ //02// success
-			db:     mock.NewDB().WithFoods([]core.Food{mock.Food1, mock.Food2}),
+			db:     mock.NewDB().WithFoods(mock.Food1, mock.Food2),
 			out:    fmt.Sprintf(`[%s,%s]`, mock.Food1Json, mock.Food2Json),
 			status: http.StatusOK,
 		},

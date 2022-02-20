@@ -59,10 +59,11 @@ type DB interface {
 	Token(string) (Token, error)
 	DeleteToken(string) error
 
-	Food(id int) (core.Food, error)
-	Foods() ([]core.Food, error)
 	NewFood() (int, error)
 	SetFood(core.Food) error
+	Food(id int) (core.Food, error)
+	Foods() ([]core.Food, error)
+	FoodExists(id int) (bool, error)
 
 	NewRecipe(string) (int, error)
 	SetRecipe(core.Recipe) error

@@ -67,7 +67,7 @@ func (db *DB) WithFood(food core.Food) *DB {
 	return db
 }
 
-func (db *DB) WithFoods(foods []core.Food) *DB {
+func (db *DB) WithFoods(foods ...core.Food) *DB {
 	db.FoodItems = foods
 	return db
 }
@@ -84,6 +84,11 @@ func (db *DB) WithToken(tok app.Token) *DB {
 
 func (db *DB) WithName(name string) *DB {
 	db.Name = name
+	return db
+}
+
+func (db *DB) WithRecipe(rec core.Recipe) *DB {
+	db.RecipeItem = rec
 	return db
 }
 
@@ -188,6 +193,18 @@ func (db *DB) SetFood(food core.Food) error {
 	}
 	db.FoodItem = food
 	return nil
+}
+
+func (db *DB) FoodExists(id int) (bool, error) {
+	if err := db.popError(); err != nil {
+		return false, err
+	}
+	for _, f := range db.FoodItems {
+		if f.ID == id {
+			return true, nil
+		}
+	}
+	return false, nil
 }
 
 func (db *DB) NewRecipe(name string) (int, error) {

@@ -18,6 +18,10 @@
 
 package app
 
+import (
+	"heyapple/pkg/core"
+)
+
 // CreateRecipe is a command to create a new named recipe
 // in the food database. If successful, the new item id is
 // stored in the command.
@@ -34,4 +38,39 @@ func (c *CreateRecipe) Execute(db DB) error {
 	}
 
 	return nil
+}
+
+// SaveRecipe is a command that upates a recipe's number
+// of servings or its list of ingredients.
+type SaveRecipe struct {
+	Items map[int]float32
+	Size  int
+	ID    int
+}
+
+func (c *SaveRecipe) Execute(db DB) error {
+	if c.ID == 0 {
+		return ErrNotFound
+	}
+
+	rec, err := db.Recipe(c.ID)
+	if err != nil {
+		return err
+	}
+
+	if c.Size > 0 {
+		rec.Size = c.Size
+	}
+
+	rec.Items = []core.Ingredient{}
+	for k, v := range c.Items {
+		if ok, err := db.FoodExists(k); ok && err == nil {
+			rec.Items = append(rec.Items, core.Ingredient{
+				ID:     k,
+				Amount: v,
+			})
+		}
+	}
+
+	return db.SetRecipe(rec)
 }

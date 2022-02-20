@@ -677,3 +677,38 @@ func TestDB_RecipeMeta(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_FoodExists(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+
+		ok  bool
+		err error
+	}{
+		{ //00// empty database
+			db: NewDB(mock.NewLog()),
+			ok: false,
+		},
+		{ //01// item doesn't exist
+			db: &DB{food: map[int]core.Food{1: mock.Food1}},
+			id: 2,
+			ok: false,
+		},
+		{ //02// success
+			db: &DB{food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}},
+			id: 2,
+			ok: true,
+		},
+	} {
+		ok, err := data.db.FoodExists(data.id)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if ok != data.ok {
+			t.Errorf("test case %d: result mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
+		}
+	}
+}

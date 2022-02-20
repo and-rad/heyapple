@@ -151,6 +151,11 @@ func (db *DB) Foods() ([]core.Food, error) {
 	return foods, nil
 }
 
+func (db *DB) FoodExists(id int) (bool, error) {
+	_, ok := db.food[id]
+	return ok, nil
+}
+
 func (db *DB) NewFood() (int, error) {
 	db.foodID++
 	db.food[db.foodID] = core.Food{ID: db.foodID}

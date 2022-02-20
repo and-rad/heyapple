@@ -47,7 +47,7 @@ func TestJSON(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		mw.JSON(data.next.Handle())(res, req, nil)
+		mw.JSON()(data.next.Handle())(res, req, nil)
 
 		if header := res.Result().Header; !reflect.DeepEqual(header, data.header) {
 			t.Errorf("test case %d: header mismatch \nhave: %v \nwant: %v", idx, header, data.header)
@@ -135,7 +135,7 @@ func TestAnon(t *testing.T) {
 			}
 		}
 
-		mw.Anon(sm, data.target, (mock.Handler{}).Handle())(res, req, nil)
+		mw.Anon(sm, data.target)((mock.Handler{}).Handle())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -176,7 +176,7 @@ func TestAuth(t *testing.T) {
 			}
 		}
 
-		mw.Auth(sm, data.target, (mock.Handler{}).Handle())(res, req, nil)
+		mw.Auth(sm, data.target)((mock.Handler{}).Handle())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

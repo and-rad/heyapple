@@ -27,34 +27,42 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+type Func func(httprouter.Handle) httprouter.Handle
+
 // Anon is a middleware that prevents logged-in users from accessing a resource.
-func Anon(sm *scs.SessionManager, target string, next httprouter.Handle) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		if sm.Get(r.Context(), "id") == nil {
-			next(w, r, ps)
-		} else {
-			http.Redirect(w, r, target, http.StatusSeeOther)
+func Anon(sm *scs.SessionManager, target string) Func {
+	return func(next httprouter.Handle) httprouter.Handle {
+		return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+			if sm.Get(r.Context(), "id") == nil {
+				next(w, r, ps)
+			} else {
+				http.Redirect(w, r, target, http.StatusSeeOther)
+			}
 		}
 	}
 }
 
 // Auth is a middleware that grants only logged-in users access to a resource.
-func Auth(sm *scs.SessionManager, target string, next httprouter.Handle) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		if sm.Get(r.Context(), "id") != nil {
-			next(w, r, ps)
-		} else {
-			http.Redirect(w, r, target, http.StatusSeeOther)
+func Auth(sm *scs.SessionManager, target string) Func {
+	return func(next httprouter.Handle) httprouter.Handle {
+		return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+			if sm.Get(r.Context(), "id") != nil {
+				next(w, r, ps)
+			} else {
+				http.Redirect(w, r, target, http.StatusSeeOther)
+			}
 		}
 	}
 }
 
 // JSON is a middleware to identify response bodies as JSON data.
-func JSON(next httprouter.Handle) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-		w.Header().Set("Content-Type", "application/json; charset=utf-8")
-		next(w, r, ps)
+func JSON() Func {
+	return func(next httprouter.Handle) httprouter.Handle {
+		return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+			w.Header().Set("Access-Control-Allow-Origin", "*")
+			w.Header().Set("Content-Type", "application/json; charset=utf-8")
+			next(w, r, ps)
+		}
 	}
 }
 

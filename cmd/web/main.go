@@ -53,21 +53,21 @@ func main() {
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(mw.Options)
 	router.GET("/", handler.Home(db))
-	router.GET("/app", mw.Auth(sm, "/login", handler.App(db)))
-	router.GET("/login", mw.Anon(sm, "/app", handler.Login(db)))
+	router.GET("/app", chain(handler.App(db), mw.Auth(sm, "/login")))
+	router.GET("/login", chain(handler.Login(db), mw.Anon(sm, "/app")))
 	router.GET("/confirm/:token", handler.Confirm(db))
 
 	router.POST("/auth/local", auth.LocalLogin(sm, db))
 	router.DELETE("/auth/local", auth.LocalLogout(sm))
 
-	router.POST("/api/v1/user", mw.JSON(api.NewUser(out, nf, db)))
+	router.POST("/api/v1/user", chain(api.NewUser(out, nf, db), mw.JSON()))
 
-	router.GET("/api/v1/foods", mw.JSON(api.Foods(db)))
-	router.GET("/api/v1/food/:id", mw.JSON(api.Food(db)))
-	router.POST("/api/v1/food", mw.JSON(api.NewFood(db)))
-	router.POST("/api/v1/recipe", mw.JSON(api.NewRecipe(db)))
-	router.PUT("/api/v1/food/:id", mw.JSON(api.SaveFood(db)))
-	router.PUT("/api/v1/recipe/:id", mw.JSON(api.SaveRecipe(db)))
+	router.GET("/api/v1/foods", chain(api.Foods(db), mw.JSON()))
+	router.GET("/api/v1/food/:id", chain(api.Food(db), mw.JSON()))
+	router.POST("/api/v1/food", chain(api.NewFood(db), mw.JSON()))
+	router.POST("/api/v1/recipe", chain(api.NewRecipe(db), mw.JSON()))
+	router.PUT("/api/v1/food/:id", chain(api.SaveFood(db), mw.JSON()))
+	router.PUT("/api/v1/recipe/:id", chain(api.SaveRecipe(db), mw.JSON()))
 
 	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {
 		router.ServeFiles("/data/*filepath", http.Dir(dir))
@@ -80,6 +80,7 @@ func main() {
 	log.Fatal(http.ListenAndServe(address(), sm.LoadAndSave(router)))
 }
 
+// address builds the ListenAndServe address from the app config.
 func address() string {
 	host := os.Getenv("HEYAPPLE_WEB_HOST")
 	port, err := strconv.Atoi(os.Getenv("HEYAPPLE_WEB_PORT"))
@@ -87,4 +88,14 @@ func address() string {
 		port = 8080
 	}
 	return fmt.Sprintf("%s:%d", host, port)
+}
+
+// chain is a convenience function to chain middleware in
+// a more readable manner.
+func chain(h httprouter.Handle, m ...mw.Func) httprouter.Handle {
+	handler := h
+	for i := len(m) - 1; i >= 0; i-- {
+		handler = m[i](handler)
+	}
+	return handler
 }

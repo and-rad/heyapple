@@ -23,6 +23,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -102,11 +103,24 @@ func Food(db app.DB) httprouter.Handle {
 //   POST
 // Possible status codes:
 //   201 - Creation successful
+//   401 - Insufficient permissions
 //   500 - Internal server error
 // Example output:
 //   42
-func NewFood(db app.DB) httprouter.Handle {
+func NewFood(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		var hasPermission bool
+		if id, ok := sm.Get(r.Context(), "id").(int); ok {
+			if u, err := db.UserByID(id); err == nil {
+				hasPermission = (u.Perm&app.PermCreateFood == app.PermCreateFood)
+			}
+		}
+
+		if !hasPermission {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
 		cmd := &app.CreateFood{}
 		if err := db.Execute(cmd); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -135,12 +149,25 @@ func NewFood(db app.DB) httprouter.Handle {
 // Possible status codes:
 //   204 - Update successful
 //   400 - Malformed form data
+//   401 - Insufficient permissions
 //   404 - Food item doesn't exist
 //   500 - Internal server error
 // Example input:
 //   kcal=123&fat=4.5&vitb1=0.06
-func SaveFood(db app.DB) httprouter.Handle {
+func SaveFood(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		var hasPermission bool
+		if id, ok := sm.Get(r.Context(), "id").(int); ok {
+			if u, err := db.UserByID(id); err == nil {
+				hasPermission = (u.Perm&app.PermEditFood == app.PermEditFood)
+			}
+		}
+
+		if !hasPermission {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
 		cmd := &app.SaveFood{}
 		if id, err := strconv.Atoi(ps.ByName("id")); err != nil {
 			w.WriteHeader(http.StatusBadRequest)

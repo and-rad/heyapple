@@ -19,8 +19,10 @@
 package app
 
 const (
-	PermNone  = 0x00000000
-	PermLogin = 0x00000001
+	PermNone       = 0x00000000
+	PermLogin      = 0x00000001
+	PermCreateFood = 0x00000002
+	PermEditFood   = 0x00000004
 )
 
 // User represents a human user of the system, identified

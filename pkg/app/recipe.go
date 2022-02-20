@@ -84,7 +84,7 @@ func (c *SaveRecipeAccess) Execute(db DB) error {
 	if c.UserID == 0 || c.RecID == 0 {
 		return ErrNotFound
 	}
-	if c.Permission < PermCreate || PermCreateFood <= c.Permission {
+	if c.Permission < 0x00000100 || 0x0000ff00 < c.Permission {
 		return ErrPermission
 	}
 	return db.SetRecipeAccess(c.UserID, c.RecID, c.Permission)

@@ -3,6 +3,7 @@ package api_test
 import (
 	"heyapple/internal/mock"
 	"heyapple/pkg/api/v1"
+	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"net/http"
 	"net/http/httptest"
@@ -11,13 +12,17 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
 )
 
 func TestNewRecipe(t *testing.T) {
 	for idx, data := range []struct {
-		db     *mock.DB
-		in     url.Values
+		db        *mock.DB
+		in        url.Values
+		setCookie bool
+
+		access mock.Access
 		out    string
 		status int
 	}{
@@ -25,22 +30,46 @@ func TestNewRecipe(t *testing.T) {
 			db:     mock.NewDB(),
 			status: http.StatusBadRequest,
 		},
-		{ //01// connection failure
+		{ //01// no session
 			in:     url.Values{"name": {"My Recipe"}},
-			db:     mock.NewDB().WithError(mock.ErrDOS),
-			status: http.StatusInternalServerError,
+			db:     mock.NewDB(),
+			status: http.StatusUnauthorized,
 		},
-		{ //02// success
-			in:     url.Values{"name": {"My Recipe"}},
-			db:     mock.NewDB().WithID(23),
-			status: http.StatusCreated,
-			out:    "23",
+		{ //02// connection failure
+			in:        url.Values{"name": {"My Recipe"}},
+			db:        mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS),
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //03// partial success
+			in:        url.Values{"name": {"My Recipe"}},
+			db:        mock.NewDB().WithUser(mock.User1).WithID(23).WithError(nil, mock.ErrDOS),
+			setCookie: true,
+			status:    http.StatusAccepted,
+			out:       "23",
+		},
+		{ //04// success
+			in:        url.Values{"name": {"My Recipe"}},
+			db:        mock.NewDB().WithUser(mock.User1).WithID(23),
+			setCookie: true,
+			status:    http.StatusCreated,
+			access:    mock.Access{User: mock.User1.ID, Resource: 23, Perms: app.PermOwner},
+			out:       "23",
 		},
 	} {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		res := httptest.NewRecorder()
-		api.NewRecipe(data.db)(res, req, nil)
+
+		sm := scs.New()
+		if data.setCookie {
+			if ctx, err := sm.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				sm.Put(req.Context(), "id", data.db.User.ID)
+			}
+		}
+
+		api.NewRecipe(sm, data.db)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
@@ -48,6 +77,10 @@ func TestNewRecipe(t *testing.T) {
 
 		if body := res.Body.String(); body != data.out {
 			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+
+		if acc := data.db.Access; acc != data.access {
+			t.Errorf("test case %d: permission mismatch \nhave: %v \nwant: %v", idx, acc, data.access)
 		}
 	}
 }

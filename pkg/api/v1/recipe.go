@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -19,19 +20,30 @@ import (
 //   POST
 // Possible status codes:
 //   201 - Creation successful
+//   202 - Partial success
 //   400 - Missing form data
+//   401 - Insufficient permission
 //   500 - Internal server error
 // Example input:
 //   name=Pie
 // Example output:
 //   42
-func NewRecipe(db app.DB) httprouter.Handle {
+func NewRecipe(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.CreateRecipe{Name: r.FormValue("name")}
 		if cmd.Name == "" {
 			w.WriteHeader(http.StatusBadRequest)
+		} else if uid, ok := sm.Get(r.Context(), "id").(int); !ok {
+			w.WriteHeader(http.StatusUnauthorized)
 		} else if err := db.Execute(cmd); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
+		} else if err := db.Execute(&app.SaveRecipeAccess{
+			UserID:     uid,
+			RecID:      cmd.ID,
+			Permission: app.PermOwner,
+		}); err != nil {
+			w.WriteHeader(http.StatusAccepted)
+			sendResponse(cmd.ID, w)
 		} else {
 			w.WriteHeader(http.StatusCreated)
 			sendResponse(cmd.ID, w)

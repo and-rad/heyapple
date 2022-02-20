@@ -26,6 +26,7 @@ const (
 	PermRead   = 0x00000200
 	PermEdit   = 0x00000400
 	PermDelete = 0x00000800
+	PermOwner  = PermCreate | PermRead | PermEdit | PermDelete
 
 	PermCreateFood = 0x00010000
 	PermEditFood   = 0x00020000

@@ -61,7 +61,7 @@ func TestCreateRecipe_Execute(t *testing.T) {
 
 func TestSaveRecipe_Execute(t *testing.T) {
 	for idx, data := range []struct {
-		data map[int]float32
+		data []core.Ingredient
 		size int
 		id   int
 		db   *mock.DB
@@ -87,7 +87,7 @@ func TestSaveRecipe_Execute(t *testing.T) {
 		{ //03// ignore non-existent food
 			id:   1,
 			size: 12,
-			data: map[int]float32{1: 200, 2: 100, 3: 450},
+			data: []core.Ingredient{{ID: 1, Amount: 200}, {ID: 2, Amount: 100}, {ID: 3, Amount: 450}},
 			db:   mock.NewDB().WithRecipe(mock.Recipe1).WithFoods(mock.Food1, mock.Food2),
 			rec: core.Recipe{
 				ID:    1,

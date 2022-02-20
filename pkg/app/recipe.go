@@ -43,7 +43,7 @@ func (c *CreateRecipe) Execute(db DB) error {
 // SaveRecipe is a command that upates a recipe's number
 // of servings or its list of ingredients.
 type SaveRecipe struct {
-	Items map[int]float32
+	Items []core.Ingredient
 	Size  int
 	ID    int
 }
@@ -63,12 +63,9 @@ func (c *SaveRecipe) Execute(db DB) error {
 	}
 
 	rec.Items = []core.Ingredient{}
-	for k, v := range c.Items {
-		if ok, err := db.FoodExists(k); ok && err == nil {
-			rec.Items = append(rec.Items, core.Ingredient{
-				ID:     k,
-				Amount: v,
-			})
+	for _, v := range c.Items {
+		if ok, err := db.FoodExists(v.ID); ok && err == nil {
+			rec.Items = append(rec.Items, v)
 		}
 	}
 

@@ -2,6 +2,7 @@ package api
 
 import (
 	"heyapple/pkg/app"
+	"heyapple/pkg/core"
 	"net/http"
 	"strconv"
 
@@ -81,11 +82,10 @@ func SaveRecipe(db app.DB) httprouter.Handle {
 			return
 		}
 
-		cmd.Items = make(map[int]float32)
 		for k := range ids {
 			if id, err := strconv.Atoi(ids[k]); err == nil {
 				if amount, err := strconv.ParseFloat(amounts[k], 32); err == nil {
-					cmd.Items[id] = float32(amount)
+					cmd.Items = append(cmd.Items, core.Ingredient{ID: id, Amount: float32(amount)})
 				}
 			}
 		}

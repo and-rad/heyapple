@@ -90,3 +90,25 @@ func (c *SaveRecipeAccess) Execute(db DB) error {
 	return db.SetRecipeAccess(c.UserID, c.RecID, c.Permission)
 }
 
+// RecipeAccess is a query that fetches a user's access
+// rights for a given recipe. If successful, the permission
+// value is stored in the query.
+type RecipeAccess struct {
+	UserID     int
+	RecID      int
+	Permission int
+}
+
+func (q *RecipeAccess) Fetch(db DB) error {
+	if q.UserID == 0 || q.RecID == 0 {
+		return ErrNotFound
+	}
+
+	if perm, err := db.RecipeAccess(q.UserID, q.RecID); err != nil {
+		return err
+	} else {
+		q.Permission = perm
+	}
+
+	return nil
+}

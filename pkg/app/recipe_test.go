@@ -109,6 +109,51 @@ func TestSaveRecipe_Execute(t *testing.T) {
 	}
 }
 
+func TestRecipeAccess_Fetch(t *testing.T) {
+	for idx, data := range []struct {
+		db   *mock.DB
+		user int
+		rec  int
+
+		perms int
+		err   error
+	}{
+		{ //00// id missing or invalid
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// connection failed
+			db:   mock.NewDB().WithError(mock.ErrDOS),
+			user: 1,
+			rec:  2,
+			err:  mock.ErrDOS,
+		},
+		{ //02// empty db
+			db:    mock.NewDB(),
+			user:  1,
+			rec:   2,
+			perms: app.PermNone,
+		},
+		{ //03// success
+			db:    mock.NewDB().WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermCreate | app.PermDelete}),
+			user:  1,
+			rec:   2,
+			perms: app.PermCreate | app.PermDelete,
+		},
+	} {
+		qry := &app.RecipeAccess{UserID: data.user, RecID: data.rec}
+		err := qry.Fetch(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if qry.Permission != data.perms {
+			t.Errorf("test case %d: permission mismatch \nhave: %v \nwant: %v", idx, qry.Permission, data.perms)
+		}
+	}
+}
+
 func TestSaveRecipeAccess_Execute(t *testing.T) {
 	for idx, data := range []struct {
 		db    *mock.DB

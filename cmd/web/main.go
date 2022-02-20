@@ -65,6 +65,7 @@ func main() {
 	router.GET("/api/v1/foods", mw.JSON(api.Foods(db)))
 	router.GET("/api/v1/food/:id", mw.JSON(api.Food(db)))
 	router.POST("/api/v1/food", mw.JSON(api.NewFood(db)))
+	router.POST("/api/v1/recipe", mw.JSON(api.NewRecipe(db)))
 	router.PUT("/api/v1/food/:id", mw.JSON(api.SaveFood(db)))
 
 	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {

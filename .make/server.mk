@@ -2,6 +2,9 @@ NUM_TESTS := `find -name "*_test.go"|xargs grep "{ //"|wc -l`
 INSTALL_DIR := /tmp/heyapple
 CONFIG_DIR := /tmp/heyapple
 
+build-web:
+	@npm run build --prefix ./web/src/login
+
 build-server:
 	@rm -rf ./out/server
 	@CGO_ENABLED=0 GOARCH=amd64 go build -o ./out/server/${BINARY_NAME}-amd64 heyapple/cmd/web

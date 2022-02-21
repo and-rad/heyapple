@@ -5,7 +5,7 @@ include .make/nextcloud.mk
 include .make/server.mk
 include .make/env.mk
 
-build: test-all-server build-server build-nextcloud
+build: test-all-server build-web build-server build-nextcloud
 
 run: run-server
 

@@ -75,7 +75,7 @@ func main() {
 	}
 
 	if sub, err := fs.Sub(web.Static, "static"); err == nil {
-		router.ServeFiles("/static/*filepath", http.FS(sub))
+		router.NotFound = http.FileServer(http.FS(sub))
 	}
 
 	log.Fatal(http.ListenAndServe(address(), sm.LoadAndSave(router)))

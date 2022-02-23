@@ -8,12 +8,12 @@ const path = require("path");
 // https://vitejs.dev/config/
 export default defineConfig({
 	build: {
-		outDir: "../../",
+		outDir: "../../static",
 		rollupOptions: {
 			output: {
-				entryFileNames: `static/login/[name].js`,
-				chunkFileNames: `static/login/[name].js`,
-				assetFileNames: `static/login/[name].[ext]`,
+				entryFileNames: `login/[name].js`,
+				chunkFileNames: `login/[name].js`,
+				assetFileNames: `login/[name].[ext]`,
 			},
 		},
 	},

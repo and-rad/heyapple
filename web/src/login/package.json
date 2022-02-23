@@ -4,7 +4,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "mv ../../index.html ../../templates/web/login.html",
+    "postbuild": "mv ../../static/index.html ../../templates/web/login.html",
     "preview": "vite preview --port 5050"
   },
   "dependencies": {

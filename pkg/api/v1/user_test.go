@@ -47,14 +47,19 @@ func TestNewUser(t *testing.T) {
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
 			status: http.StatusInternalServerError,
 		},
-		{ //01// notification failure
+		{ //02// notification failure
 			db:     mock.NewDB(),
 			nf:     mock.NewNotifier().WithError(mock.ErrDOS),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
 			status: http.StatusCreated,
 			err:    mock.ErrDOS.Error(),
 		},
-		{ //01// success
+		{ //03// username exists
+			db:     mock.NewDB().WithError(app.ErrExists),
+			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
+			status: http.StatusConflict,
+		},
+		{ //04// success
 			db:     mock.NewDB(),
 			nf:     mock.NewNotifier(),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},

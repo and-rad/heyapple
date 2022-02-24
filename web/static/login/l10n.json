@@ -23,6 +23,7 @@
 		"register": {
 			"action": "Sign up",
 			"err401": "Insufficient password strength",
+			"err409": "There is already an account using this e-mail address",
 			"err500": "Unknown error occurred",
 			"errpassempty": "Both password fields must be filled out",
 			"errpassmatch": "The passwords don't match",

@@ -51,7 +51,12 @@ func NewUser(log app.Logger, nf app.Notifier, db app.DB) httprouter.Handle {
 			return
 		}
 
-		if err := db.Execute(cmd); err != nil {
+		err := db.Execute(cmd)
+		if err == app.ErrExists {
+			w.WriteHeader(http.StatusConflict)
+			return
+		}
+		if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 			return
 		}
@@ -62,7 +67,7 @@ func NewUser(log app.Logger, nf app.Notifier, db app.DB) httprouter.Handle {
 			"lang":  "en",
 			"token": cmd.Token,
 		}
-		if err := nf.Send(cmd.Email, app.RegisterNotification, data); err != nil {
+		if err = nf.Send(cmd.Email, app.RegisterNotification, data); err != nil {
 			log.Error(err)
 		}
 	}

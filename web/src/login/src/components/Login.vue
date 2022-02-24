@@ -7,13 +7,12 @@ import { RouterLink } from "vue-router";
 	<div>
 		<form>
 			<h1>Sign In</h1>
-			<label for="">E-Mail</label>
-			<input type="email" name="" />
-			<label for="">Password</label>
-			<input type="password" name="" />
+			<label >E-Mail</label>
+			<input type="email" name="email" />
+			<label >Password <RouterLink to="/reset">Reset password</RouterLink></label>
+			<input type="password" name="pass" />
 			<footer>
 				<span>Don't have an account yet? <RouterLink to="/signup">Sign up</RouterLink>.</span>
-				<RouterLink to="/reset">Reset password</RouterLink>
 			</footer>
 			<input type="submit" value="Sign up" />
 		</form>
@@ -24,6 +23,10 @@ import { RouterLink } from "vue-router";
 </template>
 
 <style>
+#app > .image {
+	background-color: #cad0db;
+}
+
 svg#sun {
 	bottom: unset !important;
 	top: 0;

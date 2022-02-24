@@ -11,7 +11,7 @@ import { RouterLink } from "vue-router";
 				Enter your account's e-mail address. Instructions on how to reset your password will be sent to you.
 			</p>
 			<label>E-Mail</label>
-			<input type="email" name="" />
+			<input type="email" name="email" />
 			<input type="submit" value="Send password reset e-mail" />
 		</form>
 		<RouterLink to="/" class="back">&#5176; Back</RouterLink>

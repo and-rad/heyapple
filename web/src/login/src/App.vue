@@ -9,34 +9,12 @@ import { RouterView } from "vue-router";
 <style>
 @import "@/assets/base.css";
 
-#app {
-	width: 960px;
-	height: 640px;
-	margin: 0 auto;
-	transform: translateY(-50%) translateX(-50%);
-	background-color: #fff;
-	border-radius: 4px;
-	box-shadow: 0 0 24px #ccc;
-	overflow-y: hidden;
-	display: flex;
-	justify-content: space-between;
-	position: absolute;
-	top: 50%;
-	left: 50%;
-}
-
 #app > *:first-child {
-	flex-basis: 60%;
-	padding: 3em;
+	padding: 3em 1em 1em;
 }
 
-#app > *:nth-child(2) {
-	flex-basis: 40%;
-}
-
-#app > .image svg {
-	position: absolute;
-	bottom: 0;
+#app > .image {
+	display: none;
 }
 
 h1 {
@@ -45,7 +23,8 @@ h1 {
 
 label {
 	margin-top: 1em;
-	display: block;
+	display: flex;
+	justify-content: space-between;
 }
 
 input[type="text"],
@@ -85,12 +64,56 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-	box-shadow: inset 0 0 100px rgba(0,0,0,0.1);
+	box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
 }
 
 form footer {
 	margin-top: 0.5em;
 	display: flex;
 	justify-content: space-between;
+}
+
+@media screen and (min-width: 720px) {
+	#app {
+		width: calc(100% - 48px);
+		height: calc(100% - 48px);
+		transform: translateY(-50%) translateX(-50%);
+		background-color: #fff;
+		border-radius: 4px;
+		box-shadow: 0 0 24px #ccc;
+		overflow-y: hidden;
+		display: flex;
+		justify-content: space-between;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
+
+	#app > *:first-child {
+		flex-basis: 60%;
+		padding: 3em;
+	}
+
+	#app > *:nth-child(2) {
+		flex-basis: 40%;
+	}
+
+	#app > .image {
+		display: block;
+	}
+
+	#app > .image svg {
+		position: absolute;
+		bottom: 0;
+	}
+}
+
+@media screen and (min-width: 1000px) {
+	#app {
+		width: 960px;
+		max-width: calc(100% - 48px);
+		height: 640px;
+		max-height: calc(100% - 48px);
+	}
 }
 </style>

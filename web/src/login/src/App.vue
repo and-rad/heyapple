@@ -60,11 +60,21 @@ input[type="submit"] {
 	background-color: var(--color-primary);
 	margin-top: 2em;
 	color: #fff;
-	transition: box-shadow 0.2s;
+	transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+input[type="submit"]:focus,
+input[type="submit"]:active {
+	outline: none;
 }
 
 input[type="submit"]:hover {
 	box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
+}
+
+input[type="submit"][disabled] {
+	background-color: #e0e0e0;
+	pointer-events: none;
 }
 
 form footer {

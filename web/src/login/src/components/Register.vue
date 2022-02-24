@@ -2,7 +2,9 @@
 import RegisterImage from "./images/ImageRegister.vue";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const reEmail = /^[^@]+@[^@]+$/;
 
 const email = ref("");
@@ -16,15 +18,15 @@ function confirm(evt) {
 	msg.value = {};
 
 	if (email.value.search(reEmail) == -1) {
-		msg.value = { msg: "Not a valid e-mail address", level: "err" };
+		msg.value = { msg: t("login.errmail"), level: "err" };
 		return false;
 	}
 	if (pass1.value == "" || pass2.value == "") {
-		msg.value = { msg: "Fill out both password fields", level: "err" };
+		msg.value = { msg: t("register.errpassempty"), level: "err" };
 		return false;
 	}
 	if (pass1.value != pass2.value) {
-		msg.value = { msg: "The passwords don't match", level: "err" };
+		msg.value = { msg: t("register.errpassmatch"), level: "err" };
 		return;
 	}
 
@@ -36,10 +38,10 @@ function confirm(evt) {
 	}).then((response) => {
 		if (response.ok) {
 			msg.value = {
-				msg: `Registration successful! We've sent an email to ${addr}. Open it up to activate your account.`,
+				msg: t("register.success",{addr: addr}),
 			};
 		} else {
-			msg.value = { msg: "Error: " + response.status, level: "err" };
+			msg.value = { msg: t("register.err"+response.status), level: "err" };
 		}
 	});
 }
@@ -48,18 +50,18 @@ function confirm(evt) {
 <template>
 	<div>
 		<form>
-			<h1>Sign Up</h1>
+			<h1>{{ $t("register.title") }}</h1>
 			<Message v-bind="msg" />
-			<label>E-Mail</label>
+			<label>{{ $t("form.email") }}</label>
 			<input type="email" name="email" v-model="email" />
-			<label>Password</label>
+			<label>{{ $t("form.pass") }}</label>
 			<input type="password" name="pass" v-model="pass1" />
-			<label>Confirm Password</label>
+			<label>{{ $t("form.confirm") }}</label>
 			<input type="password" name="pass" v-model="pass2" />
 			<footer>
-				<span>Already have an account? <RouterLink to="/">Sign in</RouterLink>.</span>
+				<span>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</span>
 			</footer>
-			<input type="submit" value="Sign up" @click="confirm" />
+			<input type="submit" :value="$t('register.action')" @click="confirm" />
 		</form>
 	</div>
 	<div class="image register-image">

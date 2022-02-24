@@ -6,15 +6,34 @@
 	},
 	"en": {
 		"form": {
+			"back": "Back",
+			"confirm": "Confirm Password",
 			"email": "E-Mail",
 			"pass": "Password",
-			"reset": "Reset password",
-			"signup": "Sign up",
-			"signin": "Sign in"
+			"reset": "Reset password"
 		},
 		"login": {
-			"title": "Sign In",
-			"signup": "Don't have an account yet?"
+			"action": "Sign in",
+			"err401": "Incorrect username or password",
+			"err500": "Unknown error occurred",
+			"errmail": "Not a valid e-mail address",
+			"signup": "Don't have an account yet?",
+			"title": "Sign In"
+		},
+		"register": {
+			"action": "Sign up",
+			"err401": "Insufficient password strength",
+			"err500": "Unknown error occurred",
+			"errpassempty": "Both password fields must be filled out",
+			"errpassmatch": "The passwords don't match",
+			"signin": "Already have an account?",
+			"success": "Registration successful! We've sent an email to {addr}. Open it up to activate your account.",
+			"title": "Sign Up"
+		},
+		"reset": {
+			"action": "Send password reset e-mail",
+			"hint": "Enter your account's e-mail address. Instructions on how to reset your password will be sent to you.",
+			"title": "Password Reset"
 		}
 	}
 }

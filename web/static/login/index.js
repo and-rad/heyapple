@@ -1,4 +1,4 @@
-import { o as openBlock, c as createBlock, u as unref, R as RouterView, a as createElementBlock, F as Fragment, b as createBaseVNode, r as ref, d as resolveComponent, t as toDisplayString, e as createVNode, n as normalizeProps, g as guardReactiveProps, w as withDirectives, v as vModelText, f as createTextVNode, h as RouterLink, i as withCtx, j as createStaticVNode, k as createRouter, l as createWebHashHistory, m as computed, p as normalizeClass, q as createI18n, s as createApp } from "./vendor.js";
+import { o as openBlock, c as createBlock, u as unref, R as RouterView, a as createElementBlock, F as Fragment, b as createBaseVNode, d as useI18n, r as ref, e as resolveComponent, t as toDisplayString, f as createVNode, n as normalizeProps, g as guardReactiveProps, w as withDirectives, v as vModelText, h as createTextVNode, i as RouterLink, j as withCtx, k as createStaticVNode, l as createRouter, m as createWebHashHistory, p as computed, q as normalizeClass, s as createI18n, x as createApp } from "./vendor.js";
 const p = function polyfill() {
   const relList = document.createElement("link").relList;
   if (relList && relList.supports && relList.supports("modulepreload")) {
@@ -169,20 +169,24 @@ function _sfc_render$1(_ctx, _cache) {
 }
 var LoginImage = /* @__PURE__ */ _export_sfc(_sfc_main$5, [["render", _sfc_render$1]]);
 var Login_vue_vue_type_style_index_0_lang = "";
-const _hoisted_1$3 = /* @__PURE__ */ createTextVNode(".");
-const _hoisted_2$3 = ["value"];
-const _hoisted_3$2 = { class: "image" };
+const _hoisted_1$3 = /* @__PURE__ */ createBaseVNode("input", {
+  type: "password",
+  name: "pass"
+}, null, -1);
+const _hoisted_2$3 = /* @__PURE__ */ createTextVNode(".");
+const _hoisted_3$2 = ["value"];
+const _hoisted_4$1 = { class: "image" };
 const _sfc_main$4 = {
   setup(__props) {
+    const { t } = useI18n();
     const reEmail = /^[^@]+@[^@]+$/;
     const email = ref("");
-    const pass = ref("");
     const msg = ref({ msg: "", level: "" });
     function confirm(evt) {
       evt.preventDefault();
       msg.value = {};
       if (email.value.search(reEmail) == -1) {
-        msg.value = { msg: "Not a valid e-mail address", level: "err" };
+        msg.value = { msg: t("login.errmail"), level: "err" };
         return false;
       }
       fetch("/auth/local", {
@@ -193,7 +197,7 @@ const _sfc_main$4 = {
         if (response.ok) {
           window.location = "/app";
         } else {
-          msg.value = { msg: "Error: " + response.status, level: "err" };
+          msg.value = { msg: t("login.err" + response.status), level: "err" };
         }
       });
     }
@@ -213,33 +217,27 @@ const _sfc_main$4 = {
               [vModelText, email.value]
             ]),
             createBaseVNode("label", null, toDisplayString(_ctx.$t("form.pass")), 1),
-            withDirectives(createBaseVNode("input", {
-              type: "password",
-              name: "pass",
-              "onUpdate:modelValue": _cache[1] || (_cache[1] = ($event) => pass.value = $event)
-            }, null, 512), [
-              [vModelText, pass.value]
-            ]),
+            _hoisted_1$3,
             createBaseVNode("footer", null, [
               createBaseVNode("span", null, [
                 createTextVNode(toDisplayString(_ctx.$t("login.signup")) + " ", 1),
                 createVNode(unref(RouterLink), { to: "/signup" }, {
                   default: withCtx(() => [
-                    createTextVNode(toDisplayString(_ctx.$t("form.signup")), 1)
+                    createTextVNode(toDisplayString(_ctx.$t("register.action")), 1)
                   ]),
                   _: 1
                 }),
-                _hoisted_1$3
+                _hoisted_2$3
               ])
             ]),
             createBaseVNode("input", {
               type: "submit",
-              value: _ctx.$t("form.signin"),
+              value: _ctx.$t("login.action"),
               onClick: confirm
-            }, null, 8, _hoisted_2$3)
+            }, null, 8, _hoisted_3$2)
           ])
         ]),
-        createBaseVNode("div", _hoisted_3$2, [
+        createBaseVNode("div", _hoisted_4$1, [
           createVNode(LoginImage)
         ])
       ], 64);
@@ -254,24 +252,20 @@ const _hoisted_1$2 = {
   "xmlns:xlink": "http://www.w3.org/1999/xlink"
 };
 const _hoisted_2$2 = /* @__PURE__ */ createStaticVNode('<defs id="defs2"><filter id="filter30864" x="-.071351" y="-.078107" width="1.1427" height="1.1562" color-interpolation-filters="sRGB"><feGaussianBlur id="feGaussianBlur30866" stdDeviation="4.1668536"></feGaussianBlur></filter><linearGradient id="linearGradient3290" x1="-512" x2="158.74" y1="-256" y2="-256" gradientTransform="translate(512)" gradientUnits="userSpaceOnUse"><stop id="stop3284" stop-color="#c9d6df" offset="0"></stop><stop id="stop3286" stop-color="#dfd6cc" offset="1"></stop></linearGradient></defs><g id="morning"><rect transform="rotate(90)" y="-512" width="1024" height="512" fill="url(#linearGradient3290)"></rect><ellipse cx="261.39" cy="765.21" rx="128.33" ry="127.45" fill="#eee2d3" stroke-width="3"></ellipse><rect transform="rotate(90)" x="768" y="-512" width="256" height="512" fill="#bcc2b1"></rect><path d="m243.13 929.49 0.63824-0.35909 0.58171-0.12013 0.53023-0.29457s0.39449-0.23367 0.59105-0.23367 0.69664-0.21416 1.1113-0.47592c0.41465-0.26175 1.1161-0.57345 1.5588-0.69267 0.44272-0.11921 0.85872-0.30375 0.92444-0.41009 0.23279-0.37666 2.4006-1.7046 2.9612-1.8139 0.31292-0.061 1.2694 0.0209 2.1254 0.18208 2.2163 0.41728 2.5052 0.39411 3.4842-0.27948 1.1652-0.80166 2.2051-0.99847 2.7362-0.51784 0.30806 0.27879 0.43158 0.30307 0.55184 0.10848 0.37884-0.61296 0.99041-12.716 0.98882-19.568-5.9e-4 -2.1602-0.0836-5.057-0.18454-6.4375-0.10099-1.3804-0.27511-5.4013-0.38692-8.9353-0.30641-9.6846-0.58482-15.346-0.90987-18.501-0.31205-3.0288-0.47239-3.4837-1.8274-5.1842-0.33458-0.41988-0.60831-0.85387-0.60831-0.96441 0-0.48847-3.3957-4.7058-5.7779-7.176-1.5893-1.648-5.6569-5.0649-8.2762-6.9524-1.8802-1.3548-1.8828-1.3558-6.8604-2.5842-1.0801-0.26655-3.4219-0.79809-5.2041-1.1812-5.524-1.1875-11.527-3.1671-18.032-5.9467-7.3708-3.1495-9.0493-3.6442-15.802-4.6576-5.3287-0.79976-5.7642-0.88895-8.7401-1.7899-2.7549-0.83402-4.621-1.0742-8.3446-1.0742-2.9128 0-3.7058-0.23367-1.569-0.46233 1.1932-0.12769 7.4908-0.61052 10.658-0.81713 1.0261-0.0669 3.567-0.29629 5.6465-0.50968 2.0795-0.2134 3.8911-0.37023 4.0258-0.34854 0.13468 0.0217 0.40684-0.031 0.60481-0.11697 0.55144-0.23964 10.264 0.0333 13.583 0.38182 9.4618 0.9933 18.646 2.8728 22.997 4.7065 4.3216 1.8211 7.5546 4.2865 8.6861 6.624 0.79301 1.6381 0.47695 3.3819-0.8865 4.8911-0.40251 0.44553-0.63595 0.85801-0.53558 0.94631 0.0979 0.0861 0.86805 0.66839 1.7115 1.294 2.966 2.1998 7.7518 6.8871 12.401 12.146l1.3581 1.5361 0.30693-0.58791 0.30693-0.5879 0.46968 0.38229c0.25832 0.21025 0.50642 0.34553 0.55134 0.30061 0.0449-0.0449 0.25881-0.95293 0.47532-2.0178 0.44901-2.2084 2.1523-7.5815 3.4152-10.773 1.0054-2.5411 1.1802-3.5738 0.82795-4.8924-0.25529-0.95565-0.27182-0.97072-1.7454-1.5905-4.1834-1.7596-8.9754-6.4546-11.118-10.893-0.62722-1.2992-0.72269-1.6966-0.79517-3.3101-0.19229-4.2805 1.1546-8.4171 4.2944-13.189 1.8486-2.8098 3.4222-4.8103 5.3756-6.8341 2.6824-2.779 5.0157-4.3526 7.7738-5.2425 1.5379-0.49623 2.0762-0.78941 3.6755-2.0018 0.77939-0.59084 1.57-1.0448 1.757-1.0088 0.23632 0.0455 0.40294 0.3802 0.54673 1.0982 0.2574 1.2854 1.3121 2.44 3.0988 3.3922 1.3609 0.72536 2.8836 2.0542 3.5039 3.0579 0.6 0.97083 1.3611 3.0174 1.3611 3.66 0 0.30992 0.0663 0.52265 0.14728 0.47272 0.081-0.0499 0.15693 0.36463 0.16871 0.92122 0.0189 0.89357 0.33915 2.1592 0.85237 3.3686 1.0397 2.4501 1.445 4.4081 1.4786 7.1436l0.0323 2.6269-0.74856 1.4637c-0.41171 0.80505-1.2396 2.0973-1.8397 2.8718-1.5681 2.0235-9.2567 10.52-10.303 11.386-0.48604 0.40206-1.5465 0.9843-2.3566 1.2938-1.2895 0.49275-1.554 0.68188-2.1242 1.519-1.271 1.8659-3.739 7.037-4.2523 8.9096-1.3616 4.967-1.6444 6.7087-1.7967 11.063-0.11486 3.285 0.19499 19.838 0.48767 26.053l0.12485 2.6511 0.47525-1.1783c0.7681-1.9043 3.3006-6.8985 4.6693-9.208 1.4338-2.4193 1.6818-3.3718 1.5058-5.7832-0.13945-1.9108 0.39228-3.6798 2.1454-7.1378 3.3974-6.7012 6.1363-9.3515 13.43-12.996 3.0068-1.5022 7.1403-3.1542 10.939-4.3718 5.4053-1.7326 9.1712-2.4583 14.163-2.729 2.022-0.10965 2.5996-0.22156 4.0684-0.78831 1.9106-0.73723 2.9626-0.98489 3.2994-0.77675 0.14399 0.089-0.031 0.32174-0.48422 0.64425-1.2802 0.91088-1.5652 1.6173-1.6801 4.1649-0.0939 2.0811-0.15728 2.374-0.80724 3.7312-0.85769 1.791-2.4388 3.9541-5.4552 7.4629-1.2537 1.4584-2.7213 3.1784-3.2614 3.8222-3.326 3.9653-7.634 6.9849-12.513 8.7713-1.9985 0.73165-5.3754 1.6251-8.945 2.3665-2.6696 0.5545-3.2789 0.60797-7.9004 0.69339-4.295 0.0794-5.0608 0.13889-5.381 0.41819-0.20531 0.17911-1.0717 1.3788-1.9254 2.6659-1.3066 1.9701-2.027 3.3112-3.7008 6.8896-0.26483 0.56616-0.73776 1.9282-1.2956 3.7312-0.39596 1.2799-0.49854 2.0806-0.55351 4.3204-0.21275 8.6691-0.5192 18.336-0.68166 21.504-0.26032 5.0749-0.28927 4.8219 0.54722 4.7826 0.37974-0.0179 0.91734 0.0583 1.1946 0.1691 0.85408 0.34143 2.0847 0.50643 4.2845 0.57447 0.83073 0.0257 1.2274 0.1173 1.2274 0.28344 0 0.13501-0.10538 0.2806-0.23417 0.32353-0.12879 0.0429 0.15841 0.0677 0.63823 0.0551s1.1375 0.11033 1.\n4616 0.27325c0.32402 0.16292 0.659 0.27686 0.74438 0.25319 0.0854-0.0236 0.32487 0.0478 0.53221 0.15872 0.20732 0.11096 0.88863 0.23916 1.514 0.28489 0.86687 0.0634 1.1242 0.15198 1.0833 0.37288-0.0392 0.21116 0.066 0.25843 0.38769 0.17429 0.24281-0.0635 0.33327-0.1515 0.20106-0.19557-0.51332-0.17111-0.20267-0.38661 0.55729-0.38661 0.73833 0 1.1264 0.75874 1.1264 0.75874l0.57695 0.75874 0.24825 0.22421z" filter="url(#filter30864)" opacity=".20938"></path><path d="m243.13 929.49 0.63824-0.35909 0.58171-0.12013 0.53023-0.29457s0.39449-0.23367 0.59105-0.23367 0.69664-0.21416 1.1113-0.47592c0.41465-0.26175 1.1161-0.57345 1.5588-0.69267 0.44272-0.11921 0.85872-0.30375 0.92444-0.41009 0.23279-0.37666 2.4006-1.7046 2.9612-1.8139 0.31292-0.061 1.2694 0.0209 2.1254 0.18208 2.2163 0.41728 2.5052 0.39411 3.4842-0.27948 1.1652-0.80166 2.2051-0.99847 2.7362-0.51784 0.30806 0.27879 0.43158 0.30307 0.55184 0.10848 0.37884-0.61296 0.99041-12.716 0.98882-19.568-5.9e-4 -2.1602-0.0836-5.057-0.18454-6.4375-0.10099-1.3804-0.27511-5.4013-0.38692-8.9353-0.30641-9.6846-0.58482-15.346-0.90987-18.501-0.31205-3.0288-0.47239-3.4837-1.8274-5.1842-0.33458-0.41988-0.60831-0.85387-0.60831-0.96441 0-0.48847-3.3957-4.7058-5.7779-7.176-1.5893-1.648-5.6569-5.0649-8.2762-6.9524-1.8802-1.3548-1.8828-1.3558-6.8604-2.5842-1.0801-0.26655-3.4219-0.79809-5.2041-1.1812-5.524-1.1875-11.527-3.1671-18.032-5.9467-7.3708-3.1495-9.0493-3.6442-15.802-4.6576-5.3287-0.79976-5.7642-0.88895-8.7401-1.7899-2.7549-0.83402-4.621-1.0742-8.3446-1.0742-2.9128 0-3.7058-0.23367-1.569-0.46233 1.1932-0.12769 7.4908-0.61052 10.658-0.81713 1.0261-0.0669 3.567-0.29629 5.6465-0.50968 2.0795-0.2134 3.8911-0.37023 4.0258-0.34854 0.13468 0.0217 0.40684-0.031 0.60481-0.11697 0.55144-0.23964 10.264 0.0333 13.583 0.38182 9.4618 0.9933 18.646 2.8728 22.997 4.7065 4.3216 1.8211 7.5546 4.2865 8.6861 6.624 0.79301 1.6381 0.47695 3.3819-0.8865 4.8911-0.40251 0.44553-0.63595 0.85801-0.53558 0.94631 0.0979 0.0861 0.86805 0.66839 1.7115 1.294 2.966 2.1998 7.7518 6.8871 12.401 12.146l1.3581 1.5361 0.30693-0.58791 0.30693-0.5879 0.46968 0.38229c0.25832 0.21025 0.50642 0.34553 0.55134 0.30061 0.0449-0.0449 0.25881-0.95293 0.47532-2.0178 0.44901-2.2084 2.1523-7.5815 3.4152-10.773 1.0054-2.5411 1.1802-3.5738 0.82795-4.8924-0.25529-0.95565-0.27182-0.97072-1.7454-1.5905-4.1834-1.7596-8.9754-6.4546-11.118-10.893-0.62722-1.2992-0.72269-1.6966-0.79517-3.3101-0.19229-4.2805 1.1546-8.4171 4.2944-13.189 1.8486-2.8098 3.4222-4.8103 5.3756-6.8341 2.6824-2.779 5.0157-4.3526 7.7738-5.2425 1.5379-0.49623 2.0762-0.78941 3.6755-2.0018 0.77939-0.59084 1.57-1.0448 1.757-1.0088 0.23632 0.0455 0.40294 0.3802 0.54673 1.0982 0.2574 1.2854 1.3121 2.44 3.0988 3.3922 1.3609 0.72536 2.8836 2.0542 3.5039 3.0579 0.6 0.97083 1.3611 3.0174 1.3611 3.66 0 0.30992 0.0663 0.52265 0.14728 0.47272 0.081-0.0499 0.15693 0.36463 0.16871 0.92122 0.0189 0.89357 0.33915 2.1592 0.85237 3.3686 1.0397 2.4501 1.445 4.4081 1.4786 7.1436l0.0323 2.6269-0.74856 1.4637c-0.41171 0.80505-1.2396 2.0973-1.8397 2.8718-1.5681 2.0235-9.2567 10.52-10.303 11.386-0.48604 0.40206-1.5465 0.9843-2.3566 1.2938-1.2895 0.49275-1.554 0.68188-2.1242 1.519-1.271 1.8659-3.739 7.037-4.2523 8.9096-1.3616 4.967-1.6444 6.7087-1.7967 11.063-0.11486 3.285 0.19499 19.838 0.48767 26.053l0.12485 2.6511 0.47525-1.1783c0.7681-1.9043 3.3006-6.8985 4.6693-9.208 1.4338-2.4193 1.6818-3.3718 1.5058-5.7832-0.13945-1.9108 0.39228-3.6798 2.1454-7.1378 3.3974-6.7012 6.1363-9.3515 13.43-12.996 3.0068-1.5022 7.1403-3.1542 10.939-4.3718 5.4053-1.7326 9.1712-2.4583 14.163-2.729 2.022-0.10965 2.5996-0.22156 4.0684-0.78831 1.9106-0.73723 2.9626-0.98489 3.2994-0.77675 0.14399 0.089-0.031 0.32174-0.48422 0.64425-1.2802 0.91088-1.5652 1.6173-1.6801 4.1649-0.0939 2.0811-0.15728 2.374-0.80724 3.7312-0.85769 1.791-2.4388 3.9541-5.4552 7.4629-1.2537 1.4584-2.7213 3.1784-3.2614 3.8222-3.326 3.9653-7.634 6.9849-12.513 8.7713-1.9985 0.73165-5.3754 1.6251-8.945 2.3665-2.6696 0.5545-3.2789 0.60797-7.9004 0.69339-4.295 0.0794-5.0608 0.13889-5.381 0.41819-0.20531 0.17911-1.0717 1.3788-1.9254 2.6659-1.3066 1.9701-2.027 3.3112-3.7008 6.8896-0.26483 0.56616-0.73776 1.9282-1.2956 3.7312-0.39596 1.2799-0.49854 2.0806-0.55351 4.3204-0.21275 8.6691-0.5192 18.336-0.68166 21.504-0.26032 5.0749-0.28927 4.8219 0.54722 4.7826 0.37974-0.0179 0.91734 0.0583 1.1946 0.1691 0.85408 0.34143 2.0847 0.50643 4.2845 0.57447 0.83073 0.0257 1.2274 0.1173 1.2274 0.28344 0 0.13501-0.10538 0.2806-0.23417 0.32353-0.12879 0.0429 0.15841 0.0677 0.63823 0.0551s1.1375 0.11033 1.\n4616 0.27325c0.32402 0.16292 0.659 0.27686 0.74438 0.25319 0.0854-0.0236 0.32487 0.0478 0.53221 0.15872 0.20732 0.11096 0.88863 0.23916 1.514 0.28489 0.86687 0.0634 1.1242 0.15198 1.0833 0.37288-0.0392 0.21116 0.066 0.25843 0.38769 0.17429 0.24281-0.0635 0.33327-0.1515 0.20106-0.19557-0.51332-0.17111-0.20267-0.38661 0.55729-0.38661 0.73833 0 1.1264 0.75874 1.1264 0.75874l0.57695 0.75874 0.24825 0.22421z" fill="#12a66f"></path></g>', 2);
-const _hoisted_4$1 = [
+const _hoisted_4 = [
   _hoisted_2$2
 ];
 function _sfc_render(_ctx, _cache) {
-  return openBlock(), createElementBlock("svg", _hoisted_1$2, _hoisted_4$1);
+  return openBlock(), createElementBlock("svg", _hoisted_1$2, _hoisted_4);
 }
 var RegisterImage = /* @__PURE__ */ _export_sfc(_sfc_main$3, [["render", _sfc_render]]);
 var Register_vue_vue_type_style_index_0_lang = "";
-const _hoisted_1$1 = /* @__PURE__ */ createBaseVNode("h1", null, "Sign Up", -1);
-const _hoisted_2$1 = /* @__PURE__ */ createBaseVNode("label", null, "E-Mail", -1);
-const _hoisted_3$1 = /* @__PURE__ */ createBaseVNode("label", null, "Password", -1);
-const _hoisted_4 = /* @__PURE__ */ createBaseVNode("label", null, "Confirm Password", -1);
-const _hoisted_5 = /* @__PURE__ */ createTextVNode("Already have an account? ");
-const _hoisted_6 = /* @__PURE__ */ createTextVNode("Sign in");
-const _hoisted_7 = /* @__PURE__ */ createTextVNode(".");
-const _hoisted_8 = { class: "image register-image" };
+const _hoisted_1$1 = /* @__PURE__ */ createTextVNode(".");
+const _hoisted_2$1 = ["value"];
+const _hoisted_3$1 = { class: "image register-image" };
 const _sfc_main$2 = {
   setup(__props) {
+    const { t } = useI18n();
     const reEmail = /^[^@]+@[^@]+$/;
     const email = ref("");
     const pass1 = ref("");
@@ -281,15 +275,15 @@ const _sfc_main$2 = {
       evt.preventDefault();
       msg.value = {};
       if (email.value.search(reEmail) == -1) {
-        msg.value = { msg: "Not a valid e-mail address", level: "err" };
+        msg.value = { msg: t("login.errmail"), level: "err" };
         return false;
       }
       if (pass1.value == "" || pass2.value == "") {
-        msg.value = { msg: "Fill out both password fields", level: "err" };
+        msg.value = { msg: t("register.errpassempty"), level: "err" };
         return false;
       }
       if (pass1.value != pass2.value) {
-        msg.value = { msg: "The passwords don't match", level: "err" };
+        msg.value = { msg: t("register.errpassmatch"), level: "err" };
         return;
       }
       let addr = email.value;
@@ -300,10 +294,10 @@ const _sfc_main$2 = {
       }).then((response) => {
         if (response.ok) {
           msg.value = {
-            msg: `Registration successful! We've sent an email to ${addr}. Open it up to activate your account.`
+            msg: t("register.success", { addr })
           };
         } else {
-          msg.value = { msg: "Error: " + response.status, level: "err" };
+          msg.value = { msg: t("register.err" + response.status), level: "err" };
         }
       });
     }
@@ -312,9 +306,9 @@ const _sfc_main$2 = {
       return openBlock(), createElementBlock(Fragment, null, [
         createBaseVNode("div", null, [
           createBaseVNode("form", null, [
-            _hoisted_1$1,
+            createBaseVNode("h1", null, toDisplayString(_ctx.$t("register.title")), 1),
             createVNode(_component_Message, normalizeProps(guardReactiveProps(msg.value)), null, 16),
-            _hoisted_2$1,
+            createBaseVNode("label", null, toDisplayString(_ctx.$t("form.email")), 1),
             withDirectives(createBaseVNode("input", {
               type: "email",
               name: "email",
@@ -322,7 +316,7 @@ const _sfc_main$2 = {
             }, null, 512), [
               [vModelText, email.value]
             ]),
-            _hoisted_3$1,
+            createBaseVNode("label", null, toDisplayString(_ctx.$t("form.pass")), 1),
             withDirectives(createBaseVNode("input", {
               type: "password",
               name: "pass",
@@ -330,7 +324,7 @@ const _sfc_main$2 = {
             }, null, 512), [
               [vModelText, pass1.value]
             ]),
-            _hoisted_4,
+            createBaseVNode("label", null, toDisplayString(_ctx.$t("form.confirm")), 1),
             withDirectives(createBaseVNode("input", {
               type: "password",
               name: "pass",
@@ -340,24 +334,24 @@ const _sfc_main$2 = {
             ]),
             createBaseVNode("footer", null, [
               createBaseVNode("span", null, [
-                _hoisted_5,
+                createTextVNode(toDisplayString(_ctx.$t("register.signin")) + " ", 1),
                 createVNode(unref(RouterLink), { to: "/" }, {
                   default: withCtx(() => [
-                    _hoisted_6
+                    createTextVNode(toDisplayString(_ctx.$t("login.action")), 1)
                   ]),
                   _: 1
                 }),
-                _hoisted_7
+                _hoisted_1$1
               ])
             ]),
             createBaseVNode("input", {
               type: "submit",
-              value: "Sign up",
+              value: _ctx.$t("register.action"),
               onClick: confirm
-            })
+            }, null, 8, _hoisted_2$1)
           ])
         ]),
-        createBaseVNode("div", _hoisted_8, [
+        createBaseVNode("div", _hoisted_3$1, [
           createVNode(RegisterImage)
         ])
       ], 64);
@@ -365,33 +359,33 @@ const _sfc_main$2 = {
   }
 };
 var Reset_vue_vue_type_style_index_0_lang = "";
-const _hoisted_1 = /* @__PURE__ */ createBaseVNode("form", null, [
-  /* @__PURE__ */ createBaseVNode("h1", null, "Password Reset"),
-  /* @__PURE__ */ createBaseVNode("p", null, " Enter your account's e-mail address. Instructions on how to reset your password will be sent to you. "),
-  /* @__PURE__ */ createBaseVNode("label", null, "E-Mail"),
-  /* @__PURE__ */ createBaseVNode("input", {
-    type: "email",
-    name: "email"
-  }),
-  /* @__PURE__ */ createBaseVNode("input", {
-    type: "submit",
-    value: "Send password reset e-mail"
-  })
-], -1);
-const _hoisted_2 = /* @__PURE__ */ createTextVNode("\u1438 Back");
+const _hoisted_1 = /* @__PURE__ */ createBaseVNode("input", {
+  type: "email",
+  name: "email"
+}, null, -1);
+const _hoisted_2 = ["value"];
 const _hoisted_3 = { class: "image" };
 const _sfc_main$1 = {
   setup(__props) {
     return (_ctx, _cache) => {
       return openBlock(), createElementBlock(Fragment, null, [
         createBaseVNode("div", null, [
-          _hoisted_1,
+          createBaseVNode("form", null, [
+            createBaseVNode("h1", null, toDisplayString(_ctx.$t("reset.title")), 1),
+            createBaseVNode("p", null, toDisplayString(_ctx.$t("reset.hint")), 1),
+            createBaseVNode("label", null, toDisplayString(_ctx.$t("form.email")), 1),
+            _hoisted_1,
+            createBaseVNode("input", {
+              type: "submit",
+              value: _ctx.$t("reset.action")
+            }, null, 8, _hoisted_2)
+          ]),
           createVNode(unref(RouterLink), {
             to: "/",
             class: "back"
           }, {
             default: withCtx(() => [
-              _hoisted_2
+              createTextVNode("\u1438 " + toDisplayString(_ctx.$t("form.back")), 1)
             ]),
             _: 1
           })
@@ -439,8 +433,12 @@ const _sfc_main = {
   }
 };
 fetch("/login/l10n.json").then((response) => response.json()).then((messages) => {
+  let lang = navigator.language;
+  if (navigator.languages != void 0) {
+    lang = navigator.languages[0];
+  }
   const i18n = createI18n({
-    locale: "de",
+    locale: lang.split("-")[0],
     fallbackLocale: "en",
     messages
   });

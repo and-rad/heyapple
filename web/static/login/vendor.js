@@ -10015,4 +10015,4 @@ function extractChangingRecords(to, from) {
   }
   return [leavingRecords, updatingRecords, enteringRecords];
 }
-export { Fragment as F, RouterView as R, createElementBlock as a, createBaseVNode as b, createBlock as c, resolveComponent as d, createVNode as e, createTextVNode as f, guardReactiveProps as g, RouterLink as h, withCtx as i, createStaticVNode as j, createRouter as k, createWebHashHistory as l, computed as m, normalizeProps as n, openBlock as o, normalizeClass as p, createI18n as q, ref as r, createApp as s, toDisplayString$1 as t, unref as u, vModelText as v, withDirectives as w };
+export { Fragment as F, RouterView as R, createElementBlock as a, createBaseVNode as b, createBlock as c, useI18n as d, resolveComponent as e, createVNode as f, guardReactiveProps as g, createTextVNode as h, RouterLink as i, withCtx as j, createStaticVNode as k, createRouter as l, createWebHashHistory as m, normalizeProps as n, openBlock as o, computed as p, normalizeClass as q, ref as r, createI18n as s, toDisplayString$1 as t, unref as u, vModelText as v, withDirectives as w, createApp as x };

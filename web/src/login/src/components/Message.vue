@@ -24,6 +24,7 @@ const hasMessage = computed(() => {
 	padding: 0.5em;
 	background-color: var(--color-good-light);
 	border: 1px solid var(--color-good);
+	border-radius: 4px;
 }
 
 .message.hidden {

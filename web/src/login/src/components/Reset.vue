@@ -6,15 +6,15 @@ import { RouterLink } from "vue-router";
 <template>
 	<div>
 		<form>
-			<h1>Password Reset</h1>
+			<h1>{{ $t("reset.title") }}</h1>
 			<p>
-				Enter your account's e-mail address. Instructions on how to reset your password will be sent to you.
+				{{ $t("reset.hint") }}
 			</p>
-			<label>E-Mail</label>
+			<label>{{ $t("form.email") }}</label>
 			<input type="email" name="email" />
-			<input type="submit" value="Send password reset e-mail" />
+			<input type="submit" :value="$t('reset.action')" />
 		</form>
-		<RouterLink to="/" class="back">&#5176; Back</RouterLink>
+		<RouterLink to="/" class="back">&#5176; {{ $t("form.back") }}</RouterLink>
 	</div>
 	<div class="image">
 		<LoginImage />

@@ -7,8 +7,13 @@ import Message from "./components/Message.vue";
 fetch("/login/l10n.json")
 	.then((response) => response.json())
 	.then((messages) => {
+		let lang = navigator.language;
+		if (navigator.languages != undefined) {
+			lang = navigator.languages[0];
+		}
+
 		const i18n = createI18n({
-			locale: "de",
+			locale: lang.split("-")[0],
 			fallbackLocale: "en",
 			messages,
 		});

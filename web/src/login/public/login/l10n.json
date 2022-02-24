@@ -1,0 +1,20 @@
+{
+	"de": {
+		"login": {
+			"title": "Anmelden"
+		}
+	},
+	"en": {
+		"form": {
+			"email": "E-Mail",
+			"pass": "Password",
+			"reset": "Reset password",
+			"signup": "Sign up",
+			"signin": "Sign in"
+		},
+		"login": {
+			"title": "Sign In",
+			"signup": "Don't have an account yet?"
+		}
+	}
+}

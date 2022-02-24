@@ -36,18 +36,16 @@ function confirm(evt) {
 <template>
 	<div>
 		<form>
-			<h1>Sign In</h1>
+			<h1>{{ $t("login.title") }}</h1>
 			<Message v-bind="msg" />
-			<label>E-Mail</label>
+			<label>{{ $t("form.email") }}</label>
 			<input type="email" name="email" v-model="email" />
-			<label>Password <!--<RouterLink to="/reset">Reset password</RouterLink>--></label>
+			<label>{{ $t("form.pass") }} <!--<RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink>--></label>
 			<input type="password" name="pass" v-model="pass" />
 			<footer>
-				<span
-					>Don't have an account yet? <RouterLink to="/signup">Sign up</RouterLink>.</span
-				>
+				<span>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("form.signup") }}</RouterLink>.</span>
 			</footer>
-			<input type="submit" value="Sign in" @click="confirm" />
+			<input type="submit" :value="$t('form.signin')" @click="confirm" />
 		</form>
 	</div>
 	<div class="image">

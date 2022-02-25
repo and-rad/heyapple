@@ -55,10 +55,10 @@ func TestTranslate(t *testing.T) {
 			lang: "de",
 			out:  "Ja!",
 		},
-		{ //04//
+		{ //04// fall back to English
 			key:  "yes",
 			lang: "fr",
-			out:  "yes",
+			out:  "Yes!",
 		},
 		{ //05//
 			key:  errors.New("sql: wrong table"),
@@ -103,9 +103,14 @@ func TestTranslate(t *testing.T) {
 			lang: "fr",
 			out:  "doowop",
 		},
+		{ //13// parse list of preferences
+			key:  "yes",
+			lang: "de-DE,de;q=0.8,en;q=0.2",
+			out:  "Ja!",
+		},
 	}
 
-	translator := &translator{data: map[string]map[string]string{
+	translator := &translator{data: translation{
 		"de": {"yes": "Ja!", "no": "Nee!", "err.err": "Fehler"},
 		"en": {"yes": "Yes!", "no": "Nope!", "err.err": "Error"},
 	}}
@@ -122,7 +127,7 @@ func TestTranslate(t *testing.T) {
 
 func Test_translator_Get(t *testing.T) {
 	testdata := []struct {
-		langs map[string]map[string]string
+		langs translation
 		in    string
 		out   map[string]string
 	}{
@@ -130,14 +135,14 @@ func Test_translator_Get(t *testing.T) {
 			out: map[string]string{},
 		},
 		{ //01// language doesn't exist
-			langs: map[string]map[string]string{
+			langs: translation{
 				"de": {"key": "Wert"},
 			},
 			in:  "zh",
 			out: map[string]string{},
 		},
 		{ //02// language doesn't exist, fall back to English
-			langs: map[string]map[string]string{
+			langs: translation{
 				"de": {"key": "Wert"},
 				"en": {"key": "value"},
 			},
@@ -145,11 +150,19 @@ func Test_translator_Get(t *testing.T) {
 			out: map[string]string{"key": "value"},
 		},
 		{ //03// success
-			langs: map[string]map[string]string{
+			langs: translation{
 				"de": {"key": "Wert"},
 				"en": {"key": "value"},
 			},
 			in:  "de",
+			out: map[string]string{"key": "Wert"},
+		},
+		{ //04// success with preferences
+			langs: translation{
+				"de": {"key": "Wert"},
+				"en": {"key": "value"},
+			},
+			in:  "de-DE,de;q=0.9,en;q=0.4",
 			out: map[string]string{"key": "Wert"},
 		},
 	}
@@ -250,6 +263,53 @@ func Test_loadTranslations(t *testing.T) {
 
 		if !reflect.DeepEqual(tr, data.out) {
 			t.Errorf("test case %d: translator mismatch \nhave: %v \nwant: %v", idx, tr, data.out)
+		}
+	}
+}
+
+func Test_translator_match(t *testing.T) {
+	for idx, data := range []struct {
+		langs translation
+		in    string
+		out   string
+	}{
+		{ //00// no languages defined
+			out: "",
+		},
+		{ //01// empty input -> default language
+			langs: translation{
+				"de": {"key": "Wert"},
+				"en": {"key": "value"},
+			},
+			out: "en",
+		},
+		{ //02// exact match
+			langs: translation{
+				"de": {"key": "Wert"},
+				"en": {"key": "value"},
+			},
+			in:  "de",
+			out: "de",
+		},
+		{ //03// match base language
+			langs: translation{
+				"de": {"key": "Wert"},
+				"en": {"key": "value"},
+			},
+			in:  "de-CH",
+			out: "de",
+		},
+		{ //04// match list of preferences
+			langs: translation{
+				"de": {"key": "Wert"},
+				"en": {"key": "value"},
+			},
+			in:  "es-419,es;q=0.9,en;q=0.5",
+			out: "en",
+		},
+	} {
+		if out := (&translator{data: data.langs}).match(data.in); out != data.out {
+			t.Errorf("test case %d: language mismatch \nhave: %v\nwant: %v", idx, out, data.out)
 		}
 	}
 }

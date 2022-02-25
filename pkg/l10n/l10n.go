@@ -24,6 +24,8 @@ import (
 	"heyapple/web"
 	"io/fs"
 	"strings"
+
+	"golang.org/x/text/language"
 )
 
 type translation map[string]map[string]string
@@ -35,9 +37,10 @@ type translator struct {
 
 // NewTranslator returns an implementation of the app.Translator interface.
 func NewTranslator() *translator {
+	conf := getConfig()
 	return &translator{
 		data:  loadTranslations(web.L10n),
-		debug: getConfig().debugMode,
+		debug: conf.debugMode,
 	}
 }
 
@@ -56,7 +59,7 @@ func (t *translator) Translate(input interface{}, lang string) string {
 		}
 	}
 
-	if data, ok := t.data[lang]; ok {
+	if data, ok := t.data[t.match(lang)]; ok {
 		if val, ok := data[key]; ok {
 			return val
 		}
@@ -67,20 +70,41 @@ func (t *translator) Translate(input interface{}, lang string) string {
 
 // Get implements the app.Translator interface.
 func (t *translator) Get(lang string) map[string]string {
-	if data, ok := t.data[lang]; ok {
+	if data, ok := t.data[t.match(lang)]; ok {
 		return data
 	}
-
-	if data, ok := t.data["en"]; ok {
-		return data
-	}
-
 	return map[string]string{}
 }
 
 // Default implements the app.Translator interface.
 func (t *translator) Default() string {
 	return getConfig().defaultLang
+}
+
+func (t *translator) match(lang string) string {
+	if _, ok := t.data[lang]; ok {
+		return lang
+	}
+
+	if tags, _, err := language.ParseAcceptLanguage(lang); err == nil {
+		for _, tag := range tags {
+			code := tag.String()
+			if _, ok := t.data[code]; ok {
+				return code
+			}
+			code = strings.Split(code, "-")[0]
+			if _, ok := t.data[code]; ok {
+				return code
+			}
+		}
+	}
+
+	fallback := t.Default()
+	if _, ok := t.data[fallback]; ok {
+		return fallback
+	}
+
+	return lang
 }
 
 func loadTranslations(dir fs.FS) translation {

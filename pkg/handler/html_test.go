@@ -29,7 +29,12 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
+)
+
+var (
+	funcs = template.FuncMap{"l10n": func(interface{}) string { return "" }}
 )
 
 func TestHome(t *testing.T) {
@@ -50,11 +55,18 @@ func TestHome(t *testing.T) {
 			status: 200,
 			out:    "hi",
 		},
+		{ //02// translate string
+			tmpl:   `{{ l10n "msg.hi" }}`,
+			status: 200,
+			out:    "Hi!",
+		},
 	} {
-		web.Home = template.Must(template.New("home.html").Parse(data.tmpl))
+		web.Home = template.Must(template.New("home.html").Funcs(funcs).Parse(data.tmpl))
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		handler.Home(mock.NewDB())(res, req, nil)
+
+		tr := &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}}
+		handler.Home(scs.New(), tr, mock.NewDB())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -86,11 +98,18 @@ func TestLogin(t *testing.T) {
 			status: 200,
 			out:    "hi",
 		},
+		{ //02// translate string
+			tmpl:   `{{ l10n "msg.hi" }}`,
+			status: 200,
+			out:    "Hi!",
+		},
 	} {
-		web.Login = template.Must(template.New("login.html").Parse(data.tmpl))
+		web.Login = template.Must(template.New("login.html").Funcs(funcs).Parse(data.tmpl))
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		handler.Login(mock.NewDB())(res, req, nil)
+
+		tr := &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}}
+		handler.Login(scs.New(), tr, mock.NewDB())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -122,11 +141,18 @@ func TestApp(t *testing.T) {
 			status: 200,
 			out:    "hi",
 		},
+		{ //02// translate string
+			tmpl:   `{{ l10n "msg.hi" }}`,
+			status: 200,
+			out:    "Hi!",
+		},
 	} {
-		web.App = template.Must(template.New("app.html").Parse(data.tmpl))
+		web.App = template.Must(template.New("app.html").Funcs(funcs).Parse(data.tmpl))
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		handler.App(mock.NewDB())(res, req, nil)
+
+		tr := &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}}
+		handler.App(scs.New(), tr, mock.NewDB())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -186,11 +212,18 @@ func TestConfirm(t *testing.T) {
 			status: 200,
 			out:    "hi",
 		},
+		{ //06// translate string
+			tmpl:   `{{ l10n "msg.hi" }}`,
+			status: 200,
+			out:    "Hi!",
+		},
 	} {
-		web.Confirm = template.Must(template.New("confirm.html").Parse(data.tmpl))
+		web.Confirm = template.Must(template.New("confirm.html").Funcs(funcs).Parse(data.tmpl))
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		handler.Confirm(data.db)(res, req, data.ps)
+
+		tr := &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}}
+		handler.Confirm(scs.New(), tr, data.db)(res, req, data.ps)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

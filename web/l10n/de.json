@@ -5,5 +5,8 @@
 	"email.plain": "Sollte der Link nicht funktionieren, kopiere die folgende Adresse in die Adresszeile deines Internet-Browsers:",
 	"email.sub.1": "Willkommen bei HeyApple!",
 
-	"err.err": "Fehler"
+	"err.err": "Fehler",
+
+	"home.login": "Anmelden",
+	"home.register": "Registrieren"
 }

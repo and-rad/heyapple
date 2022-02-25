@@ -125,6 +125,10 @@ a {
 	transition: color 0.25s ease-in-out, background-color 0.25s ease-in-out, border-color 0.25s ease-in-out;
 }
 
+li {
+	line-height: 2;
+}
+
 header {
 	position: fixed;
 	width: 100%;
@@ -312,12 +316,8 @@ section > h2 {
 	margin: 0 0 1em;
 }
 
-section h3 {
-	font-weight: 400;
-	font-size: 1.2em;
-	line-height: 1;
-	margin-top: 0;
-	color: #888;
+section article {
+	width: 50%;
 }
 
 #more {

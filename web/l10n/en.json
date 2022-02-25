@@ -1,9 +1,64 @@
 {
+	"diary.title": "Meal Planning and Nutrient Tracking",
+	"diary.subtitle": "Add recipes to your diary with the click of a button. Adjust the amount, add or remove ingredients; planning ahead and living in the moment have never been easier.",
+	"diary.list.1": "Organize your diary by time of day or create custom meals for grouping.",
+	"diary.list.2": "Adjust daily recommended doses based on your individual circumstances.",
+	"diary.list.3": "Favorites make it even faster to add food that you eat often.",
+	"diary.list.4": "Use templates to build a meal plan for an entire week with one push of a button.",
+	"diary.list.5": "Never lose data: The diary stays organized even after years of adjusting ingredients and deleting or renaming recipes.",
+
 	"email.action.1": "Activate Account",
 	"email.foot": "Copyright &copy; 2021-2022 the HeyApple development team",
 	"email.msg.1": "<h2>Hello and welcome at HeyApple,</h2><p>Your registration is almost complete. Click this link to confirm your e-mail address and enable the account login:</p>",
 	"email.plain": "If the link above does not work, copy the following address and paste it into the address bar of your internet browser:",
 	"email.sub.1": "Welcome at HeyApple!",
 
-	"err.err": "Error"
+	"err.err": "Error",
+
+	"food.title": "Detailed Food Database",
+	"food.subtitle": "Search hundreds of foods and compare macro nutrients, minerals, and vitamins.",
+	"food.list.1": "The database tracks more than 35 nutrients, including different types of fats and carbs.",
+	"food.list.2": "Every new entry is verified with official international food databases.",
+	"food.list.3": "Quality over quantity: Unprocessed, natural foods make up most of the database.",
+
+	"home.copy": "Copyright &copy; 2021-2022 the HeyApple development team",
+	"home.login": "Sign in",
+	"home.register": "Sign up",
+
+	"jumbo.title": "The Complete Food Tracking Solution",
+	"jumbo.subtitle": "From frying pan to shopping cart, HeyApple provides everything you need to track nutrients and plan your meals.",
+	"jumbo.diary.head": "Meal Planner",
+	"jumbo.diary.intro": "Plan and track your meals, set nutrient targets, analyze the data",
+	"jumbo.food.head": "Food Database",
+	"jumbo.food.intro": "Find the food that fits your macros and more than 30 other nutrients",
+	"jumbo.recipe.head": "Recipe Manager",
+	"jumbo.recipe.intro": "Create your own cookbook, share it if you like, get inspired by others",
+	"jumbo.shop.head": "Shopping List",
+	"jumbo.shop.intro": "Automatic shopping lists make every grocery run a walk in the park",
+
+	"more.title": "More Goodies",
+	"more.apps.head": "There's an app for that",
+	"more.apps.body": "We have dedicated apps for every major OS and browser. You can even write your own!",
+	"more.donate.head": "...but doesn't have to be",
+	"more.donate.body": "If you want to support HeyApple development, you can donate to the development fund.",
+	"more.free.head": "It's free...",
+	"more.free.body": "You don't have to pay anything to use all of HeyApple's features.",
+	"more.privacy.head": "Private by design",
+	"more.privacy.body": "We respect your privacy and keep the collection of personal data to a minimum. We don't even ask your name!",
+	"more.quality.head": "Quality information",
+	"more.quality.body": "All nutrients are verified before they make it into the database.",
+	"more.source.head": "Make it your own",
+	"more.source.body": "HeyApple is released under the AGPL. You can inspect the code, contribute, or fork it any time.",
+
+	"recipe.title": "Your Favorite Recipes",
+	"recipe.subtitle": "Create recipes to stay on top of your nutrient targets. Or just because you like cooking.",
+	"recipe.list.1": "Add instructions and preparation times to your favorite meals.",
+	"recipe.list.2": "Recipes track whether they're vegan or dairy, and what types of meat they contain.",
+	"recipe.list.3": "Share your recipes with selected users or make them public for the whole world to see.",
+
+	"shop.title": "Automatic Shopping Lists",
+	"shop.subtitle": "See what you need to buy on your next run to the store at a single glance. No need to maintain separate lists or use multiple apps.",
+	"shop.list.1": "Select the days you want to shop for to let the list update automatically.",
+	"shop.list.2": "Sort items by name or aisle.",
+	"shop.list.3": "Create custom shopping lists for non-food items."
 }

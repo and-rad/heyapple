@@ -80,6 +80,7 @@ func (c *CreateUser) Execute(db DB) error {
 type Authenticate struct {
 	Email string
 	Pass  string
+	Lang  string
 	ID    int
 }
 
@@ -92,6 +93,7 @@ func (q *Authenticate) Fetch(db DB) error {
 		return ErrCredentials
 	} else {
 		q.ID = user.ID
+		q.Lang = user.Lang
 		q.Pass = ""
 	}
 

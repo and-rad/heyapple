@@ -44,6 +44,7 @@ func LocalLogin(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 		} else {
 			w.WriteHeader(http.StatusOK)
 			sm.Put(r.Context(), "id", query.ID)
+			sm.Put(r.Context(), "lang", query.Lang)
 		}
 	}
 }

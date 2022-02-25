@@ -30,8 +30,9 @@ func TestAuthenticate_Fetch(t *testing.T) {
 		pass  string
 		db    *mock.DB
 
-		id  int
-		err error
+		id   int
+		lang string
+		err  error
 	}{
 		{ //00// connection failed
 			db:  mock.NewDB().WithError(mock.ErrDOS),
@@ -73,9 +74,11 @@ func TestAuthenticate_Fetch(t *testing.T) {
 				ID:    42,
 				Email: "a@a.a",
 				Pass:  "$2a$10$ADm2JBRbt8UvB0uI7NNFBupOdTq7XKae6Dvc7NfVCnw89rPZr3.zK",
+				Lang:  "en",
 				Perm:  app.PermLogin,
 			}),
-			id: 42,
+			id:   42,
+			lang: "en",
 		},
 	} {
 		qry := &app.Authenticate{Email: data.email, Pass: data.pass}
@@ -91,6 +94,10 @@ func TestAuthenticate_Fetch(t *testing.T) {
 
 		if qry.ID != data.id {
 			t.Errorf("test case %d: id mismatch \nhave: %v \nwant: %v", idx, qry.ID, data.id)
+		}
+
+		if qry.Lang != data.lang {
+			t.Errorf("test case %d: language mismatch \nhave: %v \nwant: %v", idx, qry.Lang, data.lang)
 		}
 	}
 }

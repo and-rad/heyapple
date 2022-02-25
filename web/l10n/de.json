@@ -8,5 +8,7 @@
 	"err.err": "Fehler",
 
 	"home.login": "Anmelden",
-	"home.register": "Registrieren"
+	"home.register": "Registrieren",
+
+	"lang": "de"
 }

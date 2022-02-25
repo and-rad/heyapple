@@ -53,8 +53,8 @@ func main() {
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(mw.Options)
 	router.GET("/", handler.Home(sm, tr, db))
-	router.GET("/app", chain(handler.App(sm, tr, db), mw.Auth(sm, "/login")))
-	router.GET("/login", chain(handler.Login(sm, tr, db), mw.Anon(sm, "/app")))
+	router.GET("/app", chain(handler.App(sm, tr, db), mw.Auth(sm, "/auth")))
+	router.GET("/auth", chain(handler.Login(sm, tr, db), mw.Anon(sm, "/app")))
 	router.GET("/confirm/:token", handler.Confirm(sm, tr, db))
 
 	router.POST("/auth/local", auth.LocalLogin(sm, db))

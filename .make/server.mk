@@ -7,6 +7,14 @@ build-web:
 
 build-server:
 	@rm -rf ./out/server
+	@if command -v scour &> /dev/null; then \
+		scour ./assets/icons.svg ./web/static/img/icons.svg \
+			--enable-id-stripping \
+			--protect-ids-noninkscape \
+			--remove-descriptive-elements \
+			--enable-comment-stripping \
+			--strip-xml-prolog \
+			--strip-xml-space; fi
 	@CGO_ENABLED=0 GOARCH=amd64 go build -o ./out/server/${BINARY_NAME}-amd64 heyapple/cmd/web
 
 run-server:

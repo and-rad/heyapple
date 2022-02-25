@@ -1,0 +1,33 @@
+{{define "jumbotron" }}
+<div id="jumbo">
+	<div>
+		{{ template "jumbo-head" }}
+	</div>
+	<nav>
+		{{ template "jumbo-item" all (l10n "jumbo.food.head") (l10n "jumbo.food.intro") "apple" "database" }}
+		{{ template "jumbo-item" all (l10n "jumbo.recipe.head") (l10n "jumbo.recipe.intro") "recipe" "recipes" }}
+		{{ template "jumbo-item" all (l10n "jumbo.diary.head") (l10n "jumbo.diary.intro") "diary" "tracking" }}
+		{{ template "jumbo-item" all (l10n "jumbo.shop.head") (l10n "jumbo.shop.intro") "shop" "shopping" }}
+	</nav>
+</div>
+{{ end }}
+
+{{ define "jumbo-head"}}
+<h1>
+	{{ l10n "jumbo.title" }}
+</h1>
+<h2>
+	{{ l10n "jumbo.subtitle" }}
+</h2>
+{{ end }}
+
+{{ define "jumbo-item" }}
+<figure>
+	<figcaption>
+		<h1>{{ index . 0 }}</h1>
+		<p>{{ index . 1 }}</p>
+	</figcaption>
+	<svg viewBox='0 0 24 24'><use href='/img/icons.svg#{{ index . 2 }}'/></svg>
+	<a href="#{{ index . 3 }}"><svg viewBox='0 0 24 24'><use href='/img/icons.svg#forward'/></svg></a>
+</figure>
+{{ end }}

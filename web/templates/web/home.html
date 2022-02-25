@@ -2,13 +2,78 @@
 <html lang="en" dir="ltr">
 	<head>
 		{{ template "meta" . }}
-		<script src="/js/app.js"></script>
+		<link rel="stylesheet" href="/css/home.css">
 	</head>
 
 	<body>
-		<figure>
-			<img src="/img/placeholder.jpg" width="200" height="auto" />
-			<figcaption>An embedded image</figcaption>
-		</figure>
+		<header>
+			<img src="/img/logomono.svg" id="logo">
+			<div id="app-name">
+				<span>Hey</span><span>Apple</span>
+			</div>
+			<nav id="auth">
+				<a href="/auth">{{ l10n "home.login" }}</a>
+				<a href="/auth#/signup">{{ l10n "home.register" }}</a>
+			</nav>
+		</header>
+		<main>
+			{{ template "jumbotron" . }}
+			{{ template "section-separator" "database" }}
+
+			<section>
+				<div>
+					<h2>{{ l10n "food.title" }}</h2>
+					<h3>{{ l10n "food.subtitle" }}</h3>
+					<ul>
+						<li>{{ l10n "food.list.1" }}</li>
+						<li>{{ l10n "food.list.2" }}</li>
+					</ul>
+				</div>
+			</section>
+
+			{{ template "section-separator" "recipes" }}
+
+			<section>
+				<div>
+					<h2>{{ l10n "recipe.title" }}</h2>
+					<h3>{{ l10n "recipe.subtitle" }}</h3>
+					<ul>
+						<li>{{ l10n "recipe.list.1" }}</li>
+						<li>{{ l10n "recipe.list.2" }}</li>
+					</ul>
+				</div>
+			</section>
+
+			{{ template "section-separator" "tracking" }}
+
+			<section>
+				<div>
+					<h2>{{ l10n "diary.title" }}</h2>
+					<h3>{{ l10n "diary.subtitle" }}</h3>
+					<ul>
+						<li>{{ l10n "diary.list.1" }}</li>
+						<li>{{ l10n "diary.list.2" }}</li>
+					</ul>
+				</div>
+			</section>
+
+			{{ template "section-separator" "shopping" }}
+
+			<section>
+				<div>
+					<h2>{{ l10n "shop.title" }}</h2>
+					<h3>{{ l10n "shop.subtitle" }}</h3>
+					<ul>
+						<li>{{ l10n "shop.list.1" }}</li>
+						<li>{{ l10n "shop.list.2" }}</li>
+					</ul>
+				</div>
+			</section>
+
+			{{ template "section-separator" "shopping" }}
+			{{ template "more" . }}
+
+		</main>
+		<footer></footer>
 	</body>
 </html>

@@ -1,0 +1,23 @@
+{{ define "more" }}
+<section>
+	<h2>{{ l10n "more.title" }}</h2>
+	<div id="more">
+		{{ template "more-item" all (l10n "more.free.head") (l10n "more.free.body") "nocharge" }}
+		{{ template "more-item" all (l10n "more.donate.head") (l10n "more.donate.body") "donate" }}
+		{{ template "more-item" all (l10n "more.quality.head") (l10n "more.quality.body") "quality" }}
+		{{ template "more-item" all (l10n "more.apps.head") (l10n "more.apps.body") "devices" }}
+		{{ template "more-item" all (l10n "more.privacy.head") (l10n "more.privacy.body") "privacy" }}
+		{{ template "more-item" all (l10n "more.source.head") (l10n "more.source.body") "github" }}
+	</div>
+</section>
+{{ end }}
+
+{{ define "more-item" }}
+<figure>
+	<svg viewBox='0 0 24 24'><use href='/img/icons.svg#{{ index . 2 }}'/></svg>
+	<figcaption>
+		<h1>{{ index . 0 }}</h1>
+		<p>{{ index . 1 }}</p>
+	</figcaption>
+</figure>
+{{ end }}

@@ -31,6 +31,7 @@ func Test_getConfig(t *testing.T) {
 	}{
 		{ //00// empty environment, default values
 			cfg: config{
+				defaultLang:     "en",
 				backupDir:       "/tmp/heyapple/backup",
 				storageDir:      "/tmp/heyapple/store",
 				storageInterval: time.Minute * 15,
@@ -42,6 +43,7 @@ func Test_getConfig(t *testing.T) {
 				envStorageInterval: "5m",
 			},
 			cfg: config{
+				defaultLang:     "en",
 				backupDir:       "/tmp/heyapple/backup",
 				storageDir:      "/tmp/heyapple/store",
 				storageInterval: time.Minute * 5,
@@ -49,11 +51,13 @@ func Test_getConfig(t *testing.T) {
 		},
 		{ //02// load all vars
 			env: map[string]string{
+				envDefaultLang:     "fr",
 				envStorageDir:      "/path/to/store",
 				envBackupDir:       "/backup/is/here",
 				envStorageInterval: "1h25m",
 			},
 			cfg: config{
+				defaultLang:     "fr",
 				storageDir:      "/path/to/store",
 				backupDir:       "/backup/is/here",
 				storageInterval: time.Hour + time.Minute*25,

@@ -201,3 +201,45 @@ func TestActivate_Execute(t *testing.T) {
 		}
 	}
 }
+
+func TestSwitchLanguage_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db   *mock.DB
+		id   int
+		lang string
+
+		err error
+	}{
+		{ //00// empty data
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// database failure
+			db:   mock.NewDB().WithError(mock.ErrDOS),
+			id:   1,
+			lang: "fr",
+			err:  mock.ErrDOS,
+		},
+		{ //02// user doesn't exist
+			db:   mock.NewDB(),
+			id:   1,
+			lang: "fr",
+			err:  app.ErrNotFound,
+		},
+		{ //03// success
+			db:   mock.NewDB().WithUser(app.User{ID: 1}),
+			id:   1,
+			lang: "fr",
+		},
+	} {
+		err := (&app.SwitchLanguage{ID: data.id, Lang: data.lang}).Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if err == nil && data.db.User.Lang != data.lang {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.User.Lang, data.lang)
+		}
+	}
+}

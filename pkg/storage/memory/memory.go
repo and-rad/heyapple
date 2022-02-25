@@ -91,9 +91,14 @@ func (db *DB) NewUser(name, hash, token string) (int, error) {
 	}
 
 	db.userID++
-	db.users[db.userID] = app.User{ID: db.userID, Email: name, Pass: hash}
 	db.emails[name] = db.userID
 	db.tokens[token] = app.Token{ID: db.userID}
+	db.users[db.userID] = app.User{
+		ID:    db.userID,
+		Email: name,
+		Pass:  hash,
+		Lang:  getConfig().defaultLang,
+	}
 
 	return db.userID, nil
 }

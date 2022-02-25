@@ -309,7 +309,7 @@ func TestDB_NewUser(t *testing.T) {
 			db:   NewDB(mock.NewLog()),
 			name: "a@a.a",
 			hash: "djwrifkgh",
-			user: app.User{ID: 1, Email: "a@a.a", Pass: "djwrifkgh"},
+			user: app.User{ID: 1, Email: "a@a.a", Pass: "djwrifkgh", Lang: getConfig().defaultLang},
 		},
 		{ //01// username already exists
 			db: &DB{
@@ -332,7 +332,7 @@ func TestDB_NewUser(t *testing.T) {
 			name:  "b@b.b",
 			hash:  "djwrifkgh",
 			token: "aabbccdd",
-			user:  app.User{ID: 2, Email: "b@b.b", Pass: "djwrifkgh"},
+			user:  app.User{ID: 2, Email: "b@b.b", Pass: "djwrifkgh", Lang: getConfig().defaultLang},
 		},
 	} {
 		id, err := data.db.NewUser(data.name, data.hash, data.token)

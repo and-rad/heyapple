@@ -25,11 +25,13 @@ import (
 
 const (
 	envBackupDir       = "HEYAPPLE_BACKUP_DIR"
+	envDefaultLang     = "HEYAPPLE_APP_LANG"
 	envStorageDir      = "HEYAPPLE_STORAGE_DIR"
 	envStorageInterval = "HEYAPPLE_STORAGE_INTERVAL"
 )
 
 type config struct {
+	defaultLang     string
 	backupDir       string
 	storageDir      string
 	storageInterval time.Duration
@@ -37,11 +39,15 @@ type config struct {
 
 func getConfig() config {
 	cfg := config{
+		defaultLang:     "en",
 		backupDir:       "/tmp/heyapple/backup",
 		storageDir:      "/tmp/heyapple/store",
 		storageInterval: time.Minute * 15,
 	}
 
+	if lang := os.Getenv(envDefaultLang); lang != "" {
+		cfg.defaultLang = lang
+	}
 	if dir := os.Getenv(envBackupDir); dir != "" {
 		cfg.backupDir = dir
 	}

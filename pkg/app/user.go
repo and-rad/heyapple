@@ -39,6 +39,7 @@ const (
 type User struct {
 	Email string `json:"email"`
 	Pass  string `json:"pass"`
+	Lang  string `json:"lang"`
 	Perm  int    `json:"perm"`
 	ID    int    `json:"id"`
 }
@@ -132,4 +133,25 @@ func (c *Activate) Execute(db DB) error {
 	}
 
 	return err
+}
+
+// SwitchLanguage is a command to change a user's UI
+// language preference.
+type SwitchLanguage struct {
+	Lang string
+	ID   int
+}
+
+func (c *SwitchLanguage) Execute(db DB) error {
+	if c.Lang == "" || c.ID == 0 {
+		return ErrNotFound
+	}
+
+	u, err := db.UserByID(c.ID)
+	if err != nil {
+		return err
+	}
+
+	u.Lang = c.Lang
+	return db.SetUser(u)
 }

@@ -40,7 +40,7 @@ function confirm(evt) {
 			<Message v-bind="msg" />
 			<label>{{ $t("form.email") }}</label>
 			<input type="email" name="email" v-model="email" />
-			<label>{{ $t("form.pass") }} <!--<RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink>--></label>
+			<label>{{ $t("form.pass") }} <RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink></label>
 			<input type="password" name="pass" />
 			<footer>
 				<span>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("register.action") }}</RouterLink>.</span>

@@ -84,10 +84,11 @@
 
 :root {
 	--color-background: #f8f8f8;
-	--color-foreground: #202020;
 	--color-primary: #13ad73;
 	--color-primary-dark: #038d53;
 	--color-secondary: #f2ac05;
+	--color-text: #2c2c2c;
+
 	--font-stack: "Open Sans", Helvetica, Arial, sans-serif;
 }
 
@@ -100,7 +101,7 @@ html {
 
 body {
 	font-family: var(--font-stack);
-	color: var(--color-foreground);
+	color: var(--color-text);
 	margin: 0;
 	padding: 0;
 	display: flex;

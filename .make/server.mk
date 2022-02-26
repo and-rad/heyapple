@@ -4,6 +4,7 @@ CONFIG_DIR := /tmp/heyapple
 
 build-web:
 	@npm run build --prefix ./web/src/login
+	@npm run build --prefix ./web/src/app
 
 build-server:
 	@rm -rf ./out/server

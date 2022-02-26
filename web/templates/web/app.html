@@ -2,13 +2,11 @@
 <html lang='{{ l10n "lang" }}' dir="ltr">
 	<head>
 		{{ template "meta" . }}
-		<script src="/js/auth.js"></script>
+		<script type="module" crossorigin src="/app/index.js"></script>
+		<link rel="modulepreload" href="/app/vendor.js">
+		<link rel="stylesheet" href="/app/index.css">
 	</head>
-
 	<body>
-		APP
-		<form class="auth logout">
-			<input type="submit" value="Log out" />
-		</form>
+		<div id="app"></div>
 	</body>
 </html>

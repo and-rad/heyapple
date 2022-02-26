@@ -7,7 +7,7 @@ import { RouterView } from "vue-router";
 </template>
 
 <style>
-@import "@/assets/base.css";
+@import "../../app/src/assets/base.css";
 
 #app > *:first-child {
 	padding: 3em 1em 1em;
@@ -27,54 +27,8 @@ label {
 	justify-content: space-between;
 }
 
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-	display: block;
-	line-height: 150%;
-	font-size: 16px;
-	padding: 0.5em;
-	border: 1px solid #aaa;
-	border-radius: 4px;
-	width: 100%;
-}
-
-input[type="text"]:focus,
-input[type="text"]:active,
-input[type="email"]:focus,
-input[type="email"]:active,
-input[type="password"]:focus,
-input[type="password"]:active {
-	outline: none;
-	border-color: var(--color-primary);
-}
-
 input[type="submit"] {
-	display: block;
-	line-height: 150%;
-	font-size: 16px;
-	padding: 0.5em;
-	border: none;
-	border-radius: 4px;
-	width: 100%;
-	background-color: var(--color-primary);
 	margin-top: 2em;
-	color: #fff;
-	transition: box-shadow 0.2s, background-color 0.2s;
-}
-
-input[type="submit"]:focus,
-input[type="submit"]:active {
-	outline: none;
-}
-
-input[type="submit"]:hover {
-	box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
-}
-
-input[type="submit"][disabled] {
-	background-color: #e0e0e0;
-	pointer-events: none;
 }
 
 form footer {
@@ -84,6 +38,10 @@ form footer {
 }
 
 @media screen and (min-width: 720px) {
+	body {
+		background: var(--color-background);
+	}
+
 	#app {
 		width: calc(100% - 48px);
 		height: calc(100% - 48px);

@@ -134,7 +134,7 @@ header {
 	position: fixed;
 	width: 100%;
 	padding: 0.5em;
-	border: 1px solid #e0e0e0;
+	border-bottom: 1px solid #e0e0e0;
 	background-color: #fff;
 	z-index: 100;
 	display: flex;
@@ -356,6 +356,25 @@ section article {
 }
 
 footer {
-	height: 4em;
+	padding: 2em;
 	background-color: var(--color-primary);
+	color: #ffffff;
+	font-size: 14px;
+}
+
+footer > div {
+	margin: 0 auto;
+	max-width: 960px;
+	display: flex;
+	justify-content: space-between;
+}
+
+footer nav a {
+	margin: 0 0.5em;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+footer nav a:hover {
+	color: var(--color-secondary);
 }

@@ -83,9 +83,12 @@
 }
 
 :root {
+	--border: 1px solid #aaaaaa;
+	--border-light: 1px solid #e0e0e0;
 	--color-background: #f8f8f8;
-	--color-border: #aaaaaa;
 	--color-primary: #13ad73;
+	--color-primary-dark: #038d53;
+	--color-secondary: #f2ac05;
 	--color-text: #2c2c2c;
 }
 
@@ -133,7 +136,7 @@ select {
 	line-height: 150%;
 	font-size: 16px;
 	padding: 0.5em;
-	border: 1px solid var(--color-border);
+	border: var(--border);
 	border-radius: 4px;
 	width: 100%;
 }

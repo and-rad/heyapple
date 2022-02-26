@@ -1,6 +1,6 @@
 {
 	"email.action.1": "Konto aktivieren",
-	"email.foot": "Copyright &copy; 2021-2022 das HeyApple Entwicklerteam",
+	"email.foot": "&copy; 2021-2022 das HeyApple Entwicklerteam",
 	"email.msg.1": "<h2>Hallo und willkommen bei HeyApple,<h2><p>deine Registrierung ist fast abgeschlossen. Klicke auf den Link, um deine E-Mail-Adresse zu bestätigen und das Benutzerkonto für die Anmeldung freizuschalten:</p>",
 	"email.plain": "Sollte der Link nicht funktionieren, kopiere die folgende Adresse in die Adresszeile deines Internet-Browsers:",
 	"email.sub.1": "Willkommen bei HeyApple!",

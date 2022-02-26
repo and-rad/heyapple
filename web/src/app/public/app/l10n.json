@@ -1,3 +1,19 @@
 {
-	"en": {}
+	"en": {
+		"nav":{
+			"diary": "Diary",
+			"food": "Food",
+			"legal": "Legal Notice",
+			"privacy": "Privacy Policy",
+			"profile": "Profile",
+			"recipes": "Recipes",
+			"settings": "Settings",
+			"shopping": "Shopping Lists",
+			"signout": "Sign out"
+		},
+		"signout": {
+			"err404": "Sign out failed, session not found. Are you even signd in?",
+			"err500": "Sign out failed, internal server error. This shouldn't happen."
+		}
+	}
 }

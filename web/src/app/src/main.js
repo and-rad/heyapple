@@ -8,13 +8,18 @@ if (!lang && navigator.languages != undefined) {
 	lang = navigator.languages[0];
 }
 
-const i18n = createI18n({
-	locale: lang.split("-")[0],
-	fallbackLocale: "en",
-});
+fetch("/app/l10n.json")
+	.then((response) => response.json())
+	.then((messages) => {
+		const i18n = createI18n({
+			locale: lang.split("-")[0],
+			fallbackLocale: "en",
+			messages,
+		});
 
-const app = createApp(App);
-app.use(router);
-app.use(i18n);
+		const app = createApp(App);
+		app.use(router);
+		app.use(i18n);
 
-app.mount("#app");
+		app.mount("#app");
+	});

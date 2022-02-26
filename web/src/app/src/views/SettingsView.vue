@@ -1,7 +1,7 @@
 <script setup></script>
 
 <template>
-	<main>Foods</main>
+	<main>Settings</main>
 </template>
 
 <style>

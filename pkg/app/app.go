@@ -57,8 +57,9 @@ type DB interface {
 	SetUser(User) error
 	UserByName(name string) (User, error)
 	UserByID(id int) (User, error)
-	Token(string) (Token, error)
+	NewToken(id int, hash string, data interface{}) error
 	DeleteToken(string) error
+	Token(string) (Token, error)
 
 	NewFood() (int, error)
 	SetFood(core.Food) error

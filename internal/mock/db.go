@@ -167,6 +167,14 @@ func (db *DB) Token(string) (app.Token, error) {
 	return db.Tok, nil
 }
 
+func (db *DB) NewToken(id int, hash string, data interface{}) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+	db.Tok = app.Token{ID: id, Data: data}
+	return nil
+}
+
 func (db *DB) DeleteToken(string) error {
 	db.Tok = app.Token{}
 	return nil

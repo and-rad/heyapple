@@ -136,6 +136,11 @@ func (db *DB) Token(hash string) (app.Token, error) {
 	return app.Token{}, app.ErrNotFound
 }
 
+func (db *DB) NewToken(id int, hash string, data interface{}) error {
+	db.tokens[hash] = app.Token{ID: id, Data: data}
+	return nil
+}
+
 func (db *DB) DeleteToken(hash string) error {
 	delete(db.tokens, hash)
 	return nil

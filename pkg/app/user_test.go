@@ -250,3 +250,111 @@ func TestSwitchLanguage_Execute(t *testing.T) {
 		}
 	}
 }
+
+func TestResetPassword_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db    *mock.DB
+		email string
+
+		err error
+	}{
+		{ //00// empty data
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// database failure
+			db:    mock.NewDB().WithError(mock.ErrDOS),
+			email: "a@a.a",
+			err:   mock.ErrDOS,
+		},
+		{ //02// user doesn't exist
+			db:    mock.NewDB(),
+			email: "a@a.a",
+			err:   app.ErrNotFound,
+		},
+		{ //03// database failure
+			db:    mock.NewDB().WithUser(mock.User1).WithError(nil, mock.ErrDOS),
+			email: "a@a.a",
+			err:   mock.ErrDOS,
+		},
+		{ //04//
+			db:    mock.NewDB().WithUser(mock.User1),
+			email: "a@a.a",
+		},
+	} {
+		cmd := &app.ResetPassword{Email: data.email}
+		err := cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if id := data.db.Tok.ID; err == nil && id != data.db.User.ID {
+			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, id, data.db.User.ID)
+		}
+	}
+}
+
+func TestChangePassword_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db    *mock.DB
+		pass  string
+		token string
+		id    int
+
+		err error
+	}{
+		{ //00// empty data
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// token doesn't exist
+			db:    mock.NewDB(),
+			token: "abcd",
+			err:   app.ErrNotFound,
+		},
+		{ //02// user doesn't exist
+			db:    mock.NewDB().WithToken(app.Token{ID: 1}),
+			token: "abcd",
+			err:   app.ErrNotFound,
+		},
+		{ //03// user doesn't exist
+			db:  mock.NewDB(),
+			id:  1,
+			err: app.ErrNotFound,
+		},
+		{ //04// deferred failure
+			db:  mock.NewDB().WithUser(mock.User1).WithError(nil, mock.ErrDOS),
+			id:  1,
+			err: mock.ErrDOS,
+		},
+		{ //05// success for id path
+			db:   mock.NewDB().WithUser(mock.User1),
+			pass: "supersecret",
+			id:   1,
+		},
+		{ //06// success for token path
+			db:    mock.NewDB().WithUser(mock.User1).WithToken(app.Token{ID: mock.User1.ID}),
+			pass:  "supersecret",
+			token: "abcd",
+		},
+	} {
+		cmd := &app.ChangePassword{Token: data.token, ID: data.id, Pass: data.pass}
+		err := cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if err == nil {
+			if data.token != "" && data.db.Tok != (app.Token{}) {
+				t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, data.db.Tok, app.Token{})
+			}
+
+			if !app.NewCrypter().Match(data.db.User.Pass, data.pass) {
+				t.Errorf("test case %d: password mismatch", idx)
+			}
+		}
+
+	}
+}

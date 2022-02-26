@@ -808,3 +808,37 @@ func TestDB_SetRecipeAccess(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_NewToken(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		id   int
+		hash string
+		data interface{}
+
+		token app.Token
+		err   error
+	}{
+		{ //00//
+			db:    NewDB(mock.NewLog()),
+			token: app.Token{},
+		},
+		{ //00//
+			db:    NewDB(mock.NewLog()),
+			id:    12,
+			hash:  "abcd",
+			data:  true,
+			token: app.Token{ID: 12, Data: true},
+		},
+	} {
+		err := data.db.NewToken(data.id, data.hash, data.data)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if tok, _ := data.db.Token(data.hash); tok != data.token {
+			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, tok, data.token)
+		}
+	}
+}

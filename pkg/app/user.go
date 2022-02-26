@@ -157,3 +157,68 @@ func (c *SwitchLanguage) Execute(db DB) error {
 	u.Lang = c.Lang
 	return db.SetUser(u)
 }
+
+// ResetPassword is a command to create a password reset
+// token that allows an anonymous user to change the
+// password that's associated with a registered user.
+type ResetPassword struct {
+	Email string
+	Token string
+}
+
+func (c *ResetPassword) Execute(db DB) error {
+	if c.Email == "" {
+		return ErrNotFound
+	}
+
+	user, err := db.UserByName(c.Email)
+	if err != nil {
+		return err
+	}
+
+	token := NewTokenizer().Create()
+	if err := db.NewToken(user.ID, token, nil); err != nil {
+		return err
+	}
+	c.Token = token
+
+	return nil
+}
+
+// ChangePassword is a command to change a registered
+// user's password. It expects either the ID or the
+// Token field to be set, where ID points to a valid user
+// id or the token can be used to retrieve such an id.
+type ChangePassword struct {
+	Token string
+	Pass  string
+	ID    int
+}
+
+func (c *ChangePassword) Execute(db DB) error {
+	if c.Token == "" && c.ID < 1 {
+		return ErrNotFound
+	}
+
+	if c.Token != "" {
+		if tok, err := db.Token(c.Token); err != nil {
+			return err
+		} else {
+			c.ID = tok.ID
+		}
+	}
+
+	user, err := db.UserByID(c.ID)
+	if err != nil {
+		return err
+	}
+
+	user.Pass = NewCrypter().Encrypt(c.Pass)
+	if err = db.SetUser(user); err == nil {
+		if c.Token != "" {
+			err = db.DeleteToken(c.Token)
+		}
+	}
+
+	return err
+}

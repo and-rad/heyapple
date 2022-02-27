@@ -62,6 +62,7 @@ func main() {
 	router.GET("/confirm/:token", handler.Confirm(env))
 
 	router.POST("/auth/local", auth.LocalLogin(env))
+	router.POST("/auth/reset", auth.ResetRequest(env))
 	router.DELETE("/auth/local", auth.LocalLogout(env))
 
 	router.POST("/api/v1/user", chain(api.NewUser(env), mw.JSON()))

@@ -8,10 +8,14 @@
 	"diary.list.5": "Never lose data: The diary stays organized even after years of adjusting ingredients and deleting or renaming recipes.",
 
 	"email.action.1": "Activate Account",
+	"email.action.3": "Reset Password",
 	"email.foot": "&copy; 2021-2022 the HeyApple development team",
+	"email.info.3": "<p>If you did not ask to reset your password, you might want to review your recent account access for any unusual activity. You can do so in your profile settings.</p>",
 	"email.msg.1": "<h2>Hello and welcome at HeyApple,</h2><p>Your registration is almost complete. Click this link to confirm your e-mail address and enable the account login:</p>",
+	"email.msg.3": "<p>Hello,</p><p>You asked for help getting back into your HeyApple account? Click this link to set a new password:",
 	"email.plain": "If the link above does not work, copy the following address and paste it into the address bar of your internet browser:",
 	"email.sub.1": "Welcome at HeyApple!",
+	"email.sub.3": "Your password reset request",
 
 	"err.err": "Error",
 

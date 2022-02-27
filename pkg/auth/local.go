@@ -61,3 +61,35 @@ func LocalLogout(env *handler.Environment) httprouter.Handle {
 		}
 	}
 }
+
+func ResetRequest(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		cmd := &app.ResetPassword{Email: r.FormValue("email")}
+		if cmd.Email == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		err := env.DB.Execute(cmd)
+		if err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusOK)
+
+		data := app.NotificationData{
+			"lang":  "en",
+			"token": cmd.Token,
+		}
+		err = env.Msg.Send(cmd.Email, app.ResetNotification, data)
+		if err != nil {
+			env.Log.Error(err)
+		}
+	}
+}
+

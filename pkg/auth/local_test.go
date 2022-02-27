@@ -122,3 +122,70 @@ func TestLocalLogout(t *testing.T) {
 		}
 	}
 }
+
+func TestResetRequest(t *testing.T) {
+	for idx, data := range []struct {
+		db *mock.DB
+		nf *mock.Notifier
+		in url.Values
+
+		err    string
+		status int
+	}{
+		{ //00// no data
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// connection failure
+			db:     mock.NewDB().WithError(mock.ErrDOS),
+			in:     url.Values{"email": {"a@a.a"}},
+			status: http.StatusInternalServerError,
+		},
+		{ //02// notification failure
+			db:     mock.NewDB().WithUser(mock.User1),
+			nf:     mock.NewNotifier().WithError(mock.ErrDOS),
+			in:     url.Values{"email": {"a@a.a"}},
+			status: http.StatusOK,
+			err:    mock.ErrDOS.Error(),
+		},
+		{ //03// user doesn't exist
+			db:     mock.NewDB(),
+			in:     url.Values{"email": {"a@a.a"}},
+			status: http.StatusNotFound,
+		},
+		{ //04// success
+			db:     mock.NewDB().WithUser(mock.User1),
+			nf:     mock.NewNotifier(),
+			in:     url.Values{"email": {"a@a.a"}},
+			status: http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Msg: data.nf, Log: mock.NewLog()}
+
+		auth.ResetRequest(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		err := env.Log.(*mock.Log).Err
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if data.nf != nil && err == "" {
+			if data.nf.Msg != app.ResetNotification {
+				t.Errorf("test case %d: message mismatch \nhave: %v\nwant: %v", idx, data.nf.Msg, app.RegisterNotification)
+			}
+			if data.nf.To != data.in["email"][0] {
+				t.Errorf("test case %d: recipient mismatch \nhave: %v\nwant: %v", idx, data.nf.To, data.in["email"][0])
+			}
+			if data.nf.Data["lang"] != "en" {
+				t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.nf.Data["lang"], "en")
+			}
+		}
+	}
+}

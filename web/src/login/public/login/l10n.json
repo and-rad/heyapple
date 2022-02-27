@@ -1,9 +1,4 @@
 {
-	"de": {
-		"login": {
-			"title": "Anmelden"
-		}
-	},
 	"en": {
 		"form": {
 			"back": "Back",
@@ -14,6 +9,7 @@
 		},
 		"login": {
 			"action": "Sign in",
+			"err400": "Username or password missing",
 			"err401": "Incorrect username or password",
 			"err500": "Unknown error occurred",
 			"errmail": "Not a valid e-mail address",
@@ -33,7 +29,11 @@
 		},
 		"reset": {
 			"action": "Send password reset e-mail",
+			"err400": "E-mail address missing",
+			"err404": "This e-mail address is not in use",
+			"err500": "Unknown error occurred",
 			"hint": "Enter your account's e-mail address. Instructions on how to reset your password will be sent to you.",
+			"success": "We've sent an email to {addr}. Open it up to set a new password for your account.",
 			"title": "Password Reset"
 		}
 	}

@@ -1,0 +1,108 @@
+@import url("./home.css");
+
+header {
+	position: static;
+	border: none;
+	margin-bottom: 1em;
+	padding: 0;
+}
+
+main {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+	width: 100%;
+	max-width: 640px;
+	margin: 0;
+	padding: 1em;
+}
+
+@media only screen and (max-width: 640px) {
+	main {
+		position: static;
+		transform: none;
+	}
+}
+
+.msg {
+	--color-bad: #db5343;
+	--color-bad-light: rgba(219, 83, 67, 0.1);
+	--color-good: #21ab53;
+	--color-good-light: rgba(33, 171, 83, 0.1);
+	--color-warn: #ffc107;
+	--color-warn-light: rgba(255, 193, 7, 0.1);
+
+	padding: 0.5em;
+	background-color: var(--color-good-light);
+	border: 1px solid var(--color-good);
+	border-radius: 4px;
+	margin: 1em 0;
+}
+
+.hidden {
+	display: none;
+}
+
+.msg.err {
+	background-color: var(--color-bad-light);
+	border-color: var(--color-bad);
+}
+
+label {
+	margin-top: 1em;
+	display: block;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+select {
+	display: block;
+	line-height: 150%;
+	font-size: 16px;
+	padding: 0.5em;
+	border: var(--border);
+	border-radius: 4px;
+	width: 100%;
+}
+
+input[type="text"]:focus,
+input[type="text"]:active,
+input[type="email"]:focus,
+input[type="email"]:active,
+input[type="password"]:focus,
+input[type="password"]:active,
+select:focus,
+select:active {
+	border-color: var(--color-primary);
+}
+
+input[type="submit"],
+input[type="button"],
+button {
+	display: block;
+	line-height: 150%;
+	font-size: 16px;
+	padding: 0.5em;
+	border: none;
+	border-radius: 4px;
+	width: 100%;
+	background-color: var(--color-primary);
+	color: #fff;
+	transition: box-shadow 0.2s, background-color 0.2s;
+	margin-top: 2em;
+}
+
+input[type="submit"]:hover,
+input[type="button"]:hover,
+button:hover {
+	box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
+}
+
+input[type="submit"][disabled],
+input[type="button"][disabled],
+button[disabled] {
+	background-color: #e0e0e0;
+	pointer-events: none;
+}

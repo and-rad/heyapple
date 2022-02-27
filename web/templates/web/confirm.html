@@ -2,11 +2,25 @@
 <html lang='{{ l10n "lang" }}' dir="ltr">
 	<head>
 		{{ template "meta" . }}
-		<script src="/js/app.js"></script>
+		<link rel="stylesheet" href="/css/confirm.css" />
 	</head>
 
 	<body>
-		CONFIRM
-		<p><a href="/login">Click here to log in</a></p>
+		<main>
+			<header>
+				<img src="/img/logomono.svg" id="logo" />
+				<div id="app-name"><span>Hey</span><span>Apple</span></div>
+			</header>
+
+			{{ $msg := printf "confirm.%d" .status }}
+
+			{{ if eq .status 200 }}
+			<div class="msg">{{ l10n $msg }}</div>
+			<p><a href="/auth">{{ l10n "confirm.signin" }}</a></p>
+			{{ else }}
+			<div class="msg err">{{ l10n $msg }}</div>
+			<p><a href="/">{{ l10n "confirm.return" }}</a></p>
+			{{ end }}
+		</main>
 	</body>
 </html>

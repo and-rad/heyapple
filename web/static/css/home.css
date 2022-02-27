@@ -83,6 +83,9 @@
 }
 
 :root {
+	--border: 1px solid #aaaaaa;
+	--border-light: 1px solid #e0e0e0;
+
 	--color-background: #f8f8f8;
 	--color-primary: #13ad73;
 	--color-primary-dark: #038d53;
@@ -134,16 +137,12 @@ header {
 	position: fixed;
 	width: 100%;
 	padding: 0.5em;
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: var(--border-light);
 	background-color: #fff;
 	z-index: 100;
 	display: flex;
 	align-items: center;
 	transition: border-color 0.5s ease-in-out;
-}
-
-header.sticky {
-	border-color: #e0e0e0;
 }
 
 header #logo {
@@ -280,7 +279,7 @@ main {
 }
 
 .section-separator {
-	border-bottom: 1px solid #e0e0e0;
+	border-bottom: var(--border-light);
 	position: relative;
 }
 
@@ -292,7 +291,7 @@ main {
 	width: 4em;
 	height: 4em;
 	border-radius: 2em;
-	border: 1px solid #e0e0e0;
+	border: var(--border-light);
 	background-color: #fff;
 	background-image: url("/img/logoflat.svg");
 	background-size: 3em;

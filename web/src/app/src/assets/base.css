@@ -85,11 +85,19 @@
 :root {
 	--border: 1px solid #aaaaaa;
 	--border-light: 1px solid #e0e0e0;
+
 	--color-background: #f8f8f8;
 	--color-primary: #13ad73;
 	--color-primary-dark: #038d53;
 	--color-secondary: #f2ac05;
 	--color-text: #2c2c2c;
+
+	--color-bad: #db5343;
+	--color-bad-light: rgba(219, 83, 67, 0.1);
+	--color-good: #21ab53;
+	--color-good-light: rgba(33, 171, 83, 0.1);
+	--color-warn: #ffc107;
+	--color-warn-light: rgba(255, 193, 7, 0.1);
 }
 
 @media (prefers-color-scheme: dark) {

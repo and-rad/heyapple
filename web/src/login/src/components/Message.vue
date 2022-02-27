@@ -14,17 +14,11 @@ const hasMessage = computed(() => {
 
 <style>
 .message {
-	--color-bad: #db5343;
-	--color-bad-light: rgba(219, 83, 67, 0.3);
-	--color-good: #21ab53;
-	--color-good-light: rgba(33, 171, 83, 0.1);
-	--color-warn: #ffc107;
-	--color-warn-light: rgba(255, 193, 7, 0.1);
-
 	padding: 0.5em;
 	background-color: var(--color-good-light);
 	border: 1px solid var(--color-good);
 	border-radius: 4px;
+	margin: 1em 0;
 }
 
 .message.hidden {

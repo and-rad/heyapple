@@ -1,69 +1,41 @@
 var HA = HA || {};
 
 HA.Auth = (function () {
-	var _initSubmitButtons = function () {
+	function _initSubmitButtons() {
 		document
-			.querySelectorAll("form.signup input[type='submit']")
-			.forEach((s) => s.addEventListener("click", _onSignupButtonClicked));
-		document
-			.querySelectorAll("form.login input[type='submit']")
-			.forEach((s) => s.addEventListener("click", _onLoginButtonClicked));
-		document
-			.querySelectorAll("form.logout input[type='submit']")
-			.forEach((s) => s.addEventListener("click", _onLogoutButtonClicked));
-	};
+			.querySelectorAll("form.reset input[type='submit']")
+			.forEach((s) => s.addEventListener("click", _onResetButtonClicked));
+	}
 
-	var _onSignupButtonClicked = function (evt) {
+	function _showError(msg) {
+		let field = document.querySelector(".msg");
+		field.textContent = msg;
+		field.classList.remove("hidden");
+		field.classList.add("err");
+	}
+
+	function _showMessage(msg) {
+		let field = document.querySelector(".msg");
+		field.textContent = msg;
+		field.classList.remove("hidden", "err");
+	}
+
+	var _onResetButtonClicked = function (evt) {
 		evt.preventDefault();
-		let form = new FormData(evt.target.closest("form"));
-		if (!form.getAll("pass").every((v, i, a) => v === a[0])) {
-			window.dispatchEvent(new CustomEvent("passmatchfail"));
+		let form = evt.target.closest("form");
+		let formData = new FormData(form);
+		if (!formData.getAll("pass").every((v, i, a) => v === a[0])) {
+			_showError(HA.L10n.t("reset.nomatch"));
 			return;
 		}
 
-		fetch("/api/v1/user", {
-			method: "POST",
+		fetch("/auth/reset", {
+			method: "PUT",
 			headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			body: new URLSearchParams(form),
+			body: new URLSearchParams(formData),
 		}).then((response) => {
-			let event = new CustomEvent("signup");
-			if (!response.ok) {
-				event = new CustomEvent("signupfail", { detail: { code: response.status } });
-			}
-			window.dispatchEvent(event);
-		});
-	};
-
-	var _onLoginButtonClicked = function (evt) {
-		evt.preventDefault();
-		let form = new FormData(evt.target.closest("form"));
-		fetch("/auth/local", {
-			method: "POST",
-			headers: { "Content-Type": "application/x-www-form-urlencoded" },
-			body: new URLSearchParams(form),
-		}).then((response) => {
-			if (response.ok) {
-				window.location.reload();
-			} else {
-				window.dispatchEvent(
-					new CustomEvent("loginfail", { detail: { code: response.status } })
-				);
-			}
-		});
-	};
-
-	var _onLogoutButtonClicked = function (evt) {
-		evt.preventDefault();
-		fetch("/auth/local", {
-			method: "DELETE",
-		}).then((response) => {
-			if (response.ok) {
-				window.location.reload();
-			} else {
-				window.dispatchEvent(
-					new CustomEvent("logoutfail", { detail: { code: response.status } })
-				);
-			}
+			let msg = HA.L10n.t("reset." + response.status);
+			response.ok ? _showMessage(msg) : _showError(msg);
 		});
 	};
 

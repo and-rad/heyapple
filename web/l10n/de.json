@@ -11,7 +11,10 @@
 
 	"err.err": "Fehler",
 
+	"home.copy": "&copy; 2021-2022 das HeyApple Entwicklerteam",
+	"home.legal": "Impressum",
 	"home.login": "Anmelden",
+	"home.privacy": "Datenschutz",
 	"home.register": "Registrieren",
 
 	"lang": "de"

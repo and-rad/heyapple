@@ -93,3 +93,21 @@ func ResetRequest(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+func ResetConfirm(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		cmd := &app.ChangePassword{
+			Token: r.FormValue("token"),
+			Pass:  r.FormValue("pass"),
+		}
+
+		if cmd.Token == "" || cmd.Pass == "" {
+			w.WriteHeader(http.StatusBadRequest)
+		} else if err := env.DB.Execute(cmd); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
+	}
+}

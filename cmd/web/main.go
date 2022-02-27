@@ -60,9 +60,11 @@ func main() {
 	router.GET("/app", chain(handler.App(env), mw.Auth(env, "/auth")))
 	router.GET("/auth", chain(handler.Login(env), mw.Anon(env, "/app")))
 	router.GET("/confirm/:token", handler.Confirm(env))
+	router.GET("/reset/:token", handler.Reset(env))
 
 	router.POST("/auth/local", auth.LocalLogin(env))
 	router.POST("/auth/reset", auth.ResetRequest(env))
+	router.PUT("/auth/reset", auth.ResetConfirm(env))
 	router.DELETE("/auth/local", auth.LocalLogout(env))
 
 	router.POST("/api/v1/user", chain(api.NewUser(env), mw.JSON()))

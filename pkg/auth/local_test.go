@@ -189,3 +189,43 @@ func TestResetRequest(t *testing.T) {
 		}
 	}
 }
+
+func TestResetConfirm(t *testing.T) {
+	for idx, data := range []struct {
+		db *mock.DB
+		in url.Values
+
+		status int
+	}{
+		{ //00// no data
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// connection failure
+			db:     mock.NewDB().WithError(mock.ErrDOS),
+			in:     url.Values{"token": {"abcd"}, "pass": {"password123"}},
+			status: http.StatusInternalServerError,
+		},
+		{ //02// empty DB
+			db:     mock.NewDB(),
+			in:     url.Values{"token": {"abcd"}, "pass": {"password123"}},
+			status: http.StatusNotFound,
+		},
+		{ //03// success
+			db:     mock.NewDB().WithUser(app.User{ID: 1}).WithToken(app.Token{ID: 1, Data: "reset"}),
+			in:     url.Values{"token": {"abcd"}, "pass": {"password123"}},
+			status: http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db}
+
+		auth.ResetConfirm(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+	}
+}

@@ -252,3 +252,58 @@ func TestConfirm(t *testing.T) {
 
 	web.Confirm = tmp
 }
+
+func TestReset(t *testing.T) {
+	tmp := web.Reset
+
+	for idx, data := range []struct {
+		db   *mock.DB
+		ps   httprouter.Params
+		tmpl string
+
+		out    string
+		status int
+	}{
+		{ //00// token missing
+			tmpl:   `{{ .token }}`,
+			status: 200,
+			out:    "",
+		},
+		{ //01// function does not exist
+			tmpl:   `{{ .Foo "Bar" }}`,
+			status: 500,
+		},
+		{ //02// success
+			tmpl:   `{{ .token }}`,
+			ps:     httprouter.Params{{Key: "token", Value: "abcd"}},
+			status: 200,
+			out:    "abcd",
+		},
+		{ //03// translate string
+			tmpl:   `{{ l10n "msg.hi" }}`,
+			status: 200,
+			out:    "Hi!",
+		},
+	} {
+		web.Reset = template.Must(template.New("reset.html").Funcs(funcs).Parse(data.tmpl))
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{
+			DB:      data.db,
+			Session: scs.New(),
+			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+		}
+
+		handler.Reset(env)(res, req, data.ps)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, body, data.out)
+		}
+	}
+
+	web.Reset = tmp
+}

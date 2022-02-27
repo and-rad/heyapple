@@ -83,6 +83,19 @@ func Confirm(env *Environment) httprouter.Handle {
 	}
 }
 
+func Reset(env *Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data := map[string]interface{}{"token": ps.ByName("token")}
+
+		lang := sessionLang(env.Session, r)
+		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
+		tpl := template.Must(web.Reset.Clone()).Funcs(template.FuncMap{"l10n": l10n})
+		if err := tpl.ExecuteTemplate(w, "reset.html", data); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
+}
+
 func sessionLang(sm *scs.SessionManager, r *http.Request) string {
 	if lang, ok := sm.Get(r.Context(), "lang").(string); ok && lang != "" {
 		return lang

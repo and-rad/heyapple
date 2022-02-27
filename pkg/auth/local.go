@@ -27,6 +27,21 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// LocaLogin handles login for users with local accounts
+// as opposed to users who authenticate with SSO services
+// like OAuth. The response body is always empty.
+//
+// Endpoint:
+//   /auth/local
+// Methods:
+//   POST
+// Possible status codes:
+//   200 - Login successful
+//   400 - Malformed or missing form data
+//   401 - Unsuccessful login attempt
+//   500 - Internal server error
+// Example input:
+//   email=user@example.com&pass=topsecret
 func LocalLogin(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.Authenticate{
@@ -35,7 +50,7 @@ func LocalLogin(env *handler.Environment) httprouter.Handle {
 		}
 
 		if query.Email == "" || query.Pass == "" {
-			w.WriteHeader(http.StatusUnauthorized)
+			w.WriteHeader(http.StatusBadRequest)
 		} else if err := env.DB.Fetch(query); err == app.ErrCredentials {
 			w.WriteHeader(http.StatusUnauthorized)
 		} else if err == app.ErrNotFound {
@@ -50,6 +65,18 @@ func LocalLogin(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// LocaLogout handles logout for users with local accounts
+// as opposed to users who authenticate with SSO services
+// like OAuth. The response body is always empty.
+//
+// Endpoint:
+//   /auth/local
+// Methods:
+//   DELETE
+// Possible status codes:
+//   200 - Logout successful
+//   404 - Session not found, user is not logged in
+//   500 - Internal server error
 func LocalLogout(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		if err := env.Session.Destroy(r.Context()); err == scs.ErrNoSession {
@@ -62,6 +89,22 @@ func LocalLogout(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// ResetRequest creates a new password reset request and
+// sends a notification to the user with instructions
+// on how to complete the request. The response body is
+// always empty.
+//
+// Endpoint:
+//   /auth/reset
+// Methods:
+//   POST
+// Possible status codes:
+//   200 - Request creation successful
+//   400 - Malformed or missing form data
+//   404 - User doesn't exist
+//   500 - Internal server error
+// Example input:
+//   email=user@example.com
 func ResetRequest(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.ResetPassword{Email: r.FormValue("email")}
@@ -93,6 +136,21 @@ func ResetRequest(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// ResetConfirm completes a password reset request. If
+// successful, the associated token is deleted and the
+// password is changed. The response body is always empty.
+//
+// Endpoint:
+//   /auth/reset
+// Methods:
+//   PUT
+// Possible status codes:
+//   200 - Password reset successful
+//   400 - Malformed or missing form data
+//   404 - User or token doesn't exist
+//   500 - Internal server error
+// Example input:
+//   email=user@example.com&pass=topsecret
 func ResetConfirm(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.ChangePassword{

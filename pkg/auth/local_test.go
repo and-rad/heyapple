@@ -42,7 +42,7 @@ func TestLocalLogin(t *testing.T) {
 	}{
 		{ //00// no data
 			db:     mock.NewDB(),
-			status: http.StatusUnauthorized,
+			status: http.StatusBadRequest,
 		},
 		{ //01// connection failure
 			db:     mock.NewDB().WithError(mock.ErrDOS),

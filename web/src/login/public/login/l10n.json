@@ -23,6 +23,7 @@
 			"err500": "Unknown error occurred",
 			"errpassempty": "Both password fields must be filled out",
 			"errpassmatch": "The passwords don't match",
+			"hint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters.",
 			"signin": "Already have an account?",
 			"success": "Registration successful! We've sent an email to {addr}. Open it up to activate your account.",
 			"title": "Sign Up"

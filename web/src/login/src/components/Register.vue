@@ -52,6 +52,7 @@ function confirm(evt) {
 		<form>
 			<h1>{{ $t("register.title") }}</h1>
 			<Message v-bind="msg" />
+			<p v-html="$t('register.hint')"></p>
 			<label>{{ $t("form.email") }}</label>
 			<input type="email" name="email" v-model="email" />
 			<label>{{ $t("form.pass") }}</label>

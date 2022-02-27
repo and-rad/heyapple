@@ -3,8 +3,10 @@
 	"confirm.400": "Confirmation token missing! You should double-check whether you entered the correct URL.",
 	"confirm.404": "There was a problem with your request. Please make sure that you entered the correct URL. It's also possible that the action you want to perform has already been performed.",
 	"confirm.500": "There was an internal server problem, something's wrong on our end. Please try again later.",
-	"confirm.signin": "Click here to sign in",
 	"confirm.return": "Click here to return to HeyApple",
+	"confirm.signin": "Click here to sign in",
+	"confirm.title1": "Account ",
+	"confirm.title2": "Activation",
 
 	"diary.title": "Meal Planning and Nutrient Tracking",
 	"diary.subtitle": "Add recipes to your diary with the click of a button. Adjust the amount, add or remove ingredients; planning ahead and living in the moment have never been easier.",
@@ -82,6 +84,8 @@
 	"reset.hint": "You can set a new account password below. Once you're done, you should be able to sign in again using your new password. Remeber, passwords need to be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters!",
 	"reset.nomatch": "The passwords don't match.",
 	"reset.return": "Return to HeyApple",
+	"reset.title1": "Password ",
+	"reset.title2": "Reset",
 
 	"shop.title": "Automatic Shopping Lists",
 	"shop.subtitle": "See what you need to buy on your next run to the store at a single glance. No need to maintain separate lists or use multiple apps.",

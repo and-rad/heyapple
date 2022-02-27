@@ -1,4 +1,18 @@
 {
+	"de": {
+		"login": {
+			"title1": "An",
+			"title2": "melden"
+		},
+		"register": {
+			"title1": "Regis",
+			"title2": "trieren"
+		},
+		"reset": {
+			"title1": "Passwort ",
+			"title2": "zurücksetzen"
+		}
+	},
 	"en": {
 		"form": {
 			"back": "Back",
@@ -14,7 +28,8 @@
 			"err500": "Unknown error occurred",
 			"errmail": "Not a valid e-mail address",
 			"signup": "Don't have an account yet?",
-			"title": "Sign In"
+			"title1": "Sign ",
+			"title2": "In"
 		},
 		"register": {
 			"action": "Sign up",
@@ -26,7 +41,8 @@
 			"hint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters.",
 			"signin": "Already have an account?",
 			"success": "Registration successful! We've sent an email to {addr}. Open it up to activate your account.",
-			"title": "Sign Up"
+			"title1": "Sign ",
+			"title2": "Up"
 		},
 		"reset": {
 			"action": "Send password reset e-mail",
@@ -35,7 +51,8 @@
 			"err500": "Unknown error occurred",
 			"hint": "Enter your account's e-mail address. Instructions on how to reset your password will be sent to you.",
 			"success": "We've sent an email to {addr}. Open it up to set a new password for your account.",
-			"title": "Password Reset"
+			"title1": "Password ",
+			"title2": "Reset"
 		}
 	}
 }

@@ -9,12 +9,16 @@ import { RouterView } from "vue-router";
 <style>
 @import "../../app/src/assets/base.css";
 
-#app > *:first-child {
-	padding: 3em 1em 1em;
+body {
+	display: flex;
+	align-items: center;
 }
 
-#app > .image {
-	display: none;
+#app {
+	padding: 1em;
+	width: 100%;
+	max-width: 640px;
+	margin: 0 auto;
 }
 
 h1 {
@@ -37,51 +41,26 @@ form footer {
 	justify-content: space-between;
 }
 
-@media screen and (min-width: 720px) {
-	body {
-		background: var(--color-background);
-	}
-
-	#app {
-		width: calc(100% - 48px);
-		height: calc(100% - 48px);
-		transform: translateY(-50%) translateX(-50%);
-		background-color: #fff;
-		border-radius: 4px;
-		box-shadow: 0 0 24px #ccc;
-		overflow-y: hidden;
-		display: flex;
-		justify-content: space-between;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-	}
-
-	#app > *:first-child {
-		flex-basis: 60%;
-		padding: 3em;
-	}
-
-	#app > *:nth-child(2) {
-		flex-basis: 40%;
-	}
-
-	#app > .image {
-		display: block;
-	}
-
-	#app > .image svg {
-		position: absolute;
-		bottom: 0;
-	}
+header {
+	display: flex;
+	align-items: center;
+	margin-bottom: 1em;
 }
 
-@media screen and (min-width: 1000px) {
-	#app {
-		width: 960px;
-		max-width: calc(100% - 48px);
-		height: 640px;
-		max-height: calc(100% - 48px);
-	}
+header #logo {
+	height: 3em;
+	width: 3em;
+}
+
+header #app-name {
+	margin-left: 0.5em;
+	font-size: 2em;
+	text-transform: uppercase;
+	flex-grow: 1;
+	color: var(--color-primary);
+}
+
+header #app-name span:last-child {
+	font-weight: 300;
 }
 </style>

@@ -1,5 +1,4 @@
 <script setup>
-import RegisterImage from "./images/ImageRegister.vue";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -37,41 +36,36 @@ function confirm(evt) {
 		body: new URLSearchParams(new FormData(evt.target.closest("form"))),
 	}).then((response) => {
 		if (response.ok) {
-			msg.value = {
-				msg: t("register.success",{addr: addr}),
-			};
+			msg.value = { msg: t("register.success", { addr: addr })};
 		} else {
-			msg.value = { msg: t("register.err"+response.status), level: "err" };
+			msg.value = { msg: t("register.err" + response.status), level: "err" };
 		}
 	});
 }
 </script>
 
 <template>
-	<div>
-		<form>
-			<h1>{{ $t("register.title") }}</h1>
-			<Message v-bind="msg" />
-			<p v-html="$t('register.hint')"></p>
-			<label>{{ $t("form.email") }}</label>
-			<input type="email" name="email" v-model="email" />
-			<label>{{ $t("form.pass") }}</label>
-			<input type="password" name="pass" v-model="pass1" />
-			<label>{{ $t("form.confirm") }}</label>
-			<input type="password" name="pass" v-model="pass2" />
-			<footer>
-				<span>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</span>
-			</footer>
-			<input type="submit" :value="$t('register.action')" @click="confirm" />
-		</form>
-	</div>
-	<div class="image register-image">
-		<RegisterImage />
-	</div>
+	<header>
+		<HeaderImage id="logo" />
+		<div id="app-name">
+			<span>{{ $t("register.title1") }}</span><span>{{ $t("register.title2") }}</span>
+		</div>
+	</header>
+	<form>
+		<Message v-bind="msg" />
+		<p v-html="$t('register.hint')"></p>
+		<label>{{ $t("form.email") }}</label>
+		<input type="email" name="email" v-model="email" />
+		<label>{{ $t("form.pass") }}</label>
+		<input type="password" name="pass" v-model="pass1" />
+		<label>{{ $t("form.confirm") }}</label>
+		<input type="password" name="pass" v-model="pass2" />
+		<footer>
+			<span>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</span>
+		</footer>
+		<input type="submit" :value="$t('register.action')" @click="confirm" />
+	</form>
 </template>
 
 <style>
-#app > .image.register-image {
-	background-color: #c9d6df;
-}
 </style>

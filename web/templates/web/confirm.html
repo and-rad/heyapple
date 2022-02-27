@@ -9,7 +9,9 @@
 		<main>
 			<header>
 				<img src="/img/logomono.svg" id="logo" />
-				<div id="app-name"><span>Hey</span><span>Apple</span></div>
+				<div id="app-name">
+					<span>{{ l10n "confirm.title1"}}</span><span>{{ l10n "confirm.title2"}}</span>
+				</div>
 			</header>
 
 			{{ $msg := printf "confirm.%d" .status }}

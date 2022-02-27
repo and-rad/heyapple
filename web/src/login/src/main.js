@@ -3,6 +3,7 @@ import { createI18n } from "vue-i18n";
 import App from "./App.vue";
 import router from "./router";
 import Message from "./components/Message.vue";
+import HeaderImage from "./components/images/ImageHeader.vue";
 
 fetch("/login/l10n.json")
 	.then((response) => response.json())
@@ -20,6 +21,7 @@ fetch("/login/l10n.json")
 
 		const app = createApp(App);
 		app.component("Message", Message);
+		app.component("HeaderImage", HeaderImage);
 		app.use(router);
 		app.use(i18n);
 

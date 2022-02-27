@@ -1,5 +1,4 @@
 <script setup>
-import LoginImage from "./images/ImageLogin.vue";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -37,30 +36,30 @@ function confirm(evt) {
 </script>
 
 <template>
-	<div>
-		<form>
-			<h1>{{ $t("reset.title") }}</h1>
-			<Message v-bind="msg" />
-			<p>
-				{{ $t("reset.hint") }}
-			</p>
-			<label>{{ $t("form.email") }}</label>
-			<input type="email" name="email" v-model="email" />
-			<input type="submit" :value="$t('reset.action')" @click="confirm" />
-		</form>
-		<RouterLink to="/" class="back">&#5176; {{ $t("form.back") }}</RouterLink>
-	</div>
-	<div class="image">
-		<LoginImage />
-	</div>
+	<RouterLink to="/" class="back">&#5176; {{ $t("form.back") }}</RouterLink>
+	<header>
+		<HeaderImage id="logo" />
+		<div id="app-name">
+			<span>{{ $t("reset.title1") }}</span><span>{{ $t("reset.title2") }}</span>
+		</div>
+	</header>
+	<form>
+		<Message v-bind="msg" />
+		<p>{{ $t("reset.hint") }}</p>
+		<label>{{ $t("form.email") }}</label>
+		<input type="email" name="email" v-model="email" />
+		<input type="submit" :value="$t('reset.action')" @click="confirm" />
+	</form>
 </template>
 
 <style>
 a.back {
-	position: absolute;
 	display: block;
-	padding: 1em;
-	top: 0;
-	left: 0;
+	margin-bottom: 2em;
+	transition: color 0.2s;
+}
+
+a.back:hover {
+	color: var(--color-primary-dark);
 }
 </style>

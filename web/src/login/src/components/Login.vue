@@ -1,5 +1,4 @@
 <script setup>
-import LoginImage from "./images/ImageLogin.vue";
 import { RouterLink } from "vue-router";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
@@ -27,40 +26,31 @@ function confirm(evt) {
 		if (response.ok) {
 			window.location = "/app";
 		} else {
-			msg.value = { msg: t("login.err"+response.status), level: "err" };
+			msg.value = { msg: t("login.err" + response.status), level: "err" };
 		}
 	});
 }
 </script>
 
 <template>
-	<div>
-		<form>
-			<h1>{{ $t("login.title") }}</h1>
-			<Message v-bind="msg" />
-			<label>{{ $t("form.email") }}</label>
-			<input type="email" name="email" v-model="email" />
-			<label>{{ $t("form.pass") }} <RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink></label>
-			<input type="password" name="pass" />
-			<footer>
-				<span>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("register.action") }}</RouterLink>.</span>
-			</footer>
-			<input type="submit" :value="$t('login.action')" @click="confirm" />
-		</form>
-	</div>
-	<div class="image">
-		<LoginImage />
-	</div>
+	<header>
+		<HeaderImage id="logo" />
+		<div id="app-name">
+			<span>{{ $t("login.title1") }}</span><span>{{ $t("login.title2") }}</span>
+		</div>
+	</header>
+	<form>
+		<Message v-bind="msg" />
+		<label>{{ $t("form.email") }}</label>
+		<input type="email" name="email" v-model="email" />
+		<label>{{ $t("form.pass") }} <RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink></label>
+		<input type="password" name="pass" />
+		<footer>
+			<span>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("register.action") }}</RouterLink>.</span>
+		</footer>
+		<input type="submit" :value="$t('login.action')" @click="confirm" />
+	</form>
 </template>
 
 <style>
-#app > .image {
-	background-color: #cad0db;
-}
-
-svg#sun {
-	bottom: unset !important;
-	top: 0;
-	right: 0;
-}
 </style>

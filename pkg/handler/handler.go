@@ -19,3 +19,19 @@
 // Package handler defines handlers for static web content that conform
 // to the http.Handler and the httprouter.Handle interfaces.
 package handler
+
+import (
+	"heyapple/pkg/app"
+
+	"github.com/and-rad/scs/v2"
+)
+
+// Environment is a collection of interfaces that http
+// handlers can use to access various parts of the app.
+type Environment struct {
+	Log     app.Logger
+	DB      app.DB
+	Msg     app.Notifier
+	L10n    app.Translator
+	Session *scs.SessionManager
+}

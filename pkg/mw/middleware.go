@@ -21,19 +21,19 @@
 package mw
 
 import (
+	"heyapple/pkg/handler"
 	"net/http"
 
-	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
 )
 
 type Func func(httprouter.Handle) httprouter.Handle
 
 // Anon is a middleware that prevents logged-in users from accessing a resource.
-func Anon(sm *scs.SessionManager, target string) Func {
+func Anon(env *handler.Environment, target string) Func {
 	return func(next httprouter.Handle) httprouter.Handle {
 		return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-			if sm.Get(r.Context(), "id") == nil {
+			if env.Session.Get(r.Context(), "id") == nil {
 				next(w, r, ps)
 			} else {
 				http.Redirect(w, r, target, http.StatusSeeOther)
@@ -43,10 +43,10 @@ func Anon(sm *scs.SessionManager, target string) Func {
 }
 
 // Auth is a middleware that grants only logged-in users access to a resource.
-func Auth(sm *scs.SessionManager, target string) Func {
+func Auth(env *handler.Environment, target string) Func {
 	return func(next httprouter.Handle) httprouter.Handle {
 		return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-			if sm.Get(r.Context(), "id") != nil {
+			if env.Session.Get(r.Context(), "id") != nil {
 				next(w, r, ps)
 			} else {
 				http.Redirect(w, r, target, http.StatusSeeOther)

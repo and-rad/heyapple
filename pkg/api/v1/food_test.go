@@ -24,6 +24,7 @@ import (
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
+	"heyapple/pkg/handler"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -57,7 +58,8 @@ func TestFoods(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		api.Foods(data.db)(res, req, nil)
+		env := &handler.Environment{DB: data.db}
+		api.Foods(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
@@ -110,7 +112,8 @@ func TestFood(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
-		api.Food(data.db)(res, req, data.params)
+		env := &handler.Environment{DB: data.db}
+		api.Food(env)(res, req, data.params)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
@@ -153,16 +156,16 @@ func TestNewFood(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
 
-		sm := scs.New()
 		if data.setCookie {
-			if ctx, err := sm.Load(req.Context(), "abc"); err == nil {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
 				req = req.WithContext(ctx)
-				sm.Put(req.Context(), "id", data.db.User.ID)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
 			}
 		}
 
-		api.NewFood(sm, data.db)(res, req, nil)
+		api.NewFood(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
@@ -244,16 +247,16 @@ func TestSaveFood(t *testing.T) {
 		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
 
-		sm := scs.New()
 		if data.setCookie {
-			if ctx, err := sm.Load(req.Context(), "abc"); err == nil {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
 				req = req.WithContext(ctx)
-				sm.Put(req.Context(), "id", data.db.User.ID)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
 			}
 		}
 
-		api.SaveFood(sm, data.db)(res, req, data.params)
+		api.SaveFood(env)(res, req, data.params)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)

@@ -3,10 +3,10 @@ package api
 import (
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
+	"heyapple/pkg/handler"
 	"net/http"
 	"strconv"
 
-	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -28,16 +28,16 @@ import (
 //   name=Pie
 // Example output:
 //   42
-func NewRecipe(sm *scs.SessionManager, db app.DB) httprouter.Handle {
+func NewRecipe(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.CreateRecipe{Name: r.FormValue("name")}
 		if cmd.Name == "" {
 			w.WriteHeader(http.StatusBadRequest)
-		} else if uid, ok := sm.Get(r.Context(), "id").(int); !ok {
+		} else if uid, ok := env.Session.Get(r.Context(), "id").(int); !ok {
 			w.WriteHeader(http.StatusUnauthorized)
-		} else if err := db.Execute(cmd); err != nil {
+		} else if err := env.DB.Execute(cmd); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
-		} else if err := db.Execute(&app.SaveRecipeAccess{
+		} else if err := env.DB.Execute(&app.SaveRecipeAccess{
 			UserID:     uid,
 			RecID:      cmd.ID,
 			Permission: app.PermOwner,
@@ -74,7 +74,7 @@ func NewRecipe(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 //   500 - Internal server error
 // Example input:
 //   size=12&item=1&item=4&amount=150&amount=255
-func SaveRecipe(sm *scs.SessionManager, db app.DB) httprouter.Handle {
+func SaveRecipe(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		recID, err := strconv.Atoi(ps.ByName("id"))
 		if err != nil {
@@ -83,9 +83,9 @@ func SaveRecipe(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 		}
 
 		var hasPermission bool
-		if id, ok := sm.Get(r.Context(), "id").(int); ok {
+		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
 			query := &app.RecipeAccess{UserID: id, RecID: recID}
-			if db.Fetch(query) == nil {
+			if env.DB.Fetch(query) == nil {
 				hasPermission = query.HasPerms(app.PermEdit)
 			}
 		}
@@ -116,7 +116,7 @@ func SaveRecipe(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 			}
 		}
 
-		if err := db.Execute(cmd); err == app.ErrNotFound {
+		if err := env.DB.Execute(cmd); err == app.ErrNotFound {
 			w.WriteHeader(http.StatusNotFound)
 		} else if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

@@ -40,35 +40,39 @@ import (
 )
 
 func main() {
-	out := app.NewLog(os.Stdout)
-	out.Log("######################")
-	out.Log("# Starting Hey Apple #")
-	out.Log("######################")
+	logger := app.NewLog(os.Stdout)
+	translator := l10n.NewTranslator()
+	sessions := scs.New()
+	notifier := email.NewNotifier(translator)
+	db := memory.NewDBWithBackup(logger)
 
-	db := memory.NewDBWithBackup(out)
-	tr := l10n.NewTranslator()
-	nf := email.NewNotifier(tr)
-	sm := scs.New()
+	env := &handler.Environment{
+		DB:      db,
+		Log:     logger,
+		Msg:     notifier,
+		L10n:    translator,
+		Session: sessions,
+	}
 
 	router := httprouter.New()
 	router.GlobalOPTIONS = http.HandlerFunc(mw.Options)
-	router.GET("/", chain(handler.Home(sm, tr, db), mw.Anon(sm, "/app")))
-	router.GET("/app", chain(handler.App(sm, tr, db), mw.Auth(sm, "/auth")))
-	router.GET("/auth", chain(handler.Login(sm, tr, db), mw.Anon(sm, "/app")))
-	router.GET("/confirm/:token", handler.Confirm(sm, tr, db))
+	router.GET("/", chain(handler.Home(env), mw.Anon(env, "/app")))
+	router.GET("/app", chain(handler.App(env), mw.Auth(env, "/auth")))
+	router.GET("/auth", chain(handler.Login(env), mw.Anon(env, "/app")))
+	router.GET("/confirm/:token", handler.Confirm(env))
 
-	router.POST("/auth/local", auth.LocalLogin(sm, db))
-	router.DELETE("/auth/local", auth.LocalLogout(sm))
+	router.POST("/auth/local", auth.LocalLogin(env))
+	router.DELETE("/auth/local", auth.LocalLogout(env))
 
-	router.POST("/api/v1/user", chain(api.NewUser(out, nf, db), mw.JSON()))
+	router.POST("/api/v1/user", chain(api.NewUser(env), mw.JSON()))
 
-	router.GET("/api/v1/foods", chain(api.Foods(db), mw.JSON()))
-	router.GET("/api/v1/food/:id", chain(api.Food(db), mw.JSON()))
-	router.POST("/api/v1/food", chain(api.NewFood(sm, db), mw.JSON()))
-	router.PUT("/api/v1/food/:id", chain(api.SaveFood(sm, db), mw.JSON()))
+	router.GET("/api/v1/foods", chain(api.Foods(env), mw.JSON()))
+	router.GET("/api/v1/food/:id", chain(api.Food(env), mw.JSON()))
+	router.POST("/api/v1/food", chain(api.NewFood(env), mw.JSON()))
+	router.PUT("/api/v1/food/:id", chain(api.SaveFood(env), mw.JSON()))
 
-	router.POST("/api/v1/recipe", chain(api.NewRecipe(sm, db), mw.JSON()))
-	router.PUT("/api/v1/recipe/:id", chain(api.SaveRecipe(sm, db), mw.JSON()))
+	router.POST("/api/v1/recipe", chain(api.NewRecipe(env), mw.JSON()))
+	router.PUT("/api/v1/recipe/:id", chain(api.SaveRecipe(env), mw.JSON()))
 
 	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {
 		router.ServeFiles("/data/*filepath", http.Dir(dir))
@@ -78,7 +82,11 @@ func main() {
 		router.NotFound = http.FileServer(http.FS(sub))
 	}
 
-	log.Fatal(http.ListenAndServe(address(), sm.LoadAndSave(router)))
+	env.Log.Log("######################")
+	env.Log.Log("# Starting Hey Apple #")
+	env.Log.Log("######################")
+
+	log.Fatal(http.ListenAndServe(address(), env.Session.LoadAndSave(router)))
 }
 
 // address builds the ListenAndServe address from the app config.

@@ -20,6 +20,7 @@ package api
 
 import (
 	"heyapple/pkg/app"
+	"heyapple/pkg/handler"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
@@ -39,7 +40,7 @@ import (
 //   500 - Internal server error
 // Example input:
 //   email=user@example.com&pass=topsecret
-func NewUser(log app.Logger, nf app.Notifier, db app.DB) httprouter.Handle {
+func NewUser(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.CreateUser{
 			Email: r.FormValue("email"),
@@ -51,7 +52,7 @@ func NewUser(log app.Logger, nf app.Notifier, db app.DB) httprouter.Handle {
 			return
 		}
 
-		err := db.Execute(cmd)
+		err := env.DB.Execute(cmd)
 		if err == app.ErrExists {
 			w.WriteHeader(http.StatusConflict)
 			return
@@ -67,8 +68,9 @@ func NewUser(log app.Logger, nf app.Notifier, db app.DB) httprouter.Handle {
 			"lang":  "en",
 			"token": cmd.Token,
 		}
-		if err = nf.Send(cmd.Email, app.RegisterNotification, data); err != nil {
-			log.Error(err)
+		err = env.Msg.Send(cmd.Email, app.RegisterNotification, data)
+		if err != nil {
+			env.Log.Error(err)
 		}
 	}
 }

@@ -20,6 +20,7 @@ package mw_test
 
 import (
 	"heyapple/internal/mock"
+	"heyapple/pkg/handler"
 	"heyapple/pkg/mw"
 	"net/http"
 	"net/http/httptest"
@@ -125,17 +126,16 @@ func TestAnon(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
+		env := &handler.Environment{Session: scs.New()}
 
-		sm := scs.New()
 		if data.setCookie {
-			ctx, err := sm.Load(req.Context(), "abc")
-			if err == nil {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
 				req = req.WithContext(ctx)
-				sm.Put(req.Context(), "id", "hi")
+				env.Session.Put(req.Context(), "id", "hi")
 			}
 		}
 
-		mw.Anon(sm, data.target)((mock.Handler{}).Handle())(res, req, nil)
+		mw.Anon(env, data.target)((mock.Handler{}).Handle())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -166,17 +166,16 @@ func TestAuth(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
+		env := &handler.Environment{Session: scs.New()}
 
-		sm := scs.New()
 		if data.setCookie {
-			ctx, err := sm.Load(req.Context(), "abc")
-			if err == nil {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
 				req = req.WithContext(ctx)
-				sm.Put(req.Context(), "id", "hi")
+				env.Session.Put(req.Context(), "id", "hi")
 			}
 		}
 
-		mw.Auth(sm, data.target)((mock.Handler{}).Handle())(res, req, nil)
+		mw.Auth(env, data.target)((mock.Handler{}).Handle())(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

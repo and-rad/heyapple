@@ -20,10 +20,10 @@ package api
 
 import (
 	"heyapple/pkg/app"
+	"heyapple/pkg/handler"
 	"net/http"
 	"strconv"
 
-	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
 )
 
@@ -46,10 +46,10 @@ import (
 //     { "id": 6, "kcal": 522, ... },
 //     ...
 //   ]
-func Foods(db app.DB) httprouter.Handle {
+func Foods(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.GetFoods{}
-		if err := db.Fetch(query); err != nil {
+		if err := env.DB.Fetch(query); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusOK)
@@ -73,7 +73,7 @@ func Foods(db app.DB) httprouter.Handle {
 //   500 - Internal server error
 // Example output:
 //     { "id": 1, "kcal": 230, ... }
-func Food(db app.DB) httprouter.Handle {
+func Food(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.GetFood{}
 		if id, err := strconv.Atoi(ps.ByName("id")); err != nil {
@@ -82,7 +82,7 @@ func Food(db app.DB) httprouter.Handle {
 			query.Item.ID = id
 		}
 
-		if err := db.Fetch(query); err == app.ErrNotFound {
+		if err := env.DB.Fetch(query); err == app.ErrNotFound {
 			w.WriteHeader(http.StatusNotFound)
 		} else if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -107,11 +107,11 @@ func Food(db app.DB) httprouter.Handle {
 //   500 - Internal server error
 // Example output:
 //   42
-func NewFood(sm *scs.SessionManager, db app.DB) httprouter.Handle {
+func NewFood(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		var hasPermission bool
-		if id, ok := sm.Get(r.Context(), "id").(int); ok {
-			if u, err := db.UserByID(id); err == nil {
+		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			if u, err := env.DB.UserByID(id); err == nil {
 				hasPermission = (u.Perm&app.PermCreateFood == app.PermCreateFood)
 			}
 		}
@@ -122,7 +122,7 @@ func NewFood(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 		}
 
 		cmd := &app.CreateFood{}
-		if err := db.Execute(cmd); err != nil {
+		if err := env.DB.Execute(cmd); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusCreated)
@@ -154,11 +154,11 @@ func NewFood(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 //   500 - Internal server error
 // Example input:
 //   kcal=123&fat=4.5&vitb1=0.06
-func SaveFood(sm *scs.SessionManager, db app.DB) httprouter.Handle {
+func SaveFood(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		var hasPermission bool
-		if id, ok := sm.Get(r.Context(), "id").(int); ok {
-			if u, err := db.UserByID(id); err == nil {
+		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			if u, err := env.DB.UserByID(id); err == nil {
 				hasPermission = (u.Perm&app.PermEditFood == app.PermEditFood)
 			}
 		}
@@ -183,7 +183,7 @@ func SaveFood(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 			}
 		}
 
-		if err := db.Execute(cmd); err == app.ErrNotFound {
+		if err := env.DB.Execute(cmd); err == app.ErrNotFound {
 			w.WriteHeader(http.StatusNotFound)
 		} else if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

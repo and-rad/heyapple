@@ -22,6 +22,7 @@ import (
 	"heyapple/internal/mock"
 	"heyapple/pkg/app"
 	"heyapple/pkg/auth"
+	"heyapple/pkg/handler"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -72,8 +73,9 @@ func TestLocalLogin(t *testing.T) {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
 
-		auth.LocalLogin(scs.New(), data.db)(res, req, nil)
+		auth.LocalLogin(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -104,16 +106,16 @@ func TestLocalLogout(t *testing.T) {
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
+		env := &handler.Environment{Session: scs.New()}
 
-		sm := scs.New()
 		if data.setSession {
-			sm.Store = data.store
-			if ctx, err := sm.Load(req.Context(), ""); err == nil {
+			env.Session.Store = data.store
+			if ctx, err := env.Session.Load(req.Context(), ""); err == nil {
 				req = req.WithContext(ctx)
 			}
 		}
 
-		auth.LocalLogout(sm)(res, req, nil)
+		auth.LocalLogout(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

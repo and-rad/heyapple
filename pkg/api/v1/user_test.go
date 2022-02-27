@@ -22,6 +22,7 @@ import (
 	"heyapple/internal/mock"
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
+	"heyapple/pkg/handler"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -69,19 +70,20 @@ func TestNewUser(t *testing.T) {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		res := httptest.NewRecorder()
-		log := mock.NewLog()
+		env := &handler.Environment{DB: data.db, Msg: data.nf, Log: mock.NewLog()}
 
-		api.NewUser(log, data.nf, data.db)(res, req, nil)
+		api.NewUser(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
 		}
 
-		if log.Err != data.err {
-			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, log.Err, data.err)
+		err := env.Log.(*mock.Log).Err
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
 		}
 
-		if data.nf != nil && log.Err == "" {
+		if data.nf != nil && err == "" {
 			if data.nf.Msg != app.RegisterNotification {
 				t.Errorf("test case %d: message mismatch \nhave: %v\nwant: %v", idx, data.nf.Msg, app.RegisterNotification)
 			}

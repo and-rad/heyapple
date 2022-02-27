@@ -5,6 +5,7 @@ import (
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
+	"heyapple/pkg/handler"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -60,16 +61,16 @@ func TestNewRecipe(t *testing.T) {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
 
-		sm := scs.New()
 		if data.setCookie {
-			if ctx, err := sm.Load(req.Context(), "abc"); err == nil {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
 				req = req.WithContext(ctx)
-				sm.Put(req.Context(), "id", data.db.User.ID)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
 			}
 		}
 
-		api.NewRecipe(sm, data.db)(res, req, nil)
+		api.NewRecipe(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
@@ -172,16 +173,16 @@ func TestSaveRecipe(t *testing.T) {
 		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
 
-		sm := scs.New()
 		if data.setCookie {
-			if ctx, err := sm.Load(req.Context(), "abc"); err == nil {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
 				req = req.WithContext(ctx)
-				sm.Put(req.Context(), "id", data.db.User.ID)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
 			}
 		}
 
-		api.SaveRecipe(sm, data.db)(res, req, data.params)
+		api.SaveRecipe(env)(res, req, data.params)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

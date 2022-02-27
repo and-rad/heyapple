@@ -20,13 +20,14 @@ package auth
 
 import (
 	"heyapple/pkg/app"
+	"heyapple/pkg/handler"
 	"net/http"
 
 	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
 )
 
-func LocalLogin(sm *scs.SessionManager, db app.DB) httprouter.Handle {
+func LocalLogin(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.Authenticate{
 			Email: r.FormValue("email"),
@@ -35,7 +36,7 @@ func LocalLogin(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 
 		if query.Email == "" || query.Pass == "" {
 			w.WriteHeader(http.StatusUnauthorized)
-		} else if err := db.Fetch(query); err == app.ErrCredentials {
+		} else if err := env.DB.Fetch(query); err == app.ErrCredentials {
 			w.WriteHeader(http.StatusUnauthorized)
 		} else if err == app.ErrNotFound {
 			w.WriteHeader(http.StatusUnauthorized)
@@ -43,15 +44,15 @@ func LocalLogin(sm *scs.SessionManager, db app.DB) httprouter.Handle {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusOK)
-			sm.Put(r.Context(), "id", query.ID)
-			sm.Put(r.Context(), "lang", query.Lang)
+			env.Session.Put(r.Context(), "id", query.ID)
+			env.Session.Put(r.Context(), "lang", query.Lang)
 		}
 	}
 }
 
-func LocalLogout(sm *scs.SessionManager) httprouter.Handle {
+func LocalLogout(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		if err := sm.Destroy(r.Context()); err == scs.ErrNoSession {
+		if err := env.Session.Destroy(r.Context()); err == scs.ErrNoSession {
 			w.WriteHeader(http.StatusNotFound)
 		} else if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

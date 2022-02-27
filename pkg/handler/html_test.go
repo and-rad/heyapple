@@ -64,9 +64,13 @@ func TestHome(t *testing.T) {
 		web.Home = template.Must(template.New("home.html").Funcs(funcs).Parse(data.tmpl))
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
+		env := &handler.Environment{
+			DB:      mock.NewDB(),
+			Session: scs.New(),
+			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+		}
 
-		tr := &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}}
-		handler.Home(scs.New(), tr, mock.NewDB())(res, req, nil)
+		handler.Home(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -107,9 +111,13 @@ func TestLogin(t *testing.T) {
 		web.Login = template.Must(template.New("login.html").Funcs(funcs).Parse(data.tmpl))
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
+		env := &handler.Environment{
+			DB:      mock.NewDB(),
+			Session: scs.New(),
+			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+		}
 
-		tr := &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}}
-		handler.Login(scs.New(), tr, mock.NewDB())(res, req, nil)
+		handler.Login(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -150,9 +158,13 @@ func TestApp(t *testing.T) {
 		web.App = template.Must(template.New("app.html").Funcs(funcs).Parse(data.tmpl))
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
+		env := &handler.Environment{
+			DB:      mock.NewDB(),
+			Session: scs.New(),
+			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+		}
 
-		tr := &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}}
-		handler.App(scs.New(), tr, mock.NewDB())(res, req, nil)
+		handler.App(env)(res, req, nil)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
@@ -221,9 +233,13 @@ func TestConfirm(t *testing.T) {
 		web.Confirm = template.Must(template.New("confirm.html").Funcs(funcs).Parse(data.tmpl))
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
 		res := httptest.NewRecorder()
+		env := &handler.Environment{
+			DB:      data.db,
+			Session: scs.New(),
+			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+		}
 
-		tr := &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}}
-		handler.Confirm(scs.New(), tr, data.db)(res, req, data.ps)
+		handler.Confirm(env)(res, req, data.ps)
 
 		if status := res.Result().StatusCode; status != data.status {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)

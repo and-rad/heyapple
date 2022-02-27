@@ -28,10 +28,10 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-func Home(sm *scs.SessionManager, tr app.Translator, db app.DB) httprouter.Handle {
+func Home(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		lang := sessionLang(sm, r)
-		l10n := func(in interface{}) string { return tr.Translate(in, lang) }
+		lang := sessionLang(env.Session, r)
+		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Home.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "home.html", struct{}{}); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -39,10 +39,10 @@ func Home(sm *scs.SessionManager, tr app.Translator, db app.DB) httprouter.Handl
 	}
 }
 
-func Login(sm *scs.SessionManager, tr app.Translator, db app.DB) httprouter.Handle {
+func Login(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		lang := sessionLang(sm, r)
-		l10n := func(in interface{}) string { return tr.Translate(in, lang) }
+		lang := sessionLang(env.Session, r)
+		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Login.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "login.html", struct{}{}); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -50,10 +50,10 @@ func Login(sm *scs.SessionManager, tr app.Translator, db app.DB) httprouter.Hand
 	}
 }
 
-func App(sm *scs.SessionManager, tr app.Translator, db app.DB) httprouter.Handle {
+func App(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		lang := sessionLang(sm, r)
-		l10n := func(in interface{}) string { return tr.Translate(in, lang) }
+		lang := sessionLang(env.Session, r)
+		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.App.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "app.html", struct{}{}); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
@@ -61,12 +61,12 @@ func App(sm *scs.SessionManager, tr app.Translator, db app.DB) httprouter.Handle
 	}
 }
 
-func Confirm(sm *scs.SessionManager, tr app.Translator, db app.DB) httprouter.Handle {
+func Confirm(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		data := make(map[string]interface{})
 		if token := ps.ByName("token"); token == "" {
 			data["status"] = http.StatusBadRequest
-		} else if err := db.Execute(&app.Activate{Token: token}); err == app.ErrNotFound {
+		} else if err := env.DB.Execute(&app.Activate{Token: token}); err == app.ErrNotFound {
 			data["status"] = http.StatusNotFound
 		} else if err != nil {
 			data["status"] = http.StatusInternalServerError
@@ -74,8 +74,8 @@ func Confirm(sm *scs.SessionManager, tr app.Translator, db app.DB) httprouter.Ha
 			data["status"] = http.StatusOK
 		}
 
-		lang := sessionLang(sm, r)
-		l10n := func(in interface{}) string { return tr.Translate(in, lang) }
+		lang := sessionLang(env.Session, r)
+		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Confirm.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "confirm.html", data); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)

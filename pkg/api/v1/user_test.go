@@ -19,6 +19,7 @@
 package api_test
 
 import (
+	"encoding/json"
 	"heyapple/internal/mock"
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
@@ -26,8 +27,11 @@ import (
 	"net/http"
 	"net/http/httptest"
 	"net/url"
+	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/julienschmidt/httprouter"
 )
 
 func TestNewUser(t *testing.T) {
@@ -93,6 +97,50 @@ func TestNewUser(t *testing.T) {
 			if data.nf.Data["lang"] != "en" {
 				t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.nf.Data["lang"], "en")
 			}
+		}
+	}
+}
+
+func TestL10n(t *testing.T) {
+	for idx, data := range []struct {
+		tr     *mock.Translator
+		params httprouter.Params
+
+		out    map[string]string
+		status int
+	}{
+		{ //00// empty params, return fallback
+			tr: &mock.Translator{
+				Map:  map[string]string{"hi": "Hi!", "bye": "Bye!"},
+				Lang: "en",
+			},
+			out:    map[string]string{},
+			status: 200,
+		},
+		{ //01// success
+			tr: &mock.Translator{
+				Map:  map[string]string{"hi": "Hi!", "bye": "Bye!"},
+				Lang: "en",
+			},
+			params: httprouter.Params{{Key: "lang", Value: "en"}},
+			out:    map[string]string{"hi": "Hi!", "bye": "Bye!"},
+			status: 200,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{L10n: data.tr}
+		api.L10n(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		out := map[string]string{}
+		body := res.Body.Bytes()
+		json.Unmarshal(body, &out)
+		if !reflect.DeepEqual(out, data.out) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, out, data.out)
 		}
 	}
 }

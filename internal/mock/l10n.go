@@ -21,14 +21,16 @@ package mock
 import "fmt"
 
 type Translator struct {
-	Map  map[string]string
-	Lang string
+	Map         map[string]string
+	Lang        string
+	DefaultLang string
 }
 
 func NewTranslator() *Translator {
 	return &Translator{
-		Map:  make(map[string]string),
-		Lang: "en",
+		Map:         make(map[string]string),
+		Lang:        "en",
+		DefaultLang: "en",
 	}
 }
 
@@ -49,14 +51,14 @@ func (t *Translator) Translate(input interface{}, lang string) string {
 }
 
 func (t *Translator) Default() string {
-	if t.Lang == "" {
+	if t.DefaultLang == "" {
 		return "en"
 	}
-	return t.Lang
+	return t.DefaultLang
 }
 
 func (t *Translator) Get(lang string) map[string]string {
-	if lang == "en" {
+	if lang == t.Lang {
 		return t.Map
 	}
 	return map[string]string{}

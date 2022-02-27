@@ -74,3 +74,27 @@ func NewUser(env *handler.Environment) httprouter.Handle {
 		}
 	}
 }
+
+// L10n returns all localized strings for the language
+// {lang}. The response body will be a JSON-formatted
+// collection of key-value pairs.
+//
+// Endpoint:
+//   /api/v1/l10n/{lang}
+// Methods:
+//   GET
+// Possible status codes:
+//   200 - OK
+// Example output:
+//   {
+//     "app.name": "HeyApple",
+//     "msg.hello": "What's up?",
+//     ...
+//   }
+func L10n(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		tr := env.L10n.Get(ps.ByName("lang"))
+		w.WriteHeader(http.StatusOK)
+		sendResponse(tr, w)
+	}
+}

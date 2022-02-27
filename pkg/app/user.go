@@ -177,7 +177,7 @@ func (c *ResetPassword) Execute(db DB) error {
 	}
 
 	token := NewTokenizer().Create()
-	if err := db.NewToken(user.ID, token, nil); err != nil {
+	if err := db.NewToken(user.ID, token, "reset"); err != nil {
 		return err
 	}
 	c.Token = token
@@ -203,6 +203,10 @@ func (c *ChangePassword) Execute(db DB) error {
 	if c.Token != "" {
 		if tok, err := db.Token(c.Token); err != nil {
 			return err
+		} else if data, ok := tok.Data.(string); !ok {
+			return ErrNotFound
+		} else if data != "reset" {
+			return ErrNotFound
 		} else {
 			c.ID = tok.ID
 		}

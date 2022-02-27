@@ -256,7 +256,8 @@ func TestResetPassword_Execute(t *testing.T) {
 		db    *mock.DB
 		email string
 
-		err error
+		token app.Token
+		err   error
 	}{
 		{ //00// empty data
 			db:  mock.NewDB(),
@@ -277,9 +278,10 @@ func TestResetPassword_Execute(t *testing.T) {
 			email: "a@a.a",
 			err:   mock.ErrDOS,
 		},
-		{ //04//
+		{ //04// success
 			db:    mock.NewDB().WithUser(mock.User1),
 			email: "a@a.a",
+			token: app.Token{ID: mock.User1.ID, Data: "reset"},
 		},
 	} {
 		cmd := &app.ResetPassword{Email: data.email}
@@ -289,8 +291,8 @@ func TestResetPassword_Execute(t *testing.T) {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
 		}
 
-		if id := data.db.Tok.ID; err == nil && id != data.db.User.ID {
-			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, id, data.db.User.ID)
+		if token := data.db.Tok; token != data.token {
+			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, token, data.token)
 		}
 	}
 }
@@ -313,28 +315,38 @@ func TestChangePassword_Execute(t *testing.T) {
 			token: "abcd",
 			err:   app.ErrNotFound,
 		},
-		{ //02// user doesn't exist
+		{ //02// missing token data
 			db:    mock.NewDB().WithToken(app.Token{ID: 1}),
 			token: "abcd",
 			err:   app.ErrNotFound,
 		},
-		{ //03// user doesn't exist
+		{ //03// wrong token data
+			db:    mock.NewDB().WithToken(app.Token{ID: 1, Data: "wrong"}),
+			token: "abcd",
+			err:   app.ErrNotFound,
+		},
+		{ //04// user doesn't exist
+			db:    mock.NewDB().WithToken(app.Token{ID: 1, Data: "reset"}),
+			token: "abcd",
+			err:   app.ErrNotFound,
+		},
+		{ //05// user doesn't exist
 			db:  mock.NewDB(),
 			id:  1,
 			err: app.ErrNotFound,
 		},
-		{ //04// deferred failure
+		{ //06// deferred failure
 			db:  mock.NewDB().WithUser(mock.User1).WithError(nil, mock.ErrDOS),
 			id:  1,
 			err: mock.ErrDOS,
 		},
-		{ //05// success for id path
+		{ //07// success for id path
 			db:   mock.NewDB().WithUser(mock.User1),
 			pass: "supersecret",
 			id:   1,
 		},
-		{ //06// success for token path
-			db:    mock.NewDB().WithUser(mock.User1).WithToken(app.Token{ID: mock.User1.ID}),
+		{ //08// success for token path
+			db:    mock.NewDB().WithUser(mock.User1).WithToken(app.Token{ID: mock.User1.ID, Data: "reset"}),
 			pass:  "supersecret",
 			token: "abcd",
 		},

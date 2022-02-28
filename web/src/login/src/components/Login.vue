@@ -1,10 +1,11 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import { ref } from "vue";
+import { ref, inject } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const reEmail = /^[^@]+@[^@]+$/;
+const csrf = inject("csrfToken");
 
 const email = ref("");
 const msg = ref({ msg: "", level: "" });
@@ -20,7 +21,10 @@ function confirm(evt) {
 
 	fetch("/auth/local", {
 		method: "POST",
-		headers: { "Content-Type": "application/x-www-form-urlencoded" },
+		headers: { 
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
 		body: new URLSearchParams(new FormData(evt.target.closest("form"))),
 	}).then((response) => {
 		if (response.ok) {

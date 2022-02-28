@@ -110,9 +110,8 @@
 *::before,
 *::after {
 	box-sizing: border-box;
-	margin: 0;
-	position: relative;
 	font-weight: normal;
+	margin: 0;
 }
 
 *:focus,

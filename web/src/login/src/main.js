@@ -5,6 +5,8 @@ import router from "./router";
 import Message from "./components/Message.vue";
 import HeaderImage from "./components/images/ImageHeader.vue";
 
+const csrfToken = document.querySelector("meta[name='_csrf']").content;
+
 fetch("/login/l10n.json")
 	.then((response) => response.json())
 	.then((messages) => {
@@ -22,6 +24,7 @@ fetch("/login/l10n.json")
 		const app = createApp(App);
 		app.component("Message", Message);
 		app.component("HeaderImage", HeaderImage);
+		app.provide("csrfToken", csrfToken);
 		app.use(router);
 		app.use(i18n);
 

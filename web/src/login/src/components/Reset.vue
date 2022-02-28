@@ -12,7 +12,6 @@ const msg = ref({ msg: "", level: "" });
 
 function confirm(evt) {
 	evt.preventDefault();
-	msg.value = {};
 
 	if (email.value.search(reEmail) == -1) {
 		msg.value = { msg: t("login.errmail"), level: "err" };
@@ -22,16 +21,14 @@ function confirm(evt) {
 	let addr = email.value;
 	fetch("/auth/reset", {
 		method: "POST",
-		headers: { 
+		headers: {
 			"Content-Type": "application/x-www-form-urlencoded",
 			"X-CSRF-Token": csrf,
 		},
 		body: new URLSearchParams(new FormData(evt.target.closest("form"))),
 	}).then((response) => {
 		if (response.ok) {
-			msg.value = {
-				msg: t("reset.success", { addr: addr }),
-			};
+			msg.value = { msg: t("reset.success", { addr: addr }) };
 		} else {
 			msg.value = { msg: t("reset.err" + response.status), level: "err" };
 		}

@@ -33,7 +33,7 @@ function confirm(evt) {
 	let addr = email.value;
 	fetch("/api/v1/user", {
 		method: "POST",
-		headers: { 
+		headers: {
 			"Content-Type": "application/x-www-form-urlencoded",
 			"X-CSRF-Token": csrf,
 		},
@@ -61,9 +61,9 @@ function confirm(evt) {
 		<label>{{ $t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
 		<label>{{ $t("form.pass") }}</label>
-		<PasswordField name="pass" v-model="pass1" />
+		<PasswordField name="pass" withBar=true v-model="pass1" />
 		<label>{{ $t("form.confirm") }}</label>
-		<input type="password" name="pass" v-model="pass2" />
+		<PasswordField name="pass" v-model="pass2" />
 		<input type="submit" :value="$t('register.action')" @click="confirm" />
 		<footer>
 			<span>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</span>

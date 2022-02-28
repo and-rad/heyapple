@@ -49,10 +49,10 @@ function confirm(evt) {
 		<input type="email" name="email" v-model="email" />
 		<label>{{ $t("form.pass") }} <RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink></label>
 		<input type="password" name="pass" />
+		<input type="submit" :value="$t('login.action')" @click="confirm" />
 		<footer>
 			<span>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("register.action") }}</RouterLink>.</span>
 		</footer>
-		<input type="submit" :value="$t('login.action')" @click="confirm" />
 	</form>
 </template>
 

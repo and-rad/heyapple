@@ -1,4 +1,5 @@
 <script setup>
+import PasswordField from "./Password.vue"
 import { RouterLink } from "vue-router";
 import { ref, inject } from "vue";
 import { useI18n } from "vue-i18n";
@@ -15,7 +16,6 @@ const msg = ref({ msg: "", level: "" });
 
 function confirm(evt) {
 	evt.preventDefault();
-	msg.value = {};
 
 	if (email.value.search(reEmail) == -1) {
 		msg.value = { msg: t("login.errmail"), level: "err" };
@@ -61,13 +61,13 @@ function confirm(evt) {
 		<label>{{ $t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
 		<label>{{ $t("form.pass") }}</label>
-		<input type="password" name="pass" v-model="pass1" />
+		<PasswordField name="pass" v-model="pass1" />
 		<label>{{ $t("form.confirm") }}</label>
 		<input type="password" name="pass" v-model="pass2" />
+		<input type="submit" :value="$t('register.action')" @click="confirm" />
 		<footer>
 			<span>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</span>
 		</footer>
-		<input type="submit" :value="$t('register.action')" @click="confirm" />
 	</form>
 </template>
 

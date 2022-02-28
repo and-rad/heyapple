@@ -36,7 +36,7 @@
 			"action": "Sign up",
 			"err401": "Insufficient password strength",
 			"err403": "It doesn't look like you're allowed to do that.",
-			"err409": "There is already an account using this e-mail address",
+			"err409": "This e-mail address is already in use",
 			"err500": "Unknown error occurred",
 			"errpassempty": "Both password fields must be filled out",
 			"errpassmatch": "The passwords don't match",

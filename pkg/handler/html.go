@@ -25,15 +25,17 @@ import (
 	"net/http"
 
 	"github.com/and-rad/scs/v2"
+	"github.com/gorilla/csrf"
 	"github.com/julienschmidt/httprouter"
 )
 
 func Home(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data := map[string]interface{}{}
 		lang := sessionLang(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Home.Clone()).Funcs(template.FuncMap{"l10n": l10n})
-		if err := tpl.ExecuteTemplate(w, "home.html", struct{}{}); err != nil {
+		if err := tpl.ExecuteTemplate(w, "home.html", data); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
@@ -41,10 +43,11 @@ func Home(env *Environment) httprouter.Handle {
 
 func Login(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data := map[string]interface{}{"csrf": csrf.Token(r)}
 		lang := sessionLang(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Login.Clone()).Funcs(template.FuncMap{"l10n": l10n})
-		if err := tpl.ExecuteTemplate(w, "login.html", struct{}{}); err != nil {
+		if err := tpl.ExecuteTemplate(w, "login.html", data); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
@@ -52,10 +55,11 @@ func Login(env *Environment) httprouter.Handle {
 
 func App(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data := map[string]interface{}{"csrf": csrf.Token(r)}
 		lang := sessionLang(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.App.Clone()).Funcs(template.FuncMap{"l10n": l10n})
-		if err := tpl.ExecuteTemplate(w, "app.html", struct{}{}); err != nil {
+		if err := tpl.ExecuteTemplate(w, "app.html", data); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}
@@ -63,7 +67,7 @@ func App(env *Environment) httprouter.Handle {
 
 func Confirm(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		data := make(map[string]interface{})
+		data := map[string]interface{}{}
 		if token := ps.ByName("token"); token == "" {
 			data["status"] = http.StatusBadRequest
 		} else if err := env.DB.Execute(&app.Activate{Token: token}); err == app.ErrNotFound {
@@ -85,7 +89,10 @@ func Confirm(env *Environment) httprouter.Handle {
 
 func Reset(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		data := map[string]interface{}{"token": ps.ByName("token")}
+		data := map[string]interface{}{
+			"csrf":  csrf.Token(r),
+			"token": ps.ByName("token"),
+		}
 
 		lang := sessionLang(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }

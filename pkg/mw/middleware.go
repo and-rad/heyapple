@@ -21,10 +21,20 @@
 package mw
 
 import (
+	"errors"
 	"heyapple/pkg/handler"
 	"net/http"
+	"os"
+	"strconv"
 
+	"github.com/gorilla/csrf"
 	"github.com/julienschmidt/httprouter"
+)
+
+var (
+	ErrNoKey     = errors.New("HEYAPPLE_CSRF_KEY environment variable not found. Using insecure default value. Do NOT run this in a production environment!")
+	ErrNoSecure  = errors.New("HEYAPPLE_CSRF_SECURE environment variable not found. CSRF cookies will be sent over insecure connections. Do NOT run this in a production environment!")
+	ErrNotSecure = errors.New("HEYAPPLE_CSRF_SECURE is set to 'false'. CSRF cookies will be sent over insecure connections. Do NOT run this in a production environment!")
 )
 
 type Func func(httprouter.Handle) httprouter.Handle
@@ -79,4 +89,28 @@ func Options(w http.ResponseWriter, r *http.Request) {
 	}
 
 	w.WriteHeader(http.StatusNoContent)
+}
+
+func CSRF(env *handler.Environment, next http.Handler) http.Handler {
+	key := os.Getenv("HEYAPPLE_CSRF_KEY")
+	if key == "" {
+		env.Log.Warn(ErrNoKey)
+		key = "1f2e3d4c5b6a7a8b9c1d2f"
+	}
+
+	var secure bool
+	if secEnv, ok := os.LookupEnv("HEYAPPLE_CSRF_SECURE"); !ok {
+		env.Log.Warn(ErrNoSecure)
+	} else if b, err := strconv.ParseBool(secEnv); err != nil || !b {
+		env.Log.Warn(ErrNotSecure)
+	} else {
+		secure = true
+	}
+
+	protect := csrf.Protect([]byte(key),
+		csrf.CookieName("_csrf"),
+		csrf.Secure(secure),
+	)
+
+	return protect(next)
 }

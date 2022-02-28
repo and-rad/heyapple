@@ -24,6 +24,7 @@ import (
 	"heyapple/pkg/mw"
 	"net/http"
 	"net/http/httptest"
+	"os"
 	"reflect"
 	"strings"
 	"testing"
@@ -183,6 +184,71 @@ func TestAuth(t *testing.T) {
 
 		if loc, err := res.Result().Location(); err == nil && loc.Path != data.target {
 			t.Errorf("test case %d: location mismatch \nhave: %v\nwant: %v", idx, loc.Path, data.target)
+		}
+	}
+}
+
+func TestCSRF(t *testing.T) {
+	for idx, data := range []struct {
+		env    map[string]string
+		method string
+
+		msg    string
+		status int
+	}{
+		{ //00// missing env var, warn about it
+			env:    map[string]string{"HEYAPPLE_CSRF_KEY": "1234abcd"},
+			msg:    mw.ErrNoSecure.Error(),
+			status: 200,
+		},
+		{ //01// missing env var, warn about it
+			env:    map[string]string{"HEYAPPLE_CSRF_SECURE": "true"},
+			msg:    mw.ErrNoKey.Error(),
+			status: 200,
+		},
+		{ //02// insecure env var, warn about it
+			env: map[string]string{
+				"HEYAPPLE_CSRF_KEY":    "1234abcd",
+				"HEYAPPLE_CSRF_SECURE": "false",
+			},
+			msg:    mw.ErrNotSecure.Error(),
+			status: 200,
+		},
+		{ //03// always allow GET
+			env: map[string]string{
+				"HEYAPPLE_CSRF_KEY":    "1234abcd",
+				"HEYAPPLE_CSRF_SECURE": "true",
+			},
+			method: http.MethodGet,
+			status: 200,
+		},
+		{ //04// redirect POST if no token is present
+			env: map[string]string{
+				"HEYAPPLE_CSRF_KEY":    "1234abcd",
+				"HEYAPPLE_CSRF_SECURE": "true",
+			},
+			method: http.MethodPost,
+			status: 403,
+		},
+	} {
+		os.Clearenv()
+		for k, v := range data.env {
+			os.Setenv(k, v)
+			defer os.Unsetenv(k)
+		}
+
+		req := httptest.NewRequest(data.method, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{Log: mock.NewLog()}
+
+		mw.CSRF(env, mock.Handler{}).ServeHTTP(res, req)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if msg := env.Log.(*mock.Log).Warning; msg != data.msg {
+			t.Errorf("test case %d: log mismatch \nhave: %v\nwant: %v", idx, msg, data.msg)
 		}
 	}
 }

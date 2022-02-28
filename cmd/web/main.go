@@ -90,7 +90,8 @@ func main() {
 	env.Log.Log("# Starting Hey Apple #")
 	env.Log.Log("######################")
 
-	log.Fatal(http.ListenAndServe(address(), env.Session.LoadAndSave(router)))
+	log.Fatal(http.ListenAndServe(address(),
+		env.Session.LoadAndSave(mw.CSRF(env, router))))
 }
 
 // address builds the ListenAndServe address from the app config.

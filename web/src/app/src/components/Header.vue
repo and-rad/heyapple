@@ -1,17 +1,19 @@
 <script setup>
 import { RouterLink } from "vue-router";
-import { ref } from "vue";
+import { inject } from "vue";
 import { useI18n } from "vue-i18n";
 import HeaderImage from "./images/ImageHeader.vue";
 import ProfileImage from "./images/ImageProfile.vue";
 import BackArrow from "./images/ImageRightArrow.vue";
 
 const { t } = useI18n();
+const csrf = inject("csrfToken");
 
 function confirm(evt) {
 	evt.preventDefault();
 	fetch("/auth/local", {
 		method: "DELETE",
+		headers: { "X-CSRF-Token": csrf },
 	}).then((response) => {
 		if (response.ok) {
 			window.location = "/";

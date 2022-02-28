@@ -25,6 +25,7 @@
 			"action": "Sign in",
 			"err400": "Username or password missing",
 			"err401": "Incorrect username or password",
+			"err403": "It doesn't look like you're allowed to do that.",
 			"err500": "Unknown error occurred",
 			"errmail": "Not a valid e-mail address",
 			"signup": "Don't have an account yet?",
@@ -34,6 +35,7 @@
 		"register": {
 			"action": "Sign up",
 			"err401": "Insufficient password strength",
+			"err403": "It doesn't look like you're allowed to do that.",
 			"err409": "There is already an account using this e-mail address",
 			"err500": "Unknown error occurred",
 			"errpassempty": "Both password fields must be filled out",
@@ -47,6 +49,7 @@
 		"reset": {
 			"action": "Send password reset e-mail",
 			"err400": "E-mail address missing",
+			"err403": "It doesn't look like you're allowed to do that.",
 			"err404": "This e-mail address is not in use",
 			"err500": "Unknown error occurred",
 			"hint": "Enter your account's e-mail address. Instructions on how to reset your password will be sent to you.",

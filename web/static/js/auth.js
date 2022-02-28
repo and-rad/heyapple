@@ -31,7 +31,10 @@ HA.Auth = (function () {
 
 		fetch("/auth/reset", {
 			method: "PUT",
-			headers: { "Content-Type": "application/x-www-form-urlencoded" },
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				"X-CSRF-Token": document.querySelector("meta[name='_csrf']").content,
+			},
 			body: new URLSearchParams(formData),
 		}).then((response) => {
 			let msg = HA.L10n.t("reset." + response.status);

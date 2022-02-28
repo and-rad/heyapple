@@ -8,6 +8,8 @@ if (!lang && navigator.languages != undefined) {
 	lang = navigator.languages[0];
 }
 
+const csrfToken = document.querySelector("meta[name='_csrf']").content;
+
 fetch("/app/l10n.json")
 	.then((response) => response.json())
 	.then((messages) => {
@@ -18,6 +20,7 @@ fetch("/app/l10n.json")
 		});
 
 		const app = createApp(App);
+		app.provide("csrfToken", csrfToken);
 		app.use(router);
 		app.use(i18n);
 

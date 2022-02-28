@@ -249,7 +249,7 @@ main {
 	margin-bottom: 1em;
 }
 
-#jumbo figure figcaption h1 {
+#jumbo figure figcaption h2 {
 	font-size: 1.5em;
 	margin: 0;
 	font-weight: 300;
@@ -341,7 +341,7 @@ section article {
 	text-align: center;
 }
 
-#more figure figcaption h1 {
+#more figure figcaption h2 {
 	font-size: 1.2em;
 	margin: 0;
 	font-weight: 400;

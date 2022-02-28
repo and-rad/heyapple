@@ -5,7 +5,8 @@ import router from "./router";
 import Message from "./components/Message.vue";
 import HeaderImage from "./components/images/ImageHeader.vue";
 
-const csrfToken = document.querySelector("meta[name='_csrf']").content;
+const csrfMeta = document.querySelector("meta[name='_csrf']");
+const csrfToken = csrfMeta ? csrfMeta.content : "";
 
 fetch("/login/l10n.json")
 	.then((response) => response.json())

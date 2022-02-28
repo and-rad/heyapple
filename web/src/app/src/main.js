@@ -8,7 +8,8 @@ if (!lang && navigator.languages != undefined) {
 	lang = navigator.languages[0];
 }
 
-const csrfToken = document.querySelector("meta[name='_csrf']").content;
+const csrfMeta = document.querySelector("meta[name='_csrf']");
+const csrfToken = csrfMeta ? csrfMeta.content : "";
 
 fetch("/app/l10n.json")
 	.then((response) => response.json())

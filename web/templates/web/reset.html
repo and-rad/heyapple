@@ -20,12 +20,16 @@
 			<form class="reset">
 				<input type="hidden" name="token" value="{{ .token }}" />
 				<label>{{ l10n "form.pass" }}</label>
-				<input type="password" name="pass" />
+				<span class="password-field">
+					<input type="password" name="pass" />
+					<div class="password-strength-bar"></div>
+				</span>
 				<label>{{ l10n "form.confirm" }}</label>
 				<input type="password" name="pass" />
 				<input type="submit" value='{{ l10n "form.reset" }}' />
 			</form>
 			<p><a href="/">{{ l10n "reset.return" }}</a></p>
 		</main>
+		<script defer src="/js/zxcvbn.js"></script>
 	</body>
 </html>

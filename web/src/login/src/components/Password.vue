@@ -28,10 +28,10 @@ function updatePasswordStrength(password) {
 
 <style>
 .password-strength-bar {
-	background: green;
 	height: 4px;
-	width: 100%;
+	width: 0;
 	margin-top: 4px;
+	background: transparent;
 	transition: 0.2s ease-in-out;
 }
 </style>

@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-const props = defineProps({ msg: String, level: Number });
+const props = defineProps({ msg: String, level: String });
 
 const hasMessage = computed(() => {
 	return props.msg;

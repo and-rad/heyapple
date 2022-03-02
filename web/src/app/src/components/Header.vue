@@ -45,7 +45,7 @@ document.addEventListener("click", function () {
 			<button @click="toggleMenu">
 				<BackArrow />
 			</button>
-			<ul id="main">
+			<ul id="nav-main">
 				<li>
 					<RouterLink to="/">{{ $t("nav.food") }}</RouterLink>
 				</li>
@@ -59,10 +59,15 @@ document.addEventListener("click", function () {
 					<RouterLink to="/shopping">{{ $t("nav.shopping") }}</RouterLink>
 				</li>
 			</ul>
-			<ul id="user">
+			<ul id="nav-user">
 				<li>
 					<RouterLink to="/profile">{{ $t("nav.profile") }}</RouterLink>
+				</li>
+				<li>
 					<RouterLink to="/settings">{{ $t("nav.settings") }}</RouterLink>
+				</li>
+				<li>
+					<a href="https://docs.heyapple.org" target="_blank">{{ $t("nav.help") }}</a>
 				</li>
 				<li>
 					<a href="#" @click="confirm">{{ $t("nav.signout") }}</a>
@@ -110,7 +115,7 @@ header nav {
 	right: -340px;
 	bottom: 0;
 	background-color: #ffffff;
-	box-shadow: 0 0 6px #aaa;
+	box-shadow: var(--shadow-menu);
 	z-index: 110;
 	padding-top: 4em;
 	transition: right 0.25s ease-in-out;
@@ -144,10 +149,8 @@ header nav ul {
 	width: 320px;
 }
 
-header nav #user li:last-child,
-header nav #user {
-	padding-top: 0.5em;
-	margin-top: 0.5em;
+header #nav-user li:last-child,
+header #nav-user {
 	border-top: var(--border-light);
 }
 
@@ -202,35 +205,35 @@ header button:hover svg {
 		display: none !important;
 	}
 
-	header nav #main {
+	header #nav-main {
 		font-size: 1.2em;
 		display: flex;
 		align-items: center;
 		width: auto;
 	}
 
-	header nav #main a {
+	header #nav-main a {
 		color: var(--color-primary);
 		padding: 0.25em 1em;
 		border: none;
 	}
 
-	header nav #main a:hover,
-	header nav #main a:active,
-	header nav #main a:focus {
+	header #nav-main a:hover,
+	header #nav-main a:active,
+	header #nav-main a:focus {
 		color: var(--color-primary-dark);
 	}
 
-	header nav #main a.router-link-active {
+	header #nav-main a.router-link-active {
 		color: var(--color-secondary);
 	}
 
-	header nav #user {
+	header #nav-user {
 		position: fixed;
 		top: 4.5em;
 		right: -340px;
 		background-color: #ffffff;
-		box-shadow: 0 0 6px #ccc;
+		box-shadow: var(--shadow-menu);
 		z-index: 90;
 		margin: 0;
 		padding: 0.5em 0;
@@ -238,7 +241,7 @@ header button:hover svg {
 		transition: opacity 0.25s ease-in-out;
 	}
 
-	header nav.open #user {
+	header nav.open #nav-user {
 		right: 0.5em;
 		opacity: 1;
 	}

@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+import Main from "../components/Main.vue";
+</script>
 
 <template>
-	<main>Foods</main>
+	<Main>
+		<template #main> Food </template>
+	</Main>
 </template>
 
-<style>
-
-</style>
+<style></style>

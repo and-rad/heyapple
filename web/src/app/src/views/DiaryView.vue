@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+import Main from "../components/Main.vue";
+</script>
 
 <template>
-	<main>Diary</main>
+	<Main>
+		<template #main> Diary </template>
+	</Main>
 </template>
 
-<style>
-
-</style>
+<style></style>

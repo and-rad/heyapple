@@ -1,9 +1,11 @@
-<script setup></script>
+<script setup>
+import Main from "../components/Main.vue";
+</script>
 
 <template>
-	<main>User Pofile</main>
+	<Main>
+		<template #main> Profile </template>
+	</Main>
 </template>
 
-<style>
-
-</style>
+<style></style>

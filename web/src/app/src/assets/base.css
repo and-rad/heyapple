@@ -86,7 +86,7 @@
 	--border: 1px solid #aaaaaa;
 	--border-light: 1px solid #e0e0e0;
 
-	--color-background: #f8f8f8;
+	--color-background: #ffffff;
 	--color-primary: #13ad73;
 	--color-primary-dark: #038d53;
 	--color-secondary: #f2ac05;
@@ -98,6 +98,8 @@
 	--color-good-light: rgba(33, 171, 83, 0.1);
 	--color-warn: #ffc107;
 	--color-warn-light: rgba(255, 193, 7, 0.1);
+
+	--shadow-menu: 0 0 6px #aaaaaa;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -109,9 +111,19 @@
 *,
 *::before,
 *::after {
+	scrollbar-color: #bbb transparent;
+	scrollbar-width: thin;
 	box-sizing: border-box;
 	font-weight: normal;
 	margin: 0;
+}
+
+*::-webkit-scrollbar {
+	width: 4px;
+}
+
+*::-webkit-scrollbar-thumb {
+	background: #bbb;
 }
 
 *:focus,
@@ -119,12 +131,14 @@
 	outline: none;
 }
 
-strong {
-	font-weight: bold;
+html {
+	scroll-behavior: smooth;
 }
 
 body {
+	min-width: 350px;
 	min-height: 100vh;
+	overflow-x: hidden;
 	color: var(--color-text);
 	line-height: 1.5;
 	font-family: "Open Sans", -apple-system, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -132,6 +146,10 @@ body {
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
 	-moz-osx-font-smoothing: grayscale;
+}
+
+strong {
+	font-weight: bold;
 }
 
 a {
@@ -178,9 +196,17 @@ button {
 	transition: box-shadow 0.2s, background-color 0.2s;
 }
 
-input[type="submit"]:hover,
-input[type="button"]:hover,
-button:hover {
+@media (hover: hover) {
+	input[type="submit"]:hover,
+	input[type="button"]:hover,
+	button:hover {
+		box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
+	}
+}
+
+input[type="submit"]:active,
+input[type="button"]:active,
+button:active {
 	box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
 }
 

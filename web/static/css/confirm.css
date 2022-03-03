@@ -1,9 +1,9 @@
 @import url("./home.css");
 
-body {
+body > div {
+	flex-grow: 1;
 	display: flex;
 	align-items: center;
-	flex-direction: row;
 }
 
 header {
@@ -115,4 +115,23 @@ button[disabled] {
 	margin-top: 4px;
 	background: transparent;
 	transition: 0.2s ease-in-out;
+}
+
+footer {
+	background: none;
+	border-top: var(--border-light);
+	color: #aaa;
+	padding: 1em;
+	text-align: center;
+}
+
+footer nav a,
+footer nav span {
+	color: #aaa;
+	font-weight: normal;
+	margin: 0 0.5em;
+}
+
+footer nav a:hover {
+	color: var(--color-primary);
 }

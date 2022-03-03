@@ -6,23 +6,32 @@
 	</head>
 
 	<body>
-		<main>
-			<header>
-				<img src="/img/logomono.svg" id="logo" />
-				<div id="app-name">
-					<span>{{ l10n "confirm.title1"}}</span><span>{{ l10n "confirm.title2"}}</span>
-				</div>
-			</header>
+		<div>
+			<main>
+				<header>
+					<img src="/img/logomono.svg" id="logo" />
+					<div id="app-name">
+						<span>{{ l10n "confirm.title1"}}</span><span>{{ l10n "confirm.title2"}}</span>
+					</div>
+				</header>
 
-			{{ $msg := printf "confirm.%d" .status }}
+				{{ $msg := printf "confirm.%d" .status }}
 
-			{{ if eq .status 200 }}
-			<div class="msg">{{ l10n $msg }}</div>
-			<p><a href="/auth">{{ l10n "confirm.signin" }}</a></p>
-			{{ else }}
-			<div class="msg err">{{ l10n $msg }}</div>
-			<p><a href="/">{{ l10n "confirm.return" }}</a></p>
-			{{ end }}
-		</main>
+				{{ if eq .status 200 }}
+				<div class="msg">{{ l10n $msg }}</div>
+				<p><a href="/auth">{{ l10n "confirm.signin" }}</a></p>
+				{{ else }}
+				<div class="msg err">{{ l10n $msg }}</div>
+				<p><a href="/">{{ l10n "confirm.return" }}</a></p>
+				{{ end }}
+			</main>
+		</div>
+		<footer>
+			<nav>
+				<span>{{ raw (l10n "home.copyshort") }}</span>
+				<a href="#">{{ l10n "home.legal" }}</a>
+				<a href="#">{{ l10n "home.privacy" }}</a>
+			</nav>
+		</footer>
 	</body>
 </html>

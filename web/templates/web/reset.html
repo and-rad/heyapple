@@ -8,28 +8,37 @@
 	</head>
 
 	<body>
-		<main>
-			<header>
-				<img src="/img/logomono.svg" id="logo" />
-				<div id="app-name">
-					<span>{{ l10n "reset.title1"}}</span><span>{{ l10n "reset.title2"}}</span>
-				</div>
-			</header>
-			<div class="msg hidden"></div>
-			<p>{{ raw (l10n "reset.hint") }}</p>
-			<form class="reset">
-				<input type="hidden" name="token" value="{{ .token }}" />
-				<label>{{ l10n "form.pass" }}</label>
-				<span class="password-field">
+		<div>
+			<main>
+				<header>
+					<img src="/img/logomono.svg" id="logo" />
+					<div id="app-name">
+						<span>{{ l10n "reset.title1"}}</span><span>{{ l10n "reset.title2"}}</span>
+					</div>
+				</header>
+				<div class="msg hidden"></div>
+				<p>{{ raw (l10n "reset.hint") }}</p>
+				<form class="reset">
+					<input type="hidden" name="token" value="{{ .token }}" />
+					<label>{{ l10n "form.pass" }}</label>
+					<span class="password-field">
+						<input type="password" name="pass" />
+						<div class="password-strength-bar"></div>
+					</span>
+					<label>{{ l10n "form.confirm" }}</label>
 					<input type="password" name="pass" />
-					<div class="password-strength-bar"></div>
-				</span>
-				<label>{{ l10n "form.confirm" }}</label>
-				<input type="password" name="pass" />
-				<input type="submit" value='{{ l10n "form.reset" }}' />
-			</form>
-			<p><a href="/">{{ l10n "reset.return" }}</a></p>
-		</main>
+					<input type="submit" value='{{ l10n "form.reset" }}' />
+				</form>
+				<p><a href="/">{{ l10n "reset.return" }}</a></p>
+			</main>
+		</div>
+		<footer>
+			<nav>
+				<span>{{ raw (l10n "home.copyshort") }}</span>
+				<a href="#">{{ l10n "home.legal" }}</a>
+				<a href="#">{{ l10n "home.privacy" }}</a>
+			</nav>
+		</footer>
 		<script defer src="/js/zxcvbn.js"></script>
 	</body>
 </html>

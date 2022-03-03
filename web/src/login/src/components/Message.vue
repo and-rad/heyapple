@@ -21,10 +21,6 @@ const hasMessage = computed(() => {
 	margin: 1em 0;
 }
 
-.message.hidden {
-	display: none;
-}
-
 .message.err {
 	background-color: var(--color-bad-light);
 	border-color: var(--color-bad);

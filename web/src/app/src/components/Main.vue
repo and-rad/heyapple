@@ -27,10 +27,7 @@ function toggleDetails() {
 <template>
 	<main :class="[filter, details]">
 		<div id="filter">
-			<section>This is the "Create New" widget</section>
-			<section>
-				<slot name="filter"> This is the main search & filter area</slot>
-			</section>
+			<slot name="filter"> This is the main search & filter area</slot>
 		</div>
 
 		<div id="main">
@@ -42,7 +39,6 @@ function toggleDetails() {
 
 		<div id="details">
 			<slot name="details">This is the details area</slot>
-			<section></section>
 		</div>
 	</main>
 </template>
@@ -56,6 +52,22 @@ function toggleDetails() {
 	bottom: 0;
 	overflow-y: auto;
 	background-color: var(--color-background);
+}
+
+#details > section,
+#filter > section {
+	padding: 0.5em;
+	border-bottom: var(--border-light);
+}
+
+#details > section > h2,
+#filter > section > h2 {
+	display: none;
+}
+
+#details > section:last-child,
+#filter > section:last-child {
+	border: none;
 }
 
 #filter {
@@ -97,7 +109,7 @@ main.open-filter #main {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
-	padding: 0.25em;
+	padding: 0.5em;
 	user-select: none;
 }
 

@@ -1,5 +1,16 @@
 {
 	"en": {
+		"aria": {
+			"headnew": "New item",
+			"headsearch": "Search and filters"
+		},
+		"filter": {
+			"namehint": "Enter name",
+			"new": "New"
+		},
+		"food": {
+			"hint": "Orange"
+		},
 		"nav":{
 			"diary": "Diary",
 			"food": "Food",

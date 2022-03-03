@@ -46,7 +46,7 @@
 			"err500": "Unknown error occurred",
 			"errpassempty": "Both password fields must be filled out",
 			"errpassmatch": "The passwords don't match",
-			"hint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters.",
+			"hint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters. By clicking the \"Sign up\" button below, you agree to our <a href='/terms'>terms and conditions</a> and our <a href='/privacy'>privacy policy</a>. Please make sure you've read them carefully.",
 			"signin": "Already have an account?",
 			"success": "Registration successful! We've sent an email to {addr}. Open it up to activate your account.",
 			"title1": "Sign ",

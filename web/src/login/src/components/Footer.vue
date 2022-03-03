@@ -4,8 +4,9 @@
 	<footer>
 		<nav>
 			<span>{{ $t("foot.copy") }}</span>
-			<a href="#">{{ $t("foot.legal") }}</a>
-			<a href="#">{{ $t("foot.privacy") }}</a>
+			<a href="/terms" target="_blank">{{ $t("foot.terms") }}</a>
+			<a href="/legal" target="_blank">{{ $t("foot.legal") }}</a>
+			<a href="/privacy" target="_blank">{{ $t("foot.privacy") }}</a>
 		</nav>
 	</footer>
 </template>

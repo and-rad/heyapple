@@ -17,6 +17,13 @@
 	"home.login": "Anmelden",
 	"home.privacy": "Datenschutz",
 	"home.register": "Registrieren",
+	"home.terms": "AGB",
 
-	"lang": "de"
+	"lang": "de",
+
+	"legal.head": "Impressum",
+
+	"privacy.head": "Datenschutz",
+
+	"terms.head": "Allgemeine Geschäftsbedingungen"
 }

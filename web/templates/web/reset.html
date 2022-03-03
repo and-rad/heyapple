@@ -32,13 +32,7 @@
 				<p><a href="/">{{ l10n "reset.return" }}</a></p>
 			</main>
 		</div>
-		<footer>
-			<nav>
-				<span>{{ raw (l10n "home.copyshort") }}</span>
-				<a href="#">{{ l10n "home.legal" }}</a>
-				<a href="#">{{ l10n "home.privacy" }}</a>
-			</nav>
-		</footer>
+		{{ template "footer" . }}
 		<script defer src="/js/zxcvbn.js"></script>
 	</body>
 </html>

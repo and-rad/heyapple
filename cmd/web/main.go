@@ -59,6 +59,9 @@ func main() {
 	router.GET("/", chain(handler.Home(env), mw.Anon(env, "/app")))
 	router.GET("/app", chain(handler.App(env), mw.Auth(env, "/auth")))
 	router.GET("/auth", chain(handler.Login(env), mw.Anon(env, "/app")))
+	router.GET("/legal", handler.Legal(env))
+	router.GET("/privacy", handler.Privacy(env))
+	router.GET("/terms", handler.Terms(env))
 	router.GET("/confirm/:token", handler.Confirm(env))
 	router.GET("/reset/:token", handler.Reset(env))
 

@@ -24,7 +24,8 @@
 		"foot": {
 			"copy": "© 2021-2022",
 			"legal": "Legal Notice",
-			"privacy": "Privacy Policy"
+			"privacy": "Privacy Policy",
+			"terms": "Terms"
 		},
 		"login": {
 			"action": "Sign in",

@@ -80,14 +80,6 @@
 			{{ template "more" . }}
 
 		</main>
-		<footer>
-			<div>
-				<span>{{ raw (l10n "home.copy") }}</span>
-				<nav>
-					<a href="#">{{ l10n "home.legal" }}</a>
-					<a href="#">{{ l10n "home.privacy" }}</a>
-				</nav>
-			</div>
-		</footer>
+		{{ template "footer-home" . }}
 	</body>
 </html>

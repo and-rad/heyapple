@@ -44,6 +44,7 @@
 	"home.login": "Sign in",
 	"home.privacy": "Privacy Policy",
 	"home.register": "Sign up",
+	"home.terms": "Terms",
 
 	"jumbo.title": "The Complete Food Tracking Solution",
 	"jumbo.subtitle": "From frying pan to shopping cart, HeyApple provides everything you need to track nutrients and plan your meals.",
@@ -58,6 +59,8 @@
 
 	"lang": "en",
 
+	"legal.head": "Legal Notice",
+
 	"more.title": "More Goodies",
 	"more.apps.head": "There's an app for that",
 	"more.apps.body": "We have dedicated apps for every major OS and browser. You can even write your own!",
@@ -71,6 +74,8 @@
 	"more.quality.body": "All nutrients are verified before they make it into the database.",
 	"more.source.head": "Make it your own",
 	"more.source.body": "HeyApple is released under the AGPL. You can inspect the code, contribute, or fork it at any time.",
+
+	"privacy.head": "Privacy Policy",
 
 	"recipe.title": "Your Favorite Recipes",
 	"recipe.subtitle": "Create recipes to stay on top of your nutrient targets. Or just because you like cooking.",
@@ -93,5 +98,7 @@
 	"shop.subtitle": "See what you need to buy on your next run to the store at a single glance. No need to maintain separate lists or use multiple apps.",
 	"shop.list.1": "Select the days you want to shop for to let the list update automatically.",
 	"shop.list.2": "Sort items by name or aisle.",
-	"shop.list.3": "Create custom shopping lists for non-food items."
+	"shop.list.3": "Create custom shopping lists for non-food items.",
+
+	"terms.head": "Terms of Service"
 }

@@ -65,6 +65,42 @@ func App(env *Environment) httprouter.Handle {
 	}
 }
 
+func Legal(env *Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data := map[string]interface{}{}
+		lang := sessionLang(env.Session, r)
+		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
+		tpl := template.Must(web.Legal.Clone()).Funcs(template.FuncMap{"l10n": l10n})
+		if err := tpl.ExecuteTemplate(w, "legal.html", data); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
+}
+
+func Privacy(env *Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data := map[string]interface{}{}
+		lang := sessionLang(env.Session, r)
+		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
+		tpl := template.Must(web.Privacy.Clone()).Funcs(template.FuncMap{"l10n": l10n})
+		if err := tpl.ExecuteTemplate(w, "privacy.html", data); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
+}
+
+func Terms(env *Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		data := map[string]interface{}{}
+		lang := sessionLang(env.Session, r)
+		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
+		tpl := template.Must(web.Terms.Clone()).Funcs(template.FuncMap{"l10n": l10n})
+		if err := tpl.ExecuteTemplate(w, "terms.html", data); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		}
+	}
+}
+
 func Confirm(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		data := map[string]interface{}{}

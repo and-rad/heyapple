@@ -1,0 +1,23 @@
+{{ define "footer" }}
+<footer>
+    <nav>
+        <span>{{ raw (l10n "home.copyshort") }}</span>
+        <a href="/terms">{{ l10n "home.terms" }}</a>
+        <a href="/legal">{{ l10n "home.legal" }}</a>
+        <a href="/privacy">{{ l10n "home.privacy" }}</a>
+    </nav>
+</footer>
+{{ end }}
+
+{{ define "footer-home" }}
+<footer>
+    <div>
+        <span>{{ raw (l10n "home.copy") }}</span>
+        <nav>
+            <a href="/terms">{{ l10n "home.terms" }}</a>
+            <a href="/legal">{{ l10n "home.legal" }}</a>
+            <a href="/privacy">{{ l10n "home.privacy" }}</a>
+        </nav>
+    </div>
+</footer>
+{{ end }}

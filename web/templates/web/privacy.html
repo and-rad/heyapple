@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang='{{ l10n "lang" }}' dir="ltr">
+	<head>
+		{{ template "meta" . }}
+		<link rel="stylesheet" href="/css/home.css">
+	</head>
+
+	<body class="legal">
+		<header>
+			<img src="/img/logomono.svg" id="logo">
+			<div id="app-name"><span>Hey</span><span>Apple</span></div>
+		</header>
+
+		<main>
+			<h1>{{ l10n "privacy.head" }}</h1>
+		</main>
+
+		{{ template "footer-home" . }}
+	</body>
+</html>

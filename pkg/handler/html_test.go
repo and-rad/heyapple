@@ -178,6 +178,147 @@ func TestApp(t *testing.T) {
 	web.App = app
 }
 
+func TestLegal(t *testing.T) {
+	tmp := web.Legal
+
+	for idx, data := range []struct {
+		tmpl string
+
+		out    string
+		status int
+	}{
+		{ //00// function does not exist
+			tmpl:   `{{ .Foo "Bar" }}`,
+			status: 500,
+		},
+		{ //01// success
+			tmpl:   `{{ if true }}hi{{ end }}`,
+			status: 200,
+			out:    "hi",
+		},
+		{ //02// translate string
+			tmpl:   `{{ l10n "msg.hi" }}`,
+			status: 200,
+			out:    "Hi!",
+		},
+	} {
+		web.Legal = template.Must(template.New("legal.html").Funcs(funcs).Parse(data.tmpl))
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{
+			DB:      mock.NewDB(),
+			Session: scs.New(),
+			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+		}
+
+		handler.Legal(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, body, data.out)
+		}
+	}
+
+	web.Legal = tmp
+}
+
+func TestPrivacy(t *testing.T) {
+	tmp := web.Privacy
+
+	for idx, data := range []struct {
+		tmpl string
+
+		out    string
+		status int
+	}{
+		{ //00// function does not exist
+			tmpl:   `{{ .Foo "Bar" }}`,
+			status: 500,
+		},
+		{ //01// success
+			tmpl:   `{{ if true }}hi{{ end }}`,
+			status: 200,
+			out:    "hi",
+		},
+		{ //02// translate string
+			tmpl:   `{{ l10n "msg.hi" }}`,
+			status: 200,
+			out:    "Hi!",
+		},
+	} {
+		web.Privacy = template.Must(template.New("privacy.html").Funcs(funcs).Parse(data.tmpl))
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{
+			DB:      mock.NewDB(),
+			Session: scs.New(),
+			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+		}
+
+		handler.Privacy(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, body, data.out)
+		}
+	}
+
+	web.Home = tmp
+}
+
+func TestTerms(t *testing.T) {
+	tmp := web.Terms
+
+	for idx, data := range []struct {
+		tmpl string
+
+		out    string
+		status int
+	}{
+		{ //00// function does not exist
+			tmpl:   `{{ .Foo "Bar" }}`,
+			status: 500,
+		},
+		{ //01// success
+			tmpl:   `{{ if true }}hi{{ end }}`,
+			status: 200,
+			out:    "hi",
+		},
+		{ //02// translate string
+			tmpl:   `{{ l10n "msg.hi" }}`,
+			status: 200,
+			out:    "Hi!",
+		},
+	} {
+		web.Terms = template.Must(template.New("terms.html").Funcs(funcs).Parse(data.tmpl))
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{
+			DB:      mock.NewDB(),
+			Session: scs.New(),
+			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+		}
+
+		handler.Terms(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, body, data.out)
+		}
+	}
+
+	web.Home = tmp
+}
+
 func TestConfirm(t *testing.T) {
 	tmp := web.Confirm
 

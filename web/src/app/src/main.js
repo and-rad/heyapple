@@ -11,6 +11,21 @@ if (!lang && navigator.languages != undefined) {
 const csrfMeta = document.querySelector("meta[name='_csrf']");
 const csrfToken = csrfMeta ? csrfMeta.content : "";
 
+const perms = (function () {
+	const _current = document.documentElement.dataset.perm || 1;
+	const _createFood = 0x00010000;
+	const _editFood = 0x00020000;
+
+	function _check(perm) {
+		return (_current & perm) == perm;
+	}
+
+	return {
+		canCreateFood: _check(_createFood),
+		canEditFood: _check(_editFood),
+	};
+})();
+
 fetch("/app/l10n.json")
 	.then((response) => response.json())
 	.then((messages) => {
@@ -22,6 +37,7 @@ fetch("/app/l10n.json")
 
 		const app = createApp(App);
 		app.provide("csrfToken", csrfToken);
+		app.provide("perms", perms);
 		app.use(router);
 		app.use(i18n);
 

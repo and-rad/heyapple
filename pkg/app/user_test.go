@@ -31,6 +31,7 @@ func TestAuthenticate_Fetch(t *testing.T) {
 		db    *mock.DB
 
 		id   int
+		perm int
 		lang string
 		err  error
 	}{
@@ -78,6 +79,7 @@ func TestAuthenticate_Fetch(t *testing.T) {
 				Perm:  app.PermLogin,
 			}),
 			id:   42,
+			perm: app.PermLogin,
 			lang: "en",
 		},
 	} {
@@ -85,7 +87,7 @@ func TestAuthenticate_Fetch(t *testing.T) {
 		err := qry.Fetch(data.db)
 
 		if err != data.err {
-			t.Errorf("test case %d: error mismatch \nhave: %v \nwant: %v", idx, err, data.err)
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
 		}
 
 		if err == nil && qry.Pass != "" {
@@ -93,11 +95,15 @@ func TestAuthenticate_Fetch(t *testing.T) {
 		}
 
 		if qry.ID != data.id {
-			t.Errorf("test case %d: id mismatch \nhave: %v \nwant: %v", idx, qry.ID, data.id)
+			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, qry.ID, data.id)
+		}
+
+		if qry.Perm != data.perm {
+			t.Errorf("test case %d: permission mismatch \nhave: %v\nwant: %v", idx, qry.Perm, data.perm)
 		}
 
 		if qry.Lang != data.lang {
-			t.Errorf("test case %d: language mismatch \nhave: %v \nwant: %v", idx, qry.Lang, data.lang)
+			t.Errorf("test case %d: language mismatch \nhave: %v\nwant: %v", idx, qry.Lang, data.lang)
 		}
 	}
 }

@@ -76,11 +76,13 @@ func (c *CreateUser) Execute(db DB) error {
 
 // Authenticate is a query that authenticates a user by
 // checking against e-mail and password. If successful,
-// the user's id is stored in the command.
+// the user's id, language, and permissions are stored
+// in the command.
 type Authenticate struct {
 	Email string
 	Pass  string
 	Lang  string
+	Perm  int
 	ID    int
 }
 
@@ -93,6 +95,7 @@ func (q *Authenticate) Fetch(db DB) error {
 		return ErrCredentials
 	} else {
 		q.ID = user.ID
+		q.Perm = user.Perm
 		q.Lang = user.Lang
 		q.Pass = ""
 	}

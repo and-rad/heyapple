@@ -61,6 +61,7 @@ func LocalLogin(env *handler.Environment) httprouter.Handle {
 			w.WriteHeader(http.StatusOK)
 			env.Session.Put(r.Context(), "id", query.ID)
 			env.Session.Put(r.Context(), "lang", query.Lang)
+			env.Session.Put(r.Context(), "perm", query.Perm)
 		}
 	}
 }

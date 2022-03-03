@@ -19,6 +19,7 @@
 package handler
 
 import (
+	"heyapple/pkg/app"
 	"net/http"
 	"net/http/httptest"
 	"strings"
@@ -27,22 +28,26 @@ import (
 	"github.com/and-rad/scs/v2"
 )
 
-func Test_sessionLang(t *testing.T) {
+func Test_sessionData(t *testing.T) {
 	for idx, data := range []struct {
 		setCookie bool
 		setHeader bool
-		out       string
+
+		lang string
+		perm int
 	}{
 		{ //00// empty data
-			out: "",
+			lang: "",
+			perm: 0,
 		},
 		{ //01// from session
 			setCookie: true,
-			out:       "en",
+			lang:      "en",
+			perm:      app.PermAdmin,
 		},
 		{ //02// from header
 			setHeader: true,
-			out:       "en,fr",
+			lang:      "en,fr",
 		},
 	} {
 		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
@@ -52,6 +57,7 @@ func Test_sessionLang(t *testing.T) {
 			if ctx, err := sm.Load(req.Context(), "abc"); err == nil {
 				req = req.WithContext(ctx)
 				sm.Put(req.Context(), "lang", "en")
+				sm.Put(req.Context(), "perm", app.PermAdmin)
 			}
 		}
 
@@ -59,8 +65,12 @@ func Test_sessionLang(t *testing.T) {
 			req.Header.Set("Accept-Language", "en,fr")
 		}
 
-		if out := sessionLang(sm, req); out != data.out {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, out, data.out)
+		lang, perm := sessionData(sm, req)
+		if lang != data.lang {
+			t.Errorf("test case %d: language mismatch \nhave: %v\nwant: %v", idx, lang, data.lang)
+		}
+		if perm != data.perm {
+			t.Errorf("test case %d: permission mismatch \nhave: %v\nwant: %v", idx, perm, data.perm)
 		}
 	}
 }

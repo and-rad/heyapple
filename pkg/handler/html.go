@@ -32,7 +32,7 @@ import (
 func Home(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		data := map[string]interface{}{}
-		lang := sessionLang(env.Session, r)
+		lang, _ := sessionData(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Home.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "home.html", data); err != nil {
@@ -44,7 +44,7 @@ func Home(env *Environment) httprouter.Handle {
 func Login(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		data := map[string]interface{}{"csrf": csrf.Token(r)}
-		lang := sessionLang(env.Session, r)
+		lang, _ := sessionData(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Login.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "login.html", data); err != nil {
@@ -55,8 +55,12 @@ func Login(env *Environment) httprouter.Handle {
 
 func App(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		data := map[string]interface{}{"csrf": csrf.Token(r)}
-		lang := sessionLang(env.Session, r)
+		lang, perm := sessionData(env.Session, r)
+		data := map[string]interface{}{
+			"csrf": csrf.Token(r),
+			"perm": perm,
+		}
+
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.App.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "app.html", data); err != nil {
@@ -68,7 +72,7 @@ func App(env *Environment) httprouter.Handle {
 func Legal(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		data := map[string]interface{}{}
-		lang := sessionLang(env.Session, r)
+		lang, _ := sessionData(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Legal.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "legal.html", data); err != nil {
@@ -80,7 +84,7 @@ func Legal(env *Environment) httprouter.Handle {
 func Privacy(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		data := map[string]interface{}{}
-		lang := sessionLang(env.Session, r)
+		lang, _ := sessionData(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Privacy.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "privacy.html", data); err != nil {
@@ -92,7 +96,7 @@ func Privacy(env *Environment) httprouter.Handle {
 func Terms(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		data := map[string]interface{}{}
-		lang := sessionLang(env.Session, r)
+		lang, _ := sessionData(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Terms.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "terms.html", data); err != nil {
@@ -114,7 +118,7 @@ func Confirm(env *Environment) httprouter.Handle {
 			data["status"] = http.StatusOK
 		}
 
-		lang := sessionLang(env.Session, r)
+		lang, _ := sessionData(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Confirm.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "confirm.html", data); err != nil {
@@ -130,7 +134,7 @@ func Reset(env *Environment) httprouter.Handle {
 			"token": ps.ByName("token"),
 		}
 
-		lang := sessionLang(env.Session, r)
+		lang, _ := sessionData(env.Session, r)
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Reset.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "reset.html", data); err != nil {
@@ -139,12 +143,16 @@ func Reset(env *Environment) httprouter.Handle {
 	}
 }
 
-func sessionLang(sm *scs.SessionManager, r *http.Request) string {
-	if lang, ok := sm.Get(r.Context(), "lang").(string); ok && lang != "" {
-		return lang
+func sessionData(sm *scs.SessionManager, r *http.Request) (lang string, perm int) {
+	if l, ok := sm.Get(r.Context(), "lang").(string); ok && l != "" {
+		lang = l
 	}
 	if langs := r.Header.Get("Accept-Language"); langs != "" {
-		return langs
+		lang = langs
 	}
-	return ""
+	if p, ok := sm.Get(r.Context(), "perm").(int); ok {
+		perm = p
+	}
+
+	return
 }

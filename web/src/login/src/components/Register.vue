@@ -65,9 +65,7 @@ function confirm(evt) {
 		<label>{{ $t("form.confirm") }}</label>
 		<PasswordField name="pass" v-model="pass2" />
 		<input type="submit" :value="$t('register.action')" @click="confirm" />
-		<footer>
-			<span>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</span>
-		</footer>
+		<p>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</p>
 	</form>
 </template>
 

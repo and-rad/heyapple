@@ -21,6 +21,11 @@
 			"pass": "Password",
 			"reset": "Reset password"
 		},
+		"foot": {
+			"copy": "© 2021-2022",
+			"legal": "Legal Notice",
+			"privacy": "Privacy Policy"
+		},
 		"login": {
 			"action": "Sign in",
 			"err400": "Username or password missing",

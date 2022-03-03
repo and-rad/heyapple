@@ -1,24 +1,39 @@
 <script setup>
+import Footer from "./components/Footer.vue";
 import { RouterView } from "vue-router";
 </script>
 
 <template>
-	<RouterView />
+	<div>
+		<main>
+			<RouterView />
+		</main>
+	</div>
+	<Footer />
 </template>
 
 <style>
 @import "../../app/src/assets/base.css";
 
-body {
+#app {
+	width: 100%;
+	min-height: 100vh;
+	margin: 0 auto;
+	display: flex;
+	flex-direction: column;
+}
+
+#app > div {
+	flex-grow: 1;
 	display: flex;
 	align-items: center;
 }
 
-#app {
-	padding: 1em;
+main {
 	width: 100%;
 	max-width: 640px;
 	margin: 0 auto;
+	padding: 1em;
 }
 
 h1 {
@@ -32,13 +47,7 @@ label {
 }
 
 input[type="submit"] {
-	margin-top: 2em;
-}
-
-form footer {
-	margin-top: 0.5em;
-	display: flex;
-	justify-content: space-between;
+	margin: 2em 0 1em;
 }
 
 header {

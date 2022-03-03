@@ -3,25 +3,24 @@
 <template>
 	<footer>
 		<nav>
-			<a href="#">{{ $t("nav.legal") }}</a>
-			<a href="#">{{ $t("nav.privacy") }}</a>
+			<span>{{ $t("foot.copy") }}</span>
+			<a href="#">{{ $t("foot.legal") }}</a>
+			<a href="#">{{ $t("foot.privacy") }}</a>
 		</nav>
 	</footer>
 </template>
 
 <style>
 footer {
+	font-size: 14px;
 	padding: 1em;
 	border-top: var(--border-light);
 	text-align: center;
 }
 
-footer nav {
-	font-size: 14px;
-}
-
+footer nav span,
 footer nav a {
-	color: #aaaaaa;
+	color: #aaa;
 	display: inline-block;
 	margin: 0 0.5em;
 }

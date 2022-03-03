@@ -50,9 +50,7 @@ function confirm(evt) {
 		<label>{{ $t("form.pass") }} <RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink></label>
 		<PasswordField name="pass" />
 		<input type="submit" :value="$t('login.action')" @click="confirm" />
-		<footer>
-			<span>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("register.action") }}</RouterLink>.</span>
-		</footer>
+		<p>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("register.action") }}</RouterLink>.</p>
 	</form>
 </template>
 

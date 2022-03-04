@@ -8,8 +8,12 @@
 			"new": "New"
 		},
 		"food": {
+			"carbs": "Carbohydrates",
+			"energy": "Energy",
+			"fat": "Fat",
 			"hintnew": "New name...",
-			"hintsearch": "Find food..."
+			"hintsearch": "Find food...",
+			"protein": "Protein"
 		},
 		"nav":{
 			"diary": "Diary",
@@ -29,6 +33,10 @@
 			"err404": "Sign out failed, session not found. Are you even signd in?",
 			"err403": "It doesn't look like you're allowed to do that.",
 			"err500": "Sign out failed, internal server error. This shouldn't happen."
+		},
+		"unit": {
+			"g": "g",
+			"cal": "kcal"
 		}
 	}
 }

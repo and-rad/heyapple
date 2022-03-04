@@ -51,6 +51,7 @@ function toggleDetails() {
 	top: 4em;
 	bottom: 0;
 	overflow-y: auto;
+	overflow-x: hidden;
 	background-color: var(--color-background);
 }
 
@@ -81,6 +82,10 @@ function toggleDetails() {
 
 main.open-filter #filter {
 	left: 0;
+}
+
+#filter .slider {
+	margin-top: 2em;
 }
 
 #details {

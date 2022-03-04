@@ -100,7 +100,10 @@
 	--color-warn: #ffc107;
 	--color-warn-light: rgba(255, 193, 7, 0.1);
 
+	--font-stack: "Open Sans", Helvetica, Arial, sans-serif;
+
 	--shadow-menu: 0 0 6px #aaaaaa;
+	--shadow-button: 0 0 6px #888;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -142,7 +145,7 @@ body {
 	overflow-x: hidden;
 	color: var(--color-text);
 	line-height: 1.5;
-	font-family: "Open Sans", -apple-system, Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+	font-family: var(--font-stack);
 	font-size: 16px;
 	text-rendering: optimizeLegibility;
 	-webkit-font-smoothing: antialiased;
@@ -166,6 +169,8 @@ select {
 	display: block;
 	line-height: 150%;
 	font-size: 16px;
+	font-family: var(--font-stack);
+	color: var(--color-text);
 	padding: 0.5em;
 	border: var(--border);
 	border-radius: 4px;
@@ -182,7 +187,7 @@ input[type="search"]:focus,
 input[type="search"]:active,
 select:focus,
 select:active {
-	border-color: var(--color-primary);
+	border-color: var(--color-primary) !important;
 }
 
 input[type="submit"],

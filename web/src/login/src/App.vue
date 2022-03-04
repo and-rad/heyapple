@@ -31,7 +31,7 @@ import { RouterView } from "vue-router";
 
 main {
 	width: 100%;
-	max-width: 640px;
+	max-width: 480px;
 	margin: 0 auto;
 	padding: 1em;
 }

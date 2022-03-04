@@ -1,11 +1,15 @@
 <script setup>
 import Main from "../components/Main.vue";
-import NewFood from "../components/ClickableInput.vue";
 import Search from "../components/Search.vue";
 import Slider from "../components/Slider.vue";
-import { inject } from "vue";
+import NewFood from "../components/ClickableInput.vue";
+import FoodList from "../components/FoodList.vue";
+import { ref, inject } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const perms = inject("perms");
+const foods = ref([]);
 
 function newFood(name) {
 	// TODO create new food
@@ -13,8 +17,8 @@ function newFood(name) {
 }
 
 function updateList(status, items) {
-	// TODO update food list
-	console.log(status, items);
+	items.forEach(i => i.name = t(i.id.toString()))
+	foods.value = items;
 }
 </script>
 
@@ -35,7 +39,9 @@ function updateList(status, items) {
 				</Search>
 			</section>
 		</template>
-		<template #main> Food </template>
+		<template #main>
+			<FoodList :items="foods" />
+		</template>
 	</Main>
 </template>
 

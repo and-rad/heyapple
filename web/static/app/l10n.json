@@ -1,5 +1,7 @@
 {
 	"en": {
+		"1": "Apple",
+		"2": "Banana",
 		"aria": {
 			"headnew": "New item",
 			"headsearch": "Search and filters"
@@ -9,10 +11,12 @@
 		},
 		"food": {
 			"carbs": "Carbohydrates",
+			"carbs2": "Carbs",
 			"energy": "Energy",
 			"fat": "Fat",
 			"hintnew": "New name...",
 			"hintsearch": "Find food...",
+			"name": "Name",
 			"protein": "Protein"
 		},
 		"nav":{

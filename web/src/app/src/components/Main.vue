@@ -34,7 +34,9 @@ function toggleDetails() {
 			<div class="controls">
 				<button @click="toggleFilter" class="open-close"><MenuImage /></button>
 			</div>
-			<slot name="main">This is the main area</slot>
+			<div class="content">
+				<slot name="main">This is the main area</slot>
+			</div>
 		</div>
 
 		<div id="details">
@@ -103,6 +105,8 @@ main.open-details #details {
 #main {
 	left: 0;
 	right: 0;
+	display: flex;
+	flex-direction: column;
 	transition: 0.25s;
 }
 
@@ -115,6 +119,7 @@ main.open-filter #main {
 	align-items: center;
 	justify-content: space-between;
 	padding: 0.5em;
+	min-height: 3.5em;
 	user-select: none;
 }
 
@@ -134,33 +139,96 @@ button.open-close > svg {
 	fill: var(--color-primary);
 }
 
-/*
-button.open-close > div {
-	width: 1.5em;
-	height: 2px;
-	background-color: #aaa;
-	transform-origin: center;
-	transition: 0.5s ease-in-out;
+#main .content {
+	flex-grow: 1;
+	overflow: auto;
 }
 
-button.open-close > div:nth-child(2) {
-	margin: 6px auto;
+#main table {
+	width: 100%;
+	border-collapse: separate;
+	border-spacing: 0;
+	white-space: nowrap;
+	user-select: none;
 }
 
-main.open-filter button.open-close div:first-child {
-	background-color: var(--color-secondary);
-	transform: translateY(10px) rotate(45deg);
+#main td,
+#main th {
+	padding: 1em 0.5em;
+	text-align: left;
+	cursor: default;
+	overflow: hidden;
+	max-width: 6em;
 }
 
-main.open-filter button.open-close div:nth-child(2) {
+#main td.name {
+	text-overflow: ellipsis;
+}
+
+#main th {
+	border-bottom: var(--border-light);
+	color: var(--color-text-light);
+	padding-top: 0.5em;
+}
+
+#main th.sort {
+	cursor: pointer;
+}
+
+#main th.sort .icon {
 	opacity: 0;
+	transition: opacity 0.2s;
 }
 
-main.open-filter button.open-close div:last-child {
-	background-color: var(--color-secondary);
-	transform: translateY(-9px) rotate(-45deg);
+#main th.sort.active .icon {
+	opacity: 0.4;
 }
-*/
+
+#main thead th {
+	background-color: var(--color-background);
+	position: sticky;
+	z-index: 1;
+	top: 0;
+}
+
+#main table .num {
+	text-align: right;
+	width: 6em;
+}
+
+#main table .num .unit {
+	color: var(--color-text-light);
+}
+
+#main table .l,
+#main table .m,
+#main table .s {
+	display: none;
+}
+
+@media (hover: hover) {
+	#main tbody tr:hover {
+		background-color: #f8f8f8;
+	}
+
+	#main th.sort:hover .icon {
+		opacity: 0.5;
+	}
+}
+
+/* screen size small */
+@media only screen and (min-width: 400px) {
+	#main table .s {
+		display: table-cell;
+	}
+}
+
+/* screen size smallish */
+@media only screen and (min-width: 640px) {
+	#main table .m {
+		display: table-cell;
+	}
+}
 
 /* screen size medium */
 @media only screen and (min-width: 800px) {

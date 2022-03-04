@@ -4,12 +4,12 @@
 			"headnew": "New item",
 			"headsearch": "Search and filters"
 		},
-		"filter": {
-			"namehint": "Enter name",
+		"btn": {
 			"new": "New"
 		},
 		"food": {
-			"hint": "Orange"
+			"hintnew": "New name...",
+			"hintsearch": "Find food..."
 		},
 		"nav":{
 			"diary": "Diary",
@@ -20,6 +20,10 @@
 			"settings": "Settings",
 			"shopping": "Shopping Lists",
 			"signout": "Sign out"
+		},
+		"recipe": {
+			"hintnew": "New name...",
+			"hintsearch": "Find a recipe..."
 		},
 		"signout": {
 			"err404": "Sign out failed, session not found. Are you even signd in?",

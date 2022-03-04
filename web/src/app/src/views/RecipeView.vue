@@ -12,7 +12,7 @@ function newRecipe(name) {
 	<Main>
 		<template #filter>
 			<section>
-				<NewRecipe :label="$t('filter.new')" @confirm="newRecipe" />
+				<NewRecipe :label="$t('btn.new')" :placeholder="$t('recipe.hintnew')" @confirm="newRecipe" />
 			</section>
 		</template>
 		<template #main> Recipes </template>

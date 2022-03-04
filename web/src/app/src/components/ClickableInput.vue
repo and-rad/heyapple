@@ -1,7 +1,7 @@
 <script setup>
 import { ref } from "vue";
 
-const prop = defineProps(["label"]);
+const prop = defineProps(["label", "placeholder"]);
 const emit = defineEmits(["confirm"]);
 const value = ref("");
 
@@ -14,7 +14,7 @@ function confirm(evt) {
 
 <template>
 	<form class="clickable-input">
-		<input type="text" v-model="value" :placeholder="$t('filter.namehint')" />
+		<input type="text" v-model="value" :placeholder="placeholder" />
 		<input type="submit" @click="confirm" :value="label" />
 	</form>
 </template>
@@ -37,5 +37,4 @@ function confirm(evt) {
 	border-bottom-left-radius: 0;
 	margin-left: -1px;
 }
-
 </style>

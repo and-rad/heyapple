@@ -1,5 +1,16 @@
 {
 	"en": {
+		"aria": {
+			"headnew": "New item",
+			"headsearch": "Search and filters"
+		},
+		"btn": {
+			"new": "New"
+		},
+		"food": {
+			"hintnew": "New name...",
+			"hintsearch": "Find food..."
+		},
 		"nav":{
 			"diary": "Diary",
 			"food": "Food",
@@ -9,6 +20,10 @@
 			"settings": "Settings",
 			"shopping": "Shopping Lists",
 			"signout": "Sign out"
+		},
+		"recipe": {
+			"hintnew": "New name...",
+			"hintsearch": "Find a recipe..."
 		},
 		"signout": {
 			"err404": "Sign out failed, session not found. Are you even signd in?",

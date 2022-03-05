@@ -19,6 +19,7 @@ function confirm(evt) {
 	}
 
 	let addr = email.value;
+	evt.target.disabled = true;
 	fetch("/auth/reset", {
 		method: "POST",
 		headers: {
@@ -29,10 +30,17 @@ function confirm(evt) {
 	}).then((response) => {
 		if (response.ok) {
 			msg.value = { msg: t("reset.success", { addr: addr }) };
+			clearForm(evt);
 		} else {
 			msg.value = { msg: t("reset.err" + response.status), level: "err" };
+			evt.target.disabled = false;
 		}
 	});
+}
+
+function clearForm(evt) {
+	evt.target.disabled = false;
+	email.value = "";
 }
 </script>
 
@@ -49,7 +57,7 @@ function confirm(evt) {
 		<p>{{ $t("reset.hint") }}</p>
 		<label>{{ $t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
-		<input type="submit" :value="$t('reset.action')" @click="confirm" />
+		<button type="submit" @click="confirm" class="async">{{ $t("reset.action") }}</button>
 	</form>
 </template>
 

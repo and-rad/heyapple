@@ -46,7 +46,8 @@ label {
 	justify-content: space-between;
 }
 
-input[type="submit"] {
+input[type="submit"],
+button[type="submit"] {
 	margin: 2em 0 1em;
 }
 

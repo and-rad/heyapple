@@ -31,6 +31,7 @@ function confirm(evt) {
 	}
 
 	let addr = email.value;
+	evt.target.disabled = true;
 	fetch("/api/v1/user", {
 		method: "POST",
 		headers: {
@@ -41,10 +42,19 @@ function confirm(evt) {
 	}).then((response) => {
 		if (response.ok) {
 			msg.value = { msg: t("register.success", { addr: addr })};
+			clearForm(evt);
 		} else {
 			msg.value = { msg: t("register.err" + response.status), level: "err" };
+			evt.target.disabled = false;
 		}
 	});
+}
+
+function clearForm(evt) {
+	evt.target.disabled = false;
+	email.value = "";
+	pass1.value = "";
+	pass2.value = "";
 }
 </script>
 
@@ -64,7 +74,7 @@ function confirm(evt) {
 		<PasswordField name="pass" withBar=true v-model="pass1" />
 		<label>{{ $t("form.confirm") }}</label>
 		<PasswordField name="pass" v-model="pass2" />
-		<input type="submit" :value="$t('register.action')" @click="confirm" />
+		<button type="submit" @click="confirm" class="async">{{ $t("register.action") }}</button>
 		<p>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</p>
 	</form>
 </template>

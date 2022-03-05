@@ -19,6 +19,7 @@ function confirm(evt) {
 		return false;
 	}
 
+	evt.target.disabled = true;
 	fetch("/auth/local", {
 		method: "POST",
 		headers: {
@@ -31,6 +32,7 @@ function confirm(evt) {
 			window.location = "/app";
 		} else {
 			msg.value = { msg: t("login.err" + response.status), level: "err" };
+			evt.target.disabled = false;
 		}
 	});
 }
@@ -49,7 +51,7 @@ function confirm(evt) {
 		<input type="email" name="email" v-model="email" />
 		<label>{{ $t("form.pass") }} <RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink></label>
 		<PasswordField name="pass" />
-		<input type="submit" :value="$t('login.action')" @click="confirm" />
+		<button type="submit" @click="confirm" class="async">{{ $t("login.action") }}</button>
 		<p>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("register.action") }}</RouterLink>.</p>
 	</form>
 </template>

@@ -20,6 +20,11 @@ function updateList(status, items) {
 	items.forEach(i => i.name = t(i.id.toString()))
 	foods.value = items;
 }
+
+function showDetails(id) {
+	// TODO open details view
+	console.log(id);
+}
 </script>
 
 <template>
@@ -40,7 +45,7 @@ function updateList(status, items) {
 			</section>
 		</template>
 		<template #main>
-			<FoodList :items="foods" />
+			<FoodList :items="foods" @selected="showDetails" />
 		</template>
 	</Main>
 </template>

@@ -3,6 +3,7 @@ import Arrow from "./images/ImageSortArrow.vue";
 import { computed, ref } from "vue";
 
 const prop = defineProps(["items"]);
+const emit = defineEmits("selected")
 const sortBy = ref("name");
 const sortDir = ref("asc");
 
@@ -54,7 +55,7 @@ function setActive(evt) {
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="item in sortedItems" :key="item.id">
+			<tr v-for="item in sortedItems" :key="item.id" @click="$emit('selected', item.id)">
 				<td class="name">
 					{{ item.name }}
 				</td>

@@ -235,6 +235,10 @@ button[disabled] {
 	display: none !important;
 }
 
+.spacer {
+	flex-grow: 1;
+}
+
 button.async:after,
 .spinner {
 	font-size: 5px;

@@ -1,6 +1,8 @@
 <script setup>
 import MenuImage from "./images/ImageMenu.vue";
 import DetailsImage from "./images/ImageHeaderMono.vue";
+import MoreImage from "./images/ImageMore.vue";
+import BackArrow from "./images/ImageRightArrow.vue";
 import { ref, watch } from "vue";
 
 const prop = defineProps(["current"]);
@@ -50,7 +52,9 @@ function showDetails() {
 
 		<div id="main">
 			<div class="controls">
-				<button @click="toggleFilter" class="open-close"><MenuImage /></button>
+				<button @click="toggleFilter" class="open-filter icon"><MenuImage /></button>
+				<span class="spacer"></span>
+				<button @click="toggleDetails" class="open-details icon"><MoreImage /></button>
 			</div>
 			<div class="content">
 				<slot name="main">This is the main area</slot>
@@ -58,6 +62,9 @@ function showDetails() {
 		</div>
 
 		<div id="details">
+			<div class="controls">
+				<button @click="toggleDetails" class="open-details icon"><BackArrow /></button>
+			</div>
 			<slot name="details">
 				<div class="placeholder">
 					<DetailsImage />
@@ -162,7 +169,7 @@ main.open-filter #main {
 	transform: translateX(300px);
 }
 
-#main .controls {
+main .controls {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
@@ -171,17 +178,25 @@ main.open-filter #main {
 	user-select: none;
 }
 
-#main .controls button {
+#main .controls button.open-details > svg {
+	transform: rotate(90deg);
+}
+
+#details .controls {
+	justify-content: end;
+}
+
+main .controls button {
 	width: auto;
 }
 
-button.open-close {
+main .controls button.icon {
 	height: 2.5em;
 	width: 2.5em;
 	background: none;
 }
 
-button.open-close > svg {
+main .controls button > svg {
 	width: 1.5em;
 	height: 1.5em;
 	fill: var(--color-primary);
@@ -289,7 +304,7 @@ button.open-close > svg {
 		transform: none !important;
 	}
 
-	#main .controls button.open-close {
+	main .controls button.open-filter {
 		display: none;
 	}
 }
@@ -304,6 +319,10 @@ button.open-close > svg {
 		right: 0;
 		border-left: var(--border-light);
 		box-shadow: none;
+	}
+
+	main .controls button.open-details {
+		display: none;
 	}
 }
 </style>

@@ -20,6 +20,7 @@ package api
 
 import (
 	"heyapple/pkg/app"
+	"heyapple/pkg/core"
 	"heyapple/pkg/handler"
 	"net/http"
 	"strconv"
@@ -27,11 +28,16 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
-// Foods returns a JSON-formatted list of all the food
-// items stored in the database. The function body is
-// empty when errors occur and will always be an array
-// on success, even when there are no food items in the
-// database.
+// Foods returns a JSON-formatted list of food items
+// stored in the database. If no query parameters are
+// transmitted, it returns the entire database. The
+// function body is empty when errors occur and will
+// always be an array on success, even when there are no
+// food items in the database.
+//
+// If a query parameter is included more than once, its
+// first two values are interpreted as the minimum and
+// the maximum valid amount.
 //
 // Endpoint:
 //   /api/v1/foods
@@ -40,6 +46,8 @@ import (
 // Possible status codes:
 //   200 - OK
 //   500 - Internal server error
+// Example input:
+//   name=apple&kcal=32&kcal=120&prot=12
 // Example output:
 //   [
 //     { "id": 1, "kcal": 230, ... },
@@ -48,7 +56,7 @@ import (
 //   ]
 func Foods(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		query := &app.GetFoods{}
+		query := &app.GetFoods{Filter: getFoodFilter(r)}
 		if err := env.DB.Fetch(query); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
@@ -191,4 +199,41 @@ func SaveFood(env *handler.Environment) httprouter.Handle {
 			w.WriteHeader(http.StatusNoContent)
 		}
 	}
+}
+
+func getFoodFilter(r *http.Request) core.Filter {
+	r.ParseForm()
+
+	f := core.Filter{}
+	for i := 0; i < core.FoodType.NumField(); i++ {
+		tag := core.FoodType.Field(i).Tag.Get("json")
+		if v, ok := r.Form[tag]; ok {
+			f1, err := strconv.ParseFloat(v[0], 32)
+			if err != nil {
+				continue
+			}
+
+			f2 := f1
+			if len(v) > 1 {
+				f2, err = strconv.ParseFloat(v[1], 32)
+				if err != nil {
+					continue
+				}
+			}
+
+			if f1 == core.FoodMin.Field(i).Float() {
+				if f2 == core.FoodMax.Field(i).Float() {
+					continue
+				}
+			}
+
+			if f1 != f2 {
+				f[tag] = core.FloatRange{float32(f1), float32(f2)}
+			} else {
+				f[tag] = float32(f1)
+			}
+		}
+	}
+
+	return f
 }

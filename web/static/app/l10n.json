@@ -17,10 +17,16 @@
 			"carbs2": "Carbs",
 			"energy": "Energy",
 			"fat": "Fat",
+			"fato3": "Fat, Ω-3",
+			"fato6": "Fat, Ω-6",
+			"fatsat": "Fat, saturated",
+			"fiber": "Fiber",
 			"hintnew": "New name...",
 			"hintsearch": "Find food...",
 			"name": "Name",
-			"protein": "Protein"
+			"protein": "Protein",
+			"salt": "Salt",
+			"sugar": "Sugar"
 		},
 		"nav":{
 			"diary": "Diary",

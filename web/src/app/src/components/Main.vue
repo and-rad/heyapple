@@ -86,6 +86,7 @@ function showDetails() {
 	bottom: 0;
 	overflow-y: auto;
 	overflow-x: hidden;
+	user-select: none;
 	background-color: var(--color-background);
 }
 
@@ -110,7 +111,6 @@ function showDetails() {
 	left: -300px;
 	border-right: var(--border-light);
 	white-space: nowrap;
-	user-select: none;
 	transition: left 0.25s;
 }
 
@@ -140,7 +140,6 @@ main.open-details #details {
 	width: 100%;
 	height: 100%;
 	position: relative;
-	user-select: none;
 	font-size: 2em;
 	color: var(--color-placeholder);
 	text-align: center;
@@ -168,6 +167,71 @@ main.open-details #details {
 	text-overflow: ellipsis;
 	overflow-x: hidden;
 	margin-right: 1em;
+}
+
+#details .tag {
+	display: inline-block;
+	padding: 2px 4px;
+	min-width: 5em;
+	margin: 0 0.25em;
+	font-size: 12px;
+	font-weight: bold;
+	text-align: center;
+	background-color: var(--color-secondary);
+	color: #fff;
+	border-radius: 4px;
+}
+
+#details label,
+#details .unit {
+	color: var(--color-text-light);
+}
+
+#details input:disabled,
+#details input:read-only {
+	border-color: transparent !important;
+	background: none !important;
+}
+
+#details input:disabled + .unit,
+#details input:read-only + .unit {
+	border-color: transparent !important;
+}
+
+#details fieldset {
+	margin: 0;
+	padding: 0;
+	border: none;
+}
+
+#details fieldset > div {
+	display: flex;
+	align-items: baseline;
+	padding: 0.5em 0;
+}
+
+#details fieldset label {
+	flex-basis: 60%;
+	margin-right: 0.5em;
+}
+
+#details fieldset input[type="text"] {
+	flex-basis: 2.5em;
+	flex-grow: 1;
+	padding: 0 0.25em 0 0;
+	border: none;
+	border-radius: 0;
+	border-bottom: var(--border);
+	text-align: right;
+}
+
+#details fieldset .unit {
+	border-bottom: var(--border);
+}
+
+#details fieldset input:active + .unit,
+#details fieldset input:focus + .unit {
+	border-color: var(--color-primary);
 }
 
 #main {
@@ -222,7 +286,6 @@ main .controls button > svg {
 	border-collapse: separate;
 	border-spacing: 0;
 	white-space: nowrap;
-	user-select: none;
 }
 
 #main td,
@@ -293,6 +356,18 @@ main .controls button > svg {
 @media only screen and (min-width: 400px) {
 	#main table .s {
 		display: table-cell;
+	}
+
+	#details section {
+		display: flex;
+	}
+
+	#details fieldset:first-child {
+		margin-right: 1em;
+	}
+
+	#details fieldset:last-child {
+		margin-left: 1em;
 	}
 }
 

@@ -63,6 +63,8 @@ function showDetails() {
 
 		<div id="details">
 			<div class="controls">
+				<h2 v-if="current">{{ current.name }}</h2>
+				<span class="spacer"></span>
 				<button @click="toggleDetails" class="open-details icon"><BackArrow /></button>
 			</div>
 			<slot name="details">
@@ -157,6 +159,17 @@ main.open-details #details {
 	max-width: 66%;
 }
 
+#details .controls {
+	align-items: unset;
+}
+
+#details .controls h2 {
+	font-size: 2em;
+	text-overflow: ellipsis;
+	overflow-x: hidden;
+	margin-right: 1em;
+}
+
 #main {
 	left: 0;
 	right: 0;
@@ -173,6 +186,7 @@ main .controls {
 	display: flex;
 	align-items: center;
 	justify-content: space-between;
+	white-space: nowrap;
 	padding: 0.5em;
 	min-height: 3.5em;
 	user-select: none;
@@ -180,10 +194,6 @@ main .controls {
 
 #main .controls button.open-details > svg {
 	transform: rotate(90deg);
-}
-
-#details .controls {
-	justify-content: end;
 }
 
 main .controls button {

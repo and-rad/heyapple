@@ -66,8 +66,8 @@ function clearForm(evt) {
 		</div>
 	</header>
 	<form>
-		<Message v-bind="msg" />
 		<p v-html="$t('register.hint')"></p>
+		<Message v-bind="msg" />
 		<label>{{ $t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
 		<label>{{ $t("form.pass") }}</label>

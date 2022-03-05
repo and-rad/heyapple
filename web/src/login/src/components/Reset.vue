@@ -53,8 +53,8 @@ function clearForm(evt) {
 		</div>
 	</header>
 	<form>
-		<Message v-bind="msg" />
 		<p>{{ $t("reset.hint") }}</p>
+		<Message v-bind="msg" />
 		<label>{{ $t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
 		<button type="submit" @click="confirm" class="async">{{ $t("reset.action") }}</button>

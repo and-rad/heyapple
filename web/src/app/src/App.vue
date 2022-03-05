@@ -1,6 +1,11 @@
 <script setup>
 import { RouterView } from "vue-router";
 import Header from "./components/Header.vue";
+import { onMounted } from "vue";
+
+onMounted(() => {
+	document.querySelector("body > .spinner-container").remove();
+});
 </script>
 
 <template>

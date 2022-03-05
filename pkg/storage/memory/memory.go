@@ -153,10 +153,12 @@ func (db *DB) Food(id int) (core.Food, error) {
 	return core.Food{}, app.ErrNotFound
 }
 
-func (db *DB) Foods() ([]core.Food, error) {
+func (db *DB) Foods(filter core.Filter) ([]core.Food, error) {
 	foods := []core.Food{}
 	for _, f := range db.food {
-		foods = append(foods, f)
+		if filter.MatchFood(f) {
+			foods = append(foods, f)
+		}
 	}
 
 	sort.Slice(foods, func(i, j int) bool {

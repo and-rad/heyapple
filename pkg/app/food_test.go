@@ -166,7 +166,9 @@ func TestGetFood_Fetch(t *testing.T) {
 
 func TestGetFoods_Fetch(t *testing.T) {
 	for idx, data := range []struct {
-		db    *mock.DB
+		db     *mock.DB
+		filter core.Filter
+
 		foods []core.Food
 		err   error
 	}{
@@ -178,12 +180,17 @@ func TestGetFoods_Fetch(t *testing.T) {
 			db:    mock.NewDB(),
 			foods: []core.Food{},
 		},
-		{ //02// success
+		{ //02// success, no filter
 			db:    mock.NewDB().WithFoods(mock.Food1, mock.Food2),
 			foods: []core.Food{mock.Food1, mock.Food2},
 		},
+		{ //02// success, with filter
+			db:     mock.NewDB().WithFoods(mock.Food1, mock.Food2),
+			filter: core.Filter{"kcal": 200},
+			foods:  []core.Food{mock.Food1, mock.Food2},
+		},
 	} {
-		qry := &app.GetFoods{}
+		qry := &app.GetFoods{Filter: data.filter}
 		err := qry.Fetch(data.db)
 
 		if err != data.err {
@@ -192,6 +199,10 @@ func TestGetFoods_Fetch(t *testing.T) {
 
 		if !reflect.DeepEqual(qry.Items, data.foods) {
 			t.Errorf("test case %d: data mismatch \nhave: %#v\nwant: %#v", idx, qry.Items, data.foods)
+		}
+
+		if !reflect.DeepEqual(data.db.Filter, data.filter) {
+			t.Errorf("test case %d: filter mismatch \nhave: %#v\nwant: %#v", idx, data.db.Filter, data.filter)
 		}
 	}
 }

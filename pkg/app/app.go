@@ -64,7 +64,7 @@ type DB interface {
 	NewFood() (int, error)
 	SetFood(core.Food) error
 	Food(id int) (core.Food, error)
-	Foods() ([]core.Food, error)
+	Foods(core.Filter) ([]core.Food, error)
 	FoodExists(id int) (bool, error)
 
 	NewRecipe(string) (int, error)

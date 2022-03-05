@@ -154,7 +154,8 @@ func TestDB_NewFood(t *testing.T) {
 
 func TestDB_Foods(t *testing.T) {
 	for idx, data := range []struct {
-		db *DB
+		db     *DB
+		filter core.Filter
 
 		foods []core.Food
 		err   error
@@ -167,8 +168,18 @@ func TestDB_Foods(t *testing.T) {
 			db:    &DB{food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}},
 			foods: []core.Food{mock.Food1, mock.Food2},
 		},
+		{ //02// filter by range
+			db:     &DB{food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}},
+			filter: core.Filter{"kcal": core.FloatRange{20, 60}},
+			foods:  []core.Food{mock.Food1},
+		},
+		{ //03// filter by exact value
+			db:     &DB{food: map[int]core.Food{1: mock.Food1, 2: mock.Food2}},
+			filter: core.Filter{"prot": float32(1)},
+			foods:  []core.Food{mock.Food2},
+		},
 	} {
-		foods, err := data.db.Foods()
+		foods, err := data.db.Foods(data.filter)
 
 		if err != data.err {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)

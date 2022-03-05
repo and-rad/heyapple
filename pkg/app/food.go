@@ -93,11 +93,12 @@ func (q *GetFood) Fetch(db DB) error {
 // GetFoods is a query to retrieve all food items from
 // the food database.
 type GetFoods struct {
-	Items []core.Food
+	Filter core.Filter
+	Items  []core.Food
 }
 
 func (q *GetFoods) Fetch(db DB) error {
-	if foods, err := db.Foods(); err != nil {
+	if foods, err := db.Foods(q.Filter); err != nil {
 		return err
 	} else {
 		q.Items = foods

@@ -51,6 +51,8 @@ type DB struct {
 	Err  []error
 	ID   int
 	Name string
+
+	Filter core.Filter
 }
 
 func NewDB() *DB {
@@ -190,10 +192,11 @@ func (db *DB) Food(id int) (core.Food, error) {
 	return db.FoodItem, nil
 }
 
-func (db *DB) Foods() ([]core.Food, error) {
+func (db *DB) Foods(f core.Filter) ([]core.Food, error) {
 	if err := db.popError(); err != nil {
 		return nil, err
 	}
+	db.Filter = f
 	return db.FoodItems, nil
 }
 

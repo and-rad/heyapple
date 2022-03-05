@@ -43,9 +43,7 @@ function onSlide(evt) {
 	let bar = evt.target.closest(".slide");
 	let rect = bar.getBoundingClientRect();
 	let pos = evt.pageX !== undefined ? evt.pageX : evt.changedTouches[0].pageX;
-	console.log(pos);
 	pos = Math.min(Math.max(pos - rect.left, 0), rect.width);
-	console.log(pos);
 
 	let percent = (pos * 100) / rect.width;
 	let min = parseFloat(prop.min) || 0;

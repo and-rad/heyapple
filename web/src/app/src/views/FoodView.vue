@@ -1,6 +1,6 @@
 <script setup>
 import Main from "../components/Main.vue";
-import Search from "../components/Search.vue";
+import Search from "../components/LocalSearch.vue";
 import Slider from "../components/Slider.vue";
 import NewFood from "../components/ClickableInput.vue";
 import FoodList from "../components/FoodList.vue";
@@ -9,16 +9,16 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const perms = inject("perms");
-const foods = ref([]);
+const foods = inject("food");
+const filteredFood = ref([]);
 
 function newFood(name) {
 	// TODO create new food
 	console.log(name);
 }
 
-function updateList(status, items) {
-	items.forEach(i => i.name = t(i.id.toString()))
-	foods.value = items;
+function updateList(items) {
+	filteredFood.value = items;
 }
 
 function showDetails(id) {
@@ -36,7 +36,7 @@ function showDetails(id) {
 			</section>
 			<section>
 				<h2>{{ $t("aria.headsearch") }}</h2>
-				<Search action="/api/v1/foods" v-slot="slotProps" :placeholder="$t('food.hintsearch')" @result="updateList">
+				<Search :data="foods" v-slot="slotProps" :placeholder="$t('food.hintsearch')" @result="updateList">
 					<Slider :label="$t('food.energy')" @input="slotProps.confirm" name="kcal" unit="cal" min="0" max="900" frac="0" />
 					<Slider :label="$t('food.fat')" @input="slotProps.confirm" name="fat" unit="g" min="0" max="100" frac="0" />
 					<Slider :label="$t('food.carbs')" @input="slotProps.confirm" name="carb" unit="g" min="0" max="100" frac="0" />
@@ -45,7 +45,7 @@ function showDetails(id) {
 			</section>
 		</template>
 		<template #main>
-			<FoodList :items="foods" @selected="showDetails" />
+			<FoodList :items="filteredFood" @selected="showDetails" />
 		</template>
 	</Main>
 </template>

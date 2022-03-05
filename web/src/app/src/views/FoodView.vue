@@ -11,6 +11,7 @@ const { t } = useI18n();
 const perms = inject("perms");
 const foods = inject("food");
 const filteredFood = ref([]);
+const current = ref(null);
 
 function newFood(name) {
 	// TODO create new food
@@ -19,16 +20,22 @@ function newFood(name) {
 
 function updateList(items) {
 	filteredFood.value = items;
+
+	// TODO not sure yet about this part
+	if (current.value) {
+		if (filteredFood.value.filter(f => f.id == current.value.id).length == 0) {
+			current.value = null;
+		}
+	}
 }
 
 function showDetails(id) {
-	// TODO open details view
-	console.log(id);
+	current.value = filteredFood.value.filter(f => f.id == id)[0];
 }
 </script>
 
 <template>
-	<Main>
+	<Main :current="current">
 		<template #filter>
 			<section v-if="perms.canCreateFood">
 				<h2>{{ $t("aria.headnew") }}</h2>
@@ -46,6 +53,11 @@ function showDetails(id) {
 		</template>
 		<template #main>
 			<FoodList :items="filteredFood" @selected="showDetails" />
+		</template>
+		<template #details v-if="current">
+			<section>
+				{{ current.name }}
+			</section>
 		</template>
 	</Main>
 </template>

@@ -9,6 +9,9 @@
 		"btn": {
 			"new": "New"
 		},
+		"details": {
+			"noitem": "Select an item for details"
+		},
 		"food": {
 			"carbs": "Carbohydrates",
 			"carbs2": "Carbs",

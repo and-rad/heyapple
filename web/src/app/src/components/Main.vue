@@ -1,9 +1,20 @@
 <script setup>
 import MenuImage from "./images/ImageMenu.vue";
-import { ref } from "vue";
+import DetailsImage from "./images/ImageHeaderMono.vue";
+import { ref, watch } from "vue";
 
+const prop = defineProps(["current"]);
 const filter = ref("");
 const details = ref("");
+
+watch(
+	() => prop.current,
+	(newValue) => {
+		if (newValue) {
+			showDetails();
+		}
+	}
+);
 
 function toggleFilter() {
 	if (filter.value == "") {
@@ -20,6 +31,13 @@ function toggleDetails() {
 		filter.value = "";
 	} else {
 		details.value = "";
+	}
+}
+
+function showDetails() {
+	if (details.value == "") {
+		details.value = "open-details";
+		filter.value = "";
 	}
 }
 </script>
@@ -40,7 +58,12 @@ function toggleDetails() {
 		</div>
 
 		<div id="details">
-			<slot name="details">This is the details area</slot>
+			<slot name="details">
+				<div class="placeholder">
+					<DetailsImage />
+					<p>{{ $t("details.noitem") }}</p>
+				</div>
+			</slot>
 		</div>
 	</main>
 </template>
@@ -96,10 +119,35 @@ main.open-filter #filter {
 	max-width: 100%;
 	box-shadow: var(--shadow-menu);
 	transition: right 0.25s;
+	display: flex;
+	flex-direction: column;
 }
 
 main.open-details #details {
 	right: 0;
+}
+
+#details .placeholder {
+	width: 100%;
+	height: 100%;
+	position: relative;
+	user-select: none;
+	font-size: 2em;
+	color: var(--color-placeholder);
+	text-align: center;
+}
+
+#details .placeholder > * {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translateX(-50%) translateY(-50%);
+}
+
+#details .placeholder svg {
+	fill: var(--color-placeholder);
+	opacity: 0.2;
+	max-width: 66%;
 }
 
 #main {

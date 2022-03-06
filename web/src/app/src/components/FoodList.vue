@@ -1,24 +1,23 @@
 <script setup>
 import Arrow from "./images/ImageSortArrow.vue";
 import { computed, ref } from "vue";
+import { useI18n } from "vue-i18n";
 
 const prop = defineProps(["items"]);
-const emit = defineEmits("selected")
+const emit = defineEmits("selected");
 const sortBy = ref("name");
 const sortDir = ref("asc");
+
+const collator = new Intl.Collator(useI18n().locale.value, { numeric: true });
 
 const sortedItems = computed(() => {
 	if (sortDir.value == "asc") {
 		return [...prop.items].sort((a, b) => {
-			if (a[sortBy.value] < b[sortBy.value]) return -1;
-			if (a[sortBy.value] > b[sortBy.value]) return 1;
-			return 0;
+			return collator.compare(a[sortBy.value], b[sortBy.value]);
 		});
 	} else {
 		return [...prop.items].sort((a, b) => {
-			if (a[sortBy.value] > b[sortBy.value]) return -1;
-			if (a[sortBy.value] < b[sortBy.value]) return 1;
-			return 0;
+			return -collator.compare(a[sortBy.value], b[sortBy.value]);
 		});
 	}
 });

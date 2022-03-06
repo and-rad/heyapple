@@ -11,8 +11,12 @@ function newRecipe(name) {
 <template>
 	<Main>
 		<template #filter>
-			<section>
+			<section class="new-item">
+				<h2>{{ $t("aria.headnew") }}</h2>
 				<NewRecipe :label="$t('btn.new')" :placeholder="$t('recipe.hintnew')" @confirm="newRecipe" />
+			</section>
+			<section>
+				<h2>{{ $t("aria.headsearch") }}</h2>
 			</section>
 		</template>
 		<template #main> Recipes </template>

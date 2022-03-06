@@ -96,9 +96,20 @@ function showDetails() {
 	border-bottom: var(--border-light);
 }
 
+#details fieldset legend,
+#filter fieldset legend,
 #details > section > h2,
 #filter > section > h2 {
-	display: none;
+	margin-bottom: 1rem;
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--color-text);
+	text-transform: uppercase;
+}
+
+#details fieldset legend,
+#filter fieldset legend {
+	color: var(--color-text-light);
 }
 
 #details > section:last-child,
@@ -118,8 +129,20 @@ main.open-filter #filter {
 	left: 0;
 }
 
+#filter > section.new-item {
+	height: 105px;
+}
+
 #filter .slider {
 	margin-top: 2em;
+}
+
+#filter fieldset {
+	margin-top: 3em;
+}
+
+#filter fieldset .slider:first-of-type {
+	margin-top: 0;
 }
 
 #details {
@@ -150,12 +173,12 @@ main.open-details #details {
 	top: 50%;
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
+	width: 66%;
 }
 
 #details .placeholder svg {
 	fill: var(--color-placeholder);
 	opacity: 0.2;
-	max-width: 66%;
 }
 
 #details .controls {
@@ -198,8 +221,8 @@ main.open-details #details {
 	border-color: transparent !important;
 }
 
+#filter fieldset,
 #details fieldset {
-	margin: 0;
 	padding: 0;
 	border: none;
 }
@@ -356,18 +379,6 @@ main .controls button > svg {
 @media only screen and (min-width: 400px) {
 	#main table .s {
 		display: table-cell;
-	}
-
-	#details section {
-		display: flex;
-	}
-
-	#details fieldset:first-child {
-		margin-right: 1em;
-	}
-
-	#details fieldset:last-child {
-		margin-left: 1em;
 	}
 }
 

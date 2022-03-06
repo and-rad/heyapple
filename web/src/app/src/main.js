@@ -29,6 +29,34 @@ const perms = (function () {
 	};
 })();
 
+// message bus
+const log = (function () {
+	function _getMessage(obj) {
+		if (typeof obj === "string") {
+			return obj;
+		}
+		if ("message" in obj) {
+			return obj.message;
+		}
+		return locale.global.t("err.err");
+	}
+
+	return {
+		msg: function (obj) {
+			let payload = { msg: _getMessage(obj), timeout: 3000 };
+			window.dispatchEvent(new CustomEvent("message", { detail: payload }));
+		},
+		warn: function (obj) {
+			let payload = { msg: _getMessage(obj), timeout: 4000 };
+			window.dispatchEvent(new CustomEvent("warning", { detail: payload }));
+		},
+		err: function (obj) {
+			let payload = { msg: _getMessage(obj), timeout: 5000 };
+			window.dispatchEvent(new CustomEvent("error", { detail: payload }));
+		},
+	};
+})();
+
 // remote data
 const app = createApp(App);
 let locale = undefined;
@@ -61,6 +89,7 @@ function mountApp() {
 	app.provide("csrfToken", csrfToken);
 	app.provide("perms", perms);
 	app.provide("food", ref(food));
+	app.provide("log", log);
 	app.use(router);
 	app.use(locale);
 	app.mount("#app");

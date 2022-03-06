@@ -10,6 +10,7 @@ import { ref, inject } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+const log = inject("log");
 const csrf = inject("csrfToken");
 const perms = inject("perms");
 const foods = inject("food");
@@ -37,18 +38,10 @@ function newFood(name) {
 			data.name = name;
 			foods.value.push(data);
 			filtered.value.push(data);
-			console.log(t("createfood.ok"));
+			log.msg(t("createfood.ok"));
 			showDetails(data.id);
 		})
-		.catch((err) => {
-			if (typeof err === "string") {
-				console.log(err);
-			} else if ("message" in err) {
-				console.log(err.message);
-			} else {
-				console.log(t("err.err"));
-			}
-		});
+		.catch((err) => log.err(err));
 }
 
 function saveFood() {
@@ -76,17 +69,9 @@ function saveFood() {
 			foods.value = foods.value.map((f) => (data.id == f.id ? data : f));
 			filtered.value = filtered.value.map((f) => (data.id == f.id ? data : f));
 			current.value = current.value.id == data.id ? data : current.value;
-			console.log(t("savefood.ok"));
+			log.msg(t("savefood.ok"));
 		})
-		.catch((err) => {
-			if (typeof err === "string") {
-				console.log(err);
-			} else if ("message" in err) {
-				console.log(err.message);
-			} else {
-				console.log(t("err.err"));
-			}
-		})
+		.catch((err) => log.err(err))
 		.finally(() => {
 			setTimeout(function () {
 				isSaving.value = false;

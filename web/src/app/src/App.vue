@@ -1,6 +1,7 @@
 <script setup>
-import { RouterView } from "vue-router";
 import Header from "./components/Header.vue";
+import MessageList from "./components/MessageList.vue";
+import { RouterView } from "vue-router";
 import { onMounted } from "vue";
 
 onMounted(() => {
@@ -11,6 +12,7 @@ onMounted(() => {
 <template>
 	<Header />
 	<RouterView />
+	<MessageList />
 </template>
 
 <style>

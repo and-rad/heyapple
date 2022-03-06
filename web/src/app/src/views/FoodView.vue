@@ -130,6 +130,15 @@ function showDetails(id) {
 							max="100"
 							frac="0"
 						/>
+						<Slider
+							:label="$t('food.salt')"
+							@input="slotProps.confirm"
+							name="salt"
+							unit="g"
+							min="0"
+							max="100"
+							frac="0"
+						/>
 					</fieldset>
 				</Search>
 			</section>
@@ -193,6 +202,11 @@ function showDetails(id) {
 						<div>
 							<label>{{ $t("food.sugar") }}</label>
 							<input type="text" :value="current.sug" name="sug" />
+							<span class="unit">{{ $t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ $t("food.salt") }}</label>
+							<input type="text" :value="current.salt" name="salt" />
 							<span class="unit">{{ $t("unit.g") }}</span>
 						</div>
 					</fieldset>

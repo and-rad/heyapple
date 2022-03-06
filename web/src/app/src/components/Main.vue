@@ -120,6 +120,7 @@ function showDetails() {
 #filter {
 	width: 300px;
 	left: -300px;
+	padding-bottom: 2em;
 	border-right: var(--border-light);
 	white-space: nowrap;
 	transition: left 0.25s;

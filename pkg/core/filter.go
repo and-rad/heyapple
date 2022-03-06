@@ -15,6 +15,7 @@ var (
 		Sugar:   100,
 		Protein: 89,
 		Fiber:   71,
+		Salt:    100,
 	})
 
 	foodFieldsByTag = getFoodFieldsByTag()

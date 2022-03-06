@@ -52,6 +52,7 @@ type Food struct {
 	Sugar   float32 `json:"sug"`
 	Protein float32 `json:"prot"`
 	Fiber   float32 `json:"fib"`
+	Salt    float32 `json:"salt"`
 
 	Potassium  float32 `json:"pot"`
 	Chlorine   float32 `json:"chl"`

@@ -18,6 +18,7 @@ func TestFoodMin(t *testing.T) {
 		"sug":    0.0,
 		"prot":   0.0,
 		"fib":    0.0,
+		"salt":   0.0,
 	}
 
 	for i := 0; i < core.FoodType.NumField(); i++ {
@@ -47,6 +48,7 @@ func TestFoodMax(t *testing.T) {
 		"sug":    100.0,
 		"prot":   89.0,
 		"fib":    71.0,
+		"salt":   100.0,
 	}
 
 	for i := 0; i < core.FoodType.NumField(); i++ {

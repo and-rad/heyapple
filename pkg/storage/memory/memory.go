@@ -64,11 +64,10 @@ func NewDB(log app.Logger) *DB {
 	}
 }
 
-func NewDBWithBackup(log app.Logger) *DB {
-	backupper := &backup{db: NewDB(log)}
+func (db *DB) WithBackup() *DB {
+	backupper := &backup{db: db}
 	backupper.load()
 
-	db := backupper.db
 	db.jobs = job.NewScheduler(
 		getConfig().storageInterval,
 		backupper,

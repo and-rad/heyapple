@@ -34,7 +34,7 @@ const (
 	testStorageDir = "/tmp/heyappletest/memory/config"
 )
 
-func TestNewDBWithBackup(t *testing.T) {
+func TestDB_WithBackup(t *testing.T) {
 	os.Setenv(envStorageInterval, "200ms")
 	defer os.Unsetenv(envStorageInterval)
 
@@ -55,7 +55,7 @@ func TestNewDBWithBackup(t *testing.T) {
 		defer os.Unsetenv(envStorageDir)
 		defer os.RemoveAll(data.dir)
 
-		db := NewDBWithBackup(mock.NewLog())
+		db := NewDB(mock.NewLog()).WithBackup()
 		time.Sleep(time.Millisecond * 500)
 		db.Close()
 

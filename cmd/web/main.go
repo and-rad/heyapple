@@ -30,7 +30,6 @@ import (
 	"heyapple/pkg/storage/memory"
 	"heyapple/web"
 	"io/fs"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -40,15 +39,15 @@ import (
 )
 
 func main() {
-	logger := app.NewLog(os.Stdout)
+	log := app.NewLog(os.Stdout)
 	translator := l10n.NewTranslator()
 	sessions := scs.New()
 	notifier := email.NewNotifier(translator)
-	db := memory.NewDBWithBackup(logger)
+	db := memory.NewDB(log).WithBackup()
 
 	env := &handler.Environment{
 		DB:      db,
-		Log:     logger,
+		Log:     log,
 		Msg:     notifier,
 		L10n:    translator,
 		Session: sessions,
@@ -89,11 +88,11 @@ func main() {
 		router.NotFound = http.FileServer(http.FS(sub))
 	}
 
-	env.Log.Log("######################")
-	env.Log.Log("# Starting Hey Apple #")
-	env.Log.Log("######################")
+	log.Log("######################")
+	log.Log("# Starting Hey Apple #")
+	log.Log("######################")
 
-	log.Fatal(http.ListenAndServe(address(),
+	log.Error(http.ListenAndServe(address(),
 		env.Session.LoadAndSave(mw.CSRF(env, router))))
 }
 

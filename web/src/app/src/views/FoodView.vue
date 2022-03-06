@@ -12,6 +12,7 @@ const perms = inject("perms");
 const foods = inject("food");
 const filteredFood = ref([]);
 const current = ref(null);
+const main = ref(null);
 
 function newFood(name) {
 	// TODO create new food
@@ -31,11 +32,12 @@ function updateList(items) {
 
 function showDetails(id) {
 	current.value = filteredFood.value.filter((f) => f.id == id)[0];
+	main.value.showDetails();
 }
 </script>
 
 <template>
-	<Main :current="current">
+	<Main ref="main">
 		<template #filter>
 			<section v-if="perms.canCreateFood" class="new-item">
 				<h2>{{ $t("aria.headnew") }}</h2>
@@ -143,9 +145,15 @@ function showDetails(id) {
 				</Search>
 			</section>
 		</template>
+
 		<template #main>
 			<FoodList :items="filteredFood" @selected="showDetails" />
 		</template>
+
+		<template #head-details v-if="current">
+			<h2>{{ current.name }}</h2>
+		</template>
+
 		<template #details v-if="current">
 			<section class="subtitle">Some food category</section>
 			<section class="tags">

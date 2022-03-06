@@ -3,20 +3,10 @@ import MenuImage from "./images/ImageMenu.vue";
 import DetailsImage from "./images/ImageHeaderMono.vue";
 import MoreImage from "./images/ImageMore.vue";
 import BackArrow from "./images/ImageRightArrow.vue";
-import { ref, watch } from "vue";
+import { ref } from "vue";
 
-const prop = defineProps(["current"]);
 const filter = ref("");
 const details = ref("");
-
-watch(
-	() => prop.current,
-	(newValue) => {
-		if (newValue) {
-			showDetails();
-		}
-	}
-);
 
 function toggleFilter() {
 	if (filter.value == "") {
@@ -42,6 +32,8 @@ function showDetails() {
 		filter.value = "";
 	}
 }
+
+defineExpose({ showDetails });
 </script>
 
 <template>
@@ -63,7 +55,7 @@ function showDetails() {
 
 		<div id="details">
 			<div class="controls">
-				<h2 v-if="current">{{ current.name }}</h2>
+				<slot name="head-details"></slot>
 				<span class="spacer"></span>
 				<button @click="toggleDetails" class="open-details icon"><BackArrow /></button>
 			</div>

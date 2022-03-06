@@ -4,40 +4,92 @@ import Search from "../components/LocalSearch.vue";
 import Slider from "../components/Slider.vue";
 import NewFood from "../components/ClickableInput.vue";
 import FoodList from "../components/FoodList.vue";
+import EditImage from "../components/images/ImageEdit.vue";
+import SaveImage from "../components/images/ImageSave.vue";
 import { ref, inject } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+const csrf = inject("csrfToken");
 const perms = inject("perms");
 const foods = inject("food");
-const filteredFood = ref([]);
+
+const filtered = ref([]);
 const current = ref(null);
+const editMode = ref(false);
+const isSaving = ref(false);
+
 const main = ref(null);
+const form = ref(null);
 
 function newFood(name) {
 	// TODO create new food
 	console.log(name);
 }
 
-function updateList(items) {
-	filteredFood.value = items;
+function saveFood() {
+	isSaving.value = true;
+	let id = current.value.id;
+	let data = new FormData(form.value);
+	fetch("/api/v1/food/" + id, {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+		body: new URLSearchParams(data),
+	}).then((response) => {
+		if (response.ok) {
+			editMode.value = false;
+			refreshFood(id);
+		} else {
+			isSaving.value = false;
+		}
+	});
+}
 
-	// TODO not sure yet about this part
+function refreshFood(id) {
+	fetch("/api/v1/food/" + id)
+		.then((response) => response.json())
+		.then((data) => {
+			data.name = t(data.id.toString());
+			foods.value = foods.value.map((f) => (data.id == f.id ? data : f));
+			filtered.value = filtered.value.map((f) => (data.id == f.id ? data : f));
+			current.value = current.value.id == data.id ? data : current.value;
+			setTimeout(function () {
+				isSaving.value = false;
+			}, 500);
+		});
+}
+
+function updateList(items) {
+	filtered.value = items;
 	if (current.value) {
-		if (filteredFood.value.filter((f) => f.id == current.value.id).length == 0) {
+		if (filtered.value.filter((f) => f.id == current.value.id).length == 0) {
 			current.value = null;
 		}
 	}
 }
 
 function showDetails(id) {
-	current.value = filteredFood.value.filter((f) => f.id == id)[0];
+	current.value = filtered.value.filter((f) => f.id == id)[0];
 	main.value.showDetails();
+}
+
+function onEditMode() {
+	editMode.value ? saveFood() : (editMode.value = true);
+}
+
+function onInput(evt) {
+	evt.target.blur();
+	if (isNaN(parseFloat(evt.target.value))) {
+		evt.target.value = current.value[evt.target.name];
+	}
 }
 </script>
 
 <template>
-	<Main ref="main">
+	<Main ref="main" @detailVisibility="editMode = false">
 		<template #filter>
 			<section v-if="perms.canCreateFood" class="new-item">
 				<h2>{{ $t("aria.headnew") }}</h2>
@@ -147,7 +199,7 @@ function showDetails(id) {
 		</template>
 
 		<template #main>
-			<FoodList :items="filteredFood" @selected="showDetails" />
+			<FoodList :items="filtered" @selected="showDetails" />
 		</template>
 
 		<template #head-details v-if="current">
@@ -160,65 +212,76 @@ function showDetails(id) {
 				<span class="tag">Tag 1</span>
 				<span class="tag">Tag 2</span>
 				<span class="tag">Tag 3</span>
+				<button
+					class="icon async"
+					:disabled="isSaving"
+					@click="onEditMode"
+					v-if="perms.canCreateFood || perms.canEditFood"
+				>
+					<EditImage v-if="!editMode" />
+					<SaveImage v-if="editMode" />
+				</button>
 			</section>
 			<section class="nutrients">
 				<h2>Nutrients</h2>
-				<div>
-					<fieldset :disabled="!(perms.canCreateFood || perms.canEditFood)">
-						<div>
-							<label>{{ $t("food.energy") }}</label>
-							<input type="text" :value="current.kcal" name="kcal" />
-							<span class="unit">{{ $t("unit.cal") }}</span>
-						</div>
-						<div>
-							<label>{{ $t("food.fat") }}</label>
-							<input type="text" :value="current.fat" name="fat" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-						<div>
-							<label>{{ $t("food.carbs2") }}</label>
-							<input type="text" :value="current.carb" name="carb" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-						<div>
-							<label>{{ $t("food.protein") }}</label>
-							<input type="text" :value="current.prot" name="prot" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-						<div>
-							<label>{{ $t("food.fiber") }}</label>
-							<input type="text" :value="current.fib" name="fib" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-					</fieldset>
-					<fieldset>
-						<div>
-							<label>{{ $t("food.fatsat") }}</label>
-							<input type="text" :value="current.fatsat" name="fatsat" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-						<div>
-							<label>{{ $t("food.fato3") }}</label>
-							<input type="text" :value="current.fato3" name="fato3" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-						<div>
-							<label>{{ $t("food.fato6") }}</label>
-							<input type="text" :value="current.fato6" name="fato6" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-						<div>
-							<label>{{ $t("food.sugar") }}</label>
-							<input type="text" :value="current.sug" name="sug" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-						<div>
-							<label>{{ $t("food.salt") }}</label>
-							<input type="text" :value="current.salt" name="salt" />
-							<span class="unit">{{ $t("unit.g") }}</span>
-						</div>
-					</fieldset>
-				</div>
+				<form ref="form">
+					<div>
+						<fieldset :disabled="!editMode">
+							<div>
+								<label>{{ $t("food.energy") }}</label>
+								<input type="text" :value="current.kcal" name="kcal" @change="onInput" />
+								<span class="unit">{{ $t("unit.cal") }}</span>
+							</div>
+							<div>
+								<label>{{ $t("food.fat") }}</label>
+								<input type="text" :value="current.fat" name="fat" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ $t("food.carbs2") }}</label>
+								<input type="text" :value="current.carb" name="carb" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ $t("food.protein") }}</label>
+								<input type="text" :value="current.prot" name="prot" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ $t("food.fiber") }}</label>
+								<input type="text" :value="current.fib" name="fib" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+						</fieldset>
+						<fieldset :disabled="!editMode">
+							<div>
+								<label>{{ $t("food.fatsat") }}</label>
+								<input type="text" :value="current.fatsat" name="fatsat" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ $t("food.fato3") }}</label>
+								<input type="text" :value="current.fato3" name="fato3" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ $t("food.fato6") }}</label>
+								<input type="text" :value="current.fato6" name="fato6" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ $t("food.sugar") }}</label>
+								<input type="text" :value="current.sug" name="sug" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ $t("food.salt") }}</label>
+								<input type="text" :value="current.salt" name="salt" @change="onInput" />
+								<span class="unit">{{ $t("unit.g") }}</span>
+							</div>
+						</fieldset>
+					</div>
+				</form>
 			</section>
 		</template>
 	</Main>
@@ -236,25 +299,29 @@ function showDetails(id) {
 }
 
 #details section.tags {
-	padding: 0 0.25em 0.5em;
+	padding: 0 3em 0.5em 0.25em;
+	position: relative;
 	display: block;
 }
 
-#details .nutrients > div:not(:first-of-type) {
+#details section.tags button.icon {
+	position: absolute;
+	right: 0.5em;
+	bottom: 0.5em;
+}
+
+#details .nutrients form > div:not(:first-of-type) {
 	margin-top: 3em;
 }
 
 @media only screen and (min-width: 400px) {
-	#details .nutrients > div {
+	#details .nutrients form > div {
 		display: flex;
+		justify-content: space-between;
 	}
 
-	#details .nutrients fieldset:first-child {
-		margin-right: 1em;
-	}
-
-	#details .nutrients fieldset:last-child {
-		margin-left: 1em;
+	#details .nutrients fieldset {
+		flex-basis: 45%;
 	}
 }
 </style>

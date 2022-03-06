@@ -206,6 +206,21 @@ button {
 	transition: box-shadow 0.2s, background-color 0.2s;
 }
 
+button.icon {
+	--color-spinner-secondary: rgba(19, 173, 115, 0.3);
+	--color-spinner-primary: var(--color-primary);
+	height: 2.5em;
+	width: 2.5em;
+	background: none;
+}
+
+button.icon > svg {
+	width: 100%;
+	height: 100%;
+	display: block;
+	fill: var(--color-primary);
+}
+
 input::placeholder {
 	color: var(--color-placeholder);
 }
@@ -293,6 +308,14 @@ button.async:after {
 button.async[disabled] {
 	background-color: var(--color-primary);
 	color: transparent;
+}
+
+button.icon.async[disabled] {
+	background: none;
+}
+
+button.icon.async[disabled] > svg {
+	opacity: 0;
 }
 
 button.async[disabled]:after {

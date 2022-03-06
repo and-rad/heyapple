@@ -5,6 +5,7 @@ import MoreImage from "./images/ImageMore.vue";
 import BackArrow from "./images/ImageRightArrow.vue";
 import { ref } from "vue";
 
+const emit = defineEmits(["detailVisibility"]);
 const filter = ref("");
 const details = ref("");
 
@@ -12,12 +13,14 @@ function toggleFilter() {
 	if (filter.value == "") {
 		filter.value = "open-filter";
 		details.value = "";
+		emit("detailVisibility");
 	} else {
 		filter.value = "";
 	}
 }
 
 function toggleDetails() {
+	emit("detailVisibility");
 	if (details.value == "") {
 		details.value = "open-details";
 		filter.value = "";
@@ -27,6 +30,7 @@ function toggleDetails() {
 }
 
 function showDetails() {
+	emit("detailVisibility");
 	if (details.value == "") {
 		details.value = "open-details";
 		filter.value = "";
@@ -274,22 +278,6 @@ main .controls {
 
 #main .controls button.open-details > svg {
 	transform: rotate(90deg);
-}
-
-main .controls button {
-	width: auto;
-}
-
-main .controls button.icon {
-	height: 2.5em;
-	width: 2.5em;
-	background: none;
-}
-
-main .controls button > svg {
-	width: 1.5em;
-	height: 1.5em;
-	fill: var(--color-primary);
 }
 
 #main .content {

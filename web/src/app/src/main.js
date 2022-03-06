@@ -1,4 +1,4 @@
-import { createApp } from "vue";
+import { createApp, ref } from "vue";
 import { createI18n } from "vue-i18n";
 import App from "./App.vue";
 import router from "./router";
@@ -60,7 +60,7 @@ function mountApp() {
 
 	app.provide("csrfToken", csrfToken);
 	app.provide("perms", perms);
-	app.provide("food", food);
+	app.provide("food", ref(food));
 	app.use(router);
 	app.use(locale);
 	app.mount("#app");

@@ -38,24 +38,32 @@ function saveFood() {
 			"X-CSRF-Token": csrf,
 		},
 		body: new URLSearchParams(data),
-	}).then((response) => {
-		if (response.ok) {
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("savefood.err" + response.status);
+			}
 			editMode.value = false;
-			refreshFood(id);
-		} else {
-			isSaving.value = false;
-		}
-	});
-}
-
-function refreshFood(id) {
-	fetch("/api/v1/food/" + id)
+			return fetch("/api/v1/food/"+id);
+		})
 		.then((response) => response.json())
 		.then((data) => {
 			data.name = t(data.id.toString());
 			foods.value = foods.value.map((f) => (data.id == f.id ? data : f));
 			filtered.value = filtered.value.map((f) => (data.id == f.id ? data : f));
 			current.value = current.value.id == data.id ? data : current.value;
+			console.log(t("savefood.msg204"));
+		})
+		.catch((err) => {
+			if (typeof err === "string") {
+				console.log(err);
+			} else if ("message" in err) {
+				console.log(err.message);
+			} else {
+				console.log(t("err.err"));
+			}
+		})
+		.finally(() => {
 			setTimeout(function () {
 				isSaving.value = false;
 			}, 500);

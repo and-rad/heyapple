@@ -12,6 +12,9 @@
 		"details": {
 			"noitem": "Select an item for details"
 		},
+		"err": {
+			"err": "Unknown error occurred"
+		},
 		"food": {
 			"carbs": "Carbohydrates",
 			"carbs2": "Carbs",
@@ -41,6 +44,14 @@
 		"recipe": {
 			"hintnew": "New name...",
 			"hintsearch": "Find a recipe..."
+		},
+		"savefood": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to edit food items.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "The requested food item does not exist.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"msg204": "Success! All edits saved."
 		},
 		"signout": {
 			"err404": "Sign out failed, session not found. Are you even signd in?",

@@ -22,9 +22,12 @@
 package memory
 
 import (
+	"bytes"
+	"encoding/json"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"heyapple/pkg/job"
+	"io/fs"
 	"sort"
 	"sync"
 )
@@ -62,6 +65,34 @@ func NewDB(log app.Logger) *DB {
 		userRec: make(map[int]map[int]int),
 		recUser: make(map[int]map[int]int),
 	}
+}
+
+func (db *DB) WithDefaults(fs fs.FS) *DB {
+	if len(db.food) == 0 {
+		file, err := fs.Open("food.json")
+		if err != nil {
+			return db
+		}
+
+		defer file.Close()
+
+		var buf bytes.Buffer
+		if _, err := buf.ReadFrom(file); err != nil {
+			return db
+		}
+
+		food := []core.Food{}
+		if err := json.Unmarshal(buf.Bytes(), &food); err != nil {
+			return db
+		}
+
+		db.foodID = len(food)
+		for _, f := range food {
+			db.food[f.ID] = f
+		}
+	}
+
+	return db
 }
 
 func (db *DB) WithBackup() *DB {

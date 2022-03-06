@@ -23,8 +23,32 @@ const main = ref(null);
 const form = ref(null);
 
 function newFood(name) {
-	// TODO create new food
-	console.log(name);
+	fetch("/api/v1/food", {
+		method: "POST",
+		headers: { "X-CSRF-Token": csrf },
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("createfood.err" + response.status);
+			}
+			return response.json();
+		})
+		.then((data) => {
+			data.name = name;
+			foods.value.push(data);
+			filtered.value.push(data);
+			console.log(t("createfood.ok"));
+			showDetails(data.id);
+		})
+		.catch((err) => {
+			if (typeof err === "string") {
+				console.log(err);
+			} else if ("message" in err) {
+				console.log(err.message);
+			} else {
+				console.log(t("err.err"));
+			}
+		});
 }
 
 function saveFood() {
@@ -44,7 +68,7 @@ function saveFood() {
 				throw t("savefood.err" + response.status);
 			}
 			editMode.value = false;
-			return fetch("/api/v1/food/"+id);
+			return fetch("/api/v1/food/" + id);
 		})
 		.then((response) => response.json())
 		.then((data) => {
@@ -52,7 +76,7 @@ function saveFood() {
 			foods.value = foods.value.map((f) => (data.id == f.id ? data : f));
 			filtered.value = filtered.value.map((f) => (data.id == f.id ? data : f));
 			current.value = current.value.id == data.id ? data : current.value;
-			console.log(t("savefood.msg204"));
+			console.log(t("savefood.ok"));
 		})
 		.catch((err) => {
 			if (typeof err === "string") {

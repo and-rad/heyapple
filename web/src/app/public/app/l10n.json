@@ -9,6 +9,12 @@
 		"btn": {
 			"new": "New"
 		},
+		"createfood": {
+			"err401": "You do not have permission to create food items.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! New food item created."
+		},
 		"details": {
 			"noitem": "Select an item for details"
 		},
@@ -51,7 +57,7 @@
 			"err403": "It doesn't look like you're allowed to do that.",
 			"err404": "The requested food item does not exist.",
 			"err500": "Internal server error. This shouldn't happen.",
-			"msg204": "Success! All edits saved."
+			"ok": "Success! All edits saved."
 		},
 		"signout": {
 			"err404": "Sign out failed, session not found. Are you even signd in?",

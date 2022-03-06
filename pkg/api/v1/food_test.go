@@ -148,10 +148,10 @@ func TestNewFood(t *testing.T) {
 			status:    http.StatusInternalServerError,
 		},
 		{ //03// success
-			db:        mock.NewDB().WithUser(app.User{ID: 1, Perm: app.PermCreateFood}).WithID(23),
+			db:        mock.NewDB().WithUser(app.User{ID: 1, Perm: app.PermCreateFood}).WithID(mock.Food0.ID),
 			setCookie: true,
 			status:    http.StatusCreated,
-			out:       "23",
+			out:       mock.Food0Json,
 		},
 	} {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(""))

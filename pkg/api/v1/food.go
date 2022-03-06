@@ -80,7 +80,7 @@ func Foods(env *handler.Environment) httprouter.Handle {
 //   404 - Food item doesn't exist
 //   500 - Internal server error
 // Example output:
-//     { "id": 1, "kcal": 230, ... }
+//   { "id": 1, "kcal": 230, ... }
 func Food(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.GetFood{}
@@ -101,9 +101,9 @@ func Food(env *handler.Environment) httprouter.Handle {
 	}
 }
 
-// NewFood creates a new food item and returns the item's
-// ID on success. The response body will be empty if any
-// errors occur.
+// NewFood creates a new food item and returns an empty
+// food object with the new id on success. The response
+// body will be empty if any errors occur.
 //
 // Endpoint:
 //   /api/v1/food
@@ -114,7 +114,7 @@ func Food(env *handler.Environment) httprouter.Handle {
 //   401 - Insufficient permissions
 //   500 - Internal server error
 // Example output:
-//   42
+//   { "id": 2, "kcal": 0, "fat": 0, ... }
 func NewFood(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		var hasPermission bool
@@ -134,7 +134,7 @@ func NewFood(env *handler.Environment) httprouter.Handle {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusCreated)
-			sendResponse(cmd.ID, w)
+			sendResponse(cmd.Food, w)
 		}
 	}
 }

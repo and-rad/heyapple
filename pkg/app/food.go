@@ -27,14 +27,14 @@ import (
 // food database. If successful, the new item id is stored
 // in the command.
 type CreateFood struct {
-	ID int
+	Food core.Food
 }
 
 func (c *CreateFood) Execute(db DB) error {
 	if id, err := db.NewFood(); err != nil {
 		return err
 	} else {
-		c.ID = id
+		c.Food.ID = id
 	}
 
 	return nil

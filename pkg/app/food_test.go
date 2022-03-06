@@ -46,8 +46,8 @@ func TestCreateFood_Execute(t *testing.T) {
 			t.Errorf("test case %d: error mismatch \nhave: %v \nwant: %v", idx, err, data.err)
 		}
 
-		if cmd.ID != data.db.ID {
-			t.Errorf("test case %d: id mismatch \nhave: %v \nwant: %v", idx, cmd.ID, data.db.ID)
+		if cmd.Food.ID != data.db.ID {
+			t.Errorf("test case %d: id mismatch \nhave: %v \nwant: %v", idx, cmd.Food.ID, data.db.ID)
 		}
 	}
 }

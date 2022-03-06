@@ -84,8 +84,8 @@ func TestDB_Execute(t *testing.T) {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
 		}
 
-		if f, _ := data.db.Food(data.cmd.ID); err == nil && f.ID != data.cmd.ID {
-			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, f.ID, data.cmd.ID)
+		if f, _ := data.db.Food(data.cmd.Food.ID); err == nil && f != data.cmd.Food {
+			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, f, data.cmd.Food)
 		}
 	}
 }

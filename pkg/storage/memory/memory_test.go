@@ -532,7 +532,7 @@ func TestDB_NewRecipe(t *testing.T) {
 	}{
 		{ //00// empty database, nameless recipe
 			db:   NewDB(),
-			rec:  core.Recipe{ID: 1, Size: 1},
+			rec:  core.NewRecipe(1),
 			meta: core.RecipeMeta{ID: 1},
 		},
 		{ //01// increment id
@@ -542,7 +542,7 @@ func TestDB_NewRecipe(t *testing.T) {
 				recID:   3,
 			},
 			name: "Pie",
-			rec:  core.Recipe{ID: 4, Size: 1},
+			rec:  core.NewRecipe(4),
 			meta: core.RecipeMeta{ID: 4, Name: "Pie"},
 		},
 		{ //02// duplicate names allowed
@@ -552,7 +552,7 @@ func TestDB_NewRecipe(t *testing.T) {
 				recID:   1,
 			},
 			name: "Apple Pie",
-			rec:  core.Recipe{ID: 2, Size: 1},
+			rec:  core.NewRecipe(2),
 			meta: core.RecipeMeta{ID: 2, Name: "Apple Pie"},
 		},
 	} {

@@ -27,7 +27,7 @@ import (
 // Example input:
 //   name=Pie
 // Example output:
-//   42
+//   { "id": 1, "size": 0, "items": [] }
 func NewRecipe(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.CreateRecipe{Name: r.FormValue("name")}
@@ -39,14 +39,14 @@ func NewRecipe(env *handler.Environment) httprouter.Handle {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else if err := env.DB.Execute(&app.SaveRecipeAccess{
 			UserID:     uid,
-			RecID:      cmd.ID,
+			RecID:      cmd.Recipe.ID,
 			Permission: app.PermOwner,
 		}); err != nil {
 			w.WriteHeader(http.StatusAccepted)
-			sendResponse(cmd.ID, w)
+			sendResponse(cmd.Recipe, w)
 		} else {
 			w.WriteHeader(http.StatusCreated)
-			sendResponse(cmd.ID, w)
+			sendResponse(cmd.Recipe, w)
 		}
 	}
 }

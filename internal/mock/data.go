@@ -93,6 +93,12 @@ var (
 )
 
 var (
+	Recipe0 = core.Recipe{
+		ID:    42,
+		Size:  1,
+		Items: []core.Ingredient{},
+	}
+
 	Recipe1 = core.Recipe{
 		ID:    1,
 		Size:  1,
@@ -117,6 +123,7 @@ var (
 		KCal: 54*3 + 93*2.5,
 	}
 
+	Recipe0Json  = `{"items":[],"size":1,"id":42}`
 	Recipe1Json  = `{"items":[{"id":2,"amount":150}],"size":1,"id":1}`
 	Recipe2Json  = `{"items":[{"id":1,"amount":300},{"id":2,"amount":250}],"size":3,"id":2}`
 	RecMeta1Json = `{"name":"Apple Pie","instructions":"","id":1,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":81,"fat":0,"carb":0,"prot":0}`

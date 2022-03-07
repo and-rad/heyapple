@@ -100,6 +100,10 @@ type Recipe struct {
 	ID    int          `json:"id"`
 }
 
+func NewRecipe(id int) Recipe {
+	return Recipe{ID: id, Size: 1, Items: []Ingredient{}}
+}
+
 // RecipeMeta stores additional and computed information
 // about a recipe. Some is entered manually, like the name
 // and preparation instructions, and some is computed

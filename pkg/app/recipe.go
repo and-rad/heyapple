@@ -23,18 +23,18 @@ import (
 )
 
 // CreateRecipe is a command to create a new named recipe
-// in the food database. If successful, the new item id is
+// in the food database. If successful, the new item is
 // stored in the command.
 type CreateRecipe struct {
-	Name string
-	ID   int
+	Name   string
+	Recipe core.Recipe
 }
 
 func (c *CreateRecipe) Execute(db DB) error {
 	if id, err := db.NewRecipe(c.Name); err != nil {
 		return err
 	} else {
-		c.ID = id
+		c.Recipe = core.NewRecipe(id)
 	}
 
 	return nil

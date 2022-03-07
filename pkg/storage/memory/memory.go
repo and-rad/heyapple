@@ -229,7 +229,7 @@ func (db *DB) SetFood(food core.Food) error {
 
 func (db *DB) NewRecipe(name string) (int, error) {
 	db.recID++
-	db.recipes[db.recID] = core.Recipe{ID: db.recID, Size: 1}
+	db.recipes[db.recID] = core.NewRecipe(db.recID)
 	db.recMeta[db.recID] = core.RecipeMeta{ID: db.recID, Name: name}
 	return db.recID, nil
 }

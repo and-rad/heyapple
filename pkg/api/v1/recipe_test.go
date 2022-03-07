@@ -44,18 +44,18 @@ func TestNewRecipe(t *testing.T) {
 		},
 		{ //03// partial success
 			in:        url.Values{"name": {"My Recipe"}},
-			db:        mock.NewDB().WithUser(mock.User1).WithID(23).WithError(nil, mock.ErrDOS),
+			db:        mock.NewDB().WithUser(mock.User1).WithID(mock.Recipe0.ID).WithError(nil, mock.ErrDOS),
 			setCookie: true,
 			status:    http.StatusAccepted,
-			out:       "23",
+			out:       mock.Recipe0Json,
 		},
 		{ //04// success
 			in:        url.Values{"name": {"My Recipe"}},
-			db:        mock.NewDB().WithUser(mock.User1).WithID(23),
+			db:        mock.NewDB().WithUser(mock.User1).WithID(mock.Recipe0.ID),
 			setCookie: true,
 			status:    http.StatusCreated,
-			access:    mock.Access{User: mock.User1.ID, Resource: 23, Perms: app.PermOwner},
-			out:       "23",
+			access:    mock.Access{User: mock.User1.ID, Resource: mock.Recipe0.ID, Perms: app.PermOwner},
+			out:       mock.Recipe0Json,
 		},
 	} {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))

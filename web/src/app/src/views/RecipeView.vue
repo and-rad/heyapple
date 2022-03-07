@@ -24,6 +24,7 @@ function newRecipe(name) {
 			return response.json();
 		})
 		.then((data) => {
+			console.log(data);
 			log.msg(t("createrec.ok"));
 		})
 		.catch((err) => log.err(err));

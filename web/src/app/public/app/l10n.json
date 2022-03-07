@@ -15,6 +15,13 @@
 			"err500": "Internal server error. This shouldn't happen.",
 			"ok": "Success! New food item created."
 		},
+		"createrec": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to create recipes.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! New recipe created."
+		},
 		"details": {
 			"noitem": "Select an item for details"
 		},
@@ -37,7 +44,7 @@
 			"salt": "Salt",
 			"sugar": "Sugar"
 		},
-		"nav":{
+		"nav": {
 			"diary": "Diary",
 			"food": "Food",
 			"help": "Help",

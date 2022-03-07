@@ -1,10 +1,32 @@
 <script setup>
 import Main from "../components/Main.vue";
 import NewRecipe from "../components/ClickableInput.vue";
+import { inject } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+const log = inject("log");
+const csrf = inject("csrfToken");
 
 function newRecipe(name) {
-	// TODO create new food
-	console.log(name);
+	fetch("/api/v1/recipe", {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+		body: new URLSearchParams({ name: name }),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("createrec.err" + response.status);
+			}
+			return response.json();
+		})
+		.then((data) => {
+			log.msg(t("createrec.ok"));
+		})
+		.catch((err) => log.err(err));
 }
 </script>
 

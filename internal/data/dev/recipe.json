@@ -1,4 +1,8 @@
 {
-	"recs":[],
-	"meta": []
+	"recs":[
+		{"id":1, "size":1, "items":[{"id":1, "amount":150}]}
+	],
+	"meta": [
+		{"id":1, "name":"Apple Pie", "instructions":"Just do it", "kcal":81, "fat":0.3, "carb":21.6, "prot":0.45}
+	]
 }

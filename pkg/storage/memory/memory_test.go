@@ -867,19 +867,59 @@ func TestDB_WithDefaults(t *testing.T) {
 			db: NewDB(),
 		},
 		{ //01// not a file
-			fs: fstest.MapFS{"food.json": {Mode: fs.ModeDir}},
+			fs: fstest.MapFS{
+				"food.json": {Mode: fs.ModeDir},
+			},
 			db: NewDB(),
 		},
 		{ //02// invalid JSON
-			fs: fstest.MapFS{"food.json": {Data: []byte(`{"err":}`)}},
+			fs: fstest.MapFS{
+				"food.json": {Data: []byte(`{"err":}`)},
+			},
 			db: NewDB(),
 		},
 		{ //03// success
-			fs: fstest.MapFS{"food.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.Food1Json))}},
+			fs: fstest.MapFS{
+				"food.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.Food1Json))},
+			},
 			db: func() *DB {
 				db := NewDB()
 				db.food = map[int]core.Food{1: mock.Food1}
 				db.foodID = 1
+				return db
+			}(),
+		},
+		{ //04// not a file
+			fs: fstest.MapFS{
+				"food.json":   {Data: []byte(`[]`)},
+				"recipe.json": {Mode: fs.ModeDir},
+			},
+			db: NewDB(),
+		},
+		{ //05// invalid JSON
+			fs: fstest.MapFS{
+				"food.json":   {Data: []byte(`[]`)},
+				"recipe.json": {Data: []byte(`{"err":}`)},
+			},
+			db: NewDB(),
+		},
+		{ //06// number of items not equal
+			fs: fstest.MapFS{
+				"food.json":   {Data: []byte(`[]`)},
+				"recipe.json": {Data: []byte(fmt.Sprintf(`{"recs":[{}],"meta":[{},{}]}`))},
+			},
+			db: NewDB(),
+		},
+		{ //07// success
+			fs: fstest.MapFS{
+				"food.json":   {Data: []byte(`[]`)},
+				"recipe.json": {Data: []byte(fmt.Sprintf(`{"recs":[%s],"meta":[%s]}`, mock.Recipe1Json, mock.RecMeta1Json))},
+			},
+			db: func() *DB {
+				db := NewDB()
+				db.recID = 1
+				db.recipes = map[int]core.Recipe{1: mock.Recipe1}
+				db.recMeta = map[int]core.RecipeMeta{1: mock.RecMeta1}
 				return db
 			}(),
 		},

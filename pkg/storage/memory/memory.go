@@ -67,26 +67,38 @@ func NewDB() *DB {
 
 func (db *DB) WithDefaults(fs fs.FS) *DB {
 	if len(db.food) == 0 {
-		file, err := fs.Open("food.json")
-		if err != nil {
-			return db
-		}
-
-		defer file.Close()
-
-		var buf bytes.Buffer
-		if _, err := buf.ReadFrom(file); err != nil {
-			return db
-		}
-
 		food := []core.Food{}
-		if err := json.Unmarshal(buf.Bytes(), &food); err != nil {
+		data := loadDefault(fs, "food.json")
+		if err := json.Unmarshal(data, &food); err != nil {
 			return db
 		}
 
 		db.foodID = len(food)
 		for _, f := range food {
 			db.food[f.ID] = f
+		}
+	}
+
+	if len(db.recipes) == 0 {
+		recs := struct {
+			Recs []core.Recipe
+			Meta []core.RecipeMeta
+		}{}
+		data := loadDefault(fs, "recipe.json")
+		if err := json.Unmarshal(data, &recs); err != nil {
+			return db
+		}
+
+		if len(recs.Recs) != len(recs.Meta) {
+			return db
+		}
+
+		db.recID = len(recs.Recs)
+		for i := range recs.Recs {
+			r := recs.Recs[i]
+			m := recs.Meta[i]
+			db.recipes[r.ID] = r
+			db.recMeta[r.ID] = m
 		}
 	}
 
@@ -296,4 +308,20 @@ func (db *DB) Fetch(q app.Query) error {
 	db.mtx.RLock()
 	defer db.mtx.RUnlock()
 	return q.Fetch(db)
+}
+
+func loadDefault(fs fs.FS, name string) []byte {
+	file, err := fs.Open(name)
+	if err != nil {
+		return nil
+	}
+
+	defer file.Close()
+
+	var buf bytes.Buffer
+	if _, err := buf.ReadFrom(file); err != nil {
+		return nil
+	}
+
+	return buf.Bytes()
 }

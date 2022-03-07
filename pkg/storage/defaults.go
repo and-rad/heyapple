@@ -29,6 +29,8 @@ const envPreset = "HEYAPPLE_STORAGE_PRESET"
 
 func Defaults() embed.FS {
 	switch os.Getenv(envPreset) {
+	case "none":
+		return embed.FS{}
 	case "develop":
 		return dev.FS
 	default:

@@ -39,7 +39,9 @@ type access struct {
 }
 
 type backup struct {
-	db         *DB
+	db  *DB
+	log app.Logger
+
 	lastBackup string
 }
 
@@ -57,12 +59,12 @@ type backupData struct {
 
 func (b *backup) Run() {
 	if err := b.save(); err != nil {
-		b.db.log.Error(err)
+		b.log.Error(err)
 	}
 
 	if now := time.Now().Format("2006-01-02"); now != b.lastBackup {
 		if err := b.backUp(); err != nil {
-			b.db.log.Error(err)
+			b.log.Error(err)
 		}
 	}
 }

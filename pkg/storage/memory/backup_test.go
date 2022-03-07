@@ -40,7 +40,6 @@ var (
 	)
 
 	database1 = &DB{
-		log:     mock.NewLog(),
 		users:   map[int]app.User{mock.User1.ID: mock.User1},
 		emails:  map[string]int{mock.User1.Email: mock.User1.ID},
 		tokens:  map[string]app.Token{"abcd": {ID: mock.User1.ID}},
@@ -64,11 +63,11 @@ func Test_backup_Run(t *testing.T) {
 	}{
 		{ //00// no directory permission
 			dir: "/opt/tmp/heyapple",
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 		},
 		{ //01// empty database
 			dir:  testStorageDir,
-			db:   NewDB(mock.NewLog()),
+			db:   NewDB(),
 			file: backup0,
 		},
 		{ //02// save filled database
@@ -83,7 +82,7 @@ func Test_backup_Run(t *testing.T) {
 		defer os.Unsetenv(envBackupDir)
 		defer os.RemoveAll(data.dir)
 
-		(&backup{db: data.db}).Run()
+		(&backup{db: data.db, log: mock.NewLog()}).Run()
 
 		file, _ := ioutil.ReadFile(filepath.Join(data.dir, storageFile+".json"))
 		if contents := string(file); contents != data.file {
@@ -107,11 +106,11 @@ func Test_backup_load(t *testing.T) {
 		db   *DB
 	}{
 		{ //00// empty file
-			db: NewDB(mock.NewLog()),
+			db: NewDB(),
 		},
 		{ //01// invalid JSON
 			file: `{"food":`,
-			db:   NewDB(mock.NewLog()),
+			db:   NewDB(),
 		},
 		{ //02// success
 			file: backup1,
@@ -128,7 +127,7 @@ func Test_backup_load(t *testing.T) {
 			t.Error(err)
 		}
 
-		db := NewDB(mock.NewLog())
+		db := NewDB()
 		(&backup{db: db}).load()
 
 		if !reflect.DeepEqual(db, data.db) {
@@ -147,12 +146,12 @@ func Test_backup_save(t *testing.T) {
 	}{
 		{ //00// no directory permission
 			dir: "/opt/tmp/heyapple",
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: &fs.PathError{},
 		},
 		{ //01// empty database
 			dir:  testStorageDir,
-			db:   NewDB(mock.NewLog()),
+			db:   NewDB(),
 			file: backup0,
 		},
 		{ //02// save filled database
@@ -194,12 +193,12 @@ func Test_backup_backUp(t *testing.T) {
 	}{
 		{ //00// no directory permission
 			dir: "/opt/tmp/heyapple",
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: &fs.PathError{},
 		},
 		{ //01// empty database
 			dir:  testStorageDir,
-			db:   NewDB(mock.NewLog()),
+			db:   NewDB(),
 			file: backup0,
 		},
 		{ //02// save filled database

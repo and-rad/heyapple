@@ -33,7 +33,6 @@ import (
 )
 
 type DB struct {
-	log  app.Logger
 	jobs *job.Scheduler
 
 	users   map[int]app.User
@@ -53,9 +52,8 @@ type DB struct {
 	mtx sync.RWMutex
 }
 
-func NewDB(log app.Logger) *DB {
+func NewDB() *DB {
 	return &DB{
-		log:     log,
 		users:   make(map[int]app.User),
 		tokens:  make(map[string]app.Token),
 		emails:  make(map[string]int),
@@ -95,8 +93,8 @@ func (db *DB) WithDefaults(fs fs.FS) *DB {
 	return db
 }
 
-func (db *DB) WithBackup() *DB {
-	backupper := &backup{db: db}
+func (db *DB) WithBackup(log app.Logger) *DB {
+	backupper := &backup{db: db, log: log}
 	backupper.load()
 
 	db.jobs = job.NewScheduler(

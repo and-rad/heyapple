@@ -58,7 +58,7 @@ func TestDB_WithBackup(t *testing.T) {
 		defer os.Unsetenv(envStorageDir)
 		defer os.RemoveAll(data.dir)
 
-		db := NewDB(mock.NewLog()).WithBackup()
+		db := NewDB().WithBackup(mock.NewLog())
 		time.Sleep(time.Millisecond * 500)
 		db.Close()
 
@@ -77,7 +77,7 @@ func TestDB_Execute(t *testing.T) {
 		err error
 	}{
 		{ //00//
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			cmd: &app.CreateFood{},
 		},
 	} {
@@ -101,7 +101,7 @@ func TestDB_Fetch(t *testing.T) {
 		err error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			cmd: &app.GetFood{Item: core.Food{ID: 1}},
 			err: app.ErrNotFound,
 		},
@@ -135,7 +135,7 @@ func TestDB_NewFood(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:   NewDB(mock.NewLog()),
+			db:   NewDB(),
 			food: core.Food{ID: 1},
 		},
 		{ //01// increment id
@@ -164,7 +164,7 @@ func TestDB_Foods(t *testing.T) {
 		err   error
 	}{
 		{ //00// empty database
-			db:    NewDB(mock.NewLog()),
+			db:    NewDB(),
 			foods: []core.Food{},
 		},
 		{ //01// all items returned
@@ -203,7 +203,7 @@ func TestDB_Food(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// item doesn't exist
@@ -237,7 +237,7 @@ func TestDB_SetFood(t *testing.T) {
 		err error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// food item doesn't exist
@@ -271,7 +271,7 @@ func TestDB_UserByName(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// user doesn't exist
@@ -320,7 +320,7 @@ func TestDB_NewUser(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:   NewDB(mock.NewLog()),
+			db:   NewDB(),
 			name: "a@a.a",
 			hash: "djwrifkgh",
 			user: app.User{ID: 1, Email: "a@a.a", Pass: "djwrifkgh", Lang: getConfig().defaultLang},
@@ -377,7 +377,7 @@ func TestDB_SetUser(t *testing.T) {
 		err error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// user doesn't exist
@@ -418,7 +418,7 @@ func TestDB_UserByID(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// user doesn't exist
@@ -460,7 +460,7 @@ func TestDB_Token(t *testing.T) {
 		err   error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// token not found
@@ -495,7 +495,7 @@ func TestDB_DeleteToken(t *testing.T) {
 		err    error
 	}{
 		{ //00// empty database, no error
-			db:     NewDB(mock.NewLog()),
+			db:     NewDB(),
 			tokens: make(map[string]app.Token),
 		},
 		{ //01// token deleted
@@ -531,7 +531,7 @@ func TestDB_NewRecipe(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database, nameless recipe
-			db:   NewDB(mock.NewLog()),
+			db:   NewDB(),
 			rec:  core.Recipe{ID: 1, Size: 1},
 			meta: core.RecipeMeta{ID: 1},
 		},
@@ -581,7 +581,7 @@ func TestDB_SetRecipe(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// recipe doesn't exist
@@ -631,7 +631,7 @@ func TestDB_Recipe(t *testing.T) {
 		err error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// recipe doesn't exist
@@ -666,7 +666,7 @@ func TestDB_RecipeMeta(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// recipe doesn't exist
@@ -701,7 +701,7 @@ func TestDB_FoodExists(t *testing.T) {
 		err error
 	}{
 		{ //00// empty database
-			db: NewDB(mock.NewLog()),
+			db: NewDB(),
 			ok: false,
 		},
 		{ //01// item doesn't exist
@@ -737,7 +737,7 @@ func TestDB_RecipeAccess(t *testing.T) {
 		err   error
 	}{
 		{ //00// empty database
-			db:    NewDB(mock.NewLog()),
+			db:    NewDB(),
 			perms: app.PermNone,
 		},
 		{ //01// user doesn't exist
@@ -775,7 +775,7 @@ func TestDB_SetRecipeAccess(t *testing.T) {
 		err error
 	}{
 		{ //00// empty database
-			db:  NewDB(mock.NewLog()),
+			db:  NewDB(),
 			err: app.ErrNotFound,
 		},
 		{ //01// recipe doesn't exist
@@ -834,11 +834,11 @@ func TestDB_NewToken(t *testing.T) {
 		err   error
 	}{
 		{ //00//
-			db:    NewDB(mock.NewLog()),
+			db:    NewDB(),
 			token: app.Token{},
 		},
 		{ //00//
-			db:    NewDB(mock.NewLog()),
+			db:    NewDB(),
 			id:    12,
 			hash:  "abcd",
 			data:  true,
@@ -864,27 +864,27 @@ func TestDB_WithDefaults(t *testing.T) {
 	}{
 		{ //00// file not found
 			fs: fstest.MapFS{},
-			db: NewDB(mock.NewLog()),
+			db: NewDB(),
 		},
 		{ //01// not a file
 			fs: fstest.MapFS{"food.json": {Mode: fs.ModeDir}},
-			db: NewDB(mock.NewLog()),
+			db: NewDB(),
 		},
 		{ //02// invalid JSON
 			fs: fstest.MapFS{"food.json": {Data: []byte(`{"err":}`)}},
-			db: NewDB(mock.NewLog()),
+			db: NewDB(),
 		},
 		{ //03// success
 			fs: fstest.MapFS{"food.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.Food1Json))}},
 			db: func() *DB {
-				db := NewDB(mock.NewLog())
+				db := NewDB()
 				db.food = map[int]core.Food{1: mock.Food1}
 				db.foodID = 1
 				return db
 			}(),
 		},
 	} {
-		db := NewDB(mock.NewLog()).WithDefaults(data.fs)
+		db := NewDB().WithDefaults(data.fs)
 
 		if !reflect.DeepEqual(db, data.db) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, db, data.db)

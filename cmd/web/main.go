@@ -43,7 +43,7 @@ func main() {
 	log := app.NewLog(os.Stdout)
 	translator := l10n.NewTranslator()
 	notifier := email.NewNotifier(translator)
-	db := memory.NewDB(log).WithBackup().WithDefaults(storage.Defaults())
+	db := memory.NewDB().WithBackup(log).WithDefaults(storage.Defaults())
 	sessions := scs.New()
 
 	env := &handler.Environment{

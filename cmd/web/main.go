@@ -27,6 +27,7 @@ import (
 	"heyapple/pkg/handler"
 	"heyapple/pkg/l10n"
 	"heyapple/pkg/mw"
+	"heyapple/pkg/storage"
 	"heyapple/pkg/storage/memory"
 	"heyapple/web"
 	"io/fs"
@@ -41,9 +42,9 @@ import (
 func main() {
 	log := app.NewLog(os.Stdout)
 	translator := l10n.NewTranslator()
-	sessions := scs.New()
 	notifier := email.NewNotifier(translator)
-	db := memory.NewDB(log).WithBackup()
+	db := memory.NewDB(log).WithBackup().WithDefaults(storage.Defaults())
+	sessions := scs.New()
 
 	env := &handler.Environment{
 		DB:      db,

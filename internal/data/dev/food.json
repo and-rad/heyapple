@@ -1,0 +1,4 @@
+[
+	{"name":"apple", "id":1, "brand":0, "kcal":54, "fat":42, "fatsat":0, "fato3":0, "fato6":0, "carb":14.4, "sug":10.3, "prot":0.3, "fib":3, "salt":0, "pot":119, "chl":2.2, "sod":0, "calc":5.3, "phos":11, "mag":5, "iron":0.2, "zinc":0.1, "mang":0, "cop":0.1, "iod":0.008, "chr":0, "mol":0, "sel":0, "vita":0.01, "vitb1":0.04, "vitb2":0.03, "vitb3":0, "vitb5":0, "vitb6":0.1, "vitb7":0, "vitb9":0, "vitb12":0, "vitc":12, "vitd":0, "vite":0.49, "vitk":0},
+	{"name":"banana", "id":2, "brand":0, "kcal":121, "fat":40, "fatsat":0, "fato3":0, "fato6":0, "carb":30, "sug":17, "prot":1, "fib":2, "salt":0, "pot":367, "chl":109, "sod":0, "calc":7, "phos":22, "mag":30, "iron":0.4, "zinc":0.2, "mang":0.3, "cop":0.1, "iod":0.003, "chr":0, "mol":0, "sel":0, "vita":0.01, "vitb1":0.04, "vitb2":0.06, "vitb3":0, "vitb5":0, "vitb6":0.36, "vitb7":0, "vitb9":0, "vitb12":0, "vitc":11, "vitd":0, "vite":0.27, "vitk":0}
+]

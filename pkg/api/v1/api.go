@@ -27,7 +27,10 @@ package api
 
 import (
 	"encoding/json"
+	"heyapple/pkg/app"
+	"heyapple/pkg/core"
 	"net/http"
+	"strconv"
 )
 
 func sendResponse(data interface{}, w http.ResponseWriter) {
@@ -36,4 +39,60 @@ func sendResponse(data interface{}, w http.ResponseWriter) {
 	} else {
 		w.Write(data)
 	}
+}
+
+// asInt checks if param exists in the request's form and
+// if so, returns it as int or int range if there are
+// several values found.
+func asInt(param string, r *http.Request) (interface{}, error) {
+	v, ok := r.Form[param]
+	if !ok {
+		return nil, app.ErrNotFound
+	}
+
+	v1, err := strconv.Atoi(v[0])
+	if err != nil {
+		return nil, err
+	}
+
+	v2 := v1
+	if len(v) > 1 {
+		if v2, err = strconv.Atoi(v[1]); err != nil {
+			return nil, err
+		}
+	}
+
+	if v1 != v2 {
+		return core.IntRange{v1, v2}, nil
+	}
+
+	return v1, nil
+}
+
+// asFloat checks if param exists in the request's form and
+// if so, returns it as float32 or float32 range if there are
+// several values found.
+func asFloat(param string, r *http.Request) (interface{}, error) {
+	v, ok := r.Form[param]
+	if !ok {
+		return nil, app.ErrNotFound
+	}
+
+	v1, err := strconv.ParseFloat(v[0], 32)
+	if err != nil {
+		return nil, err
+	}
+
+	v2 := v1
+	if len(v) > 1 {
+		if v2, err = strconv.ParseFloat(v[1], 32); err != nil {
+			return nil, err
+		}
+	}
+
+	if v1 != v2 {
+		return core.FloatRange{float32(v1), float32(v2)}, nil
+	}
+
+	return float32(v1), nil
 }

@@ -47,7 +47,7 @@ import (
 //   200 - OK
 //   500 - Internal server error
 // Example input:
-//   name=apple&kcal=32&kcal=120&prot=12
+//   kcal=32&kcal=120&prot=12
 // Example output:
 //   [
 //     { "id": 1, "kcal": 230, ... },

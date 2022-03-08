@@ -1,6 +1,7 @@
 package api_test
 
 import (
+	"fmt"
 	"heyapple/internal/mock"
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
@@ -189,6 +190,59 @@ func TestSaveRecipe(t *testing.T) {
 
 		if !reflect.DeepEqual(data.db.RecipeItem, data.rec) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.RecipeItem, data.rec)
+		}
+	}
+}
+
+func TestRecipes(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// connection failure
+			db:        mock.NewDB().WithError(mock.ErrDOS),
+			status:    http.StatusInternalServerError,
+			setCookie: true,
+		},
+		{ //01// anonymous user
+			db:     mock.NewDB(),
+			status: http.StatusInternalServerError,
+		},
+		{ //02// empty set
+			db:        mock.NewDB(),
+			setCookie: true,
+			status:    http.StatusOK,
+			out:       "[]",
+		},
+		{ //03// success
+			setCookie: true,
+			db:        mock.NewDB().WithRecipes(mock.Recipe1, mock.Recipe2),
+			out:       fmt.Sprintf(`[%s,%s]`, mock.Recipe1Json, mock.Recipe2Json),
+			status:    http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.Recipes(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
 		}
 	}
 }

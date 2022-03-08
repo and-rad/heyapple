@@ -2,6 +2,7 @@ package api
 
 import (
 	"heyapple/pkg/app"
+	"heyapple/pkg/core"
 	"heyapple/pkg/handler"
 	"net/http"
 	"strconv"
@@ -120,4 +121,81 @@ func SaveRecipe(env *handler.Environment) httprouter.Handle {
 			w.WriteHeader(http.StatusNoContent)
 		}
 	}
+}
+
+// Recipes returns a JSON-formatted list of recipes
+// stored in the database. If no query parameters are
+// transmitted, it returns all recipes that the session
+// user has access to. The function body is empty when
+// errors occur and will always be an array on success,
+// even when there are no recipes in the database.
+//
+// If a query parameter is included more than once, its
+// first two values are interpreted as the minimum and
+// the maximum valid amount.
+//
+// Endpoint:
+//   /api/v1/recipes
+// Methods:
+//   GET
+// Possible status codes:
+//   200 - OK
+//   500 - Internal server error
+// Example input:
+//   name=Pie&kcal=32&kcal=120&prot=12
+// Example output:
+//   [
+//     { "id": 1, "name": "Pie", "size": 6, ... },
+//     { "id": 6, "name": "Omelette", "size": 1, ... },
+//     ...
+//   ]
+func Recipes(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		query := &app.GetRecipes{Filter: getRecipeFilter(r)}
+		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			query.UserID = id
+		}
+
+		if err := env.DB.Fetch(query); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(query.Items, w)
+		}
+	}
+}
+
+func getRecipeFilter(r *http.Request) core.Filter {
+	r.ParseForm()
+
+	f := core.Filter{}
+	if name := r.FormValue("name"); name != "" {
+		f["name"] = name
+		delete(r.Form, "name")
+	}
+	if size, err := asInt("size", r); err == nil {
+		f["size"] = size
+		delete(r.Form, "size")
+	}
+	if time, err := asInt("preptime", r); err == nil {
+		f["preptime"] = time
+		delete(r.Form, "preptime")
+	}
+	if time, err := asInt("cooktime", r); err == nil {
+		f["cooktime"] = time
+		delete(r.Form, "cooktime")
+	}
+	if time, err := asInt("misctime", r); err == nil {
+		f["misctime"] = time
+		delete(r.Form, "misctime")
+	}
+
+	for i := 0; i < core.RecipeType.NumField(); i++ {
+		param := core.FoodType.Field(i).Tag.Get("json")
+		if val, err := asFloat(param, r); err == nil {
+			f[param] = val
+		}
+	}
+
+	return f
 }

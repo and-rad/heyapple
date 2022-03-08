@@ -78,6 +78,7 @@ func main() {
 	router.POST("/api/v1/food", chain(api.NewFood(env), mw.JSON()))
 	router.PUT("/api/v1/food/:id", chain(api.SaveFood(env), mw.JSON()))
 
+	router.GET("/api/v1/recipes", chain(api.Recipes(env), mw.JSON()))
 	router.POST("/api/v1/recipe", chain(api.NewRecipe(env), mw.JSON()))
 	router.PUT("/api/v1/recipe/:id", chain(api.SaveRecipe(env), mw.JSON()))
 

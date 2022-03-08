@@ -248,3 +248,55 @@ func TestRecipeAccess_HasPerms(t *testing.T) {
 		}
 	}
 }
+
+func TestGetRecipes_Fetch(t *testing.T) {
+	for idx, data := range []struct {
+		db     *mock.DB
+		filter core.Filter
+		uid    int
+
+		recs []core.Recipe
+		err  error
+	}{
+		{ //00// connection failed
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			uid: 1,
+			err: mock.ErrDOS,
+		},
+		{ //01// user doesn't exist
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //02// empty db
+			db:   mock.NewDB(),
+			uid:  1,
+			recs: []core.Recipe{},
+		},
+		{ //03// success, no filter
+			db:   mock.NewDB().WithRecipes(mock.Recipe1, mock.Recipe2),
+			uid:  1,
+			recs: []core.Recipe{mock.Recipe1, mock.Recipe2},
+		},
+		{ //04// success, with filter
+			db:     mock.NewDB().WithRecipes(mock.Recipe1),
+			filter: core.Filter{"kcal": 150},
+			uid:    1,
+			recs:   []core.Recipe{mock.Recipe1},
+		},
+	} {
+		qry := &app.GetRecipes{UserID: data.uid, Filter: data.filter}
+		err := qry.Fetch(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(qry.Items, data.recs) {
+			t.Errorf("test case %d: data mismatch \nhave: %#v\nwant: %#v", idx, qry.Items, data.recs)
+		}
+
+		if !reflect.DeepEqual(data.db.Filter, data.filter) {
+			t.Errorf("test case %d: filter mismatch \nhave: %#v\nwant: %#v", idx, data.db.Filter, data.filter)
+		}
+	}
+}

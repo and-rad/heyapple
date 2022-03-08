@@ -873,3 +873,76 @@ func TestDB_WithDefaults(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_Recipes(t *testing.T) {
+	for idx, data := range []struct {
+		db     *DB
+		filter core.Filter
+		uid    int
+
+		recs []core.Recipe
+		err  error
+	}{
+		{ //00// empty database
+			db:   NewDB(),
+			recs: []core.Recipe{},
+		},
+		{ //01// missing permissions
+			db:   &DB{recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2}},
+			uid:  1,
+			recs: []core.Recipe{},
+		},
+		{ //02// denied by explicit permission
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				userRec: map[int]map[int]int{1: {1: app.PermNone}},
+			},
+			uid:  1,
+			recs: []core.Recipe{},
+		},
+		{ //03// no filter, all items with access returned
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				userRec: map[int]map[int]int{1: {1: app.PermOwner}},
+			},
+			uid:  1,
+			recs: []core.Recipe{mock.Recipe1},
+		},
+		{ //04// all items returned
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				userRec: map[int]map[int]int{1: {1: app.PermOwner, 2: app.PermRead}},
+			},
+			uid:  1,
+			recs: []core.Recipe{mock.Recipe1, mock.Recipe2},
+		},
+		{ //05// filter by range
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				userRec: map[int]map[int]int{1: {1: app.PermOwner, 2: app.PermRead}},
+			},
+			uid:    1,
+			filter: core.Filter{"kcal": core.FloatRange{60, 180}},
+			recs:   []core.Recipe{mock.Recipe1},
+		},
+		{ //06// filter by exact value
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				userRec: map[int]map[int]int{1: {1: app.PermOwner, 2: app.PermRead}},
+			},
+			uid:    1,
+			filter: core.Filter{"size": mock.Recipe2.Size},
+			recs:   []core.Recipe{mock.Recipe2},
+		},
+	} {
+		recs, err := data.db.Recipes(data.uid, data.filter)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(recs, data.recs) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, recs, data.recs)
+		}
+	}
+}

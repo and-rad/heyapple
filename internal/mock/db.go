@@ -56,7 +56,8 @@ type DB struct {
 
 func NewDB() *DB {
 	return &DB{
-		FoodItems: []core.Food{},
+		FoodItems:   []core.Food{},
+		RecipeItems: []core.Recipe{},
 	}
 }
 
@@ -97,6 +98,11 @@ func (db *DB) WithName(name string) *DB {
 
 func (db *DB) WithRecipe(rec core.Recipe) *DB {
 	db.RecipeItem = rec
+	return db
+}
+
+func (db *DB) WithRecipes(recs ...core.Recipe) *DB {
+	db.RecipeItems = recs
 	return db
 }
 
@@ -269,6 +275,14 @@ func (db *DB) RecipeAccess(user, rec int) (int, error) {
 		return db.Access.Perms, nil
 	}
 	return 0, nil
+}
+
+func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {
+	if err := db.popError(); err != nil {
+		return nil, err
+	}
+	db.Filter = f
+	return db.RecipeItems, nil
 }
 
 func (db *DB) popError() error {

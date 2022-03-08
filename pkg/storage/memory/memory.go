@@ -263,6 +263,22 @@ func (db *DB) RecipeAccess(user, rec int) (int, error) {
 	return app.PermNone, nil
 }
 
+func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {
+	recs := []core.Recipe{}
+	for id, perm := range db.userRec[uid] {
+		r := db.recipes[id]
+		if perm != app.PermNone && f.MatchRecipe(r) {
+			recs = append(recs, r)
+		}
+	}
+
+	sort.Slice(recs, func(i, j int) bool {
+		return recs[i].ID < recs[j].ID
+	})
+
+	return recs, nil
+}
+
 func (db *DB) Execute(c app.Command) error {
 	db.mtx.Lock()
 	defer db.mtx.Unlock()

@@ -126,3 +126,25 @@ func (q *RecipeAccess) Fetch(db DB) error {
 func (q *RecipeAccess) HasPerms(perms int) bool {
 	return q.Permission&perms == perms
 }
+
+// GetRecipes is a query to retrieve all recipes from
+// the food database.
+type GetRecipes struct {
+	Filter core.Filter
+	Items  []core.Recipe
+	UserID int
+}
+
+func (q *GetRecipes) Fetch(db DB) error {
+	if q.UserID == 0 {
+		return ErrNotFound
+	}
+
+	if recs, err := db.Recipes(q.UserID, q.Filter); err != nil {
+		return err
+	} else {
+		q.Items = recs
+	}
+
+	return nil
+}

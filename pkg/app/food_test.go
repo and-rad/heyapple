@@ -184,7 +184,7 @@ func TestGetFoods_Fetch(t *testing.T) {
 			db:    mock.NewDB().WithFoods(mock.Food1, mock.Food2),
 			foods: []core.Food{mock.Food1, mock.Food2},
 		},
-		{ //02// success, with filter
+		{ //03// success, with filter
 			db:     mock.NewDB().WithFoods(mock.Food1, mock.Food2),
 			filter: core.Filter{"kcal": 200},
 			foods:  []core.Food{mock.Food1, mock.Food2},

@@ -60,7 +60,12 @@ func (c *SaveFood) Execute(db DB) error {
 	foodType := reflect.TypeOf(food)
 	foodVal := reflect.ValueOf(&food).Elem()
 	for i := 0; i < foodType.NumField(); i++ {
-		tag := foodType.Field(i).Tag.Get("json")
+		field := foodType.Field(i)
+		if field.Type.Kind() != reflect.Float32 {
+			continue
+		}
+
+		tag := field.Tag.Get("json")
 		if v, ok := c.Data[tag]; ok {
 			foodVal.Field(i).SetFloat(float64(v))
 		}

@@ -101,6 +101,12 @@ func TestSaveFood_Execute(t *testing.T) {
 				VitA: 33, VitB1: 34, VitB2: 35, VitB3: 36, VitB5: 37, VitB6: 38, VitB7: 39, VitB9: 40, VitB12: 41, VitC: 42, VitD: 43, VitE: 44, VitK: 45,
 			},
 		},
+		{ //06// prevent accidental id change
+			id:   1,
+			db:   mock.NewDB().WithFood(mock.Food1),
+			data: map[string]float32{"id": 42},
+			food: mock.Food1,
+		},
 	} {
 		cmd := &app.SaveFood{ID: data.id, Data: data.data}
 		err := cmd.Execute(data.db)

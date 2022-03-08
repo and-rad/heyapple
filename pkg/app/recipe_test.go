@@ -61,8 +61,7 @@ func TestCreateRecipe_Execute(t *testing.T) {
 
 func TestSaveRecipe_Execute(t *testing.T) {
 	for idx, data := range []struct {
-		data []core.Ingredient
-		size int
+		data map[string]interface{}
 		id   int
 		db   *mock.DB
 
@@ -84,19 +83,28 @@ func TestSaveRecipe_Execute(t *testing.T) {
 			rec: mock.Recipe1,
 			err: app.ErrNotFound,
 		},
-		{ //03// ignore non-existent food
-			id:   1,
-			size: 12,
-			data: []core.Ingredient{{ID: 1, Amount: 200}, {ID: 2, Amount: 100}, {ID: 3, Amount: 450}},
-			db:   mock.NewDB().WithRecipe(mock.Recipe1).WithFoods(mock.Food1, mock.Food2),
-			rec: core.Recipe{
-				ID:    1,
-				Size:  12,
-				Items: []core.Ingredient{{ID: 1, Amount: 200}, {ID: 2, Amount: 100}},
+		{ //03// success
+			id: 1,
+			data: map[string]interface{}{
+				"name":     "Apple Pie",
+				"size":     2,
+				"preptime": 5,
+				"cooktime": 30,
+				"misctime": 45,
 			},
+			db: mock.NewDB().WithRecipe(mock.Recipe1),
+			rec: func() core.Recipe {
+				r := mock.Recipe1
+				r.Name = "Apple Pie"
+				r.Size = 2
+				r.PrepTime = 5
+				r.CookTime = 30
+				r.MiscTime = 45
+				return r
+			}(),
 		},
 	} {
-		cmd := &app.SaveRecipe{ID: data.id, Items: data.data, Size: data.size}
+		cmd := &app.SaveRecipe{ID: data.id, Data: data.data}
 		err := cmd.Execute(data.db)
 
 		if err != data.err {

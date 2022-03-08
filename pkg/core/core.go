@@ -92,27 +92,16 @@ type Ingredient struct {
 	Amount float32 `json:"amount"`
 }
 
-// Recipe is a named collection of ingredients. The serving
-// size stores how many servings the recipe yields.
+// Recipe is a named collection of ingredients. Some data
+// is entered manually, like the name, number of servings,
+// and preparation instructions, while some is computed
+// automatically, like nutrients and flags.
 type Recipe struct {
+	Name  string       `json:"name"`
 	Items []Ingredient `json:"items"`
-	Size  int          `json:"size"`
-	ID    int          `json:"id"`
-}
-
-func NewRecipe(id int) Recipe {
-	return Recipe{ID: id, Size: 1, Items: []Ingredient{}}
-}
-
-// RecipeMeta stores additional and computed information
-// about a recipe. Some is entered manually, like the name
-// and preparation instructions, and some is computed
-// automatically, like macro nutrients and flags.
-type RecipeMeta struct {
-	Name         string `json:"name"`
-	Instructions string `json:"instructions"`
 
 	ID       int `json:"id"`
+	Size     int `json:"size"`
 	Flags    int `json:"flags"`
 	PrepTime int `json:"preptime"`
 	CookTime int `json:"cooktime"`
@@ -122,6 +111,10 @@ type RecipeMeta struct {
 	Fat     float32 `json:"fat"`
 	Carbs   float32 `json:"carb"`
 	Protein float32 `json:"prot"`
+}
+
+func NewRecipe(id int) Recipe {
+	return Recipe{ID: id, Size: 1, Items: []Ingredient{}}
 }
 
 // Meal is a collection of food items that were consumed at

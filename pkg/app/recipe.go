@@ -35,17 +35,18 @@ func (c *CreateRecipe) Execute(db DB) error {
 		return err
 	} else {
 		c.Recipe = core.NewRecipe(id)
+		c.Recipe.Name = c.Name
 	}
 
 	return nil
 }
 
-// SaveRecipe is a command that upates a recipe's number
-// of servings or its list of ingredients.
+// SaveRecipe is a command that upates a recipe's data,
+// including the name and the number of servings but
+// never the list of ingredients.
 type SaveRecipe struct {
-	Items []core.Ingredient
-	Size  int
-	ID    int
+	Data map[string]interface{}
+	ID   int
 }
 
 func (c *SaveRecipe) Execute(db DB) error {
@@ -58,15 +59,24 @@ func (c *SaveRecipe) Execute(db DB) error {
 		return err
 	}
 
-	if c.Size > 0 {
-		rec.Size = c.Size
+	if name, ok := c.Data["name"].(string); ok && name != "" {
+		rec.Name = name
 	}
 
-	rec.Items = []core.Ingredient{}
-	for _, v := range c.Items {
-		if ok, err := db.FoodExists(v.ID); ok && err == nil {
-			rec.Items = append(rec.Items, v)
-		}
+	if size, ok := c.Data["size"].(int); ok && size > 0 {
+		rec.Size = size
+	}
+
+	if time, ok := c.Data["preptime"].(int); ok && time >= 0 {
+		rec.PrepTime = time
+	}
+
+	if time, ok := c.Data["cooktime"].(int); ok && time >= 0 {
+		rec.CookTime = time
+	}
+
+	if time, ok := c.Data["misctime"].(int); ok && time >= 0 {
+		rec.MiscTime = time
 	}
 
 	return db.SetRecipe(rec)

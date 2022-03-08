@@ -47,7 +47,7 @@ func TestNewRecipe(t *testing.T) {
 			db:        mock.NewDB().WithUser(mock.User1).WithID(mock.Recipe0.ID).WithError(nil, mock.ErrDOS),
 			setCookie: true,
 			status:    http.StatusAccepted,
-			out:       mock.Recipe0Json,
+			out:       strings.Replace(mock.Recipe0Json, `"name":""`, `"name":"My Recipe"`, 1),
 		},
 		{ //04// success
 			in:        url.Values{"name": {"My Recipe"}},
@@ -55,7 +55,7 @@ func TestNewRecipe(t *testing.T) {
 			setCookie: true,
 			status:    http.StatusCreated,
 			access:    mock.Access{User: mock.User1.ID, Resource: mock.Recipe0.ID, Perms: app.PermOwner},
-			out:       mock.Recipe0Json,
+			out:       strings.Replace(mock.Recipe0Json, `"name":""`, `"name":"My Recipe"`, 1),
 		},
 	} {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
@@ -141,34 +141,33 @@ func TestSaveRecipe(t *testing.T) {
 				WithRecipe(mock.Recipe1).
 				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
 			params:    httprouter.Params{{Key: "id", Value: "1"}},
-			in:        url.Values{"size": {"9"}},
+			in:        url.Values{"size": {"9"}, "name": {"Banana Pie"}},
 			setCookie: true,
 			status:    http.StatusNoContent,
-			rec:       core.Recipe{ID: 1, Size: 9, Items: []core.Ingredient{}},
+			rec: func() core.Recipe {
+				r := mock.Recipe1
+				r.Size = 9
+				r.Name = "Banana Pie"
+				return r
+			}(),
 		},
-		{ //07// ignore invalid values
+		{ //07// success
 			db: mock.NewDB().
 				WithUser(mock.User1).
 				WithRecipe(mock.Recipe1).
 				WithFoods(mock.Food1, mock.Food2).
 				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
 			params:    httprouter.Params{{Key: "id", Value: "1"}},
-			in:        url.Values{"item": {"1", "2", "34"}, "amount": {"100", "alot", "340"}},
+			in:        url.Values{"preptime": {"4"}, "cooktime": {"5"}, "misctime": {"6"}},
 			setCookie: true,
 			status:    http.StatusNoContent,
-			rec:       core.Recipe{ID: 1, Size: 1, Items: []core.Ingredient{{ID: 1, Amount: 100}}},
-		},
-		{ //08// array sizes don't match
-			db: mock.NewDB().
-				WithUser(mock.User1).
-				WithRecipe(mock.Recipe1).
-				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
-			params:    httprouter.Params{{Key: "id", Value: "1"}},
-			in:        url.Values{"item": {"1", "2"}, "amount": {"100", "250", "340"}},
-			setCookie: true,
-			status:    http.StatusBadRequest,
-			rec:       mock.Recipe1,
-		},
+			rec: func() core.Recipe {
+				r := mock.Recipe1
+				r.PrepTime = 4
+				r.CookTime = 5
+				r.MiscTime = 6
+				return r
+			}()},
 	} {
 		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")

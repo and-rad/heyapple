@@ -2,7 +2,6 @@ package api
 
 import (
 	"heyapple/pkg/app"
-	"heyapple/pkg/core"
 	"heyapple/pkg/handler"
 	"net/http"
 	"strconv"
@@ -52,10 +51,11 @@ func NewRecipe(env *handler.Environment) httprouter.Handle {
 }
 
 // SaveRecipe updates a recipe in the database identified
-// by the {id} parameter. The ingredients are passed in
-// the request body. The response body will always be
-// empty, success or failure is communicated by the status
-// codes.
+// by the {id} parameter. The data is passed in the request
+// body. The response body will always be empty, success
+// or failure is communicated by the status codes.
+//
+// This endpoint does not update the list of ingredients!
 //
 // Invalid form data does not trigger an error and will
 // just be dropped silently. As long as data is valid and
@@ -73,7 +73,7 @@ func NewRecipe(env *handler.Environment) httprouter.Handle {
 //   404 - Recipe doesn't exist
 //   500 - Internal server error
 // Example input:
-//   size=12&item=1&item=4&amount=150&amount=255
+//   size=12&name=Butterscotch
 func SaveRecipe(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		recID, err := strconv.Atoi(ps.ByName("id"))
@@ -95,25 +95,21 @@ func SaveRecipe(env *handler.Environment) httprouter.Handle {
 			return
 		}
 
-		r.ParseForm()
-		cmd := &app.SaveRecipe{ID: recID}
-		if size, err := strconv.Atoi(r.PostForm.Get("size")); err == nil {
-			cmd.Size = size
+		cmd := &app.SaveRecipe{ID: recID, Data: map[string]interface{}{}}
+		if name := r.FormValue("name"); name != "" {
+			cmd.Data["name"] = name
 		}
-
-		ids := r.PostForm["item"]
-		amounts := r.PostForm["amount"]
-		if len(ids) != len(amounts) {
-			w.WriteHeader(http.StatusBadRequest)
-			return
+		if size, err := strconv.Atoi(r.FormValue("size")); err == nil {
+			cmd.Data["size"] = size
 		}
-
-		for k := range ids {
-			if id, err := strconv.Atoi(ids[k]); err == nil {
-				if amount, err := strconv.ParseFloat(amounts[k], 32); err == nil {
-					cmd.Items = append(cmd.Items, core.Ingredient{ID: id, Amount: float32(amount)})
-				}
-			}
+		if time, err := strconv.Atoi(r.FormValue("preptime")); err == nil {
+			cmd.Data["preptime"] = time
+		}
+		if time, err := strconv.Atoi(r.FormValue("cooktime")); err == nil {
+			cmd.Data["cooktime"] = time
+		}
+		if time, err := strconv.Atoi(r.FormValue("misctime")); err == nil {
+			cmd.Data["misctime"] = time
 		}
 
 		if err := env.DB.Execute(cmd); err == app.ErrNotFound {

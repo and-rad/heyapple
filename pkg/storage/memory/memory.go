@@ -40,7 +40,6 @@ type DB struct {
 	tokens  map[string]app.Token
 	food    map[int]core.Food
 	recipes map[int]core.Recipe
-	recMeta map[int]core.RecipeMeta
 
 	userRec map[int]map[int]int
 	recUser map[int]map[int]int
@@ -59,7 +58,6 @@ func NewDB() *DB {
 		emails:  make(map[string]int),
 		food:    make(map[int]core.Food),
 		recipes: make(map[int]core.Recipe),
-		recMeta: make(map[int]core.RecipeMeta),
 		userRec: make(map[int]map[int]int),
 		recUser: make(map[int]map[int]int),
 	}
@@ -80,25 +78,15 @@ func (db *DB) WithDefaults(fs fs.FS) *DB {
 	}
 
 	if len(db.recipes) == 0 {
-		recs := struct {
-			Recs []core.Recipe
-			Meta []core.RecipeMeta
-		}{}
+		recs := []core.Recipe{}
 		data := loadDefault(fs, "recipe.json")
 		if err := json.Unmarshal(data, &recs); err != nil {
 			return db
 		}
 
-		if len(recs.Recs) != len(recs.Meta) {
-			return db
-		}
-
-		db.recID = len(recs.Recs)
-		for i := range recs.Recs {
-			r := recs.Recs[i]
-			m := recs.Meta[i]
+		db.recID = len(recs)
+		for _, r := range recs {
 			db.recipes[r.ID] = r
-			db.recMeta[r.ID] = m
 		}
 	}
 
@@ -229,34 +217,18 @@ func (db *DB) SetFood(food core.Food) error {
 
 func (db *DB) NewRecipe(name string) (int, error) {
 	db.recID++
-	db.recipes[db.recID] = core.NewRecipe(db.recID)
-	db.recMeta[db.recID] = core.RecipeMeta{ID: db.recID, Name: name}
-	return db.recID, nil
+	rec := core.NewRecipe(db.recID)
+	rec.Name = name
+	db.recipes[rec.ID] = rec
+	return rec.ID, nil
 }
 
 func (db *DB) SetRecipe(rec core.Recipe) error {
-	if _, ok := db.recipes[rec.ID]; !ok {
-		return app.ErrNotFound
+	if _, ok := db.recipes[rec.ID]; ok {
+		db.recipes[rec.ID] = rec
+		return nil
 	}
-
-	meta := db.recMeta[rec.ID]
-	meta.KCal = 0
-	meta.Fat = 0
-	meta.Carbs = 0
-	meta.Protein = 0
-	for _, v := range rec.Items {
-		food := db.food[v.ID]
-		amount := v.Amount * 0.01
-		meta.KCal += food.KCal * amount
-		meta.Fat += food.Fat * amount
-		meta.Carbs += food.Carbs * amount
-		meta.Protein += food.Protein * amount
-	}
-
-	db.recipes[rec.ID] = rec
-	db.recMeta[rec.ID] = meta
-
-	return nil
+	return app.ErrNotFound
 }
 
 func (db *DB) SetRecipeAccess(user, rec, perms int) error {
@@ -282,13 +254,6 @@ func (db *DB) Recipe(id int) (core.Recipe, error) {
 		return rec, nil
 	}
 	return core.Recipe{}, app.ErrNotFound
-}
-
-func (db *DB) RecipeMeta(id int) (core.RecipeMeta, error) {
-	if meta, ok := db.recMeta[id]; ok {
-		return meta, nil
-	}
-	return core.RecipeMeta{}, app.ErrNotFound
 }
 
 func (db *DB) RecipeAccess(user, rec int) (int, error) {

@@ -33,10 +33,10 @@ import (
 )
 
 var (
-	backup0 = `{"users":{},"tokens":{},"food":{},"recipes":{},"recmeta":{},"recaccess":{},"userid":0,"foodid":0,"recid":0}`
+	backup0 = `{"users":{},"tokens":{},"food":{},"recipes":{},"recaccess":{},"userid":0,"foodid":0,"recid":0}`
 	backup1 = fmt.Sprintf(
-		`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"recmeta":{"1":%s},"recaccess":{"1":[{"res":1,"perms":3840}]},"userid":1,"foodid":2,"recid":1}`,
-		mock.User1Json, mock.Food1Json, mock.Food2Json, mock.Recipe1Json, mock.RecMeta1Json,
+		`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"recaccess":{"1":[{"res":1,"perms":3840}]},"userid":1,"foodid":2,"recid":1}`,
+		mock.User1Json, mock.Food1Json, mock.Food2Json, mock.Recipe1Json,
 	)
 
 	database1 = &DB{
@@ -45,7 +45,6 @@ var (
 		tokens:  map[string]app.Token{"abcd": {ID: mock.User1.ID}},
 		food:    map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},
 		recipes: map[int]core.Recipe{mock.Recipe1.ID: mock.Recipe1},
-		recMeta: map[int]core.RecipeMeta{mock.Recipe1.ID: mock.RecMeta1},
 		recUser: map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
 		userRec: map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
 		userID:  1,

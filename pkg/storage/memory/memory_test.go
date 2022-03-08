@@ -526,34 +526,28 @@ func TestDB_NewRecipe(t *testing.T) {
 		db   *DB
 		name string
 
-		rec  core.Recipe
-		meta core.RecipeMeta
-		err  error
+		rec core.Recipe
+		err error
 	}{
 		{ //00// empty database, nameless recipe
-			db:   NewDB(),
-			rec:  core.NewRecipe(1),
-			meta: core.RecipeMeta{ID: 1},
+			db:  NewDB(),
+			rec: core.NewRecipe(1),
 		},
 		{ //01// increment id
 			db: &DB{
 				recipes: map[int]core.Recipe{2: {ID: 2}, 3: {ID: 3}},
-				recMeta: map[int]core.RecipeMeta{2: {ID: 2, Name: "Food"}, 3: {ID: 3, Name: "Drink"}},
 				recID:   3,
 			},
 			name: "Pie",
-			rec:  core.NewRecipe(4),
-			meta: core.RecipeMeta{ID: 4, Name: "Pie"},
+			rec:  func() core.Recipe { r := core.NewRecipe(4); r.Name = "Pie"; return r }(),
 		},
 		{ //02// duplicate names allowed
 			db: &DB{
-				recipes: map[int]core.Recipe{1: {ID: 1}},
-				recMeta: map[int]core.RecipeMeta{1: {ID: 1, Name: "Apple Pie"}},
+				recipes: map[int]core.Recipe{1: {ID: 1, Name: "Pie"}},
 				recID:   1,
 			},
-			name: "Apple Pie",
-			rec:  core.NewRecipe(2),
-			meta: core.RecipeMeta{ID: 2, Name: "Apple Pie"},
+			name: "Pie",
+			rec:  func() core.Recipe { r := core.NewRecipe(2); r.Name = "Pie"; return r }(),
 		},
 	} {
 		id, err := data.db.NewRecipe(data.name)
@@ -565,10 +559,6 @@ func TestDB_NewRecipe(t *testing.T) {
 		if r, _ := data.db.Recipe(id); !reflect.DeepEqual(r, data.rec) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, r, data.rec)
 		}
-
-		if m, _ := data.db.RecipeMeta(id); m != data.meta {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, m, data.meta)
-		}
 	}
 }
 
@@ -577,8 +567,7 @@ func TestDB_SetRecipe(t *testing.T) {
 		db  *DB
 		rec core.Recipe
 
-		meta core.RecipeMeta
-		err  error
+		err error
 	}{
 		{ //00// empty database
 			db:  NewDB(),
@@ -593,17 +582,17 @@ func TestDB_SetRecipe(t *testing.T) {
 			db: &DB{
 				food:    map[int]core.Food{1: mock.Food1},
 				recipes: map[int]core.Recipe{2: mock.Recipe2},
-				recMeta: map[int]core.RecipeMeta{2: mock.RecMeta2},
 			},
-			rec: core.Recipe{ID: 2, Size: 5, Items: []core.Ingredient{{ID: 1, Amount: 600}}},
-			meta: func() core.RecipeMeta {
-				m := mock.RecMeta2
-				m.KCal = mock.Food1.KCal * 6
-				m.Fat = mock.Food1.Fat * 6
-				m.Carbs = mock.Food1.Carbs * 6
-				m.Protein = mock.Food1.Protein * 6
-				return m
-			}(),
+			rec: core.Recipe{
+				ID:      2,
+				Name:    mock.Recipe2.Name,
+				Size:    5,
+				Items:   []core.Ingredient{{ID: 1, Amount: 600}},
+				KCal:    mock.Food1.KCal * 6,
+				Fat:     mock.Food1.Fat * 6,
+				Carbs:   mock.Food1.Carbs * 6,
+				Protein: mock.Food1.Protein * 6,
+			},
 		},
 	} {
 		err := data.db.SetRecipe(data.rec)
@@ -614,10 +603,6 @@ func TestDB_SetRecipe(t *testing.T) {
 
 		if r, err := data.db.Recipe(data.rec.ID); err == nil && !reflect.DeepEqual(r, data.rec) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, r, data.rec)
-		}
-
-		if m, _ := data.db.RecipeMeta(data.rec.ID); m != data.meta {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, m, data.meta)
 		}
 	}
 }
@@ -653,41 +638,6 @@ func TestDB_Recipe(t *testing.T) {
 
 		if !reflect.DeepEqual(rec, data.rec) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, rec, data.rec)
-		}
-	}
-}
-
-func TestDB_RecipeMeta(t *testing.T) {
-	for idx, data := range []struct {
-		db *DB
-		id int
-
-		meta core.RecipeMeta
-		err  error
-	}{
-		{ //00// empty database
-			db:  NewDB(),
-			err: app.ErrNotFound,
-		},
-		{ //01// recipe doesn't exist
-			db:  &DB{recMeta: map[int]core.RecipeMeta{1: mock.RecMeta1}},
-			id:  2,
-			err: app.ErrNotFound,
-		},
-		{ //02// success
-			db:   &DB{recMeta: map[int]core.RecipeMeta{1: mock.RecMeta1, 2: mock.RecMeta2}},
-			id:   2,
-			meta: mock.RecMeta2,
-		},
-	} {
-		meta, err := data.db.RecipeMeta(data.id)
-
-		if err != data.err {
-			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
-		}
-
-		if meta != data.meta {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, meta, data.meta)
 		}
 	}
 }
@@ -903,23 +853,15 @@ func TestDB_WithDefaults(t *testing.T) {
 			},
 			db: NewDB(),
 		},
-		{ //06// number of items not equal
+		{ //06// success
 			fs: fstest.MapFS{
 				"food.json":   {Data: []byte(`[]`)},
-				"recipe.json": {Data: []byte(fmt.Sprintf(`{"recs":[{}],"meta":[{},{}]}`))},
-			},
-			db: NewDB(),
-		},
-		{ //07// success
-			fs: fstest.MapFS{
-				"food.json":   {Data: []byte(`[]`)},
-				"recipe.json": {Data: []byte(fmt.Sprintf(`{"recs":[%s],"meta":[%s]}`, mock.Recipe1Json, mock.RecMeta1Json))},
+				"recipe.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.Recipe1Json))},
 			},
 			db: func() *DB {
 				db := NewDB()
 				db.recID = 1
 				db.recipes = map[int]core.Recipe{1: mock.Recipe1}
-				db.recMeta = map[int]core.RecipeMeta{1: mock.RecMeta1}
 				return db
 			}(),
 		},

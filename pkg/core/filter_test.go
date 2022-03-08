@@ -78,28 +78,86 @@ func TestFilter_MatchFood(t *testing.T) {
 			food: mock.Food1,
 			ok:   true,
 		},
-		{ //00// fail exact value
+		{ //01// fail exact value
 			filter: core.Filter{"kcal": float32(123)},
 			food:   mock.Food1,
 			ok:     false,
 		},
-		{ //00// match exact value
+		{ //02// match exact value
 			filter: core.Filter{"kcal": mock.Food1.KCal},
 			food:   mock.Food1,
 			ok:     true,
 		},
-		{ //00// fail range
+		{ //03// fail range
 			filter: core.Filter{"fib": core.FloatRange{4, 9}},
 			food:   mock.Food1,
 			ok:     false,
 		},
-		{ //00// match range
+		{ //04// match range
 			filter: core.Filter{"fib": core.FloatRange{0, 100}},
 			food:   mock.Food1,
 			ok:     true,
 		},
 	} {
 		if ok := data.filter.MatchFood(data.food); ok != data.ok {
+			t.Errorf("test case %d: result mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
+		}
+	}
+}
+
+func TestFilter_MatchRecipe(t *testing.T) {
+	for idx, data := range []struct {
+		filter core.Filter
+		rec    core.Recipe
+
+		ok bool
+	}{
+		{ //00// empty filter, always true
+			rec: mock.Recipe1,
+			ok:  true,
+		},
+		{ //01// fail exact value
+			filter: core.Filter{"name": "Brownie"},
+			rec:    mock.Recipe1,
+			ok:     false,
+		},
+		{ //02// match exact value
+			filter: core.Filter{"name": mock.Recipe1.Name},
+			rec:    mock.Recipe1,
+			ok:     true,
+		},
+		{ //03// fail exact value
+			filter: core.Filter{"size": 4},
+			rec:    mock.Recipe1,
+			ok:     false,
+		},
+		{ //04// fail int range
+			filter: core.Filter{"size": core.IntRange{4, 6}},
+			rec:    mock.Recipe1,
+			ok:     false,
+		},
+		{ //05// match int range
+			filter: core.Filter{"size": core.IntRange{1, 6}},
+			rec:    mock.Recipe1,
+			ok:     true,
+		},
+		{ //06// fail exact value
+			filter: core.Filter{"kcal": 4.4},
+			rec:    mock.Recipe1,
+			ok:     false,
+		},
+		{ //07// fail float range
+			filter: core.Filter{"kcal": core.FloatRange{120, 150}},
+			rec:    mock.Recipe1,
+			ok:     false,
+		},
+		{ //08// match float range
+			filter: core.Filter{"kcal": core.FloatRange{40, 150}},
+			rec:    mock.Recipe1,
+			ok:     true,
+		},
+	} {
+		if ok := data.filter.MatchRecipe(data.rec); ok != data.ok {
 			t.Errorf("test case %d: result mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
 		}
 	}

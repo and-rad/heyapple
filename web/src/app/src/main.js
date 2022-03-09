@@ -61,6 +61,7 @@ const log = (function () {
 const app = createApp(App);
 let locale = undefined;
 let food = undefined;
+let recipes = undefined;
 
 function initLocale(messages) {
 	locale = createI18n({
@@ -69,14 +70,22 @@ function initLocale(messages) {
 		messages,
 	});
 
-	if (food) {
+	if (food && recipes) {
 		mountApp();
 	}
 }
 
 function initFoods(data) {
 	food = data;
-	if (locale) {
+	if (locale && recipes) {
+		mountApp();
+	}
+}
+
+function initRecipes(data) {
+	recipes = data;
+	console.log(recipes);
+	if (locale && food) {
 		mountApp();
 	}
 }
@@ -89,6 +98,7 @@ function mountApp() {
 	app.provide("csrfToken", csrfToken);
 	app.provide("perms", perms);
 	app.provide("food", ref(food));
+	app.provide("recipes", ref(recipes));
 	app.provide("log", log);
 	app.use(router);
 	app.use(locale);
@@ -102,3 +112,7 @@ fetch("/app/l10n.json")
 fetch("api/v1/foods")
 	.then((response) => response.json())
 	.then(initFoods);
+
+fetch("api/v1/recipes")
+	.then((response) => response.json())
+	.then(initRecipes);

@@ -151,7 +151,7 @@ func SaveRecipe(env *handler.Environment) httprouter.Handle {
 //   ]
 func Recipes(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		query := &app.GetRecipes{Filter: getRecipeFilter(r)}
+		query := &app.Recipes{Filter: getRecipeFilter(r)}
 		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
 			query.UserID = id
 		}

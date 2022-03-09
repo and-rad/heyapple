@@ -284,7 +284,7 @@ func TestGetRecipes_Fetch(t *testing.T) {
 			recs:   []core.Recipe{mock.Recipe1},
 		},
 	} {
-		qry := &app.GetRecipes{UserID: data.uid, Filter: data.filter}
+		qry := &app.Recipes{UserID: data.uid, Filter: data.filter}
 		err := qry.Fetch(data.db)
 
 		if err != data.err {

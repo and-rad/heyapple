@@ -84,7 +84,6 @@ function initFoods(data) {
 
 function initRecipes(data) {
 	recipes = data;
-	console.log(recipes);
 	if (locale && food) {
 		mountApp();
 	}

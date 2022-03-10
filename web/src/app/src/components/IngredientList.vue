@@ -2,18 +2,16 @@
 import { computed, ref, inject } from "vue";
 import { useI18n } from "vue-i18n";
 
+const { t, locale } = useI18n();
 const prop = defineProps(["items"]);
 const foods = inject("food");
 const sortBy = ref("name");
 
-const collator = new Intl.Collator(useI18n().locale.value, { numeric: true });
+const collator = new Intl.Collator(locale.value, { numeric: true });
 
 const sortedItems = computed(() => {
-	let ids = prop.items.map((i) => i.id);
-	let current = foods.value.filter((f) => ids.includes(f.id));
-	return current.sort((a, b) => {
-		return collator.compare(a[sortBy.value], b[sortBy.value]);
-	});
+	let items = prop.items.map((i) => ({ id: i.id, amount: i.amount, name: t(i.id.toString()) }));
+	return items.sort((a, b) => collator.compare(a[sortBy.value], b[sortBy.value]));
 });
 </script>
 

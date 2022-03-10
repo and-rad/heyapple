@@ -252,6 +252,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 			</section>
 			<section>
 				<h2>{{ t("aria.headingred") }}</h2>
+				<p class="msg-noitems" v-if="!current.items.length" v-html="t('recipe.noitems')"></p>
 				<IngredientList :items="current.items" />
 			</section>
 			<section>
@@ -354,6 +355,12 @@ onMounted(() => (filtered.value = [...recipes.value]));
 
 #details section.prep .prep-size label:last-child {
 	display: none;
+}
+
+#details .msg-noitems {
+	padding: 0.5em 0;
+	color: var(--color-text-light);
+	text-align: center;
 }
 
 @media only screen and (min-width: 400px) {

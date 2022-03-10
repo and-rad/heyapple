@@ -242,7 +242,7 @@ function onInput(evt) {
 				<h2>{{ $t("aria.headnutrients") }}</h2>
 				<form ref="form">
 					<div>
-						<fieldset :disabled="!editMode">
+						<fieldset :disabled="!editMode" class="col50">
 							<div>
 								<label>{{ $t("food.energy") }}</label>
 								<input type="text" :value="current.kcal" name="kcal" @change="onInput" />
@@ -269,7 +269,7 @@ function onInput(evt) {
 								<span class="unit">{{ $t("unit.g") }}</span>
 							</div>
 						</fieldset>
-						<fieldset :disabled="!editMode">
+						<fieldset :disabled="!editMode" class="col50">
 							<div>
 								<label>{{ $t("food.fatsat") }}</label>
 								<input type="text" :value="current.fatsat" name="fatsat" @change="onInput" />
@@ -340,10 +340,6 @@ function onInput(evt) {
 	#details .nutrients form > div {
 		display: flex;
 		justify-content: space-between;
-	}
-
-	#details .nutrients fieldset {
-		flex-basis: 45%;
 	}
 }
 </style>

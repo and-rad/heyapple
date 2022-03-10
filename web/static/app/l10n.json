@@ -61,12 +61,16 @@
 			"signout": "Sign out"
 		},
 		"recipe": {
+			"cooktime": "Cooking",
 			"hintnew": "New name...",
 			"hintsearch": "Find a recipe...",
 			"isowner": "Your recipe",
 			"ispublic": "Public recipe",
+			"misctime": "Additional",
 			"owner": "<strong>{name}</strong>'s recipe",
-			"size": "Number of servings"
+			"preptime": "Preparation",
+			"size": "Servings",
+			"time": "Total time"
 		},
 		"savefood": {
 			"err400": "Malformed or missing input data.",
@@ -89,9 +93,13 @@
 			"err403": "It doesn't look like you're allowed to do that.",
 			"err500": "Sign out failed, internal server error. This shouldn't happen."
 		},
+		"todo": {
+			"instructions": "Instructions coming soon"
+		},
 		"unit": {
+			"cal": "kcal",
 			"g": "g",
-			"cal": "kcal"
+			"min": "min"
 		}
 	}
 }

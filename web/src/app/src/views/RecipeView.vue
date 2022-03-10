@@ -4,6 +4,7 @@ import NewRecipe from "../components/ClickableInput.vue";
 import FoodList from "../components/FoodList.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
+import ListImage from "../components/images/ImageList.vue";
 import { ref, inject, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -168,21 +169,88 @@ onMounted(() => (filtered.value = recipes.value));
 				<h2>{{ $t("aria.headingred") }}</h2>
 				Ingredients go here
 			</section>
-			<section>
+			<section class="nutrients">
 				<h2>{{ $t("aria.headnutrients") }}</h2>
 				Nutrients go here
 			</section>
-			<section>
+			<section class="prep">
 				<h2>{{ $t("aria.headprep") }}</h2>
-				<fieldset :disabled="!editMode">
-					<div>
-						<label>{{ $t("recipe.size") }}</label>
-						<input type="text" name="size" form="form-recipe" :value="current.size" @change="onInput" />
-					</div>
-				</fieldset>
+				<div>
+					<fieldset :disabled="!editMode" class="col50">
+						<div>
+							<label>{{ $t("recipe.size") }}</label>
+							<input type="text" name="size" form="form-recipe" :value="current.size" @change="onInput" />
+						</div>
+						<div>
+							<label>{{ $t("recipe.time") }}</label>
+							<input
+								type="text"
+								disabled
+								:value="current.preptime + current.cooktime + current.misctime"
+							/>
+							<span class="unit">{{ $t("unit.min") }}</span>
+						</div>
+					</fieldset>
+					<fieldset :disabled="!editMode" class="col50">
+						<div>
+							<label>{{ $t("recipe.preptime") }}</label>
+							<input
+								type="text"
+								name="preptime"
+								form="form-recipe"
+								:value="current.preptime"
+								@change="onInput"
+							/>
+							<span class="unit">{{ $t("unit.min") }}</span>
+						</div>
+						<div>
+							<label>{{ $t("recipe.cooktime") }}</label>
+							<input
+								type="text"
+								name="cooktime"
+								form="form-recipe"
+								:value="current.cooktime"
+								@change="onInput"
+							/>
+							<span class="unit">{{ $t("unit.min") }}</span>
+						</div>
+						<div>
+							<label>{{ $t("recipe.misctime") }}</label>
+							<input
+								type="text"
+								name="misctime"
+								form="form-recipe"
+								:value="current.misctime"
+								@change="onInput"
+							/>
+							<span class="unit">{{ $t("unit.min") }}</span>
+						</div>
+					</fieldset>
+				</div>
+				<div class="placeholder">
+					<ListImage />
+					<p>{{ $t("todo.instructions") }}</p>
+				</div>
 			</section>
 		</template>
 	</Main>
 </template>
 
-<style></style>
+<style>
+#details section.prep .placeholder {
+	height: 66vw;
+}
+
+@media only screen and (min-width: 400px) {
+	#details section.prep > div {
+		display: flex;
+		justify-content: space-between;
+	}
+}
+
+@media only screen and (min-width: 480px) {
+	#details section.prep .placeholder {
+		height: 320px;
+	}
+}
+</style>

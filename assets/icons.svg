@@ -27,7 +27,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="15.839192"
-     inkscape:cx="-6.4081552"
+     inkscape:cx="-24.401497"
      inkscape:cy="12.532205"
      inkscape:document-units="px"
      inkscape:current-layer="svg8"
@@ -35,10 +35,10 @@
      showgrid="false"
      units="px"
      inkscape:pagecheckerboard="true"
-     inkscape:window-width="1920"
-     inkscape:window-height="1137"
-     inkscape:window-x="1912"
-     inkscape:window-y="-8"
+     inkscape:window-width="2560"
+     inkscape:window-height="1262"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
      inkscape:window-maximized="1" />
   <metadata
      id="metadata5">
@@ -150,4 +150,7 @@
   <path
      id="warn"
      d="M 12,1.6363636 -1.2e-7,22.363636 H 24 Z m 0,4.352983 8.215909,14.1924714 H 3.7862213 Z m -1.090909,4.3742894 v 5.454545 h 2.181818 v -5.454545 z m 0,6.545455 v 2.181818 h 2.181818 v -2.181818 z" />
+  <path
+     d="m 0,18.31579 h 2.5263158 v 0.631579 H 1.2631579 v 1.263157 h 1.2631579 v 0.631579 H 0 v 1.263158 H 3.7894737 V 17.052632 H 0 Z M 1.2631579,6.9473686 H 2.5263158 V 1.894737 H 0 V 3.1578949 H 1.2631579 Z M 0,10.736842 H 2.2736842 L 0,13.389474 v 1.136842 H 3.7894737 V 13.263158 H 1.5157895 L 3.7894737,10.610526 V 9.473684 H 0 Z M 6.3157895,3.1578949 V 5.6842107 H 24 V 3.1578949 Z m 0,17.6842101 H 24 V 18.31579 H 6.3157895 Z m 0,-7.578947 H 24 V 10.736842 H 6.3157895 Z"
+     id="list-num" />
 </svg>

@@ -171,6 +171,7 @@ main.open-details #details {
 	left: 50%;
 	transform: translateX(-50%) translateY(-50%);
 	width: 66%;
+	height: auto;
 }
 
 #details .placeholder svg {

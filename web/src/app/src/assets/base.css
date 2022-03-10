@@ -255,6 +255,10 @@ button[disabled] {
 	flex-grow: 1;
 }
 
+.col50 {
+	flex-basis: 45%;
+}
+
 button.async:after,
 .spinner {
 	font-size: 5px;

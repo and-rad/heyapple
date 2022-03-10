@@ -49,7 +49,7 @@ function confirm(evt) {
 		<Message v-bind="msg" />
 		<label>{{ $t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
-		<label>{{ $t("form.pass") }} <RouterLink to="/reset">{{ $t("form.reset") }}</RouterLink></label>
+		<label>{{ $t("form.pass") }} <RouterLink to="/reset" tabindex="-1">{{ $t("form.reset") }}</RouterLink></label>
 		<PasswordField name="pass" />
 		<button type="submit" @click="confirm" class="async">{{ $t("login.action") }}</button>
 		<p>{{ $t("login.signup") }} <RouterLink to="/signup">{{ $t("register.action") }}</RouterLink>.</p>

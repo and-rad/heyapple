@@ -246,6 +246,10 @@ main.open-details #details {
 	text-align: right;
 }
 
+#details fieldset input[type="text"]:last-child {
+	padding: 0;
+}
+
 #details fieldset .unit {
 	border-bottom: var(--border);
 }

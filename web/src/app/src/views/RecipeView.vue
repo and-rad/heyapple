@@ -39,7 +39,7 @@ function newRecipe(name) {
 			return response.json();
 		})
 		.then((data) => {
-			data.isOwner = true;
+			data.isowner = true;
 			recipes.value.push(data);
 			filtered.value.push(data);
 			log.msg(t("createrec.ok"));
@@ -53,7 +53,7 @@ function saveRecipe() {
 
 	let id = current.value.id;
 	let owner = current.value.owner;
-	let isOwner = current.value.isOwner;
+	let isowner = current.value.isowner;
 
 	fetch("/api/v1/recipe/" + id, {
 		method: "PUT",
@@ -73,7 +73,7 @@ function saveRecipe() {
 		.then((response) => response.json())
 		.then((data) => {
 			data.owner = owner;
-			data.isOwner = isOwner;
+			data.isowner = isowner;
 			recipes.value = recipes.value.map((r) => (data.id == r.id ? data : r));
 			filtered.value = filtered.value.map((r) => (data.id == r.id ? data : r));
 			current.value = current.value.id == data.id ? data : current.value;
@@ -91,7 +91,7 @@ function showDetails(id) {
 	current.value = filtered.value.filter((r) => r.id == id)[0];
 	main.value.showDetails();
 
-	if ("isOwner" in current.value) {
+	if ("isowner" in current.value) {
 		updateOwnerInfo();
 	} else {
 		fetchOwnerInfo();
@@ -100,12 +100,25 @@ function showDetails(id) {
 
 function fetchOwnerInfo() {
 	fetch(`/api/v1/recipe/${current.value.id}/owner`)
-		.then((response) => response.json())
-		.then((data) => console.log(data));
+		.then((response) => {
+			if (!response.ok) {
+				throw response;
+			}
+			return response.json();
+		})
+		.then((data) => {
+			current.value.isowner = data.isowner;
+			current.value.owner = data.owner;
+			updateOwnerInfo();
+		})
+		.catch(() => {
+			log.err(t("recowner.err"));
+			ownerInfo.value = "&nbsp;";
+		});
 }
 
 function updateOwnerInfo() {
-	if (current.value.isOwner) {
+	if (current.value.isowner) {
 		ownerInfo.value = t("recipe.isowner");
 	} else if (current.value.owner) {
 		ownerInfo.value = t("recipe.owner", { name: current.value.owner });
@@ -158,7 +171,7 @@ onMounted(() => (filtered.value = recipes.value));
 				<span class="tag">Tag 1</span>
 				<span class="tag">Tag 2</span>
 				<span class="tag">Tag 3</span>
-				<button class="icon async" :disabled="isSaving" @click="onEditMode" v-if="current.isOwner">
+				<button class="icon async" :disabled="isSaving" @click="onEditMode" v-if="current.isowner">
 					<EditImage v-if="!editMode" />
 					<SaveImage v-if="editMode" />
 				</button>

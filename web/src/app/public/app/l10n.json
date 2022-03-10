@@ -72,6 +72,9 @@
 			"size": "Servings",
 			"time": "Total time"
 		},
+		"recowner": {
+			"err": "Could not determine recipe ownership."
+		},
 		"savefood": {
 			"err400": "Malformed or missing input data.",
 			"err401": "You do not have permission to edit food items.",

@@ -23,6 +23,13 @@ const sortedItems = computed(() => {
 	}
 });
 
+function perServing(val, size, frac = 1) {
+	if (size) {
+		return +parseFloat(val / size).toFixed(frac);
+	}
+	return val;
+}
+
 function setActive(evt) {
 	let cat = evt.target.dataset.sort;
 	if (sortBy.value == cat) {
@@ -60,16 +67,16 @@ function setActive(evt) {
 					{{ item.name }}
 				</td>
 				<td class="num">
-					{{ item.kcal }} <span class="unit">{{ t("unit.cal") }}</span>
+					{{ perServing(item.kcal, item.size) }} <span class="unit">{{ t("unit.cal") }}</span>
 				</td>
 				<td class="m num">
-					{{ item.fat }} <span class="unit">{{ t("unit.g") }}</span>
+					{{ perServing(item.fat, item.size) }} <span class="unit">{{ t("unit.g") }}</span>
 				</td>
 				<td class="m num">
-					{{ item.carb }} <span class="unit">{{ t("unit.g") }}</span>
+					{{ perServing(item.carb, item.size) }} <span class="unit">{{ t("unit.g") }}</span>
 				</td>
 				<td class="m num">
-					{{ item.prot }} <span class="unit">{{ t("unit.g") }}</span>
+					{{ perServing(item.prot, item.size) }} <span class="unit">{{ t("unit.g") }}</span>
 				</td>
 			</tr>
 		</tbody>

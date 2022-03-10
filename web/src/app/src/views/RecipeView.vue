@@ -24,6 +24,10 @@ const ownerInfo = ref("&nbsp;");
 const main = ref(null);
 const form = ref(null);
 
+function perServing(val, frac = 2) {
+	return +parseFloat(val / (current.value.size || 1)).toFixed(frac);
+}
+
 function newRecipe(name) {
 	fetch("/api/v1/recipe", {
 		method: "POST",
@@ -191,24 +195,24 @@ onMounted(() => (filtered.value = recipes.value));
 					<div class="col50">
 						<div>
 							<label>{{ t("food.energy") }}</label>
-							<span>{{ current.kcal }}</span>
+							<span>{{ perServing(current.kcal, 1) }}</span>
 							<span class="unit">{{ t("unit.cal") }}</span>
 						</div>
 						<div>
 							<label>{{ t("food.fat") }}</label>
-							<span>{{ current.fat }}</span>
+							<span>{{ perServing(current.fat, 1) }}</span>
 							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
 					</div>
 					<div class="col50">
 						<div>
 							<label>{{ t("food.carbs2") }}</label>
-							<span>{{ current.carb }}</span>
+							<span>{{ perServing(current.carb, 1) }}</span>
 							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
 						<div>
 							<label>{{ t("food.protein") }}</label>
-							<span>{{ current.prot }}</span>
+							<span>{{ perServing(current.prot, 1) }}</span>
 							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
 					</div>

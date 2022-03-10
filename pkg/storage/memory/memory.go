@@ -259,13 +259,14 @@ func (db *DB) Recipe(id int) (core.Recipe, error) {
 }
 
 func (db *DB) RecipeAccess(user, rec int) (int, error) {
+	combined := app.PermNone
 	if acc, ok := db.userRec[0]; ok {
-		return acc[rec], nil
+		combined |= acc[rec]
 	}
 	if acc, ok := db.userRec[user]; ok {
-		return acc[rec], nil
+		combined |= acc[rec]
 	}
-	return app.PermNone, nil
+	return combined, nil
 }
 
 func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {

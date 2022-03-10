@@ -708,6 +708,24 @@ func TestDB_RecipeAccess(t *testing.T) {
 			rec:   5,
 			perms: app.PermRead,
 		},
+		{ //04// public recipe doesn't block custom access
+			db: &DB{userRec: map[int]map[int]int{
+				0: {2: app.PermRead},
+				1: {5: app.PermCreate},
+			}},
+			user:  1,
+			rec:   5,
+			perms: app.PermCreate,
+		},
+		{ //05// permissions are combined
+			db: &DB{userRec: map[int]map[int]int{
+				0: {5: app.PermRead},
+				1: {5: app.PermCreate},
+			}},
+			user:  1,
+			rec:   5,
+			perms: app.PermRead | app.PermCreate,
+		},
 	} {
 		perms, err := data.db.RecipeAccess(data.user, data.rec)
 

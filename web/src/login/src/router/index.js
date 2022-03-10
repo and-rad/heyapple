@@ -21,6 +21,10 @@ const router = createRouter({
 			name: "reset",
 			component: ResetView,
 		},
+		{
+			path: "/:pathmatch(.*)",
+			redirect: "/",
+		},
 	],
 });
 

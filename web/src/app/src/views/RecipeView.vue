@@ -115,6 +115,13 @@ function onEditMode() {
 	editMode.value ? saveRecipe() : (editMode.value = true);
 }
 
+function onInput(evt) {
+	evt.target.blur();
+	if (isNaN(parseFloat(evt.target.value))) {
+		evt.target.value = current.value[evt.target.name];
+	}
+}
+
 onMounted(() => (filtered.value = recipes.value));
 </script>
 
@@ -135,7 +142,7 @@ onMounted(() => (filtered.value = recipes.value));
 		</template>
 
 		<template #head-details v-if="current">
-			<form ref="form" autocomplete="off">
+			<form ref="form" autocomplete="off" id="form-recipe">
 				<fieldset :disabled="!editMode">
 					<input type="text" name="name" :value="current.name" />
 				</fieldset>
@@ -167,7 +174,12 @@ onMounted(() => (filtered.value = recipes.value));
 			</section>
 			<section>
 				<h2>{{ $t("aria.headprep") }}</h2>
-				Cooking instructions go here
+				<fieldset :disabled="!editMode">
+					<div>
+						<label>{{ $t("recipe.size") }}</label>
+						<input type="text" name="size" form="form-recipe" :value="current.size" @change="onInput" />
+					</div>
+				</fieldset>
 			</section>
 		</template>
 	</Main>

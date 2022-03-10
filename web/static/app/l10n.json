@@ -65,7 +65,8 @@
 			"hintsearch": "Find a recipe...",
 			"isowner": "Your recipe",
 			"ispublic": "Public recipe",
-			"owner": "<strong>{name}</strong>'s recipe"
+			"owner": "<strong>{name}</strong>'s recipe",
+			"size": "Number of servings"
 		},
 		"savefood": {
 			"err400": "Malformed or missing input data.",

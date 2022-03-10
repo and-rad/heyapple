@@ -2,6 +2,7 @@
 import Main from "../components/Main.vue";
 import NewRecipe from "../components/ClickableInput.vue";
 import FoodList from "../components/FoodList.vue";
+import IngredientList from "../components/IngredientList.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
 import ListImage from "../components/images/ImageList.vue";
@@ -182,7 +183,7 @@ onMounted(() => (filtered.value = recipes.value));
 			</section>
 			<section>
 				<h2>{{ $t("aria.headingred") }}</h2>
-				Ingredients go here
+				<IngredientList :items="current.items" />
 			</section>
 			<section>
 				<h2>{{ $t("aria.headnutrients") }}</h2>

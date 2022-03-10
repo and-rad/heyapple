@@ -300,3 +300,52 @@ func TestGetRecipes_Fetch(t *testing.T) {
 		}
 	}
 }
+
+func TestGetRecipe_Fetch(t *testing.T) {
+	for idx, data := range []struct {
+		id int
+		db *mock.DB
+
+		rec core.Recipe
+		err error
+	}{
+		{ //00// id missing or invalid
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// connection failed
+			id:  1,
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			rec: core.Recipe{ID: 1},
+			err: mock.ErrDOS,
+		},
+		{ //02// empty db
+			id:  1,
+			db:  mock.NewDB(),
+			rec: core.Recipe{ID: 1},
+			err: app.ErrNotFound,
+		},
+		{ //03// id not found
+			id:  1,
+			db:  mock.NewDB().WithRecipe(mock.Recipe2),
+			rec: core.Recipe{ID: 1},
+			err: app.ErrNotFound,
+		},
+		{ //04// success
+			id:  1,
+			db:  mock.NewDB().WithRecipe(mock.Recipe1),
+			rec: mock.Recipe1,
+		},
+	} {
+		qry := &app.GetRecipe{Item: core.Recipe{ID: data.rec.ID}}
+		err := qry.Fetch(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(qry.Item, data.rec) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, qry.Item, data.rec)
+		}
+	}
+}

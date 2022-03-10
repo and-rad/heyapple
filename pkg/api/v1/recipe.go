@@ -165,6 +165,54 @@ func Recipes(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// Recipe returns a JSON-formatted recipe identified
+// by {id}. The function body is empty when errors occur
+// and will be a single JSON object on success.
+//
+// Endpoint:
+//   /api/v1/recipe/{id}
+// Methods:
+//   GET
+// Possible status codes:
+//   200 - OK
+//   400 - Missing or malformed id
+//   404 - Food item doesn't exist
+//   500 - Internal server error
+// Example output:
+//   { "id": 1, "name": "Pie", "size": 6, ... }
+func Recipe(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		recID, err := strconv.Atoi(ps.ByName("id"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		var hasPermission bool
+		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			query := &app.RecipeAccess{UserID: id, RecID: recID}
+			if env.DB.Fetch(query) == nil {
+				hasPermission = query.HasPerms(app.PermRead)
+			}
+		}
+
+		if !hasPermission {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		query := &app.GetRecipe{Item: core.Recipe{ID: recID}}
+		if err := env.DB.Fetch(query); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(query.Item, w)
+		}
+	}
+}
+
 func getRecipeFilter(r *http.Request) core.Filter {
 	r.ParseForm()
 

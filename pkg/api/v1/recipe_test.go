@@ -246,3 +246,75 @@ func TestRecipes(t *testing.T) {
 		}
 	}
 }
+
+func TestRecipe(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// missing id
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// missing id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "name", Value: "12"}},
+			status: http.StatusBadRequest,
+		},
+		{ //02// wrong data type for id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "someone"}},
+			status: http.StatusBadRequest,
+		},
+		{ //03// insufficient permission
+			db:        mock.NewDB(),
+			params:    httprouter.Params{{Key: "id", Value: "42"}},
+			setCookie: true,
+			status:    http.StatusUnauthorized,
+		},
+		{ //04// connection failure
+			db:        mock.NewDB().WithAccess(mock.Access{1, 42, app.PermRead}).WithError(nil, mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "42"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //05// item doesn't exist
+			db:        mock.NewDB().WithAccess(mock.Access{User: 1, Resource: 42, Perms: app.PermRead}),
+			params:    httprouter.Params{{Key: "id", Value: "42"}},
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //06// success
+			db:        mock.NewDB().WithRecipe(mock.Recipe1).WithAccess(mock.Access{1, 1, app.PermRead}),
+			params:    httprouter.Params{{Key: "id", Value: "1"}},
+			setCookie: true,
+			status:    http.StatusOK,
+			out:       mock.Recipe1Json,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.Recipe(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}

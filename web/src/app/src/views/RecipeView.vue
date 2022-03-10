@@ -1,5 +1,7 @@
 <script setup>
 import Main from "../components/Main.vue";
+import Search from "../components/LocalSearch.vue";
+import Slider from "../components/Slider.vue";
 import NewRecipe from "../components/ClickableInput.vue";
 import FoodList from "../components/FoodList.vue";
 import IngredientList from "../components/IngredientList.vue";
@@ -26,6 +28,20 @@ const form = ref(null);
 
 function perServing(val, frac = 2) {
 	return +parseFloat(val / (current.value.size || 1)).toFixed(frac);
+}
+
+function minSearchAttr(attr) {
+	return Math.min.apply(
+		Math,
+		recipes.value.map((r) => Math.floor(r[attr] / r.size))
+	);
+}
+
+function maxSearchAttr(attr) {
+	return Math.max.apply(
+		Math,
+		recipes.value.map((r) => Math.ceil(r[attr] / r.size))
+	);
 }
 
 function newRecipe(name) {
@@ -132,6 +148,15 @@ function updateOwnerInfo() {
 	}
 }
 
+function updateList(items) {
+	filtered.value = items;
+	if (current.value) {
+		if (filtered.value.filter((r) => r.id == current.value.id).length == 0) {
+			current.value = null;
+		}
+	}
+}
+
 function onEditMode() {
 	editMode.value ? saveRecipe() : (editMode.value = true);
 }
@@ -143,18 +168,58 @@ function onInput(evt) {
 	}
 }
 
-onMounted(() => (filtered.value = recipes.value));
+onMounted(() => (filtered.value = [...recipes.value]));
 </script>
 
 <template>
 	<Main ref="main" @detailVisibility="editMode = false">
 		<template #filter>
 			<section class="new-item">
-				<h2>{{ t("aria.headnew") }}</h2>
+				<h2>{{ t("aria.headnewrec") }}</h2>
 				<NewRecipe :label="t('btn.new')" :placeholder="t('recipe.hintnew')" @confirm="newRecipe" />
 			</section>
 			<section>
 				<h2>{{ t("aria.headsearch") }}</h2>
+				<Search :data="recipes" v-slot="slotProps" :placeholder="t('recipe.hintsearch')" @result="updateList">
+					<fieldset>
+						<Slider
+							:label="t('food.energy')"
+							:min="minSearchAttr('kcal')"
+							:max="maxSearchAttr('kcal')"
+							@input="slotProps.confirm"
+							name="kcal"
+							unit="cal"
+							frac="0"
+						/>
+						<Slider
+							:label="t('food.fat')"
+							:min="minSearchAttr('fat')"
+							:max="maxSearchAttr('fat')"
+							@input="slotProps.confirm"
+							name="fat"
+							unit="g"
+							frac="0"
+						/>
+						<Slider
+							:label="t('food.carbs')"
+							:min="minSearchAttr('carb')"
+							:max="maxSearchAttr('carb')"
+							@input="slotProps.confirm"
+							name="carb"
+							unit="g"
+							frac="0"
+						/>
+						<Slider
+							:label="t('food.protein')"
+							:min="minSearchAttr('prot')"
+							:max="maxSearchAttr('prot')"
+							@input="slotProps.confirm"
+							name="prot"
+							unit="g"
+							frac="0"
+						/>
+					</fieldset>
+				</Search>
 			</section>
 		</template>
 
@@ -302,6 +367,7 @@ onMounted(() => (filtered.value = recipes.value));
 		flex-basis: 50%;
 		padding: 0;
 		flex-grow: 1;
+		margin-top: 1rem;
 	}
 
 	#details section.prep .prep-size label:first-child {

@@ -15,6 +15,7 @@ function confirm(evt) {
 function fetchData(form) {
 	let formData = new FormData(form);
 	let filtered = prop.data.filter((d) => {
+		let size = d.size || 1;
 		for (let k of formData.keys()) {
 			// special cases first
 			if (k == "name") {
@@ -28,7 +29,7 @@ function fetchData(form) {
 			// numeric values next
 			let [first, last] = formData.getAll(k).map((v) => parseFloat(v));
 			if (!isNaN(first) && !isNaN(last)) {
-				if (d[k] < first || last < d[k]) {
+				if (d[k] / size < first || last < d[k] / size) {
 					return false;
 				}
 			}

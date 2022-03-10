@@ -95,6 +95,10 @@ function mountApp() {
 		f.name = locale.global.t(f.id.toString());
 	});
 
+	recipes.forEach((r) => {
+		r.isOwner = true;
+	});
+
 	app.provide("csrfToken", csrfToken);
 	app.provide("perms", perms);
 	app.provide("food", ref(food));

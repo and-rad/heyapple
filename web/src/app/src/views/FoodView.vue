@@ -47,14 +47,13 @@ function newFood(name) {
 function saveFood() {
 	isSaving.value = true;
 	let id = current.value.id;
-	let data = new FormData(form.value);
 	fetch("/api/v1/food/" + id, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded",
 			"X-CSRF-Token": csrf,
 		},
-		body: new URLSearchParams(data),
+		body: new URLSearchParams(new FormData(form.value)),
 	})
 		.then((response) => {
 			if (!response.ok) {
@@ -116,7 +115,7 @@ function onInput(evt) {
 				<h2>{{ $t("aria.headsearch") }}</h2>
 				<Search :data="foods" v-slot="slotProps" :placeholder="$t('food.hintsearch')" @result="updateList">
 					<fieldset>
-						<legend>Primary Macronutrients</legend>
+						<legend>{{ $t("aria.headmacro1") }}</legend>
 						<Slider
 							:label="$t('food.energy')"
 							@input="slotProps.confirm"
@@ -164,7 +163,7 @@ function onInput(evt) {
 						/>
 					</fieldset>
 					<fieldset>
-						<legend>Secondary Macronutrients</legend>
+						<legend>{{ $t("aria.headmacro2") }}</legend>
 						<Slider
 							:label="$t('food.fatsat')"
 							@input="slotProps.confirm"
@@ -240,7 +239,7 @@ function onInput(evt) {
 				</button>
 			</section>
 			<section class="nutrients">
-				<h2>Nutrients</h2>
+				<h2>{{ $t("aria.headnutrients") }}</h2>
 				<form ref="form">
 					<div>
 						<fieldset :disabled="!editMode">
@@ -315,10 +314,16 @@ function onInput(evt) {
 	border: none;
 }
 
+#details section.subtitle strong {
+	font-weight: normal;
+	color: var(--color-secondary);
+}
+
 #details section.tags {
-	padding: 0 3em 0.5em 0.25em;
+	padding: 0.5em 3em 0.5em 0.25em;
 	position: relative;
-	display: block;
+	display: flex;
+	flex-wrap: wrap;
 }
 
 #details section.tags button.icon {

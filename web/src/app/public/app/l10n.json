@@ -3,8 +3,14 @@
 		"1": "Apple",
 		"2": "Banana",
 		"aria": {
+			"headingred": "Ingredients",
+			"headmacro1": "Primary Macronutrients",
+			"headmacro2": "Secondary Macronutrients",
 			"headnew": "New item",
-			"headsearch": "Search and filter"
+			"headnutrients": "Nutrients",
+			"headprep": "Preparation",
+			"headsearch": "Search and filter",
+			"headtrack": "Tracking"
 		},
 		"btn": {
 			"new": "New"
@@ -56,13 +62,24 @@
 		},
 		"recipe": {
 			"hintnew": "New name...",
-			"hintsearch": "Find a recipe..."
+			"hintsearch": "Find a recipe...",
+			"isowner": "Your recipe",
+			"ispublic": "Public recipe",
+			"owner": "<strong>{name}</strong>'s recipe"
 		},
 		"savefood": {
 			"err400": "Malformed or missing input data.",
 			"err401": "You do not have permission to edit food items.",
 			"err403": "It doesn't look like you're allowed to do that.",
 			"err404": "The requested food item does not exist.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! All edits saved."
+		},
+		"saverec": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to edit this recipe.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "The requested recipe does not exist.",
 			"err500": "Internal server error. This shouldn't happen.",
 			"ok": "Success! All edits saved."
 		},

@@ -254,6 +254,16 @@ main.open-details #details {
 	border-color: var(--color-primary);
 }
 
+#details .controls form {
+	margin-right: 1em;
+}
+
+#details .controls input[type="text"] {
+	text-align: left;
+	text-overflow: ellipsis;
+	font-size: 2em;
+}
+
 #main {
 	left: 0;
 	right: 0;

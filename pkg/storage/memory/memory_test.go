@@ -967,6 +967,14 @@ func TestDB_Recipes(t *testing.T) {
 			uid:  1,
 			recs: []core.Recipe{mock.Recipe1, mock.Recipe2},
 		},
+		{ //08// avoid duplicates
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				userRec: map[int]map[int]int{0: {2: app.PermRead}, 1: {2: app.PermOwner}},
+			},
+			uid:  1,
+			recs: []core.Recipe{mock.Recipe2},
+		},
 	} {
 		recs, err := data.db.Recipes(data.uid, data.filter)
 

@@ -270,17 +270,23 @@ func (db *DB) RecipeAccess(user, rec int) (int, error) {
 }
 
 func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {
+	ids := map[int]struct{}{}
 	recs := []core.Recipe{}
+
 	for id, perm := range db.userRec[0] {
 		r := db.recipes[id]
 		if perm != app.PermNone && f.MatchRecipe(r) {
+			ids[id] = struct{}{}
 			recs = append(recs, r)
 		}
 	}
+
 	for id, perm := range db.userRec[uid] {
-		r := db.recipes[id]
-		if perm != app.PermNone && f.MatchRecipe(r) {
-			recs = append(recs, r)
+		if _, ok := ids[id]; !ok {
+			r := db.recipes[id]
+			if perm != app.PermNone && f.MatchRecipe(r) {
+				recs = append(recs, r)
+			}
 		}
 	}
 

@@ -238,10 +238,10 @@ function onInput(evt) {
 					<SaveImage v-if="editMode" />
 				</button>
 			</section>
-			<section class="nutrients">
+			<section>
 				<h2>{{ $t("aria.headnutrients") }}</h2>
 				<form ref="form">
-					<div>
+					<div class="nutrient-block">
 						<fieldset :disabled="!editMode" class="col50">
 							<div>
 								<label>{{ $t("food.energy") }}</label>
@@ -332,12 +332,12 @@ function onInput(evt) {
 	bottom: 0.5em;
 }
 
-#details .nutrients form > div:not(:first-of-type) {
+#details .nutrient-block:not(:first-of-type) {
 	margin-top: 3em;
 }
 
 @media only screen and (min-width: 400px) {
-	#details .nutrients form > div {
+	#details .nutrient-block {
 		display: flex;
 		justify-content: space-between;
 	}

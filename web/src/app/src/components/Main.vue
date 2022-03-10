@@ -208,6 +208,7 @@ main.open-details #details {
 	color: var(--color-text-light);
 }
 
+#details label + span,
 #details input:disabled,
 #details input:read-only {
 	border-color: transparent !important;
@@ -225,18 +226,19 @@ main.open-details #details {
 	border: none;
 }
 
-#details fieldset > div {
+#details .col50 > div {
 	display: flex;
 	align-items: baseline;
 	padding: 0.5em 0;
 }
 
-#details fieldset label {
+#details label {
 	flex-basis: 60%;
 	margin-right: 0.5em;
 }
 
-#details fieldset input[type="text"] {
+#details label + span,
+#details label + input[type="text"] {
 	flex-basis: 2.5em;
 	flex-grow: 1;
 	padding: 0 0.25em 0 0;
@@ -246,16 +248,17 @@ main.open-details #details {
 	text-align: right;
 }
 
-#details fieldset input[type="text"]:last-child {
+#details label + span:last-child,
+#details input[type="text"]:last-child {
 	padding: 0;
 }
 
-#details fieldset .unit {
+#details input + .unit {
 	border-bottom: var(--border);
 }
 
-#details fieldset input:active + .unit,
-#details fieldset input:focus + .unit {
+#details input:active + .unit,
+#details input:focus + .unit {
 	border-color: var(--color-primary);
 }
 

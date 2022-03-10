@@ -184,9 +184,34 @@ onMounted(() => (filtered.value = recipes.value));
 				<h2>{{ $t("aria.headingred") }}</h2>
 				Ingredients go here
 			</section>
-			<section class="nutrients">
+			<section>
 				<h2>{{ $t("aria.headnutrients") }}</h2>
-				Nutrients go here
+				<div class="nutrient-block">
+					<div class="col50">
+						<div>
+							<label>{{ $t("food.energy") }}</label>
+							<span>{{ current.kcal }}</span>
+							<span class="unit">{{ $t("unit.cal") }}</span>
+						</div>
+						<div>
+							<label>{{ $t("food.fat") }}</label>
+							<span>{{ current.fat }}</span>
+							<span class="unit">{{ $t("unit.g") }}</span>
+						</div>
+					</div>
+					<div class="col50">
+						<div>
+							<label>{{ $t("food.carbs2") }}</label>
+							<span>{{ current.carb }}</span>
+							<span class="unit">{{ $t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ $t("food.protein") }}</label>
+							<span>{{ current.prot }}</span>
+							<span class="unit">{{ $t("unit.g") }}</span>
+						</div>
+					</div>
+				</div>
 			</section>
 			<section class="prep">
 				<h2>{{ $t("aria.headprep") }}</h2>

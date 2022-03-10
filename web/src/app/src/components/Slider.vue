@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -11,33 +11,47 @@ const maxVal = ref(parseFloat(prop.max).toFixed(prop.frac));
 const minPercent = ref(0);
 const maxPercent = ref(100);
 
-function onMin(evt) {
-	evt.target.blur();
+watch(
+	() => prop.min,
+	(val, old) => setMin(val)
+);
 
+watch(
+	() => prop.max,
+	(val, old) => setMax(val)
+);
+
+function setMin(value) {
 	let min = parseFloat(prop.min) || 0;
-	let val = parseFloat(evt.target.value) || min;
+	let val = parseFloat(value) || min;
 	minVal.value = val;
 	maxVal.value = Math.max(minVal.value, maxVal.value);
 
 	let max = parseFloat(prop.max) || 0;
 	minPercent.value = ((val - min) * 100) / (max - min);
 	maxPercent.value = Math.max(minPercent.value, maxPercent.value);
-
-	emit("input", evt);
 }
 
-function onMax(evt) {
-	evt.target.blur();
-
+function setMax(value) {
 	let max = parseFloat(prop.max) || 0;
-	let val = parseFloat(evt.target.value) || max;
+	let val = parseFloat(value) || max;
 	maxVal.value = val;
 	minVal.value = Math.min(minVal.value, maxVal.value);
 
 	let min = parseFloat(prop.min) || 0;
 	maxPercent.value = ((val - min) * 100) / (max - min);
 	minPercent.value = Math.min(minPercent.value, maxPercent.value);
+}
 
+function onMin(evt) {
+	evt.target.blur();
+	setMin(evt.target.value);
+	emit("input", evt);
+}
+
+function onMax(evt) {
+	evt.target.blur();
+	setMax(evt.target.value);
 	emit("input", evt);
 }
 

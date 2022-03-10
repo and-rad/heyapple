@@ -702,6 +702,12 @@ func TestDB_RecipeAccess(t *testing.T) {
 			rec:   5,
 			perms: app.PermRead,
 		},
+		{ //03// success for public recipe
+			db:    &DB{userRec: map[int]map[int]int{0: {5: app.PermRead}}},
+			user:  1,
+			rec:   5,
+			perms: app.PermRead,
+		},
 	} {
 		perms, err := data.db.RecipeAccess(data.user, data.rec)
 
@@ -862,6 +868,7 @@ func TestDB_WithDefaults(t *testing.T) {
 				db := NewDB()
 				db.recID = 1
 				db.recipes = map[int]core.Recipe{1: mock.Recipe1}
+				db.userRec = map[int]map[int]int{0: {1: app.PermRead}}
 				return db
 			}(),
 		},
@@ -933,6 +940,14 @@ func TestDB_Recipes(t *testing.T) {
 			uid:    1,
 			filter: core.Filter{"size": mock.Recipe2.Size},
 			recs:   []core.Recipe{mock.Recipe2},
+		},
+		{ //07// include public recipes
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				userRec: map[int]map[int]int{0: {1: app.PermRead}, 1: {2: app.PermOwner}},
+			},
+			uid:  1,
+			recs: []core.Recipe{mock.Recipe1, mock.Recipe2},
 		},
 	} {
 		recs, err := data.db.Recipes(data.uid, data.filter)

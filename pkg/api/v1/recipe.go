@@ -213,6 +213,34 @@ func Recipe(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+func RecipeOwner(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		rid, err := strconv.Atoi(ps.ByName("id"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		uid, ok := env.Session.Get(r.Context(), "id").(int)
+		if !ok {
+			uid = 0
+		}
+
+		data := map[string]interface{}{}
+		query := &app.RecipeAccess{UserID: uid, RecID: rid}
+		if err := env.DB.Fetch(query); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			println(query.Permission, query.HasPerms(app.PermOwner))
+			data["isowner"] = query.HasPerms(app.PermOwner)
+			w.WriteHeader(http.StatusOK)
+			sendResponse(data, w)
+		}
+	}
+}
+
 func getRecipeFilter(r *http.Request) core.Filter {
 	r.ParseForm()
 

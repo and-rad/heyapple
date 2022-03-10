@@ -99,7 +99,9 @@ function showDetails(id) {
 }
 
 function fetchOwnerInfo() {
-	console.log("TODO get owner info");
+	fetch(`/api/v1/recipe/${current.value.id}/owner`)
+		.then((response) => response.json())
+		.then((data) => console.log(data));
 }
 
 function updateOwnerInfo() {

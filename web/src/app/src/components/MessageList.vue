@@ -35,7 +35,8 @@ onMounted(() => {
 #messages {
 	position: fixed;
 	z-index: 1000;
-	width: 350px;
+	width: 100%;
+	max-width: 480px;
 	right: 0;
 	bottom: 0.5em;
 }

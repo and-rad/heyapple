@@ -85,8 +85,10 @@ func (db *DB) WithDefaults(fs fs.FS) *DB {
 		}
 
 		db.recID = len(recs)
+		db.userRec[0] = map[int]int{}
 		for _, r := range recs {
 			db.recipes[r.ID] = r
+			db.userRec[0][r.ID] = app.PermRead
 		}
 	}
 
@@ -257,6 +259,9 @@ func (db *DB) Recipe(id int) (core.Recipe, error) {
 }
 
 func (db *DB) RecipeAccess(user, rec int) (int, error) {
+	if acc, ok := db.userRec[0]; ok {
+		return acc[rec], nil
+	}
 	if acc, ok := db.userRec[user]; ok {
 		return acc[rec], nil
 	}
@@ -265,6 +270,12 @@ func (db *DB) RecipeAccess(user, rec int) (int, error) {
 
 func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {
 	recs := []core.Recipe{}
+	for id, perm := range db.userRec[0] {
+		r := db.recipes[id]
+		if perm != app.PermNone && f.MatchRecipe(r) {
+			recs = append(recs, r)
+		}
+	}
 	for id, perm := range db.userRec[uid] {
 		r := db.recipes[id]
 		if perm != app.PermNone && f.MatchRecipe(r) {

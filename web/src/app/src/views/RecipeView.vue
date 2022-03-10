@@ -38,8 +38,11 @@ function newRecipe(name) {
 			return response.json();
 		})
 		.then((data) => {
-			console.log(data);
+			data.isOwner = true;
+			recipes.value.push(data);
+			filtered.value.push(data);
 			log.msg(t("createrec.ok"));
+			showDetails(data.id);
 		})
 		.catch((err) => log.err(err));
 }

@@ -176,7 +176,7 @@ func Recipes(env *handler.Environment) httprouter.Handle {
 // Possible status codes:
 //   200 - OK
 //   400 - Missing or malformed id
-//   404 - Food item doesn't exist
+//   404 - Recipe doesn't exist
 //   500 - Internal server error
 // Example output:
 //   { "id": 1, "name": "Pie", "size": 6, ... }
@@ -213,28 +213,52 @@ func Recipe(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// RecipeOwner returns ownership information about the
+// recipe identified by {id}. The function body is empty
+// when errors occur and will be a single JSON object
+// on success.
+//
+// Endpoint:
+//   /api/v1/recipe/{id}/owner
+// Methods:
+//   GET
+// Possible status codes:
+//   200 - OK
+//   400 - Missing or malformed id
+//   404 - Recipe doesn't exist
+//   500 - Internal server error
+// Example output:
+//   { "isowner": false, "owner": "NastyOrange" }
 func RecipeOwner(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		// TODO this function is structured a little odd because
+		// we prepared it to be ready for adding another query
+		// later once usernames are implemented.
+
 		rid, err := strconv.Atoi(ps.ByName("id"))
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
-		uid, ok := env.Session.Get(r.Context(), "id").(int)
-		if !ok {
-			uid = 0
-		}
-
+		uid := env.Session.GetInt(r.Context(), "id")
 		data := map[string]interface{}{}
-		query := &app.RecipeAccess{UserID: uid, RecID: rid}
-		if err := env.DB.Fetch(query); err == app.ErrNotFound {
+
+		query1 := &app.RecipeAccess{UserID: uid, RecID: rid}
+		if err := env.DB.Fetch(query1); err == app.ErrNotFound {
 			w.WriteHeader(http.StatusNotFound)
 		} else if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
-			println(query.Permission, query.HasPerms(app.PermOwner))
-			data["isowner"] = query.HasPerms(app.PermOwner)
+			data["isowner"] = query1.HasPerms(app.PermOwner)
+		}
+
+		// TODO replace this with an actual implementation
+		if len(data) != 0 {
+			data["owner"] = ""
+		}
+
+		if len(data) != 0 {
 			w.WriteHeader(http.StatusOK)
 			sendResponse(data, w)
 		}

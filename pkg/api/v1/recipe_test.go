@@ -318,3 +318,68 @@ func TestRecipe(t *testing.T) {
 		}
 	}
 }
+
+func TestRecipeOwner(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// missing id
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// missing id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "name", Value: "12"}},
+			status: http.StatusBadRequest,
+		},
+		{ //02// wrong data type for id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "someone"}},
+			status: http.StatusBadRequest,
+		},
+		{ //03// connection failure
+			db:        mock.NewDB().WithError(mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "42"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //04// item doesn't exist
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "0"}},
+			status: http.StatusNotFound,
+		},
+		{ //05// success for owner
+			db:        mock.NewDB().WithAccess(mock.Access{1, 2, app.PermOwner}),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusOK,
+			out:       `{"isowner":true,"owner":""}`,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.RecipeOwner(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}

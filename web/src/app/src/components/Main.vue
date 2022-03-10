@@ -4,7 +4,9 @@ import DetailsImage from "./images/ImageHeaderMono.vue";
 import MoreImage from "./images/ImageMore.vue";
 import BackArrow from "./images/ImageRightArrow.vue";
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const emit = defineEmits(["detailVisibility"]);
 const filter = ref("");
 const details = ref("");
@@ -66,7 +68,7 @@ defineExpose({ showDetails });
 			<slot name="details">
 				<div class="placeholder">
 					<DetailsImage />
-					<p>{{ $t("details.noitem") }}</p>
+					<p>{{ t("details.noitem") }}</p>
 				</div>
 			</slot>
 		</div>
@@ -241,7 +243,7 @@ main.open-details #details {
 }
 
 #details label + span,
-#details label + input[type="text"] {
+#details input[type="text"] {
 	flex-basis: 2.5em;
 	flex-grow: 1;
 	padding: 0 0.25em 0 0;

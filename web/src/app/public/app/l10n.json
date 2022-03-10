@@ -69,7 +69,7 @@
 			"misctime": "Additional",
 			"owner": "<strong>{name}</strong>'s recipe",
 			"preptime": "Preparation",
-			"size": "Servings",
+			"size": "Serving|Servings",
 			"time": "Total time"
 		},
 		"recowner": {

@@ -1,12 +1,15 @@
-<script setup></script>
+<script setup>
+import { useI18n } from "vue-i18n";
+const { t } = useI18n();
+</script>
 
 <template>
 	<footer>
 		<nav>
-			<span>{{ $t("foot.copy") }}</span>
-			<a href="/terms" target="_blank">{{ $t("foot.terms") }}</a>
-			<a href="/legal" target="_blank">{{ $t("foot.legal") }}</a>
-			<a href="/privacy" target="_blank">{{ $t("foot.privacy") }}</a>
+			<span>{{ t("foot.copy") }}</span>
+			<a href="/terms" target="_blank">{{ t("foot.terms") }}</a>
+			<a href="/legal" target="_blank">{{ t("foot.legal") }}</a>
+			<a href="/privacy" target="_blank">{{ t("foot.privacy") }}</a>
 		</nav>
 	</footer>
 </template>

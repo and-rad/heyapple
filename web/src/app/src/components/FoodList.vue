@@ -3,12 +3,13 @@ import Arrow from "./images/ImageSortArrow.vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
+const { t, locale } = useI18n();
 const prop = defineProps(["items"]);
 const emit = defineEmits("selected");
 const sortBy = ref("name");
 const sortDir = ref("asc");
 
-const collator = new Intl.Collator(useI18n().locale.value, { numeric: true });
+const collator = new Intl.Collator(locale.value, { numeric: true });
 
 const sortedItems = computed(() => {
 	if (sortDir.value == "asc") {
@@ -37,19 +38,19 @@ function setActive(evt) {
 		<thead>
 			<tr :class="sortDir">
 				<th class="name sort" :class="{ active: sortBy == 'name' }" @click="setActive" data-sort="name">
-					{{ $t("food.name") }} <Arrow />
+					{{ t("food.name") }} <Arrow />
 				</th>
 				<th class="num sort" :class="{ active: sortBy == 'kcal' }" @click="setActive" data-sort="kcal">
-					<Arrow /> {{ $t("food.energy") }}
+					<Arrow /> {{ t("food.energy") }}
 				</th>
 				<th class="m num sort" :class="{ active: sortBy == 'fat' }" @click="setActive" data-sort="fat">
-					<Arrow /> {{ $t("food.fat") }}
+					<Arrow /> {{ t("food.fat") }}
 				</th>
 				<th class="m num sort" :class="{ active: sortBy == 'carb' }" @click="setActive" data-sort="carb">
-					<Arrow /> {{ $t("food.carbs2") }}
+					<Arrow /> {{ t("food.carbs2") }}
 				</th>
 				<th class="m num sort" :class="{ active: sortBy == 'prot' }" @click="setActive" data-sort="prot">
-					<Arrow /> {{ $t("food.protein") }}
+					<Arrow /> {{ t("food.protein") }}
 				</th>
 			</tr>
 		</thead>
@@ -59,16 +60,16 @@ function setActive(evt) {
 					{{ item.name }}
 				</td>
 				<td class="num">
-					{{ item.kcal }} <span class="unit">{{ $t("unit.cal") }}</span>
+					{{ item.kcal }} <span class="unit">{{ t("unit.cal") }}</span>
 				</td>
 				<td class="m num">
-					{{ item.fat }} <span class="unit">{{ $t("unit.g") }}</span>
+					{{ item.fat }} <span class="unit">{{ t("unit.g") }}</span>
 				</td>
 				<td class="m num">
-					{{ item.carb }} <span class="unit">{{ $t("unit.g") }}</span>
+					{{ item.carb }} <span class="unit">{{ t("unit.g") }}</span>
 				</td>
 				<td class="m num">
-					{{ item.prot }} <span class="unit">{{ $t("unit.g") }}</span>
+					{{ item.prot }} <span class="unit">{{ t("unit.g") }}</span>
 				</td>
 			</tr>
 		</tbody>

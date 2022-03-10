@@ -21,7 +21,7 @@ const sortedItems = computed(() => {
 			<div v-for="item in sortedItems" :key="item.id">
 				<label>{{ item.name }}</label>
 				<input type="text" name="amount" :value="item.amount" />
-				<span class="unit">{{ $t("unit.g") }}</span>
+				<span class="unit">{{ t("unit.g") }}</span>
 				<input type="hidden" name="id" :value="item.id" />
 			</div>
 		</fieldset>

@@ -108,16 +108,16 @@ function onInput(evt) {
 	<Main ref="main" @detailVisibility="editMode = false">
 		<template #filter>
 			<section v-if="perms.canCreateFood" class="new-item">
-				<h2>{{ $t("aria.headnew") }}</h2>
-				<NewFood :label="$t('btn.new')" :placeholder="$t('food.hintnew')" @confirm="newFood" />
+				<h2>{{ t("aria.headnew") }}</h2>
+				<NewFood :label="t('btn.new')" :placeholder="t('food.hintnew')" @confirm="newFood" />
 			</section>
 			<section>
-				<h2>{{ $t("aria.headsearch") }}</h2>
-				<Search :data="foods" v-slot="slotProps" :placeholder="$t('food.hintsearch')" @result="updateList">
+				<h2>{{ t("aria.headsearch") }}</h2>
+				<Search :data="foods" v-slot="slotProps" :placeholder="t('food.hintsearch')" @result="updateList">
 					<fieldset>
-						<legend>{{ $t("aria.headmacro1") }}</legend>
+						<legend>{{ t("aria.headmacro1") }}</legend>
 						<Slider
-							:label="$t('food.energy')"
+							:label="t('food.energy')"
 							@input="slotProps.confirm"
 							name="kcal"
 							unit="cal"
@@ -126,7 +126,7 @@ function onInput(evt) {
 							frac="0"
 						/>
 						<Slider
-							:label="$t('food.fat')"
+							:label="t('food.fat')"
 							@input="slotProps.confirm"
 							name="fat"
 							unit="g"
@@ -135,7 +135,7 @@ function onInput(evt) {
 							frac="0"
 						/>
 						<Slider
-							:label="$t('food.carbs')"
+							:label="t('food.carbs')"
 							@input="slotProps.confirm"
 							name="carb"
 							unit="g"
@@ -144,7 +144,7 @@ function onInput(evt) {
 							frac="0"
 						/>
 						<Slider
-							:label="$t('food.protein')"
+							:label="t('food.protein')"
 							@input="slotProps.confirm"
 							name="prot"
 							unit="g"
@@ -153,7 +153,7 @@ function onInput(evt) {
 							frac="0"
 						/>
 						<Slider
-							:label="$t('food.fiber')"
+							:label="t('food.fiber')"
 							@input="slotProps.confirm"
 							name="fib"
 							unit="g"
@@ -163,9 +163,9 @@ function onInput(evt) {
 						/>
 					</fieldset>
 					<fieldset>
-						<legend>{{ $t("aria.headmacro2") }}</legend>
+						<legend>{{ t("aria.headmacro2") }}</legend>
 						<Slider
-							:label="$t('food.fatsat')"
+							:label="t('food.fatsat')"
 							@input="slotProps.confirm"
 							name="fatsat"
 							unit="g"
@@ -174,7 +174,7 @@ function onInput(evt) {
 							frac="0"
 						/>
 						<Slider
-							:label="$t('food.fato3')"
+							:label="t('food.fato3')"
 							@input="slotProps.confirm"
 							name="fato3"
 							unit="g"
@@ -183,7 +183,7 @@ function onInput(evt) {
 							frac="0"
 						/>
 						<Slider
-							:label="$t('food.fato6')"
+							:label="t('food.fato6')"
 							@input="slotProps.confirm"
 							name="fato6"
 							unit="g"
@@ -192,7 +192,7 @@ function onInput(evt) {
 							frac="0"
 						/>
 						<Slider
-							:label="$t('food.sugar')"
+							:label="t('food.sugar')"
 							@input="slotProps.confirm"
 							name="sug"
 							unit="g"
@@ -201,7 +201,7 @@ function onInput(evt) {
 							frac="0"
 						/>
 						<Slider
-							:label="$t('food.salt')"
+							:label="t('food.salt')"
 							@input="slotProps.confirm"
 							name="salt"
 							unit="g"
@@ -239,61 +239,61 @@ function onInput(evt) {
 				</button>
 			</section>
 			<section>
-				<h2>{{ $t("aria.headnutrients") }}</h2>
+				<h2>{{ t("aria.headnutrients") }}</h2>
 				<form ref="form">
 					<div class="nutrient-block">
 						<fieldset :disabled="!editMode" class="col50">
 							<div>
-								<label>{{ $t("food.energy") }}</label>
+								<label>{{ t("food.energy") }}</label>
 								<input type="text" :value="current.kcal" name="kcal" @change="onInput" />
-								<span class="unit">{{ $t("unit.cal") }}</span>
+								<span class="unit">{{ t("unit.cal") }}</span>
 							</div>
 							<div>
-								<label>{{ $t("food.fat") }}</label>
+								<label>{{ t("food.fat") }}</label>
 								<input type="text" :value="current.fat" name="fat" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ $t("food.carbs2") }}</label>
+								<label>{{ t("food.carbs2") }}</label>
 								<input type="text" :value="current.carb" name="carb" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ $t("food.protein") }}</label>
+								<label>{{ t("food.protein") }}</label>
 								<input type="text" :value="current.prot" name="prot" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ $t("food.fiber") }}</label>
+								<label>{{ t("food.fiber") }}</label>
 								<input type="text" :value="current.fib" name="fib" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 						</fieldset>
 						<fieldset :disabled="!editMode" class="col50">
 							<div>
-								<label>{{ $t("food.fatsat") }}</label>
+								<label>{{ t("food.fatsat") }}</label>
 								<input type="text" :value="current.fatsat" name="fatsat" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ $t("food.fato3") }}</label>
+								<label>{{ t("food.fato3") }}</label>
 								<input type="text" :value="current.fato3" name="fato3" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ $t("food.fato6") }}</label>
+								<label>{{ t("food.fato6") }}</label>
 								<input type="text" :value="current.fato6" name="fato6" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ $t("food.sugar") }}</label>
+								<label>{{ t("food.sugar") }}</label>
 								<input type="text" :value="current.sug" name="sug" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ $t("food.salt") }}</label>
+								<label>{{ t("food.salt") }}</label>
 								<input type="text" :value="current.salt" name="salt" @change="onInput" />
-								<span class="unit">{{ $t("unit.g") }}</span>
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 						</fieldset>
 					</div>

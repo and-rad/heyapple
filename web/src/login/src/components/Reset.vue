@@ -45,19 +45,19 @@ function clearForm(evt) {
 </script>
 
 <template>
-	<RouterLink to="/" class="back">&#5176; {{ $t("form.back") }}</RouterLink>
+	<RouterLink to="/" class="back">&#5176; {{ t("form.back") }}</RouterLink>
 	<header>
 		<HeaderImage id="logo" />
 		<div id="app-name">
-			<span>{{ $t("reset.title1") }}</span><span>{{ $t("reset.title2") }}</span>
+			<span>{{ t("reset.title1") }}</span><span>{{ t("reset.title2") }}</span>
 		</div>
 	</header>
 	<form>
-		<p>{{ $t("reset.hint") }}</p>
+		<p>{{ t("reset.hint") }}</p>
 		<Message v-bind="msg" />
-		<label>{{ $t("form.email") }}</label>
+		<label>{{ t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
-		<button type="submit" @click="confirm" class="async">{{ $t("reset.action") }}</button>
+		<button type="submit" @click="confirm" class="async">{{ t("reset.action") }}</button>
 	</form>
 </template>
 

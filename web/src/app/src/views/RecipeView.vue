@@ -146,11 +146,11 @@ onMounted(() => (filtered.value = recipes.value));
 	<Main ref="main" @detailVisibility="editMode = false">
 		<template #filter>
 			<section class="new-item">
-				<h2>{{ $t("aria.headnew") }}</h2>
-				<NewRecipe :label="$t('btn.new')" :placeholder="$t('recipe.hintnew')" @confirm="newRecipe" />
+				<h2>{{ t("aria.headnew") }}</h2>
+				<NewRecipe :label="t('btn.new')" :placeholder="t('recipe.hintnew')" @confirm="newRecipe" />
 			</section>
 			<section>
-				<h2>{{ $t("aria.headsearch") }}</h2>
+				<h2>{{ t("aria.headsearch") }}</h2>
 			</section>
 		</template>
 
@@ -178,63 +178,64 @@ onMounted(() => (filtered.value = recipes.value));
 				</button>
 			</section>
 			<section>
-				<h2>{{ $t("aria.headtrack") }}</h2>
+				<h2>{{ t("aria.headtrack") }}</h2>
 				Add to diary here
 			</section>
 			<section>
-				<h2>{{ $t("aria.headingred") }}</h2>
+				<h2>{{ t("aria.headingred") }}</h2>
 				<IngredientList :items="current.items" />
 			</section>
 			<section>
-				<h2>{{ $t("aria.headnutrients") }}</h2>
+				<h2>{{ t("aria.headnutrients") }}</h2>
 				<div class="nutrient-block">
 					<div class="col50">
 						<div>
-							<label>{{ $t("food.energy") }}</label>
+							<label>{{ t("food.energy") }}</label>
 							<span>{{ current.kcal }}</span>
-							<span class="unit">{{ $t("unit.cal") }}</span>
+							<span class="unit">{{ t("unit.cal") }}</span>
 						</div>
 						<div>
-							<label>{{ $t("food.fat") }}</label>
+							<label>{{ t("food.fat") }}</label>
 							<span>{{ current.fat }}</span>
-							<span class="unit">{{ $t("unit.g") }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
 					</div>
 					<div class="col50">
 						<div>
-							<label>{{ $t("food.carbs2") }}</label>
+							<label>{{ t("food.carbs2") }}</label>
 							<span>{{ current.carb }}</span>
-							<span class="unit">{{ $t("unit.g") }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
 						<div>
-							<label>{{ $t("food.protein") }}</label>
+							<label>{{ t("food.protein") }}</label>
 							<span>{{ current.prot }}</span>
-							<span class="unit">{{ $t("unit.g") }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
 					</div>
 				</div>
 			</section>
 			<section class="prep">
-				<h2>{{ $t("aria.headprep") }}</h2>
+				<h2>{{ t("aria.headprep") }}</h2>
 				<div>
 					<fieldset :disabled="!editMode" class="col50">
-						<div>
-							<label>{{ $t("recipe.size") }}</label>
+						<div class="prep-size">
+							<label>{{ t("recipe.size", 2) }}</label>
 							<input type="text" name="size" form="form-recipe" :value="current.size" @change="onInput" />
+							<label>{{ t("recipe.size", current.size) }}</label>
 						</div>
+					</fieldset>
+					<fieldset :disabled="!editMode" class="col50">
 						<div>
-							<label>{{ $t("recipe.time") }}</label>
+							<label>{{ t("recipe.time") }}</label>
 							<input
 								type="text"
 								disabled
 								:value="current.preptime + current.cooktime + current.misctime"
 							/>
-							<span class="unit">{{ $t("unit.min") }}</span>
+							<span class="unit">{{ t("unit.min") }}</span>
 						</div>
-					</fieldset>
-					<fieldset :disabled="!editMode" class="col50">
 						<div>
-							<label>{{ $t("recipe.preptime") }}</label>
+							<label>{{ t("recipe.preptime") }}</label>
 							<input
 								type="text"
 								name="preptime"
@@ -242,10 +243,10 @@ onMounted(() => (filtered.value = recipes.value));
 								:value="current.preptime"
 								@change="onInput"
 							/>
-							<span class="unit">{{ $t("unit.min") }}</span>
+							<span class="unit">{{ t("unit.min") }}</span>
 						</div>
 						<div>
-							<label>{{ $t("recipe.cooktime") }}</label>
+							<label>{{ t("recipe.cooktime") }}</label>
 							<input
 								type="text"
 								name="cooktime"
@@ -253,10 +254,10 @@ onMounted(() => (filtered.value = recipes.value));
 								:value="current.cooktime"
 								@change="onInput"
 							/>
-							<span class="unit">{{ $t("unit.min") }}</span>
+							<span class="unit">{{ t("unit.min") }}</span>
 						</div>
 						<div>
-							<label>{{ $t("recipe.misctime") }}</label>
+							<label>{{ t("recipe.misctime") }}</label>
 							<input
 								type="text"
 								name="misctime"
@@ -264,13 +265,13 @@ onMounted(() => (filtered.value = recipes.value));
 								:value="current.misctime"
 								@change="onInput"
 							/>
-							<span class="unit">{{ $t("unit.min") }}</span>
+							<span class="unit">{{ t("unit.min") }}</span>
 						</div>
 					</fieldset>
 				</div>
 				<div class="placeholder">
 					<ListImage />
-					<p>{{ $t("todo.instructions") }}</p>
+					<p>{{ t("todo.instructions") }}</p>
 				</div>
 			</section>
 		</template>
@@ -282,10 +283,31 @@ onMounted(() => (filtered.value = recipes.value));
 	height: 66vw;
 }
 
+#details section.prep .prep-size label:last-child {
+	display: none;
+}
+
 @media only screen and (min-width: 400px) {
 	#details section.prep > div {
 		display: flex;
 		justify-content: space-between;
+	}
+
+	#details section.prep .prep-size input {
+		font-size: 5em;
+		flex-basis: 50%;
+		padding: 0;
+		flex-grow: 1;
+	}
+
+	#details section.prep .prep-size label:first-child {
+		display: none;
+	}
+
+	#details section.prep .prep-size label:last-child {
+		flex-basis: 0;
+		display: block;
+		overflow-x: visible;
 	}
 }
 

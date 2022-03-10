@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
+import { useI18n } from "vue-i18n";
 
+const { t } = useI18n();
 const prop = defineProps(["label", "name", "unit", "min", "max", "frac"]);
 const emit = defineEmits(["input"]);
 
@@ -90,7 +92,7 @@ function onRelease(evt) {
 <template>
 	<div class="slider">
 		<label>
-			<span>{{ label }} ({{ $t("unit." + unit) }})</span>
+			<span>{{ label }} ({{ t("unit." + unit) }})</span>
 			<input type="text" :name="name" :value="minVal" @change="onMin" />
 			&nbsp;&ndash;&nbsp;
 			<input type="text" :name="name" :value="maxVal" @change="onMax" />

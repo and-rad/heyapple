@@ -65,6 +65,7 @@ let recipes = undefined;
 
 function initLocale(messages) {
 	locale = createI18n({
+		legacy: false,
 		locale: lang.split("-")[0],
 		fallbackLocale: "en",
 		messages,

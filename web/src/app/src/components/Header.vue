@@ -47,30 +47,30 @@ document.addEventListener("click", function () {
 			</button>
 			<ul id="nav-main">
 				<li>
-					<RouterLink to="/">{{ $t("nav.food") }}</RouterLink>
+					<RouterLink to="/">{{ t("nav.food") }}</RouterLink>
 				</li>
 				<li>
-					<RouterLink to="/recipes">{{ $t("nav.recipes") }}</RouterLink>
+					<RouterLink to="/recipes">{{ t("nav.recipes") }}</RouterLink>
 				</li>
 				<li>
-					<RouterLink to="/diary">{{ $t("nav.diary") }}</RouterLink>
+					<RouterLink to="/diary">{{ t("nav.diary") }}</RouterLink>
 				</li>
 				<li>
-					<RouterLink to="/shopping">{{ $t("nav.shopping") }}</RouterLink>
+					<RouterLink to="/shopping">{{ t("nav.shopping") }}</RouterLink>
 				</li>
 			</ul>
 			<ul id="nav-user">
 				<li>
-					<RouterLink to="/profile">{{ $t("nav.profile") }}</RouterLink>
+					<RouterLink to="/profile">{{ t("nav.profile") }}</RouterLink>
 				</li>
 				<li>
-					<RouterLink to="/settings">{{ $t("nav.settings") }}</RouterLink>
+					<RouterLink to="/settings">{{ t("nav.settings") }}</RouterLink>
 				</li>
 				<li>
-					<a href="https://docs.heyapple.org" target="_blank">{{ $t("nav.help") }}</a>
+					<a href="https://docs.heyapple.org" target="_blank">{{ t("nav.help") }}</a>
 				</li>
 				<li>
-					<a href="#" @click="confirm">{{ $t("nav.signout") }}</a>
+					<a href="#" @click="confirm">{{ t("nav.signout") }}</a>
 				</li>
 			</ul>
 		</nav>

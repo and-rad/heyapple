@@ -62,20 +62,20 @@ function clearForm(evt) {
 	<header>
 		<HeaderImage id="logo" />
 		<div id="app-name">
-			<span>{{ $t("register.title1") }}</span><span>{{ $t("register.title2") }}</span>
+			<span>{{ t("register.title1") }}</span><span>{{ t("register.title2") }}</span>
 		</div>
 	</header>
 	<form>
-		<p v-html="$t('register.hint')"></p>
+		<p v-html="t('register.hint')"></p>
 		<Message v-bind="msg" />
-		<label>{{ $t("form.email") }}</label>
+		<label>{{ t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
-		<label>{{ $t("form.pass") }}</label>
+		<label>{{ t("form.pass") }}</label>
 		<PasswordField name="pass" withBar=true v-model="pass1" />
-		<label>{{ $t("form.confirm") }}</label>
+		<label>{{ t("form.confirm") }}</label>
 		<PasswordField name="pass" v-model="pass2" />
-		<button type="submit" @click="confirm" class="async">{{ $t("register.action") }}</button>
-		<p>{{ $t("register.signin") }} <RouterLink to="/">{{ $t("login.action") }}</RouterLink>.</p>
+		<button type="submit" @click="confirm" class="async">{{ t("register.action") }}</button>
+		<p>{{ t("register.signin") }} <RouterLink to="/">{{ t("login.action") }}</RouterLink>.</p>
 	</form>
 </template>
 

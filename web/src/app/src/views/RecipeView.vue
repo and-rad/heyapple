@@ -246,7 +246,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 					<SaveImage v-if="editMode" />
 				</button>
 			</section>
-			<section>
+			<section v-if="current.items.length">
 				<h2>{{ t("aria.headtrack") }}</h2>
 				Add to diary here
 			</section>

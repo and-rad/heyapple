@@ -252,7 +252,9 @@ func (db *DB) SetRecipeAccess(user, rec, perms int) error {
 }
 
 func (db *DB) Recipe(id int) (core.Recipe, error) {
-	if rec, ok := db.recipes[id]; ok {
+	if r, ok := db.recipes[id]; ok {
+		rec := r
+		rec.Items = append([]core.Ingredient{}, r.Items...)
 		return rec, nil
 	}
 	return core.Recipe{}, app.ErrNotFound
@@ -277,7 +279,9 @@ func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {
 		r := db.recipes[id]
 		if perm != app.PermNone && f.MatchRecipe(r) {
 			ids[id] = struct{}{}
-			recs = append(recs, r)
+			rec := r
+			rec.Items = append([]core.Ingredient{}, r.Items...)
+			recs = append(recs, rec)
 		}
 	}
 
@@ -285,7 +289,9 @@ func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {
 		if _, ok := ids[id]; !ok {
 			r := db.recipes[id]
 			if perm != app.PermNone && f.MatchRecipe(r) {
-				recs = append(recs, r)
+				rec := r
+				rec.Items = append([]core.Ingredient{}, r.Items...)
+				recs = append(recs, rec)
 			}
 		}
 	}

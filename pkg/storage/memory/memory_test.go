@@ -28,6 +28,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"sync"
 	"testing"
 	"testing/fstest"
 	"time"
@@ -642,6 +643,31 @@ func TestDB_Recipe(t *testing.T) {
 	}
 }
 
+func TestDB_Recipe_Race(t *testing.T) {
+	db := NewDB()
+	db.recipes[1] = mock.Recipe1()
+
+	rec1, _ := db.Recipe(1)
+	rec2, _ := db.Recipe(1)
+
+	wg := &sync.WaitGroup{}
+	wg.Add(2)
+
+	go func() {
+		rec1.Name = "Rec 1"
+		rec1.Items[0].Amount = 12
+		wg.Done()
+	}()
+
+	go func() {
+		rec2.Name = "Rec 2"
+		rec2.Items[0].Amount = 120
+		wg.Done()
+	}()
+
+	wg.Wait()
+}
+
 func TestDB_FoodExists(t *testing.T) {
 	for idx, data := range []struct {
 		db *DB
@@ -986,4 +1012,30 @@ func TestDB_Recipes(t *testing.T) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, recs, data.recs)
 		}
 	}
+}
+
+func TestDB_Recipes_Race(t *testing.T) {
+	db := NewDB()
+	db.recipes[1] = mock.Recipe1()
+	db.userRec[1] = map[int]int{1: app.PermRead}
+
+	rec1, _ := db.Recipes(1, nil)
+	rec2, _ := db.Recipes(1, nil)
+
+	wg := &sync.WaitGroup{}
+	wg.Add(2)
+
+	go func() {
+		rec1[0].Name = "Rec 1"
+		rec1[0].Items[0].Amount = 12
+		wg.Done()
+	}()
+
+	go func() {
+		rec2[0].Name = "Rec 2"
+		rec2[0].Items[0].Amount = 120
+		wg.Done()
+	}()
+
+	wg.Wait()
 }

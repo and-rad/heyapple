@@ -27,7 +27,7 @@ test-server:
 
 test-all-server:
 	@echo "testing ${NUM_TESTS} cases:"
-	@go test -cover -p 1 -timeout 30m ./pkg/...
+	@go test -cover -race -p 1 -timeout 30m ./pkg/...
 
 install-server:
 	@cp ./out/server/${BINARY_NAME}-amd64 ${INSTALL_DIR}/

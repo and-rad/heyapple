@@ -85,7 +85,7 @@
 	--color-primary: #13ad73;
 	--color-primary-dark: #038d53;
 	--color-secondary: #f2ac05;
-	--color-spinner-secondary: rgba(0,0,0,0.2);
+	--color-spinner-secondary: rgba(0, 0, 0, 0.2);
 	--color-spinner-primary: #000000;
 	--color-text: #2c2c2c;
 	--color-text-light: #808080;
@@ -164,12 +164,16 @@ input[type="text"],
 input[type="email"],
 input[type="password"],
 input[type="search"],
+input[type="date"],
+input[type="time"],
+input[type="number"],
 select {
 	display: block;
 	line-height: 150%;
 	font-size: 16px;
 	font-family: var(--font-stack);
 	color: var(--color-text);
+	background-color: var(--color-background);
 	padding: 0.5em;
 	border: var(--border);
 	border-radius: 4px;
@@ -184,6 +188,12 @@ input[type="password"]:focus,
 input[type="password"]:active,
 input[type="search"]:focus,
 input[type="search"]:active,
+input[type="date"]:focus,
+input[type="date"]:active,
+input[type="time"]:focus,
+input[type="time"]:active,
+input[type="number"]:focus,
+input[type="number"]:active,
 select:focus,
 select:active {
 	border-color: var(--color-primary) !important;
@@ -215,6 +225,16 @@ button {
 	background-color: var(--color-primary);
 	color: #fff;
 	transition: box-shadow 0.2s, background-color 0.2s;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+input[type="number"] {
+	-moz-appearance: textfield;
 }
 
 button.icon {

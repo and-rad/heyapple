@@ -265,6 +265,75 @@ func RecipeOwner(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// AddIngredient adds the ingredient identified by {ing} to
+// the recipe identified by {rec}. The amount is passed in
+// the request body. The response body will always be empty,
+// success or failure is communicated by the status codes.
+//
+// If the ingredient does not exist in the database, it is
+// just ignored without returning an error.
+//
+// Endpoint:
+//   /api/v1/recipe/{rec}/ingredient/{ing}
+// Methods:
+//   POST
+// Possible status codes:
+//   204 - Update successful
+//   400 - Malformed or missing form data
+//   401 - Insufficient permission
+//   404 - Recipe doesn't exist
+//   500 - Internal server error
+// Example input:
+//   amount=125
+func AddIngredient(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		recID, err := strconv.Atoi(ps.ByName("rec"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		var hasPermission bool
+		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			query := &app.RecipeAccess{UserID: id, RecID: recID}
+			if env.DB.Fetch(query) == nil {
+				hasPermission = query.HasPerms(app.PermEdit)
+			}
+		}
+
+		if !hasPermission {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		ingID, err := strconv.Atoi(ps.ByName("ing"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		amount, err := strconv.ParseFloat(r.FormValue("amount"), 32)
+		if err != nil || amount == 0 {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		cmd := &app.SaveIngredient{
+			Amount:       float32(amount),
+			RecipeID:     recID,
+			IngredientID: ingID,
+		}
+
+		if err := env.DB.Execute(cmd); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusNoContent)
+		}
+	}
+}
+
 func getRecipeFilter(r *http.Request) core.Filter {
 	r.ParseForm()
 

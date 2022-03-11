@@ -168,7 +168,8 @@ func TestSaveRecipe(t *testing.T) {
 				r.CookTime = 5
 				r.MiscTime = 6
 				return r
-			}()},
+			}(),
+		},
 	} {
 		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
 		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
@@ -380,6 +381,117 @@ func TestRecipeOwner(t *testing.T) {
 
 		if body := res.Body.String(); body != data.out {
 			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}
+
+func TestAddIngredient(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		in        url.Values
+		setCookie bool
+
+		rec    core.Recipe
+		status int
+	}{
+		{ //00// missing mandatory form values
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// missing mandatory form values
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "name", Value: "12"}},
+			status: http.StatusBadRequest,
+		},
+		{ //02// wrong data type for id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "rec", Value: "someone"}},
+			status: http.StatusBadRequest,
+		},
+		{ //03// no session
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "rec", Value: "42"}},
+			status: http.StatusUnauthorized,
+		},
+		{ //04// missing ingredient id
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 42, Perms: app.PermEdit}).
+				WithError(nil, mock.ErrDOS),
+			params:    httprouter.Params{{Key: "rec", Value: "42"}},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //05// wrong or missing amount value
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 42, Perms: app.PermEdit}).
+				WithError(nil, mock.ErrDOS),
+			params:    httprouter.Params{{Key: "rec", Value: "42"}, {Key: "ing", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //06// connection failure
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 42, Perms: app.PermEdit}).
+				WithError(nil, mock.ErrDOS),
+			params:    httprouter.Params{{Key: "rec", Value: "42"}, {Key: "ing", Value: "2"}},
+			in:        url.Values{"amount": {"240"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //07// recie doesn't exist
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 42, Perms: app.PermEdit}),
+			params:    httprouter.Params{{Key: "rec", Value: "42"}, {Key: "ing", Value: "2"}},
+			in:        url.Values{"amount": {"240"}},
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //08// success
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithFoods(mock.Food1, mock.Food2).
+				WithRecipe(mock.Recipe1()).
+				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
+			params:    httprouter.Params{{Key: "rec", Value: "1"}, {Key: "ing", Value: "1"}},
+			in:        url.Values{"amount": {"240"}},
+			setCookie: true,
+			status:    http.StatusNoContent,
+			rec: func() core.Recipe {
+				r := mock.Recipe1()
+				r.Items = append(r.Items, core.Ingredient{ID: 1, Amount: 240})
+				r.KCal += mock.Food1.KCal * 240 * 0.01
+				r.Fat += mock.Food1.Fat * 240 * 0.01
+				r.Carbs += mock.Food1.Carbs * 240 * 0.01
+				r.Protein += mock.Food1.Protein * 240 * 0.01
+				return r
+			}(),
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
+			}
+		}
+
+		api.AddIngredient(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if !reflect.DeepEqual(data.db.RecipeItem, data.rec) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.RecipeItem, data.rec)
 		}
 	}
 }

@@ -172,12 +172,13 @@ onMounted(() => (filtered.value = [...recipes.value]));
 </script>
 
 <template>
-	<Main ref="main" @detailVisibility="editMode = false">
+	<Main ref="main" @detailVisibility="editMode = false" :class="{ 'edit-mode': editMode }">
 		<template #filter>
 			<section class="new-item">
 				<h2>{{ t("aria.headnewrec") }}</h2>
 				<NewRecipe :label="t('btn.new')" :placeholder="t('recipe.hintnew')" @confirm="newRecipe" />
 			</section>
+			<hr />
 			<section>
 				<h2>{{ t("aria.headsearch") }}</h2>
 				<Search :data="recipes" v-slot="slotProps" :placeholder="t('recipe.hintsearch')" @result="updateList">
@@ -236,26 +237,29 @@ onMounted(() => (filtered.value = [...recipes.value]));
 		</template>
 
 		<template #details v-if="current">
-			<section class="subtitle" v-html="ownerInfo"></section>
+			<section class="subtitle no-edit-mode" v-html="ownerInfo"></section>
 			<section class="tags">
-				<span class="tag">Tag 1</span>
-				<span class="tag">Tag 2</span>
-				<span class="tag">Tag 3</span>
+				<span class="tag no-edit-mode">Tag 1</span>
+				<span class="tag no-edit-mode">Tag 2</span>
+				<span class="tag no-edit-mode">Tag 3</span>
 				<button class="icon async" :disabled="isSaving" @click="onEditMode" v-if="current.isowner">
 					<EditImage v-if="!editMode" />
 					<SaveImage v-if="editMode" />
 				</button>
 			</section>
-			<section v-if="current.items.length">
+			<hr />
+			<section v-if="current.items.length" class="no-edit-mode">
 				<h2>{{ t("aria.headtrack") }}</h2>
-				Add to diary here
+				<p>Add to diary here</p>
 			</section>
+			<hr />
 			<section>
 				<h2>{{ t("aria.headingred") }}</h2>
 				<p class="msg-noitems" v-if="!current.items.length" v-html="t('recipe.noitems')"></p>
-				<IngredientList :items="current.items" />
+				<IngredientList :items="current.items" :disabled="!editMode" />
 			</section>
-			<section>
+			<hr />
+			<section class="no-edit-mode">
 				<h2>{{ t("aria.headnutrients") }}</h2>
 				<div class="nutrient-block">
 					<div class="col50">
@@ -284,6 +288,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 					</div>
 				</div>
 			</section>
+			<hr />
 			<section class="prep">
 				<h2>{{ t("aria.headprep") }}</h2>
 				<div>

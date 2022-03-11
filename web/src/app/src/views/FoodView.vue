@@ -23,7 +23,7 @@ const filtered = ref([]);
 const current = ref(null);
 const editMode = ref(false);
 const disableSave = ref(false);
-const disableToRecipe = ref(false)
+const disableToRecipe = ref(false);
 const amount = ref(100);
 const today = ref(DateTime.now().toISODate());
 const now = ref(DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE));
@@ -149,12 +149,13 @@ function onInput(evt) {
 </script>
 
 <template>
-	<Main ref="main" @detailVisibility="editMode = false">
+	<Main ref="main" @detailVisibility="editMode = false" :class="{ 'edit-mode': editMode }">
 		<template #filter>
 			<section v-if="perms.canCreateFood" class="new-item">
 				<h2>{{ t("aria.headnew") }}</h2>
 				<NewFood :label="t('btn.new')" :placeholder="t('food.hintnew')" @confirm="newFood" />
 			</section>
+			<hr />
 			<section>
 				<h2>{{ t("aria.headsearch") }}</h2>
 				<Search :data="foods" v-slot="slotProps" :placeholder="t('food.hintsearch')" @result="updateList">
@@ -282,8 +283,8 @@ function onInput(evt) {
 					<SaveImage v-if="editMode" />
 				</button>
 			</section>
-
-			<section class="tracking">
+			<hr />
+			<section class="tracking no-edit-mode">
 				<h2>{{ t("aria.headtrack") }}</h2>
 				<fieldset class="tracking-amount">
 					<div>
@@ -307,7 +308,7 @@ function onInput(evt) {
 					<DiarySelect :label="t('btn.add')" :time="now" :date="today" @confirm="addToDiary" />
 				</fieldset>
 			</section>
-
+			<hr />
 			<section>
 				<h2>{{ t("aria.headnutrients") }}</h2>
 				<form ref="form">
@@ -381,7 +382,6 @@ function onInput(evt) {
 #details section.subtitle {
 	padding-top: 0;
 	padding-bottom: 0;
-	border: none;
 }
 
 #details section.subtitle strong {

@@ -160,6 +160,11 @@ a {
 	text-decoration: none;
 }
 
+hr {
+	border: none;
+	border-bottom: var(--border-light);
+}
+
 input[type="text"],
 input[type="email"],
 input[type="password"],

@@ -91,7 +91,6 @@ defineExpose({ showDetails });
 #details > section,
 #filter > section {
 	padding: 0.5em;
-	border-bottom: var(--border-light);
 }
 
 #details fieldset legend,
@@ -110,11 +109,6 @@ defineExpose({ showDetails });
 	color: var(--color-text-light);
 }
 
-#details > section:last-child,
-#filter > section:last-child {
-	border: none;
-}
-
 #filter {
 	width: 300px;
 	left: -300px;
@@ -129,7 +123,7 @@ main.open-filter #filter {
 }
 
 #filter > section.new-item {
-	height: 105px;
+	height: 104px;
 }
 
 #filter .slider {
@@ -291,6 +285,15 @@ main.open-details #details {
 
 main.open-filter #main {
 	transform: translateX(300px);
+}
+
+main .no-edit-mode {
+	transition: opacity 0.2s;
+}
+
+main.edit-mode .no-edit-mode {
+	pointer-events: none;
+	opacity: 0.2;
 }
 
 main .controls {

@@ -79,8 +79,8 @@ func TestSaveRecipe_Execute(t *testing.T) {
 		},
 		{ //02// id not found
 			id:  2,
-			db:  mock.NewDB().WithRecipe(mock.Recipe1),
-			rec: mock.Recipe1,
+			db:  mock.NewDB().WithRecipe(mock.Recipe1()),
+			rec: mock.Recipe1(),
 			err: app.ErrNotFound,
 		},
 		{ //03// success
@@ -92,9 +92,9 @@ func TestSaveRecipe_Execute(t *testing.T) {
 				"cooktime": 30,
 				"misctime": 45,
 			},
-			db: mock.NewDB().WithRecipe(mock.Recipe1),
+			db: mock.NewDB().WithRecipe(mock.Recipe1()),
 			rec: func() core.Recipe {
-				r := mock.Recipe1
+				r := mock.Recipe1()
 				r.Name = "Apple Pie"
 				r.Size = 2
 				r.PrepTime = 5
@@ -273,15 +273,15 @@ func TestGetRecipes_Fetch(t *testing.T) {
 			recs: []core.Recipe{},
 		},
 		{ //03// success, no filter
-			db:   mock.NewDB().WithRecipes(mock.Recipe1, mock.Recipe2),
+			db:   mock.NewDB().WithRecipes(mock.Recipe1(), mock.Recipe2()),
 			uid:  1,
-			recs: []core.Recipe{mock.Recipe1, mock.Recipe2},
+			recs: []core.Recipe{mock.Recipe1(), mock.Recipe2()},
 		},
 		{ //04// success, with filter
-			db:     mock.NewDB().WithRecipes(mock.Recipe1),
+			db:     mock.NewDB().WithRecipes(mock.Recipe1()),
 			filter: core.Filter{"kcal": 150},
 			uid:    1,
-			recs:   []core.Recipe{mock.Recipe1},
+			recs:   []core.Recipe{mock.Recipe1()},
 		},
 	} {
 		qry := &app.Recipes{UserID: data.uid, Filter: data.filter}
@@ -327,14 +327,14 @@ func TestGetRecipe_Fetch(t *testing.T) {
 		},
 		{ //03// id not found
 			id:  1,
-			db:  mock.NewDB().WithRecipe(mock.Recipe2),
+			db:  mock.NewDB().WithRecipe(mock.Recipe2()),
 			rec: core.Recipe{ID: 1},
 			err: app.ErrNotFound,
 		},
 		{ //04// success
 			id:  1,
-			db:  mock.NewDB().WithRecipe(mock.Recipe1),
-			rec: mock.Recipe1,
+			db:  mock.NewDB().WithRecipe(mock.Recipe1()),
+			rec: mock.Recipe1(),
 		},
 	} {
 		qry := &app.GetRecipe{Item: core.Recipe{ID: data.rec.ID}}

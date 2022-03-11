@@ -92,31 +92,42 @@ var (
 	Food2Json = `{"id":2,"brand":0,"kcal":93,"fat":0.2,"fatsat":0,"fato3":0,"fato6":0,"carb":20,"sug":17,"prot":1,"fib":2,"salt":0,"pot":367,"chl":109,"sod":1,"calc":7,"phos":22,"mag":30,"iron":0.4,"zinc":0.2,"mang":0.3,"cop":0.1,"iod":0.003,"chr":0,"mol":0,"sel":0,"vita":0.01,"vitb1":0.04,"vitb2":0.06,"vitb3":0,"vitb5":0,"vitb6":0.36,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":11,"vitd":0,"vite":0.27,"vitk":0}`
 )
 
-var (
-	Recipe0 = core.Recipe{
+// Recipes need to be functions to make sure the underlying
+// data of the Items slice is unique for every call.
+func Recipe0() core.Recipe {
+	return core.Recipe{
 		ID:    42,
 		Size:  1,
 		Items: []core.Ingredient{},
 	}
+}
 
-	Recipe1 = core.Recipe{
-		ID:    1,
-		Name:  "Apple Pie",
-		Size:  1,
-		KCal:  54 * 1.5,
-		Items: []core.Ingredient{{ID: 2, Amount: 150}},
+func Recipe1() core.Recipe {
+	return core.Recipe{
+		ID:      1,
+		Name:    "Banana Pie",
+		Size:    1,
+		KCal:    Food2.KCal * 1.5,
+		Fat:     Food2.Fat * 1.5,
+		Carbs:   Food2.Carbs * 1.5,
+		Protein: Food2.Protein * 1.5,
+		Items:   []core.Ingredient{{ID: Food2.ID, Amount: 150}},
 	}
+}
 
-	Recipe2 = core.Recipe{
+func Recipe2() core.Recipe {
+	return core.Recipe{
 		ID:    2,
 		Name:  "Fruit Cake",
 		Size:  3,
 		KCal:  54*3 + 93*2.5,
 		Items: []core.Ingredient{{ID: 1, Amount: 300}, {ID: 2, Amount: 250}},
 	}
+}
 
+const (
 	Recipe0Json = `{"name":"","items":[],"id":42,"size":1,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":0,"fat":0,"carb":0,"prot":0}`
-	Recipe1Json = `{"name":"Apple Pie","items":[{"id":2,"amount":150}],"id":1,"size":1,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":81,"fat":0,"carb":0,"prot":0}`
+	Recipe1Json = `{"name":"Banana Pie","items":[{"id":2,"amount":150}],"id":1,"size":1,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":139.5,"fat":0.3,"carb":30,"prot":1.5}`
 	Recipe2Json = `{"name":"Fruit Cake","items":[{"id":1,"amount":300},{"id":2,"amount":250}],"id":2,"size":3,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":394.5,"fat":0,"carb":0,"prot":0}`
 )
 

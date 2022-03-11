@@ -45,17 +45,17 @@ func TestNewRecipe(t *testing.T) {
 		},
 		{ //03// partial success
 			in:        url.Values{"name": {"My Recipe"}},
-			db:        mock.NewDB().WithUser(mock.User1).WithID(mock.Recipe0.ID).WithError(nil, mock.ErrDOS),
+			db:        mock.NewDB().WithUser(mock.User1).WithID(mock.Recipe0().ID).WithError(nil, mock.ErrDOS),
 			setCookie: true,
 			status:    http.StatusAccepted,
 			out:       strings.Replace(mock.Recipe0Json, `"name":""`, `"name":"My Recipe"`, 1),
 		},
 		{ //04// success
 			in:        url.Values{"name": {"My Recipe"}},
-			db:        mock.NewDB().WithUser(mock.User1).WithID(mock.Recipe0.ID),
+			db:        mock.NewDB().WithUser(mock.User1).WithID(mock.Recipe0().ID),
 			setCookie: true,
 			status:    http.StatusCreated,
-			access:    mock.Access{User: mock.User1.ID, Resource: mock.Recipe0.ID, Perms: app.PermOwner},
+			access:    mock.Access{User: mock.User1.ID, Resource: mock.Recipe0().ID, Perms: app.PermOwner},
 			out:       strings.Replace(mock.Recipe0Json, `"name":""`, `"name":"My Recipe"`, 1),
 		},
 	} {
@@ -128,25 +128,25 @@ func TestSaveRecipe(t *testing.T) {
 		{ //05// item doesn't exist
 			db: mock.NewDB().
 				WithUser(mock.User1).
-				WithRecipe(mock.Recipe1).
+				WithRecipe(mock.Recipe1()).
 				WithAccess(mock.Access{User: 1, Resource: 42, Perms: app.PermEdit}),
 			params:    httprouter.Params{{Key: "id", Value: "42"}},
 			in:        url.Values{"size": {"9"}},
 			setCookie: true,
 			status:    http.StatusNotFound,
-			rec:       mock.Recipe1,
+			rec:       mock.Recipe1(),
 		},
 		{ //06// success
 			db: mock.NewDB().
 				WithUser(mock.User1).
-				WithRecipe(mock.Recipe1).
+				WithRecipe(mock.Recipe1()).
 				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
 			params:    httprouter.Params{{Key: "id", Value: "1"}},
 			in:        url.Values{"size": {"9"}, "name": {"Banana Pie"}},
 			setCookie: true,
 			status:    http.StatusNoContent,
 			rec: func() core.Recipe {
-				r := mock.Recipe1
+				r := mock.Recipe1()
 				r.Size = 9
 				r.Name = "Banana Pie"
 				return r
@@ -155,7 +155,7 @@ func TestSaveRecipe(t *testing.T) {
 		{ //07// success
 			db: mock.NewDB().
 				WithUser(mock.User1).
-				WithRecipe(mock.Recipe1).
+				WithRecipe(mock.Recipe1()).
 				WithFoods(mock.Food1, mock.Food2).
 				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}),
 			params:    httprouter.Params{{Key: "id", Value: "1"}},
@@ -163,7 +163,7 @@ func TestSaveRecipe(t *testing.T) {
 			setCookie: true,
 			status:    http.StatusNoContent,
 			rec: func() core.Recipe {
-				r := mock.Recipe1
+				r := mock.Recipe1()
 				r.PrepTime = 4
 				r.CookTime = 5
 				r.MiscTime = 6
@@ -219,7 +219,7 @@ func TestRecipes(t *testing.T) {
 		},
 		{ //03// success
 			setCookie: true,
-			db:        mock.NewDB().WithRecipes(mock.Recipe1, mock.Recipe2),
+			db:        mock.NewDB().WithRecipes(mock.Recipe1(), mock.Recipe2()),
 			out:       fmt.Sprintf(`[%s,%s]`, mock.Recipe1Json, mock.Recipe2Json),
 			status:    http.StatusOK,
 		},
@@ -289,7 +289,7 @@ func TestRecipe(t *testing.T) {
 			status:    http.StatusNotFound,
 		},
 		{ //06// success
-			db:        mock.NewDB().WithRecipe(mock.Recipe1).WithAccess(mock.Access{1, 1, app.PermRead}),
+			db:        mock.NewDB().WithRecipe(mock.Recipe1()).WithAccess(mock.Access{1, 1, app.PermRead}),
 			params:    httprouter.Params{{Key: "id", Value: "1"}},
 			setCookie: true,
 			status:    http.StatusOK,

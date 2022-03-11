@@ -574,18 +574,18 @@ func TestDB_SetRecipe(t *testing.T) {
 			err: app.ErrNotFound,
 		},
 		{ //01// recipe doesn't exist
-			db:  &DB{recipes: map[int]core.Recipe{1: mock.Recipe1}},
-			rec: mock.Recipe2,
+			db:  &DB{recipes: map[int]core.Recipe{1: mock.Recipe1()}},
+			rec: mock.Recipe2(),
 			err: app.ErrNotFound,
 		},
 		{ //02// success
 			db: &DB{
 				food:    map[int]core.Food{1: mock.Food1},
-				recipes: map[int]core.Recipe{2: mock.Recipe2},
+				recipes: map[int]core.Recipe{2: mock.Recipe2()},
 			},
 			rec: core.Recipe{
 				ID:      2,
-				Name:    mock.Recipe2.Name,
+				Name:    mock.Recipe2().Name,
 				Size:    5,
 				Items:   []core.Ingredient{{ID: 1, Amount: 600}},
 				KCal:    mock.Food1.KCal * 6,
@@ -620,14 +620,14 @@ func TestDB_Recipe(t *testing.T) {
 			err: app.ErrNotFound,
 		},
 		{ //01// recipe doesn't exist
-			db:  &DB{recipes: map[int]core.Recipe{1: mock.Recipe1}},
+			db:  &DB{recipes: map[int]core.Recipe{1: mock.Recipe1()}},
 			id:  2,
 			err: app.ErrNotFound,
 		},
 		{ //02// success
-			db:  &DB{recipes: map[int]core.Recipe{2: mock.Recipe2}},
+			db:  &DB{recipes: map[int]core.Recipe{2: mock.Recipe2()}},
 			id:  2,
-			rec: mock.Recipe2,
+			rec: mock.Recipe2(),
 		},
 	} {
 		rec, err := data.db.Recipe(data.id)
@@ -765,7 +765,7 @@ func TestDB_SetRecipeAccess(t *testing.T) {
 		{ //02// set new permission
 			db: &DB{
 				users:   map[int]app.User{1: mock.User1},
-				recipes: map[int]core.Recipe{2: mock.Recipe2},
+				recipes: map[int]core.Recipe{2: mock.Recipe2()},
 				userRec: map[int]map[int]int{},
 				recUser: map[int]map[int]int{},
 			},
@@ -776,7 +776,7 @@ func TestDB_SetRecipeAccess(t *testing.T) {
 		{ //03// update existing permissions
 			db: &DB{
 				users:   map[int]app.User{1: mock.User1},
-				recipes: map[int]core.Recipe{2: mock.Recipe2},
+				recipes: map[int]core.Recipe{2: mock.Recipe2()},
 				userRec: map[int]map[int]int{1: {2: app.PermNone}},
 				recUser: map[int]map[int]int{2: {1: app.PermNone}},
 			},
@@ -885,7 +885,7 @@ func TestDB_WithDefaults(t *testing.T) {
 			db: func() *DB {
 				db := NewDB()
 				db.recID = 1
-				db.recipes = map[int]core.Recipe{1: mock.Recipe1}
+				db.recipes = map[int]core.Recipe{1: mock.Recipe1()}
 				db.userRec = map[int]map[int]int{0: {1: app.PermRead}}
 				return db
 			}(),
@@ -913,13 +913,13 @@ func TestDB_Recipes(t *testing.T) {
 			recs: []core.Recipe{},
 		},
 		{ //01// missing permissions
-			db:   &DB{recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2}},
+			db:   &DB{recipes: map[int]core.Recipe{1: mock.Recipe1(), 2: mock.Recipe2()}},
 			uid:  1,
 			recs: []core.Recipe{},
 		},
 		{ //02// denied by explicit permission
 			db: &DB{
-				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				recipes: map[int]core.Recipe{1: mock.Recipe1(), 2: mock.Recipe2()},
 				userRec: map[int]map[int]int{1: {1: app.PermNone}},
 			},
 			uid:  1,
@@ -927,53 +927,53 @@ func TestDB_Recipes(t *testing.T) {
 		},
 		{ //03// no filter, all items with access returned
 			db: &DB{
-				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				recipes: map[int]core.Recipe{1: mock.Recipe1(), 2: mock.Recipe2()},
 				userRec: map[int]map[int]int{1: {1: app.PermOwner}},
 			},
 			uid:  1,
-			recs: []core.Recipe{mock.Recipe1},
+			recs: []core.Recipe{mock.Recipe1()},
 		},
 		{ //04// all items returned
 			db: &DB{
-				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				recipes: map[int]core.Recipe{1: mock.Recipe1(), 2: mock.Recipe2()},
 				userRec: map[int]map[int]int{1: {1: app.PermOwner, 2: app.PermRead}},
 			},
 			uid:  1,
-			recs: []core.Recipe{mock.Recipe1, mock.Recipe2},
+			recs: []core.Recipe{mock.Recipe1(), mock.Recipe2()},
 		},
 		{ //05// filter by range
 			db: &DB{
-				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				recipes: map[int]core.Recipe{1: mock.Recipe1(), 2: mock.Recipe2()},
 				userRec: map[int]map[int]int{1: {1: app.PermOwner, 2: app.PermRead}},
 			},
 			uid:    1,
 			filter: core.Filter{"kcal": core.FloatRange{60, 180}},
-			recs:   []core.Recipe{mock.Recipe1},
+			recs:   []core.Recipe{mock.Recipe1()},
 		},
 		{ //06// filter by exact value
 			db: &DB{
-				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				recipes: map[int]core.Recipe{1: mock.Recipe1(), 2: mock.Recipe2()},
 				userRec: map[int]map[int]int{1: {1: app.PermOwner, 2: app.PermRead}},
 			},
 			uid:    1,
-			filter: core.Filter{"size": mock.Recipe2.Size},
-			recs:   []core.Recipe{mock.Recipe2},
+			filter: core.Filter{"size": mock.Recipe2().Size},
+			recs:   []core.Recipe{mock.Recipe2()},
 		},
 		{ //07// include public recipes
 			db: &DB{
-				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				recipes: map[int]core.Recipe{1: mock.Recipe1(), 2: mock.Recipe2()},
 				userRec: map[int]map[int]int{0: {1: app.PermRead}, 1: {2: app.PermOwner}},
 			},
 			uid:  1,
-			recs: []core.Recipe{mock.Recipe1, mock.Recipe2},
+			recs: []core.Recipe{mock.Recipe1(), mock.Recipe2()},
 		},
 		{ //08// avoid duplicates
 			db: &DB{
-				recipes: map[int]core.Recipe{1: mock.Recipe1, 2: mock.Recipe2},
+				recipes: map[int]core.Recipe{1: mock.Recipe1(), 2: mock.Recipe2()},
 				userRec: map[int]map[int]int{0: {2: app.PermRead}, 1: {2: app.PermOwner}},
 			},
 			uid:  1,
-			recs: []core.Recipe{mock.Recipe2},
+			recs: []core.Recipe{mock.Recipe2()},
 		},
 	} {
 		recs, err := data.db.Recipes(data.uid, data.filter)

@@ -113,47 +113,47 @@ func TestFilter_MatchRecipe(t *testing.T) {
 		ok bool
 	}{
 		{ //00// empty filter, always true
-			rec: mock.Recipe1,
+			rec: mock.Recipe1(),
 			ok:  true,
 		},
 		{ //01// fail exact value
 			filter: core.Filter{"name": "Brownie"},
-			rec:    mock.Recipe1,
+			rec:    mock.Recipe1(),
 			ok:     false,
 		},
 		{ //02// match exact value
-			filter: core.Filter{"name": mock.Recipe1.Name},
-			rec:    mock.Recipe1,
+			filter: core.Filter{"name": mock.Recipe1().Name},
+			rec:    mock.Recipe1(),
 			ok:     true,
 		},
 		{ //03// fail exact value
 			filter: core.Filter{"size": 4},
-			rec:    mock.Recipe1,
+			rec:    mock.Recipe1(),
 			ok:     false,
 		},
 		{ //04// fail int range
 			filter: core.Filter{"size": core.IntRange{4, 6}},
-			rec:    mock.Recipe1,
+			rec:    mock.Recipe1(),
 			ok:     false,
 		},
 		{ //05// match int range
 			filter: core.Filter{"size": core.IntRange{1, 6}},
-			rec:    mock.Recipe1,
+			rec:    mock.Recipe1(),
 			ok:     true,
 		},
 		{ //06// fail exact value
 			filter: core.Filter{"kcal": 4.4},
-			rec:    mock.Recipe1,
+			rec:    mock.Recipe1(),
 			ok:     false,
 		},
 		{ //07// fail float range
-			filter: core.Filter{"kcal": core.FloatRange{120, 150}},
-			rec:    mock.Recipe1,
+			filter: core.Filter{"kcal": core.FloatRange{150, 180}},
+			rec:    mock.Recipe1(),
 			ok:     false,
 		},
 		{ //08// match float range
 			filter: core.Filter{"kcal": core.FloatRange{40, 150}},
-			rec:    mock.Recipe1,
+			rec:    mock.Recipe1(),
 			ok:     true,
 		},
 	} {

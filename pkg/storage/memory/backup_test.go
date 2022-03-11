@@ -44,7 +44,7 @@ var (
 		emails:  map[string]int{mock.User1.Email: mock.User1.ID},
 		tokens:  map[string]app.Token{"abcd": {ID: mock.User1.ID}},
 		food:    map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},
-		recipes: map[int]core.Recipe{mock.Recipe1.ID: mock.Recipe1},
+		recipes: map[int]core.Recipe{mock.Recipe1().ID: mock.Recipe1()},
 		recUser: map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
 		userRec: map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
 		userID:  1,

@@ -212,13 +212,15 @@ main.open-details #details {
 
 #details label + span,
 #details input:disabled,
-#details input:read-only {
+#details input[type="text"]:read-only,
+#details input[type="number"]:read-only {
 	border-color: transparent !important;
 	background: none !important;
 }
 
 #details input:disabled + .unit,
-#details input:read-only + .unit {
+#details input[type="text"]:read-only + .unit,
+#details input[type="number"]:read-only + .unit {
 	border-color: transparent !important;
 }
 
@@ -243,7 +245,8 @@ main.open-details #details {
 }
 
 #details label + span,
-#details input[type="text"] {
+#details input[type="text"],
+#details input[type="number"] {
 	flex-basis: 2.5em;
 	flex-grow: 1;
 	padding: 0 0.25em 0 0;
@@ -254,7 +257,8 @@ main.open-details #details {
 }
 
 #details label + span:last-child,
-#details input[type="text"]:last-child {
+#details input[type="text"]:last-child,
+#details input[type="number"]:last-child {
 	padding: 0;
 }
 

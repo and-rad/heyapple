@@ -3,7 +3,7 @@ import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { locale } = useI18n();
-const prop = defineProps(["label", "placeholder", "items"]);
+const prop = defineProps(["label", "placeholder", "items", "disabled"]);
 const emit = defineEmits(["confirm"]);
 const value = ref(0);
 
@@ -28,7 +28,7 @@ function confirm(evt) {
 			<option value="0" selected>{{ placeholder }}</option>
 			<option v-for="item in sortedItems" :key="item.id" :value="item.id">{{ item.name }}</option>
 		</select>
-		<input type="submit" @click="confirm" :value="label" />
+		<button type="submit" class="async" @click="confirm" :disabled="disabled">{{ label }}</button>
 	</form>
 </template>
 
@@ -44,7 +44,7 @@ function confirm(evt) {
 	border-bottom-right-radius: 0;
 }
 
-.clickable-select input[type="submit"] {
+.clickable-select button {
 	width: auto;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;

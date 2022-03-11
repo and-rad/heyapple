@@ -3,22 +3,30 @@ import Main from "../components/Main.vue";
 import Search from "../components/LocalSearch.vue";
 import Slider from "../components/Slider.vue";
 import NewFood from "../components/ClickableInput.vue";
+import RecipeSelect from "../components/ClickableSelect.vue";
+import DiarySelect from "../components/ClickableDate.vue";
 import FoodList from "../components/FoodList.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
 import { ref, inject } from "vue";
 import { useI18n } from "vue-i18n";
+import { DateTime } from "luxon";
 
 const { t } = useI18n();
 const log = inject("log");
 const csrf = inject("csrfToken");
 const perms = inject("perms");
 const foods = inject("food");
+const recipes = inject("recipes");
 
 const filtered = ref([]);
 const current = ref(null);
 const editMode = ref(false);
-const isSaving = ref(false);
+const disableSave = ref(false);
+const disableToRecipe = ref(false)
+const amount = ref(100);
+const today = ref(DateTime.now().toISODate());
+const now = ref(DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE));
 
 const main = ref(null);
 const form = ref(null);
@@ -45,7 +53,7 @@ function newFood(name) {
 }
 
 function saveFood() {
-	isSaving.value = true;
+	disableSave.value = true;
 	let id = current.value.id;
 	fetch("/api/v1/food/" + id, {
 		method: "PUT",
@@ -73,9 +81,42 @@ function saveFood() {
 		.catch((err) => log.err(err))
 		.finally(() => {
 			setTimeout(function () {
-				isSaving.value = false;
+				disableSave.value = false;
 			}, 500);
 		});
+}
+
+function addToRecipe(id) {
+	disableToRecipe.value = true;
+	fetch(`/api/v1/recipe/${id}/ingredient/${current.value.id}`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+		body: new URLSearchParams({ amount: amount.value }),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("addfood.err" + response.status);
+			}
+			return fetch("/api/v1/recipe/" + id);
+		})
+		.then((response) => response.json())
+		.then((data) => {
+			recipes.value = recipes.value.map((r) => (data.id == r.id ? data : r));
+			log.msg(t("addfood.ok"));
+		})
+		.catch((err) => log.err(err))
+		.finally(() => {
+			setTimeout(function () {
+				disableToRecipe.value = false;
+			}, 500);
+		});
+}
+
+function addToDiary(date) {
+	console.log(date, amount.value);
 }
 
 function updateList(items) {
@@ -89,6 +130,9 @@ function updateList(items) {
 
 function showDetails(id) {
 	current.value = filtered.value.filter((f) => f.id == id)[0];
+	today.value = DateTime.now().toISODate();
+	now.value = DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE);
+	amount.value = 100;
 	main.value.showDetails();
 }
 
@@ -230,7 +274,7 @@ function onInput(evt) {
 				<span class="tag">Tag 3</span>
 				<button
 					class="icon async"
-					:disabled="isSaving"
+					:disabled="disableSave"
 					@click="onEditMode"
 					v-if="perms.canCreateFood || perms.canEditFood"
 				>
@@ -238,6 +282,32 @@ function onInput(evt) {
 					<SaveImage v-if="editMode" />
 				</button>
 			</section>
+
+			<section class="tracking">
+				<h2>{{ t("aria.headtrack") }}</h2>
+				<fieldset class="tracking-amount">
+					<div>
+						<label>{{ t("food.amount") }}</label>
+						<input type="number" v-model="amount" name="amount" />
+						<span class="unit">{{ t("unit.g") }}</span>
+					</div>
+				</fieldset>
+				<fieldset>
+					<label>Add to recipe</label>
+					<RecipeSelect
+						:label="t('btn.add')"
+						:placeholder="t('food.hintrec')"
+						:items="recipes"
+						:disabled="disableToRecipe"
+						@confirm="addToRecipe"
+					/>
+				</fieldset>
+				<fieldset>
+					<label>Add to diary</label>
+					<DiarySelect :label="t('btn.add')" :time="now" :date="today" @confirm="addToDiary" />
+				</fieldset>
+			</section>
+
 			<section>
 				<h2>{{ t("aria.headnutrients") }}</h2>
 				<form ref="form">
@@ -330,6 +400,21 @@ function onInput(evt) {
 	position: absolute;
 	right: 0.5em;
 	bottom: 0.5em;
+}
+
+#details section.tracking > fieldset {
+	margin-bottom: 1em;
+}
+
+#details .tracking-amount > div {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	padding: 0.5em 0;
+}
+
+#details .tracking-amount label {
+	flex-basis: 100%;
 }
 
 #details .nutrient-block:not(:first-of-type) {

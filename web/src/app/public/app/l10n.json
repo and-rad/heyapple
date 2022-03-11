@@ -2,6 +2,14 @@
 	"en": {
 		"1": "Apple",
 		"2": "Banana",
+		"addfood":{
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to edit this recipe.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "The requested recipe does not exist.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! The ingredient was added."
+		},
 		"aria": {
 			"headingred": "Ingredients",
 			"headmacro1": "Primary Macronutrients",
@@ -14,6 +22,7 @@
 			"headtrack": "Tracking"
 		},
 		"btn": {
+			"add": "Add",
 			"new": "New"
 		},
 		"createfood": {
@@ -36,6 +45,7 @@
 			"err": "Unknown error occurred"
 		},
 		"food": {
+			"amount": "Amount",
 			"carbs": "Carbohydrates",
 			"carbs2": "Carbs",
 			"energy": "Energy",
@@ -45,6 +55,7 @@
 			"fatsat": "Fat, saturated",
 			"fiber": "Fiber",
 			"hintnew": "New name...",
+			"hintrec": "Select recipe...",
 			"hintsearch": "Find food...",
 			"name": "Name",
 			"protein": "Protein",

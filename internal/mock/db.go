@@ -187,6 +187,11 @@ func (db *DB) Food(id int) (core.Food, error) {
 		return core.Food{}, err
 	}
 	if db.FoodItem.ID != id {
+		for _, f := range db.FoodItems {
+			if f.ID == id {
+				return f, nil
+			}
+		}
 		return core.Food{}, app.ErrNotFound
 	}
 	return db.FoodItem, nil

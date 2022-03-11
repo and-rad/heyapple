@@ -349,3 +349,72 @@ func TestGetRecipe_Fetch(t *testing.T) {
 		}
 	}
 }
+
+func TestSaveIngredient_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		cmd *app.SaveIngredient
+		db  *mock.DB
+
+		rec core.Recipe
+		err error
+	}{
+		{ //00// connection failed
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			cmd: &app.SaveIngredient{},
+			err: mock.ErrDOS,
+		},
+		{ //01// recipe not found
+			db:  mock.NewDB(),
+			cmd: &app.SaveIngredient{RecipeID: 1},
+			err: app.ErrNotFound,
+		},
+		{ //02// remove ingredient success
+			db: mock.NewDB().WithRecipe(core.Recipe{
+				ID: 1, Name: "rec1", Items: []core.Ingredient{{ID: 2, Amount: 120}}, KCal: 123, Fat: 43},
+			),
+			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 2, Amount: 0},
+			rec: core.Recipe{ID: 1, Name: "rec1", Items: []core.Ingredient{}},
+		},
+		{ //03// ingredient doesn't exist
+			db:  mock.NewDB().WithRecipe(mock.Recipe1()).WithFood(mock.Food2),
+			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 3, Amount: 350},
+			rec: mock.Recipe1(),
+		},
+		{ //04// change an ingredient's amount
+			db:  mock.NewDB().WithRecipe(mock.Recipe1()).WithFoods(mock.Food2),
+			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 2, Amount: 200},
+			rec: func() core.Recipe {
+				r := mock.Recipe1()
+				r.Items = []core.Ingredient{{ID: mock.Food2.ID, Amount: 200}}
+				r.KCal = mock.Food2.KCal * 2
+				r.Fat = mock.Food2.Fat * 2
+				r.Carbs = mock.Food2.Carbs * 2
+				r.Protein = mock.Food2.Protein * 2
+				return r
+			}(),
+		},
+		{ //05// add an ingredient
+			db:  mock.NewDB().WithRecipe(mock.Recipe1()).WithFoods(mock.Food1, mock.Food2),
+			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 1, Amount: 100},
+			rec: func() core.Recipe {
+				r := mock.Recipe1()
+				r.Items = append(r.Items, core.Ingredient{ID: mock.Food1.ID, Amount: 100})
+				r.KCal += mock.Food1.KCal
+				r.Fat += mock.Food1.Fat
+				r.Carbs += mock.Food1.Carbs
+				r.Protein += mock.Food1.Protein
+				return r
+			}(),
+		},
+	} {
+		err := data.cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v \nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.rec, data.db.RecipeItem) {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, data.db.RecipeItem, data.rec)
+		}
+	}
+}

@@ -46,14 +46,15 @@ type backup struct {
 }
 
 type backupData struct {
-	Users   map[int]app.User     `json:"users"`
-	Tokens  map[string]app.Token `json:"tokens"`
-	Food    map[int]core.Food    `json:"food"`
-	Recipes map[int]core.Recipe  `json:"recipes"`
-	UserRec map[int][]access     `json:"recaccess"`
-	UserID  int                  `json:"userid"`
-	FoodID  int                  `json:"foodid"`
-	RecID   int                  `json:"recid"`
+	Users   map[int]app.User          `json:"users"`
+	Tokens  map[string]app.Token      `json:"tokens"`
+	Food    map[int]core.Food         `json:"food"`
+	Recipes map[int]core.Recipe       `json:"recipes"`
+	Entries map[int][]core.DiaryEntry `json:"entries"`
+	UserRec map[int][]access          `json:"recaccess"`
+	UserID  int                       `json:"userid"`
+	FoodID  int                       `json:"foodid"`
+	RecID   int                       `json:"recid"`
 }
 
 func (b *backup) Run() {
@@ -96,6 +97,17 @@ func (b *backup) load() {
 						b.db.recUser[a.Resource] = map[int]int{}
 					}
 					b.db.recUser[a.Resource][k] = a.Perms
+				}
+			}
+
+			for k, v := range db.Entries {
+				b.db.entries[k] = map[time.Time][]core.DiaryEntry{}
+				for _, e := range v {
+					day := e.Date.Truncate(time.Hour * 24)
+					if _, ok := b.db.entries[k][day]; !ok {
+						b.db.entries[k][day] = []core.DiaryEntry{}
+					}
+					b.db.entries[k][day] = append(b.db.entries[k][day], e)
 				}
 			}
 		}
@@ -143,12 +155,20 @@ func (b *backup) bytes() []byte {
 		}
 	}
 
+	entries := map[int][]core.DiaryEntry{}
+	for id, days := range b.db.entries {
+		for _, list := range days {
+			entries[id] = append(entries[id], list...)
+		}
+	}
+
 	data, _ := json.Marshal(backupData{
 		Users:   b.db.users,
 		UserID:  b.db.userID,
 		Food:    b.db.food,
 		FoodID:  b.db.foodID,
 		Recipes: b.db.recipes,
+		Entries: entries,
 		RecID:   b.db.recID,
 		Tokens:  b.db.tokens,
 		UserRec: recAccess,

@@ -33,6 +33,9 @@ import (
 	"time"
 )
 
+// entryMap       uid     day         entries
+type entryMap map[int]map[time.Time][]core.DiaryEntry
+
 type DB struct {
 	jobs *job.Scheduler
 
@@ -41,6 +44,7 @@ type DB struct {
 	tokens  map[string]app.Token
 	food    map[int]core.Food
 	recipes map[int]core.Recipe
+	entries entryMap
 
 	userRec map[int]map[int]int
 	recUser map[int]map[int]int
@@ -59,6 +63,7 @@ func NewDB() *DB {
 		emails:  make(map[string]int),
 		food:    make(map[int]core.Food),
 		recipes: make(map[int]core.Recipe),
+		entries: make(entryMap),
 		userRec: make(map[int]map[int]int),
 		recUser: make(map[int]map[int]int),
 	}

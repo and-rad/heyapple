@@ -25,8 +25,11 @@ import (
 )
 
 var (
-	Date1   = time.Date(2022, 3, 12, 13, 43, 0, 0, time.UTC)
+	Date1 = time.Date(2022, 3, 12, 8, 43, 0, 0, time.UTC)
+	Date2 = time.Date(2022, 3, 12, 16, 43, 0, 0, time.UTC)
+
 	Date1p2 = Date1.Add(time.Minute * 2)
+	Date2p2 = Date1.Add(time.Minute * 2)
 )
 
 var (
@@ -163,3 +166,23 @@ func Entry1Rec1() core.DiaryEntry {
 		Recipe: "Rec1",
 	}
 }
+
+func Entry2() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food: core.Ingredient{ID: 1, Amount: 50},
+		Date: Date2,
+	}
+}
+
+func Entry2Rec1() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food:   core.Ingredient{ID: 1, Amount: 50},
+		Date:   Date2,
+		Recipe: "Rec1",
+	}
+}
+
+const (
+	Entry1Json = `{"date":"2022-03-12T08:43:00Z","recipe":"","food":{"id":2,"amount":150}}`
+	Entry2Json = `{"date":"2022-03-12T16:43:00Z","recipe":"","food":{"id":1,"amount":50}}`
+)

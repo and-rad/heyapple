@@ -47,13 +47,13 @@ document.addEventListener("click", function () {
 			</button>
 			<ul id="nav-main">
 				<li>
-					<RouterLink to="/">{{ t("nav.food") }}</RouterLink>
+					<RouterLink to="/">{{ t("nav.diary") }}</RouterLink>
+				</li>
+				<li>
+					<RouterLink to="/food">{{ t("nav.food") }}</RouterLink>
 				</li>
 				<li>
 					<RouterLink to="/recipes">{{ t("nav.recipes") }}</RouterLink>
-				</li>
-				<li>
-					<RouterLink to="/diary">{{ t("nav.diary") }}</RouterLink>
 				</li>
 				<li>
 					<RouterLink to="/shopping">{{ t("nav.shopping") }}</RouterLink>
@@ -130,7 +130,7 @@ header nav > button {
 	position: absolute;
 	top: 0.5em;
 	right: 0.5em;
-	padding:0.75em;
+	padding: 0.75em;
 }
 
 header nav > button svg {

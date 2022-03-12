@@ -11,8 +11,8 @@ const router = createRouter({
 	routes: [
 		{
 			path: "/",
-			name: "food",
-			component: FoodView,
+			name: "diary",
+			component: DiaryView,
 		},
 		{
 			path: "/recipes",
@@ -20,9 +20,9 @@ const router = createRouter({
 			component: RecipeView,
 		},
 		{
-			path: "/diary",
-			name: "diary",
-			component: DiaryView,
+			path: "/food",
+			name: "food",
+			component: FoodView,
 		},
 		{
 			path: "/shopping",

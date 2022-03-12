@@ -137,10 +137,15 @@ func (d DiaryEntry) Equal(entry DiaryEntry) bool {
 		return false
 	}
 
-	t1 := d.Date.Round(time.Minute * 5)
-	t2 := entry.Date.Round(time.Minute * 5)
+	if d.Date.After(entry.Date) {
+		return d.Date.Sub(entry.Date) < time.Second*150
+	}
 
-	return t1 == t2
+	if d.Date.Before(entry.Date) {
+		return entry.Date.Sub(d.Date) < time.Second*150
+	}
+
+	return true
 }
 
 func (d DiaryEntry) Day() time.Time {

@@ -79,6 +79,10 @@ func TestDiaryEntry_Equal(t *testing.T) {
 		if ok := data.a.Equal(data.b); ok != data.ok {
 			t.Errorf("test case %d: equality mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
 		}
+
+		if ok := data.b.Equal(data.a); ok != data.ok {
+			t.Errorf("test case %d: equality mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
+		}
 	}
 }
 
@@ -96,8 +100,8 @@ func TestDiaryEntry_Day(t *testing.T) {
 			day:   "1987-12-06",
 		},
 		{ //02// today
-			entry: core.DiaryEntry{Date: time.Now()},
-			day:   time.Now().Format("2006-01-02"),
+			entry: core.DiaryEntry{Date: time.Now().UTC()},
+			day:   time.Now().UTC().Format("2006-01-02"),
 		},
 	} {
 		if day := data.entry.Day().Format("2006-01-02"); day != data.day {

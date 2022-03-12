@@ -25,6 +25,7 @@ const ownerInfo = ref("&nbsp;");
 
 const main = ref(null);
 const form = ref(null);
+const ingredients = ref(null);
 
 function perServing(val, frac = 2) {
 	return +parseFloat(val / (current.value.size || 1)).toFixed(frac);
@@ -88,9 +89,9 @@ function saveRecipe() {
 			if (!response.ok) {
 				throw t("saverec.err" + response.status);
 			}
-			editMode.value = false;
-			return fetch("/api/v1/recipe/" + id);
+			return saveIngredients(id);
 		})
+		.then(() => fetch("/api/v1/recipe/" + id))
 		.then((response) => response.json())
 		.then((data) => {
 			data.owner = owner;
@@ -106,6 +107,48 @@ function saveRecipe() {
 				isSaving.value = false;
 			}, 500);
 		});
+}
+
+function saveIngredients(id) {
+	let items = ingredients.value.getDiff();
+	if (items.length == 0) {
+		return new Promise((resolve) => {
+			editMode.value = false;
+			resolve();
+		});
+	}
+
+	return new Promise((resolve, reject) => {
+		let count = 0;
+		let error = undefined;
+		items.forEach((item) => {
+			fetch(`/api/v1/recipe/${id}/ingredient/${item.id}`, {
+				method: "PUT",
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-CSRF-Token": csrf,
+				},
+				body: new URLSearchParams({ amount: item.amount }),
+			})
+				.then((response) => {
+					++count;
+					if (!response.ok) {
+						throw t("saverec.err" + response.status);
+					}
+				})
+				.catch((err) => (error = err))
+				.finally(() => {
+					if (count == items.length) {
+						if (error) {
+							reject(error);
+						} else {
+							editMode.value = false;
+							resolve();
+						}
+					}
+				});
+		});
+	});
 }
 
 function showDetails(id) {
@@ -256,7 +299,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 			<section>
 				<h2>{{ t("aria.headingred") }}</h2>
 				<p class="msg-noitems" v-if="!current.items.length" v-html="t('recipe.noitems')"></p>
-				<IngredientList :items="current.items" :disabled="!editMode" />
+				<IngredientList ref="ingredients" :items="current.items" :disabled="!editMode" />
 			</section>
 			<hr />
 			<section class="no-edit-mode">

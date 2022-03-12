@@ -1039,3 +1039,93 @@ func TestDB_Recipes_Race(t *testing.T) {
 
 	wg.Wait()
 }
+
+func TestDB_NewDiaryEntries(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+		in []core.DiaryEntry
+
+		out entryMap
+		err error
+	}{
+		{ //00// create new entry
+			id:  1,
+			db:  NewDB(),
+			in:  []core.DiaryEntry{mock.Entry1()},
+			out: entryMap{1: {mock.Day1: {mock.Entry1()}}},
+		},
+		{ //01// make sure entries are sorted
+			id:  1,
+			db:  NewDB(),
+			in:  []core.DiaryEntry{mock.Entry2(), mock.Entry1()},
+			out: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}},
+		},
+	} {
+		err := data.db.NewDiaryEntries(data.id, data.in...)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.db.entries, data.out) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.out)
+		}
+	}
+}
+
+func TestDB_DelDiaryEntries(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+		in []core.DiaryEntry
+
+		out entryMap
+		err error
+	}{
+		{ //00// diary doesn't exist
+			id:  1,
+			db:  NewDB(),
+			out: entryMap{},
+			err: app.ErrNotFound,
+		},
+		{ //01// empty diary, nothing to do
+			id:  1,
+			db:  &DB{entries: entryMap{1: {}}},
+			in:  []core.DiaryEntry{mock.Entry1()},
+			out: entryMap{1: {}},
+		},
+		{ //02// success, simple case
+			id:  1,
+			db:  &DB{entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}}},
+			in:  []core.DiaryEntry{mock.Entry2()},
+			out: entryMap{1: {mock.Day1: {mock.Entry1()}}},
+		},
+		{ //03// success, complex case
+			id: 1,
+			db: &DB{entries: entryMap{1: {
+				mock.Day1: {mock.Entry1(), mock.Entry2()},
+				mock.Day2: {mock.Entry3(), mock.Entry4()},
+			}}},
+			in: []core.DiaryEntry{
+				mock.Entry3(),
+				mock.Entry4(),
+				mock.Entry2(),
+			},
+			out: entryMap{1: {
+				mock.Day1: {mock.Entry1()},
+				mock.Day2: {},
+			}},
+		},
+	} {
+		err := data.db.DelDiaryEntries(data.id, data.in...)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.db.entries, data.out) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.out)
+		}
+	}
+}

@@ -131,3 +131,18 @@ type DiaryEntry struct {
 	Recipe string     `json:"recipe"`
 	Food   Ingredient `json:"food"`
 }
+
+func (d DiaryEntry) Equal(entry DiaryEntry) bool {
+	if d.Food.ID != entry.Food.ID {
+		return false
+	}
+
+	t1 := d.Date.Round(time.Minute * 5)
+	t2 := entry.Date.Round(time.Minute * 5)
+
+	return t1 == t2
+}
+
+func (d DiaryEntry) Day() time.Time {
+	return d.Date.Truncate(time.Hour * 24)
+}

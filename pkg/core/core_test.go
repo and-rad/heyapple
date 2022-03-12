@@ -19,9 +19,11 @@
 package core_test
 
 import (
+	"heyapple/internal/mock"
 	"heyapple/pkg/core"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestNewRecipe(t *testing.T) {
@@ -40,6 +42,66 @@ func TestNewRecipe(t *testing.T) {
 	} {
 		if rec := core.NewRecipe(data.id); !reflect.DeepEqual(rec, data.rec) {
 			t.Errorf("test case %d: recipe mismatch \nhave: %v\nwant: %v", idx, rec, data.rec)
+		}
+	}
+}
+
+func TestDiaryEntry_Equal(t *testing.T) {
+	for idx, data := range []struct {
+		a core.DiaryEntry
+		b core.DiaryEntry
+
+		ok bool
+	}{
+		{ //00//
+			a:  mock.Entry1(),
+			b:  mock.Entry2(),
+			ok: false,
+		},
+		{ //01// identity
+			a:  mock.Entry1(),
+			b:  mock.Entry1(),
+			ok: true,
+		},
+		{ //02// fuzzy date matching
+			a: core.DiaryEntry{
+				Date:   time.Now(),
+				Recipe: "My Recipe",
+				Food:   core.Ingredient{ID: 1, Amount: 230},
+			},
+			b: core.DiaryEntry{
+				Date: time.Now().Add(time.Minute * 2),
+				Food: core.Ingredient{ID: 1, Amount: 50},
+			},
+			ok: true,
+		},
+	} {
+		if ok := data.a.Equal(data.b); ok != data.ok {
+			t.Errorf("test case %d: equality mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
+		}
+	}
+}
+
+func TestDiaryEntry_Day(t *testing.T) {
+	for idx, data := range []struct {
+		entry core.DiaryEntry
+		day   string
+	}{
+		{ //00//
+			entry: core.DiaryEntry{Date: time.Date(1987, 12, 6, 11, 45, 0, 0, time.UTC)},
+			day:   "1987-12-06",
+		},
+		{ //01// midnight
+			entry: core.DiaryEntry{Date: time.Date(1987, 12, 6, 0, 0, 0, 0, time.UTC)},
+			day:   "1987-12-06",
+		},
+		{ //02// today
+			entry: core.DiaryEntry{Date: time.Now()},
+			day:   time.Now().Format("2006-01-02"),
+		},
+	} {
+		if day := data.entry.Day().Format("2006-01-02"); day != data.day {
+			t.Errorf("test case %d: date mismatch \nhave: %v\nwant: %v", idx, day, data.day)
 		}
 	}
 }

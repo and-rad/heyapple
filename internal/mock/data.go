@@ -27,9 +27,14 @@ import (
 var (
 	Date1 = time.Date(2022, 3, 12, 8, 43, 0, 0, time.UTC)
 	Date2 = time.Date(2022, 3, 12, 16, 43, 0, 0, time.UTC)
+	Date3 = time.Date(2022, 3, 13, 8, 33, 0, 0, time.UTC)
+	Date4 = time.Date(2022, 3, 13, 16, 33, 0, 0, time.UTC)
 
 	Date1p2 = Date1.Add(time.Minute * 2)
 	Date2p2 = Date1.Add(time.Minute * 2)
+
+	Day1 = Date1.Truncate(time.Hour * 24)
+	Day2 = Date3.Truncate(time.Hour * 24)
 )
 
 var (
@@ -179,6 +184,20 @@ func Entry2Rec1() core.DiaryEntry {
 		Food:   core.Ingredient{ID: 1, Amount: 50},
 		Date:   Date2,
 		Recipe: "Rec1",
+	}
+}
+
+func Entry3() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food: core.Ingredient{ID: 1, Amount: 50},
+		Date: Date3,
+	}
+}
+
+func Entry4() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food: core.Ingredient{ID: 2, Amount: 250},
+		Date: Date4,
 	}
 }
 

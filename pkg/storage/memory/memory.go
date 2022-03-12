@@ -322,7 +322,30 @@ func (db *DB) Fetch(q app.Query) error {
 }
 
 func (db *DB) NewDiaryEntries(id int, entries ...core.DiaryEntry) error {
-	panic("not implemented")
+	days, ok := db.entries[id]
+	if !ok {
+		db.entries[id] = map[time.Time][]core.DiaryEntry{}
+		days = db.entries[id]
+	}
+
+	dirty := map[time.Time]struct{}{}
+	for _, e := range entries {
+		date := e.Date.Truncate(time.Hour * 24)
+		if _, ok := days[date]; !ok {
+			days[date] = []core.DiaryEntry{e}
+			continue
+		}
+		days[date] = append(days[date], e)
+		dirty[date] = struct{}{}
+	}
+
+	for date := range dirty {
+		sort.Slice(days[date], func(i, j int) bool {
+			return days[date][i].Date.Before(days[date][j].Date)
+		})
+	}
+
+	return nil
 }
 
 func (db *DB) SetDiaryEntries(id int, entries ...core.DiaryEntry) error {
@@ -330,7 +353,29 @@ func (db *DB) SetDiaryEntries(id int, entries ...core.DiaryEntry) error {
 }
 
 func (db *DB) DelDiaryEntries(id int, entries ...core.DiaryEntry) error {
-	panic("not implemented")
+	days, ok := db.entries[id]
+	if !ok {
+		return app.ErrNotFound
+	}
+
+	for _, entry := range entries {
+		date := entry.Day()
+		if _, ok := days[date]; !ok {
+			continue
+		}
+
+		end := 0
+		for _, e := range days[date] {
+			if !e.Equal(entry) {
+				days[date][end] = e
+				end++
+			}
+		}
+
+		days[date] = days[date][:end]
+	}
+
+	return nil
 }
 
 func (db *DB) DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, error) {

@@ -312,10 +312,7 @@ func (db *DB) SetDiaryEntries(id int, entries ...core.DiaryEntry) error {
 	}
 	for i, old := range db.Entries {
 		for _, new := range entries {
-			if old.Food.ID != new.Food.ID {
-				continue
-			}
-			if old.Date.Round(time.Minute * 5).Equal(new.Date.Round(time.Minute * 5)) {
+			if old.Equal(new) {
 				db.Entries[i] = new
 				break
 			}
@@ -351,11 +348,12 @@ func (db *DB) DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, erro
 	if err := db.popError(); err != nil {
 		return core.DiaryEntry{}, err
 	}
+	test := core.DiaryEntry{
+		Food: core.Ingredient{ID: food},
+		Date: date,
+	}
 	for _, e := range db.Entries {
-		if e.Food.ID != food {
-			continue
-		}
-		if e.Date.Round(time.Minute * 5).Equal(date.Round(time.Minute * 5)) {
+		if e.Equal(test) {
 			return e, nil
 		}
 	}

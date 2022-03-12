@@ -105,6 +105,7 @@ function addToRecipe(id) {
 		.then((response) => response.json())
 		.then((data) => {
 			recipes.value = recipes.value.map((r) => (data.id == r.id ? data : r));
+			amount.value = 100;
 			log.msg(t("addfood.ok"));
 		})
 		.catch((err) => log.err(err))

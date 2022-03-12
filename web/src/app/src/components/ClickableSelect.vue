@@ -17,7 +17,6 @@ function confirm(evt) {
 	evt.preventDefault();
 	if (value.value) {
 		emit("confirm", value.value);
-		value.value = 0;
 	}
 }
 </script>

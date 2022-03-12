@@ -21,6 +21,12 @@ package mock
 import (
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
+	"time"
+)
+
+var (
+	Date1   = time.Date(2022, 3, 12, 13, 43, 0, 0, time.UTC)
+	Date1p2 = Date1.Add(time.Minute * 2)
 )
 
 var (
@@ -142,3 +148,18 @@ var (
 
 	User1Json = `{"email":"a@a.a","pass":"$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC","lang":"en","perm":1,"id":1}`
 )
+
+func Entry1() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food: core.Ingredient{ID: 2, Amount: 150},
+		Date: Date1,
+	}
+}
+
+func Entry1Rec1() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food:   core.Ingredient{ID: 2, Amount: 150},
+		Date:   Date1,
+		Recipe: "Rec1",
+	}
+}

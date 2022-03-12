@@ -28,6 +28,7 @@ package app
 import (
 	"errors"
 	"heyapple/pkg/core"
+	"time"
 )
 
 type (
@@ -73,6 +74,11 @@ type DB interface {
 	Recipe(id int) (core.Recipe, error)
 	Recipes(uid int, f core.Filter) ([]core.Recipe, error)
 	RecipeAccess(user, rec int) (int, error)
+
+	NewDiaryEntries(id int, entries ...core.DiaryEntry) error
+	SetDiaryEntries(id int, entries ...core.DiaryEntry) error
+	DelDiaryEntries(id int, entries ...core.DiaryEntry) error
+	DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, error)
 }
 
 // A Command encapsulates a single action that changes the

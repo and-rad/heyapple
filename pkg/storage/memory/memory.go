@@ -30,6 +30,7 @@ import (
 	"io/fs"
 	"sort"
 	"sync"
+	"time"
 )
 
 type DB struct {
@@ -313,6 +314,22 @@ func (db *DB) Fetch(q app.Query) error {
 	db.mtx.RLock()
 	defer db.mtx.RUnlock()
 	return q.Fetch(db)
+}
+
+func (db *DB) NewDiaryEntries(id int, entries ...core.DiaryEntry) error {
+	panic("not implemented")
+}
+
+func (db *DB) SetDiaryEntries(id int, entries ...core.DiaryEntry) error {
+	panic("not implemented")
+}
+
+func (db *DB) DelDiaryEntries(id int, entries ...core.DiaryEntry) error {
+	panic("not implemented")
+}
+
+func (db *DB) DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, error) {
+	panic("not implemented")
 }
 
 func loadDefault(fs fs.FS, name string) []byte {

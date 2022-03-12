@@ -117,7 +117,7 @@ func NewRecipe(id int) Recipe {
 	return Recipe{ID: id, Size: 1, Items: []Ingredient{}}
 }
 
-// Meal is a collection of food items that were consumed at
+// DiaryEntry represents a food item that was consumed at
 // a specific point in time. The food can be provided by a
 // recipe, but this is not required.
 //
@@ -126,8 +126,8 @@ func NewRecipe(id int) Recipe {
 // Storing just the id would be less useful to a user in
 // these situations. The name provides the most useful
 // information even after the original recipe is gone.
-type Meal struct {
-	Recipe string       `json:"recipe"`
-	Date   time.Time    `json:"date"`
-	Items  []Ingredient `json:"items"`
+type DiaryEntry struct {
+	Date   time.Time  `json:"date"`
+	Recipe string     `json:"recipe"`
+	Food   Ingredient `json:"food"`
 }

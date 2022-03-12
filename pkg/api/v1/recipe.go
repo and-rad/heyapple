@@ -265,18 +265,20 @@ func RecipeOwner(env *handler.Environment) httprouter.Handle {
 	}
 }
 
-// AddIngredient adds the ingredient identified by {ing} to
-// the recipe identified by {rec}. The amount is passed in
+// SaveIngredient adds the ingredient identified by {ing} to
+// the recipe identified by {id}. The amount is passed in
 // the request body. The response body will always be empty,
 // success or failure is communicated by the status codes.
 //
 // If the ingredient does not exist in the database, it is
-// just ignored without returning an error.
+// just ignored without returning an error. POST adds the
+// given amount to the amount of an existing ingredient while
+// PUT replaces it.
 //
 // Endpoint:
-//   /api/v1/recipe/{rec}/ingredient/{ing}
+//   /api/v1/recipe/{id}/ingredient/{ing}
 // Methods:
-//   POST
+//   POST, PUT
 // Possible status codes:
 //   204 - Update successful
 //   400 - Malformed or missing form data
@@ -285,9 +287,9 @@ func RecipeOwner(env *handler.Environment) httprouter.Handle {
 //   500 - Internal server error
 // Example input:
 //   amount=125
-func AddIngredient(env *handler.Environment) httprouter.Handle {
+func SaveIngredient(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		recID, err := strconv.Atoi(ps.ByName("rec"))
+		recID, err := strconv.Atoi(ps.ByName("id"))
 		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
 			return
@@ -313,8 +315,14 @@ func AddIngredient(env *handler.Environment) httprouter.Handle {
 		}
 
 		amount, err := strconv.ParseFloat(r.FormValue("amount"), 32)
-		if err != nil || amount == 0 {
+		if err != nil {
 			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		replace := r.Method == http.MethodPut
+		if !replace && amount == 0 {
+			w.WriteHeader(http.StatusNoContent)
 			return
 		}
 
@@ -322,6 +330,7 @@ func AddIngredient(env *handler.Environment) httprouter.Handle {
 			Amount:       float32(amount),
 			RecipeID:     recID,
 			IngredientID: ingID,
+			Replace:      replace,
 		}
 
 		if err := env.DB.Execute(cmd); err == app.ErrNotFound {

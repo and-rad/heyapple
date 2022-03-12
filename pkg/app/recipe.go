@@ -170,15 +170,18 @@ func (q *GetRecipe) Fetch(db DB) error {
 	return nil
 }
 
-// SaveIngredient is a command to save changes to a recipe's
-// list of ingredients. If amount is 0, the ingredient will
+// SaveIngredient is a command to make changes to a recipe's
+// list of ingredients. If Amount is 0, the ingredient will
 // be removed from the recipe, otherwise it will be added
-// or updated. In any case, the recipe's cached nutrients
-// will be recalculated after the operation.
+// or updated. If Replace is true, it will replace the current
+// amount, otherwise it will add to it. In any case, the
+// recipe's cached nutrients will be recalculated after the
+// operation.
 type SaveIngredient struct {
 	RecipeID     int
 	IngredientID int
 	Amount       float32
+	Replace      bool
 }
 
 func (c *SaveIngredient) Execute(db DB) error {
@@ -199,6 +202,9 @@ func (c *SaveIngredient) Execute(db DB) error {
 
 	for k, v := range rec.Items {
 		if v.ID == c.IngredientID {
+			if !c.Replace {
+				c.Amount += v.Amount
+			}
 			rec.Items = append(rec.Items[:k], rec.Items[k+1:]...)
 			break
 		}

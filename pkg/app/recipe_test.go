@@ -380,9 +380,9 @@ func TestSaveIngredient_Execute(t *testing.T) {
 			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 3, Amount: 350},
 			rec: mock.Recipe1(),
 		},
-		{ //04// change an ingredient's amount
+		{ //04// replace an ingredient's amount
 			db:  mock.NewDB().WithRecipe(mock.Recipe1()).WithFoods(mock.Food2),
-			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 2, Amount: 200},
+			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 2, Amount: 200, Replace: true},
 			rec: func() core.Recipe {
 				r := mock.Recipe1()
 				r.Items = []core.Ingredient{{ID: mock.Food2.ID, Amount: 200}}
@@ -393,7 +393,20 @@ func TestSaveIngredient_Execute(t *testing.T) {
 				return r
 			}(),
 		},
-		{ //05// add an ingredient
+		{ //05// add to an ingredient's amount
+			db:  mock.NewDB().WithRecipe(mock.Recipe1()).WithFoods(mock.Food2),
+			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 2, Amount: 123},
+			rec: func() core.Recipe {
+				r := mock.Recipe1()
+				r.Items = []core.Ingredient{{ID: mock.Food2.ID, Amount: 273}}
+				r.KCal = mock.Food2.KCal * 2.73
+				r.Fat = mock.Food2.Fat * 2.73
+				r.Carbs = mock.Food2.Carbs * 2.73
+				r.Protein = mock.Food2.Protein * 2.73
+				return r
+			}(),
+		},
+		{ //06// add an ingredient
 			db:  mock.NewDB().WithRecipe(mock.Recipe1()).WithFoods(mock.Food1, mock.Food2),
 			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 1, Amount: 100},
 			rec: func() core.Recipe {

@@ -1,11 +1,11 @@
 <script setup>
-import { computed, ref, inject } from "vue";
+import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t, locale } = useI18n();
 const prop = defineProps(["items", "disabled"]);
-const foods = inject("food");
 const sortBy = ref("name");
+const form = ref(null);
 
 const collator = new Intl.Collator(locale.value, { numeric: true });
 
@@ -21,10 +21,28 @@ function onInput(evt) {
 		evt.target.value = 0;
 	}
 }
+
+function getDiff() {
+	let data = new FormData(form.value);
+	let ids = data.getAll("id");
+	let amounts = data.getAll("amount");
+
+	let result = [];
+	prop.items.forEach((item) => {
+		let idx = parseInt(ids.indexOf(item.id.toString()));
+		let amount = parseFloat(amounts[idx]);
+		if (amount != item.amount) {
+			result.push({ id: item.id, amount: amount });
+		}
+	});
+	return result;
+}
+
+defineExpose({ getDiff });
 </script>
 
 <template>
-	<form class="ingredients">
+	<form class="ingredients" ref="form">
 		<fieldset :disabled="disabled">
 			<div v-for="item in sortedItems" :key="item.id">
 				<label>{{ item.name }}</label>

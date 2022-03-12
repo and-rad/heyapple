@@ -43,11 +43,16 @@ func (c *AddDiaryEntry) Execute(db DB) error {
 	if err == ErrNotFound {
 		entry.Date = c.Date
 		entry.Recipe = c.Recipe
-		entry.Food.ID = c.Food.ID
+		entry.Food = c.Food
+		return db.NewDiaryEntries(c.ID, entry)
 	}
 
-	entry.Food.Amount += c.Food.Amount
-	return db.NewDiaryEntries(c.ID, entry)
+	if err == nil {
+		entry.Food.Amount += c.Food.Amount
+		return db.SetDiaryEntries(c.ID, entry)
+	}
+
+	return err
 }
 
 // SaveDiaryEntry is a command to update an existing

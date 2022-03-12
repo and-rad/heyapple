@@ -38,7 +38,12 @@ func TestAddDiaryEntry_Execute(t *testing.T) {
 			cmd: &app.AddDiaryEntry{},
 			db:  mock.NewDB(),
 		},
-		{ //01// add a new entry
+		{ //01// connection failure
+			cmd: &app.AddDiaryEntry{Food: core.Ingredient{ID: 2, Amount: 150}},
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			err: mock.ErrDOS,
+		},
+		{ //02// add a new entry
 			db: mock.NewDB(),
 			cmd: &app.AddDiaryEntry{
 				ID:     1,
@@ -52,7 +57,7 @@ func TestAddDiaryEntry_Execute(t *testing.T) {
 				Recipe: "Rec1",
 			},
 		},
-		{ //02// update an entry with fuzzy date matching
+		{ //03// update an entry with fuzzy date matching
 			db: mock.NewDB().WithEntries(mock.Entry1Rec1()),
 			cmd: &app.AddDiaryEntry{
 				ID:   1,

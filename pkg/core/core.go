@@ -137,6 +137,10 @@ func (d DiaryEntry) Equal(entry DiaryEntry) bool {
 		return false
 	}
 
+	if d.Recipe != entry.Recipe {
+		return false
+	}
+
 	if d.Date.After(entry.Date) {
 		return d.Date.Sub(entry.Date) < time.Second*150
 	}
@@ -150,4 +154,13 @@ func (d DiaryEntry) Equal(entry DiaryEntry) bool {
 
 func (d DiaryEntry) Day() time.Time {
 	return d.Date.Truncate(time.Hour * 24)
+}
+
+type DiaryDay struct {
+	Date time.Time `json:"date"`
+
+	KCal    float32 `json:"kcal"`
+	Fat     float32 `json:"fat"`
+	Carbs   float32 `json:"carb"`
+	Protein float32 `json:"prot"`
 }

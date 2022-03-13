@@ -46,26 +46,24 @@ func TestAddDiaryEntry_Execute(t *testing.T) {
 		{ //02// add a new entry
 			db: mock.NewDB(),
 			cmd: &app.AddDiaryEntry{
-				ID:     1,
-				Recipe: "Rec1",
-				Food:   core.Ingredient{ID: 2, Amount: 150},
-				Date:   mock.Date1,
+				ID:   1,
+				Food: core.Ingredient{ID: 2, Amount: 150},
+				Date: mock.Date1,
 			},
 			entry: core.DiaryEntry{
-				Date:   mock.Date1,
-				Food:   core.Ingredient{ID: 2, Amount: 150},
-				Recipe: "Rec1",
+				Date: mock.Date1,
+				Food: core.Ingredient{ID: 2, Amount: 150},
 			},
 		},
 		{ //03// update an entry with fuzzy date matching
-			db: mock.NewDB().WithEntries(mock.Entry1Rec1()),
+			db: mock.NewDB().WithEntries(mock.Entry1()),
 			cmd: &app.AddDiaryEntry{
 				ID:   1,
 				Food: core.Ingredient{ID: 2, Amount: 75},
 				Date: mock.Date1p2,
 			},
 			entry: func() core.DiaryEntry {
-				e := mock.Entry1Rec1()
+				e := mock.Entry1()
 				e.Food.Amount += 75
 				return e
 			}(),

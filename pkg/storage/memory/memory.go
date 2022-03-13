@@ -323,18 +323,6 @@ func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {
 	return recs, nil
 }
 
-func (db *DB) Execute(c app.Command) error {
-	db.mtx.Lock()
-	defer db.mtx.Unlock()
-	return c.Execute(db)
-}
-
-func (db *DB) Fetch(q app.Query) error {
-	db.mtx.RLock()
-	defer db.mtx.RUnlock()
-	return q.Fetch(db)
-}
-
 func (db *DB) NewDiaryEntries(id int, entries ...core.DiaryEntry) error {
 	days, ok := db.entries[id]
 	if !ok {
@@ -443,6 +431,18 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 		}
 	}
 	return nil, app.ErrNotFound
+}
+
+func (db *DB) Execute(c app.Command) error {
+	db.mtx.Lock()
+	defer db.mtx.Unlock()
+	return c.Execute(db)
+}
+
+func (db *DB) Fetch(q app.Query) error {
+	db.mtx.RLock()
+	defer db.mtx.RUnlock()
+	return q.Fetch(db)
 }
 
 func loadDefault(fs fs.FS, name string) []byte {

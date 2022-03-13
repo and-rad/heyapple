@@ -63,6 +63,11 @@ func TestDiaryEntry_Equal(t *testing.T) {
 			b:  mock.Entry1(),
 			ok: true,
 		},
+		{ //01// recipe doesn't match
+			a:  mock.Entry1(),
+			b:  mock.Entry1Rec1(),
+			ok: false,
+		},
 		{ //02// fuzzy date matching
 			a: core.DiaryEntry{
 				Date:   time.Now(),
@@ -70,18 +75,19 @@ func TestDiaryEntry_Equal(t *testing.T) {
 				Food:   core.Ingredient{ID: 1, Amount: 230},
 			},
 			b: core.DiaryEntry{
-				Date: time.Now().Add(time.Minute * 2),
-				Food: core.Ingredient{ID: 1, Amount: 50},
+				Date:   time.Now().Add(time.Minute * 2),
+				Recipe: "My Recipe",
+				Food:   core.Ingredient{ID: 1, Amount: 50},
 			},
 			ok: true,
 		},
 	} {
 		if ok := data.a.Equal(data.b); ok != data.ok {
-			t.Errorf("test case %d: equality mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
+			t.Errorf("test case %d: (a,b) equality mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
 		}
 
 		if ok := data.b.Equal(data.a); ok != data.ok {
-			t.Errorf("test case %d: equality mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
+			t.Errorf("test case %d: (b,a) equality mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
 		}
 	}
 }

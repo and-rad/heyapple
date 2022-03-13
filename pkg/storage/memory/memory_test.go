@@ -70,6 +70,104 @@ func TestDB_WithBackup(t *testing.T) {
 	}
 }
 
+func TestDB_WithDefaults(t *testing.T) {
+	for idx, data := range []struct {
+		fs fs.FS
+		db *DB
+	}{
+		{ //00// file not found
+			fs: fstest.MapFS{},
+			db: NewDB(),
+		},
+		{ //01// not a file
+			fs: fstest.MapFS{
+				"user.json": {Mode: fs.ModeDir},
+			},
+			db: NewDB(),
+		},
+		{ //02// invalid JSON
+			fs: fstest.MapFS{
+				"user.json": {Data: []byte(`{"email":}`)},
+			},
+			db: NewDB(),
+		},
+		{ //03// success
+			fs: fstest.MapFS{
+				"user.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.User1Json))},
+			},
+			db: func() *DB {
+				db := NewDB()
+				db.users = map[int]app.User{1: mock.User1}
+				db.emails = map[string]int{mock.User1.Email: 1}
+				db.userID = 1
+				return db
+			}(),
+		},
+		{ //04// not a file
+			fs: fstest.MapFS{
+				"user.json": {Data: []byte(`[]`)},
+				"food.json": {Mode: fs.ModeDir},
+			},
+			db: NewDB(),
+		},
+		{ //05// invalid JSON
+			fs: fstest.MapFS{
+				"user.json": {Data: []byte(`[]`)},
+				"food.json": {Data: []byte(`{"err":}`)},
+			},
+			db: NewDB(),
+		},
+		{ //06// success
+			fs: fstest.MapFS{
+				"user.json": {Data: []byte(`[]`)},
+				"food.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.Food1Json))},
+			},
+			db: func() *DB {
+				db := NewDB()
+				db.food = map[int]core.Food{1: mock.Food1}
+				db.foodID = 1
+				return db
+			}(),
+		},
+		{ //07// not a file
+			fs: fstest.MapFS{
+				"user.json":   {Data: []byte(`[]`)},
+				"food.json":   {Data: []byte(`[]`)},
+				"recipe.json": {Mode: fs.ModeDir},
+			},
+			db: NewDB(),
+		},
+		{ //08// invalid JSON
+			fs: fstest.MapFS{
+				"user.json":   {Data: []byte(`[]`)},
+				"food.json":   {Data: []byte(`[]`)},
+				"recipe.json": {Data: []byte(`{"err":}`)},
+			},
+			db: NewDB(),
+		},
+		{ //09// success
+			fs: fstest.MapFS{
+				"user.json":   {Data: []byte(`[]`)},
+				"food.json":   {Data: []byte(`[]`)},
+				"recipe.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.Recipe1Json))},
+			},
+			db: func() *DB {
+				db := NewDB()
+				db.recID = 1
+				db.recipes = map[int]core.Recipe{1: mock.Recipe1()}
+				db.userRec = map[int]map[int]int{0: {1: app.PermRead}}
+				return db
+			}(),
+		},
+	} {
+		db := NewDB().WithDefaults(data.fs)
+
+		if !reflect.DeepEqual(db, data.db) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, db, data.db)
+		}
+	}
+}
+
 func TestDB_Execute(t *testing.T) {
 	for idx, data := range []struct {
 		db  *DB
@@ -853,74 +951,6 @@ func TestDB_NewToken(t *testing.T) {
 
 		if tok, _ := data.db.Token(data.hash); tok != data.token {
 			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, tok, data.token)
-		}
-	}
-}
-
-func TestDB_WithDefaults(t *testing.T) {
-	for idx, data := range []struct {
-		fs fs.FS
-		db *DB
-	}{
-		{ //00// file not found
-			fs: fstest.MapFS{},
-			db: NewDB(),
-		},
-		{ //01// not a file
-			fs: fstest.MapFS{
-				"food.json": {Mode: fs.ModeDir},
-			},
-			db: NewDB(),
-		},
-		{ //02// invalid JSON
-			fs: fstest.MapFS{
-				"food.json": {Data: []byte(`{"err":}`)},
-			},
-			db: NewDB(),
-		},
-		{ //03// success
-			fs: fstest.MapFS{
-				"food.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.Food1Json))},
-			},
-			db: func() *DB {
-				db := NewDB()
-				db.food = map[int]core.Food{1: mock.Food1}
-				db.foodID = 1
-				return db
-			}(),
-		},
-		{ //04// not a file
-			fs: fstest.MapFS{
-				"food.json":   {Data: []byte(`[]`)},
-				"recipe.json": {Mode: fs.ModeDir},
-			},
-			db: NewDB(),
-		},
-		{ //05// invalid JSON
-			fs: fstest.MapFS{
-				"food.json":   {Data: []byte(`[]`)},
-				"recipe.json": {Data: []byte(`{"err":}`)},
-			},
-			db: NewDB(),
-		},
-		{ //06// success
-			fs: fstest.MapFS{
-				"food.json":   {Data: []byte(`[]`)},
-				"recipe.json": {Data: []byte(fmt.Sprintf(`[%s]`, mock.Recipe1Json))},
-			},
-			db: func() *DB {
-				db := NewDB()
-				db.recID = 1
-				db.recipes = map[int]core.Recipe{1: mock.Recipe1()}
-				db.userRec = map[int]map[int]int{0: {1: app.PermRead}}
-				return db
-			}(),
-		},
-	} {
-		db := NewDB().WithDefaults(data.fs)
-
-		if !reflect.DeepEqual(db, data.db) {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, db, data.db)
 		}
 	}
 }

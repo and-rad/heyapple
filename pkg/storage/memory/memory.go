@@ -70,6 +70,20 @@ func NewDB() *DB {
 }
 
 func (db *DB) WithDefaults(fs fs.FS) *DB {
+	if len(db.users) == 0 {
+		users := []app.User{}
+		data := loadDefault(fs, "user.json")
+		if err := json.Unmarshal(data, &users); err != nil {
+			return db
+		}
+
+		db.userID = len(users)
+		for _, u := range users {
+			db.users[u.ID] = u
+			db.emails[u.Email] = u.ID
+		}
+	}
+
 	if len(db.food) == 0 {
 		food := []core.Food{}
 		data := loadDefault(fs, "food.json")

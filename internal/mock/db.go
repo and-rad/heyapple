@@ -330,7 +330,7 @@ func (db *DB) DelDiaryEntries(id int, entries ...core.DiaryEntry) error {
 	for _, old := range db.Entries {
 		found := false
 		for _, new := range entries {
-			if new.Food.ID == old.Food.ID {
+			if new.Equal(old) {
 				found = true
 				break
 			}
@@ -342,22 +342,6 @@ func (db *DB) DelDiaryEntries(id int, entries ...core.DiaryEntry) error {
 
 	db.Entries = tmp
 	return nil
-}
-
-func (db *DB) DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, error) {
-	if err := db.popError(); err != nil {
-		return core.DiaryEntry{}, err
-	}
-	test := core.DiaryEntry{
-		Food: core.Ingredient{ID: food},
-		Date: date,
-	}
-	for _, e := range db.Entries {
-		if e.Equal(test) {
-			return e, nil
-		}
-	}
-	return core.DiaryEntry{}, app.ErrNotFound
 }
 
 func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {

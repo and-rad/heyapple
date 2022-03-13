@@ -78,7 +78,6 @@ type DB interface {
 	NewDiaryEntries(id int, entries ...core.DiaryEntry) error
 	SetDiaryEntries(id int, entries ...core.DiaryEntry) error
 	DelDiaryEntries(id int, entries ...core.DiaryEntry) error
-	DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, error)
 	DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error)
 }
 

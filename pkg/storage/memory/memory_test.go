@@ -1216,54 +1216,6 @@ func TestDB_SetDiaryEntries(t *testing.T) {
 	}
 }
 
-func TestDB_DiaryEntry(t *testing.T) {
-	for idx, data := range []struct {
-		db    *DB
-		diary int
-		food  int
-		date  time.Time
-
-		entry core.DiaryEntry
-		err   error
-	}{
-		{ //00// diary doesn't exist
-			diary: 1,
-			db:    NewDB(),
-			err:   app.ErrNotFound,
-		},
-		{ //01// day doesn't exist
-			diary: 1,
-			date:  mock.Date1,
-			db:    &DB{entries: entryMap{1: {}}},
-			err:   app.ErrNotFound,
-		},
-		{ //02// food entry doesn't exist
-			diary: 1,
-			food:  1,
-			date:  mock.Date1,
-			db:    &DB{entries: entryMap{1: {mock.Day1: {mock.Entry1()}}}},
-			err:   app.ErrNotFound,
-		},
-		{ //03// success
-			diary: 1,
-			food:  1,
-			date:  mock.Date2p2,
-			db:    &DB{entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}}},
-			entry: mock.Entry2(),
-		},
-	} {
-		entry, err := data.db.DiaryEntry(data.diary, data.food, data.date)
-
-		if err != data.err {
-			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
-		}
-
-		if entry != data.entry {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, entry, data.entry)
-		}
-	}
-}
-
 func TestDB_DiaryEntries(t *testing.T) {
 	for idx, data := range []struct {
 		db   *DB

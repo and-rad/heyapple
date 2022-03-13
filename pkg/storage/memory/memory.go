@@ -349,7 +349,26 @@ func (db *DB) NewDiaryEntries(id int, entries ...core.DiaryEntry) error {
 }
 
 func (db *DB) SetDiaryEntries(id int, entries ...core.DiaryEntry) error {
-	panic("not implemented")
+	days, ok := db.entries[id]
+	if !ok {
+		return app.ErrNotFound
+	}
+
+	for _, entry := range entries {
+		date := entry.Day()
+		if _, ok := days[date]; !ok {
+			continue
+		}
+
+		for i, e := range days[date] {
+			if e.Equal(entry) {
+				days[date][i] = entry
+				break
+			}
+		}
+	}
+
+	return nil
 }
 
 func (db *DB) DelDiaryEntries(id int, entries ...core.DiaryEntry) error {

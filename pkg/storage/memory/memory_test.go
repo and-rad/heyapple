@@ -1129,3 +1129,59 @@ func TestDB_DelDiaryEntries(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_SetDiaryEntries(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+		in []core.DiaryEntry
+
+		out entryMap
+		err error
+	}{
+		{ //00// diary doesn't exist
+			id:  1,
+			db:  NewDB(),
+			out: entryMap{},
+			err: app.ErrNotFound,
+		},
+		{ //01// empty diary, nothing to do
+			id:  1,
+			db:  &DB{entries: entryMap{1: {}}},
+			in:  []core.DiaryEntry{mock.Entry1()},
+			out: entryMap{1: {}},
+		},
+		{ //02// success, simple case
+			id:  1,
+			db:  &DB{entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}}},
+			in:  []core.DiaryEntry{mock.Entry1New()},
+			out: entryMap{1: {mock.Day1: {mock.Entry1New(), mock.Entry2()}}},
+		},
+		{ //03// success, complex case
+			id: 1,
+			db: &DB{entries: entryMap{1: {
+				mock.Day1: {mock.Entry1(), mock.Entry2()},
+				mock.Day2: {mock.Entry3(), mock.Entry4()},
+			}}},
+			in: []core.DiaryEntry{
+				mock.Entry3New(),
+				mock.Entry4New(),
+				mock.Entry2New(),
+			},
+			out: entryMap{1: {
+				mock.Day1: {mock.Entry1(), mock.Entry2New()},
+				mock.Day2: {mock.Entry3New(), mock.Entry4New()},
+			}},
+		},
+	} {
+		err := data.db.SetDiaryEntries(data.id, data.in...)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.db.entries, data.out) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.out)
+		}
+	}
+}

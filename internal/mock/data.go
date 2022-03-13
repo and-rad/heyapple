@@ -31,7 +31,7 @@ var (
 	Date4 = time.Date(2022, 3, 13, 16, 33, 0, 0, time.UTC)
 
 	Date1p2 = Date1.Add(time.Minute * 2)
-	Date2p2 = Date1.Add(time.Minute * 2)
+	Date2p2 = Date2.Add(time.Minute * 2)
 
 	Day1 = Date1.Truncate(time.Hour * 24)
 	Day2 = Date3.Truncate(time.Hour * 24)
@@ -164,6 +164,13 @@ func Entry1() core.DiaryEntry {
 	}
 }
 
+func Entry1New() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food: core.Ingredient{ID: 2, Amount: 75},
+		Date: Date1p2,
+	}
+}
+
 func Entry1Rec1() core.DiaryEntry {
 	return core.DiaryEntry{
 		Food:   core.Ingredient{ID: 2, Amount: 150},
@@ -176,6 +183,13 @@ func Entry2() core.DiaryEntry {
 	return core.DiaryEntry{
 		Food: core.Ingredient{ID: 1, Amount: 50},
 		Date: Date2,
+	}
+}
+
+func Entry2New() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food: core.Ingredient{ID: 1, Amount: 90},
+		Date: Date2p2,
 	}
 }
 
@@ -194,9 +208,23 @@ func Entry3() core.DiaryEntry {
 	}
 }
 
+func Entry3New() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food: core.Ingredient{ID: 1, Amount: 520},
+		Date: Date3,
+	}
+}
+
 func Entry4() core.DiaryEntry {
 	return core.DiaryEntry{
 		Food: core.Ingredient{ID: 2, Amount: 250},
+		Date: Date4,
+	}
+}
+
+func Entry4New() core.DiaryEntry {
+	return core.DiaryEntry{
+		Food: core.Ingredient{ID: 2, Amount: 150},
 		Date: Date4,
 	}
 }

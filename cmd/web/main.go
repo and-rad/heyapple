@@ -86,6 +86,9 @@ func main() {
 	router.PUT("/api/v1/recipe/:id", chain(api.SaveRecipe(env), mw.JSON()))
 	router.PUT("/api/v1/recipe/:id/ingredient/:ing", chain(api.SaveIngredient(env), mw.JSON()))
 
+	router.POST("/api/v1/diary/:date", chain(api.SaveDiaryEntry(env), mw.JSON()))
+	router.PUT("/api/v1/diary/:date", chain(api.SaveDiaryEntry(env), mw.JSON()))
+
 	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {
 		router.ServeFiles("/data/*filepath", http.Dir(dir))
 	}

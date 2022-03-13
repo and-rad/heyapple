@@ -1263,3 +1263,65 @@ func TestDB_DiaryEntry(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_DiaryEntries(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		id   int
+		date time.Time
+
+		entries []core.DiaryEntry
+		err     error
+	}{
+		{ //00// diary doesn't exist
+			id:  1,
+			db:  NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// day doesn't exist
+			id:   1,
+			date: mock.Date1,
+			db:   &DB{entries: entryMap{1: {}}},
+			err:  app.ErrNotFound,
+		},
+		{ //02// success with fuzzy date match
+			id:      1,
+			date:    mock.Date1,
+			db:      &DB{entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}}},
+			entries: []core.DiaryEntry{mock.Entry1(), mock.Entry2()},
+		},
+	} {
+		entries, err := data.db.DiaryEntries(data.id, data.date)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(entries, data.entries) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, entries, data.db.entries)
+		}
+	}
+}
+
+func TestDB_DiaryEntries_Race(t *testing.T) {
+	db := NewDB()
+	db.entries = entryMap{1: {mock.Day1: {mock.Entry1()}}}
+
+	e1, _ := db.DiaryEntries(1, mock.Day1)
+	e2, _ := db.DiaryEntries(1, mock.Day1)
+
+	wg := &sync.WaitGroup{}
+	wg.Add(2)
+
+	go func() {
+		e1[0].Recipe = "Rec 1"
+		wg.Done()
+	}()
+
+	go func() {
+		e2[0].Recipe = "Rec 1"
+		wg.Done()
+	}()
+
+	wg.Wait()
+}

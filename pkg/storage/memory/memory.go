@@ -436,6 +436,15 @@ func (db *DB) DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, erro
 	return core.DiaryEntry{}, app.ErrNotFound
 }
 
+func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
+	if days, ok := db.entries[id]; ok {
+		if day, ok := days[date.Truncate(time.Hour*24)]; ok {
+			return append(make([]core.DiaryEntry, 0, len(day)), day...), nil
+		}
+	}
+	return nil, app.ErrNotFound
+}
+
 func loadDefault(fs fs.FS, name string) []byte {
 	file, err := fs.Open(name)
 	if err != nil {

@@ -360,6 +360,20 @@ func (db *DB) DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, erro
 	return core.DiaryEntry{}, app.ErrNotFound
 }
 
+func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
+	if err := db.popError(); err != nil {
+		return nil, err
+	}
+	day := date.Truncate(time.Hour * 24)
+	var entries []core.DiaryEntry
+	for _, e := range db.Entries {
+		if e.Day() == day {
+			entries = append(entries, e)
+		}
+	}
+	return entries, nil
+}
+
 func (db *DB) popError() error {
 	var err error
 	if len(db.Err) > 0 {

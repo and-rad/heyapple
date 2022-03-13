@@ -79,6 +79,7 @@ type DB interface {
 	SetDiaryEntries(id int, entries ...core.DiaryEntry) error
 	DelDiaryEntries(id int, entries ...core.DiaryEntry) error
 	DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, error)
+	DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error)
 }
 
 // A Command encapsulates a single action that changes the

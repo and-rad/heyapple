@@ -23,36 +23,71 @@ import (
 	"time"
 )
 
-// AddDiaryEntry is a command to add a food item to the
-// diary identified by ID at the time given by Date. If
-// the same food exists at the same time, the amount is
-// added on top, otherwise a new entry is created.
-type AddDiaryEntry struct {
-	Date   time.Time
-	Recipe string
-	ID     int
-	Food   core.Ingredient
+// AddDiaryEntries is a command to add several food
+// items to the diary identified by ID and the day
+// identified by Date. If any of the food already exists,
+// the amount is added on top, otherwise a new entry
+// is created.
+//
+// Any food with an amount of 0 or a date that does not
+// actually fall in the same day with Date is silently
+// dropped.
+type AddDiaryEntries struct {
+	Date time.Time
+	Food []core.DiaryEntry
+	ID   int
 }
 
-func (c *AddDiaryEntry) Execute(db DB) error {
-	if c.Food.Amount == 0 {
+func (c *AddDiaryEntries) Execute(db DB) error {
+	date := c.Date.Truncate(time.Hour * 24)
+	clean := make([]core.DiaryEntry, 0, len(c.Food))
+	for _, f := range c.Food {
+		if f.Food.Amount > 0 && f.Day() == date {
+			clean = append(clean, f)
+		}
+	}
+
+	if len(clean) == 0 {
 		return nil
 	}
 
-	entry, err := db.DiaryEntry(c.ID, c.Food.ID, c.Date)
-	if err == ErrNotFound {
-		entry.Date = c.Date
-		entry.Recipe = c.Recipe
-		entry.Food = c.Food
-		return db.NewDiaryEntries(c.ID, entry)
+	entries, err := db.DiaryEntries(c.ID, date)
+	if err != nil {
+		return err
 	}
 
-	if err == nil {
-		entry.Food.Amount += c.Food.Amount
-		return db.SetDiaryEntries(c.ID, entry)
+	entriesToAdd := []core.DiaryEntry{}
+	entriesToSet := []core.DiaryEntry{}
+
+	for _, food := range clean {
+		exists := false
+		for _, entry := range entries {
+			if food.Equal(entry) {
+				exists = true
+				food.Date = entry.Date
+				food.Food.Amount += entry.Food.Amount
+				entriesToSet = append(entriesToSet, food)
+				break
+			}
+		}
+		if !exists {
+			entriesToAdd = append(entriesToAdd, food)
+		}
 	}
 
-	return err
+	if len(entriesToAdd) != 0 {
+		if err = db.NewDiaryEntries(c.ID, entriesToAdd...); err != nil {
+			return err
+		}
+	}
+
+	if len(entriesToSet) != 0 {
+		if err = db.SetDiaryEntries(c.ID, entriesToSet...); err != nil {
+			return err
+		}
+	}
+
+	return nil
 }
 
 // SaveDiaryEntry is a command to update an existing

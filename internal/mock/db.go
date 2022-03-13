@@ -302,7 +302,7 @@ func (db *DB) NewDiaryEntries(id int, entries ...core.DiaryEntry) error {
 	if err := db.popError(); err != nil {
 		return err
 	}
-	db.Entries = append(entries)
+	db.Entries = append(db.Entries, entries...)
 	return nil
 }
 

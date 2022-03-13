@@ -398,7 +398,28 @@ func (db *DB) DelDiaryEntries(id int, entries ...core.DiaryEntry) error {
 }
 
 func (db *DB) DiaryEntry(diary, food int, date time.Time) (core.DiaryEntry, error) {
-	panic("not implemented")
+	days, ok := db.entries[diary]
+	if !ok {
+		return core.DiaryEntry{}, app.ErrNotFound
+	}
+
+	day, ok := days[date.Truncate(time.Hour*24)]
+	if !ok {
+		return core.DiaryEntry{}, app.ErrNotFound
+	}
+
+	test := core.DiaryEntry{
+		Food: core.Ingredient{ID: food},
+		Date: date,
+	}
+
+	for _, e := range day {
+		if e.Equal(test) {
+			return e, nil
+		}
+	}
+
+	return core.DiaryEntry{}, app.ErrNotFound
 }
 
 func loadDefault(fs fs.FS, name string) []byte {

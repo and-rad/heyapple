@@ -36,8 +36,11 @@ var (
 	Date1ISO = Date1.Format(time.RFC3339)
 	Date2ISO = Date2.Format(time.RFC3339)
 
-	Date1yyyymmdd = Date1.Format("2006-01-02")
-	Date2yyyymmdd = Date2.Format("2006-01-02")
+	Date1Date = Date1.Format("2006-01-02")
+	Date2Date = Date2.Format("2006-01-02")
+
+	Date1Time = Date1.Format("15:04")
+	Date2Time = Date2.Format("15:04")
 
 	Day1 = Date1.Truncate(time.Hour * 24)
 	Day2 = Date3.Truncate(time.Hour * 24)

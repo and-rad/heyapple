@@ -30,8 +30,8 @@ import (
 )
 
 // SaveDiaryEntry edits food in the diary on the day
-// identified by {date}. Food id, amount, and recipe
-// name are passed in the request body. The response
+// identified by {date}. Time, food id, amount, and
+// recipe name are passed in the request body. The response
 // body will always be empty, success or failure is
 // communicated by the status codes.
 //
@@ -39,6 +39,10 @@ import (
 // without returning an error. POST adds the given
 // amount to the amount of an existing item while PUT
 // replaces it.
+//
+// Date is expected to be in YYYY-MM-DD format, the time
+// in simplified 24-hour hh:mm format. Any food item
+// that does not conform to this will be ignored.
 //
 // Endpoint:
 //   /api/v1/diary/{date}
@@ -69,8 +73,8 @@ func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 		r.ParseForm()
 		ids := r.Form["id"]
 		amounts := r.Form["amount"]
-		dates := r.Form["date"]
-		if !(len(ids) == len(amounts) && len(ids) == len(dates)) {
+		times := r.Form["time"]
+		if !(len(ids) == len(amounts) && len(ids) == len(times)) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -86,7 +90,8 @@ func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 			if err != nil {
 				continue
 			}
-			date, err := time.Parse(time.RFC3339, dates[i])
+			format := ps.ByName("date") + "T" + times[i] + ":00Z"
+			date, err := time.Parse(time.RFC3339, format)
 			if err != nil {
 				continue
 			}

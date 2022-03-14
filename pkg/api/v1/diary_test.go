@@ -87,7 +87,7 @@ func TestSaveDiaryEntry(t *testing.T) {
 			db:        mock.NewDB(),
 			method:    http.MethodPost,
 			params:    httprouter.Params{{Key: "date", Value: "2022-03-12"}},
-			in:        url.Values{"id": {"hi"}, "amount": {"120"}, "date": {mock.Date1ISO}},
+			in:        url.Values{"id": {"hi"}, "amount": {"120"}, "time": {mock.Date1Time}},
 			setCookie: true,
 			entries:   []core.DiaryEntry{},
 			status:    http.StatusNoContent,
@@ -96,16 +96,16 @@ func TestSaveDiaryEntry(t *testing.T) {
 			db:        mock.NewDB(),
 			method:    http.MethodPost,
 			params:    httprouter.Params{{Key: "date", Value: "2022-03-12"}},
-			in:        url.Values{"id": {"1"}, "amount": {"lots"}, "date": {mock.Date1ISO}},
+			in:        url.Values{"id": {"1"}, "amount": {"lots"}, "time": {mock.Date1Time}},
 			setCookie: true,
 			entries:   []core.DiaryEntry{},
 			status:    http.StatusNoContent,
 		},
-		{ //07// invalid date param
+		{ //07// invalid time param
 			db:        mock.NewDB(),
 			method:    http.MethodPost,
 			params:    httprouter.Params{{Key: "date", Value: "2022-03-12"}},
-			in:        url.Values{"id": {"1"}, "amount": {"120"}, "date": {"today"}},
+			in:        url.Values{"id": {"1"}, "amount": {"120"}, "time": {"now"}},
 			setCookie: true,
 			entries:   []core.DiaryEntry{},
 			status:    http.StatusNoContent,
@@ -113,8 +113,8 @@ func TestSaveDiaryEntry(t *testing.T) {
 		{ //08// connection failure
 			db:        mock.NewDB().WithError(mock.ErrDOS),
 			method:    http.MethodPost,
-			params:    httprouter.Params{{Key: "date", Value: mock.Date1yyyymmdd}},
-			in:        url.Values{"id": {"1"}, "amount": {"120"}, "date": {mock.Date1ISO}},
+			params:    httprouter.Params{{Key: "date", Value: mock.Date1Date}},
+			in:        url.Values{"id": {"1"}, "amount": {"120"}, "time": {mock.Date1Time}},
 			setCookie: true,
 			entries:   []core.DiaryEntry{},
 			status:    http.StatusInternalServerError,
@@ -122,8 +122,8 @@ func TestSaveDiaryEntry(t *testing.T) {
 		{ //09// diary id does not exist
 			db:        mock.NewDB().WithError(app.ErrNotFound),
 			method:    http.MethodPut,
-			params:    httprouter.Params{{Key: "date", Value: mock.Date1yyyymmdd}},
-			in:        url.Values{"id": {"1"}, "amount": {"120"}, "date": {mock.Date1ISO}},
+			params:    httprouter.Params{{Key: "date", Value: mock.Date1Date}},
+			in:        url.Values{"id": {"1"}, "amount": {"120"}, "time": {mock.Date1Time}},
 			setCookie: true,
 			entries:   []core.DiaryEntry{},
 			status:    http.StatusNotFound,
@@ -131,11 +131,11 @@ func TestSaveDiaryEntry(t *testing.T) {
 		{ //10// add entries
 			db:     mock.NewDB(),
 			method: http.MethodPost,
-			params: httprouter.Params{{Key: "date", Value: mock.Date1yyyymmdd}},
+			params: httprouter.Params{{Key: "date", Value: mock.Date1Date}},
 			in: url.Values{
 				"id":     {"1", "2"},
 				"amount": {"120", "210"},
-				"date":   {mock.Date1ISO, mock.Date1ISO}},
+				"time":   {mock.Date1Time, mock.Date1Time}},
 			setCookie: true,
 			entries: []core.DiaryEntry{
 				{Date: mock.Date1, Food: core.Ingredient{ID: 1, Amount: 120}},
@@ -150,11 +150,11 @@ func TestSaveDiaryEntry(t *testing.T) {
 				core.DiaryEntry{Date: mock.Date2, Food: core.Ingredient{ID: 1, Amount: 30}, Recipe: "Rec1"},
 			),
 			method: http.MethodPut,
-			params: httprouter.Params{{Key: "date", Value: mock.Date1yyyymmdd}},
+			params: httprouter.Params{{Key: "date", Value: mock.Date1Date}},
 			in: url.Values{
 				"id":     {"1", "2"},
 				"amount": {"120", "210"},
-				"date":   {mock.Date1ISO, mock.Date1ISO}},
+				"time":   {mock.Date1Time, mock.Date1Time}},
 			setCookie: true,
 			entries: []core.DiaryEntry{
 				{Date: mock.Date1, Food: core.Ingredient{ID: 1, Amount: 120}},

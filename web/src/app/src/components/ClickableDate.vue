@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed } from "vue";
 
-const prop = defineProps(["label", "date", "time"]);
+const prop = defineProps(["label", "date", "time", "disabled"]);
 const emit = defineEmits(["confirm"]);
 
 function confirm(evt) {
@@ -15,7 +15,7 @@ function confirm(evt) {
 	<form class="clickable-date">
 		<input type="date" name="date" :value="date" />
 		<input type="time" name="time" :value="time" />
-		<input type="submit" @click="confirm" :value="label" />
+		<button type="submit" class="async" @click="confirm" :disabled="disabled">{{ label }}</button>
 	</form>
 </template>
 
@@ -39,9 +39,10 @@ function confirm(evt) {
 	flex-basis: 35%;
 }
 
-.clickable-date input[type="submit"] {
+.clickable-date button {
 	width: auto;
 	border-top-left-radius: 0;
 	border-bottom-left-radius: 0;
+	background-color: var(--color-primary);
 }
 </style>

@@ -52,7 +52,7 @@ func (c *AddDiaryEntries) Execute(db DB) error {
 	}
 
 	entries, err := db.DiaryEntries(c.ID, date)
-	if err != nil {
+	if err != nil && err != ErrNotFound {
 		return err
 	}
 

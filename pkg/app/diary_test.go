@@ -57,7 +57,12 @@ func TestAddDiaryEntries_Execute(t *testing.T) {
 			entries: []core.DiaryEntry{mock.Entry1()},
 			err:     mock.ErrDOS,
 		},
-		{ //04// success, add single food
+		{ //04// ignore "not found" errors
+			db:      mock.NewDB().WithError(app.ErrNotFound),
+			cmd:     &app.AddDiaryEntries{Date: mock.Day1, Food: []core.DiaryEntry{mock.Entry1()}},
+			entries: []core.DiaryEntry{mock.Entry1()},
+		},
+		{ //05// success, add single food
 			db: mock.NewDB(),
 			cmd: &app.AddDiaryEntries{
 				ID:   1,
@@ -66,7 +71,7 @@ func TestAddDiaryEntries_Execute(t *testing.T) {
 			},
 			entries: []core.DiaryEntry{mock.Entry1()},
 		},
-		{ //05// success, add to existing single food
+		{ //06// success, add to existing single food
 			db: mock.NewDB().WithEntries(mock.Entry1()),
 			cmd: &app.AddDiaryEntries{
 				ID:   1,
@@ -82,7 +87,7 @@ func TestAddDiaryEntries_Execute(t *testing.T) {
 				}(),
 			},
 		},
-		{ //06// success, complex operations
+		{ //07// success, complex operations
 			db: mock.NewDB().WithEntries(
 				core.DiaryEntry{Date: mock.Date1, Food: core.Ingredient{ID: 1, Amount: 100}},
 				core.DiaryEntry{Date: mock.Date1, Food: core.Ingredient{ID: 2, Amount: 50}},

@@ -24,6 +24,7 @@ const current = ref(null);
 const editMode = ref(false);
 const disableSave = ref(false);
 const disableToRecipe = ref(false);
+const disableToDiary = ref(false);
 const amount = ref(100);
 const today = ref(DateTime.now().toISODate());
 const now = ref(DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE));
@@ -116,8 +117,33 @@ function addToRecipe(id) {
 		});
 }
 
-function addToDiary(date) {
-	console.log(date, amount.value);
+function addToDiary(date, time) {
+	disableToDiary.value = true;
+	fetch(`/api/v1/diary/${date}`, {
+		method: "POST",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+		body: new URLSearchParams({
+			id: current.value.id,
+			amount: amount.value,
+			time: time,
+		}),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("adddiary.err" + response.status);
+			}
+			amount.value = 100;
+			log.msg(t("adddiary.ok"));
+		})
+		.catch((err) => log.err(err))
+		.finally(() => {
+			setTimeout(function () {
+				disableToDiary.value = false;
+			}, 500);
+		});
 }
 
 function updateList(items) {
@@ -306,7 +332,13 @@ function onInput(evt) {
 				</fieldset>
 				<fieldset>
 					<label>Add to diary</label>
-					<DiarySelect :label="t('btn.add')" :time="now" :date="today" @confirm="addToDiary" />
+					<DiarySelect
+						:label="t('btn.add')"
+						:time="now"
+						:date="today"
+						:disabled="disableToDiary"
+						@confirm="addToDiary"
+					/>
 				</fieldset>
 			</section>
 			<hr />

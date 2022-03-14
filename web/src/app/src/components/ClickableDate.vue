@@ -7,7 +7,7 @@ const emit = defineEmits(["confirm"]);
 function confirm(evt) {
 	evt.preventDefault();
 	let data = new FormData(evt.target.closest("form"));
-	emit("confirm", data.get("date") + "T" + data.get("time"));
+	emit("confirm", data.get("date"), data.get("time"));
 }
 </script>
 

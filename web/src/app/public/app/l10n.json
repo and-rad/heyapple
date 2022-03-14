@@ -2,7 +2,7 @@
 	"en": {
 		"1": "Apple",
 		"2": "Banana",
-		"adddiary":{
+		"adddiary": {
 			"err400": "Malformed or missing input data.",
 			"err401": "You do not have permission to edit this diary.",
 			"err403": "It doesn't look like you're allowed to do that.",
@@ -10,7 +10,7 @@
 			"err500": "Internal server error. This shouldn't happen.",
 			"ok": "Success! The diary was updated."
 		},
-		"addfood":{
+		"addfood": {
 			"err400": "Malformed or missing input data.",
 			"err401": "You do not have permission to edit this recipe.",
 			"err403": "It doesn't look like you're allowed to do that.",
@@ -19,6 +19,7 @@
 			"ok": "Success! The ingredient was added."
 		},
 		"aria": {
+			"headcal": "Calendar",
 			"headingred": "Ingredients",
 			"headmacro1": "Primary Macronutrients",
 			"headmacro2": "Secondary Macronutrients",
@@ -46,6 +47,15 @@
 			"err500": "Internal server error. This shouldn't happen.",
 			"ok": "Success! New recipe created."
 		},
+		"day": {
+			"cal1": "Mo",
+			"cal2": "Tu",
+			"cal3": "We",
+			"cal4": "Th",
+			"cal5": "Fr",
+			"cal6": "Sa",
+			"cal7": "Su"
+		},
 		"details": {
 			"noitem": "Select an item for details"
 		},
@@ -69,6 +79,20 @@
 			"protein": "Protein",
 			"salt": "Salt",
 			"sugar": "Sugar"
+		},
+		"month": {
+			"1": "January",
+			"2": "February",
+			"3": "March",
+			"4": "April",
+			"5": "May",
+			"6": "June",
+			"7": "July",
+			"8": "August",
+			"9": "September",
+			"10": "October",
+			"11": "November",
+			"12": "December"
 		},
 		"nav": {
 			"diary": "Diary",

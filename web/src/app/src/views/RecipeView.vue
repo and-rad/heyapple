@@ -4,12 +4,14 @@ import Search from "../components/LocalSearch.vue";
 import Slider from "../components/Slider.vue";
 import NewRecipe from "../components/ClickableInput.vue";
 import FoodList from "../components/FoodList.vue";
+import DiarySelect from "../components/ClickableDate.vue";
 import IngredientList from "../components/IngredientList.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
 import ListImage from "../components/images/ImageList.vue";
 import { ref, inject, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import { DateTime } from "luxon";
 
 const { t } = useI18n();
 const log = inject("log");
@@ -21,7 +23,11 @@ const filtered = ref([]);
 const current = ref(null);
 const editMode = ref(false);
 const isSaving = ref(false);
+const disableToDiary = ref(false);
+const amount = ref(1);
 const ownerInfo = ref("&nbsp;");
+const today = ref(DateTime.now().toISODate());
+const now = ref(DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE));
 
 const main = ref(null);
 const form = ref(null);
@@ -151,8 +157,44 @@ function saveIngredients(id) {
 	});
 }
 
+function addToDiary(date, time) {
+	disableToDiary.value = true;
+
+	let params = new URLSearchParams({ recipe: current.value.name });
+	current.value.items.forEach((i) => {
+		params.append("id", i.id);
+		params.append("amount", perServing(i.amount) * amount.value);
+		params.append("time", time);
+	});
+
+	fetch(`/api/v1/diary/${date}`, {
+		method: "POST",
+		body: params,
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("adddiary.err" + response.status);
+			}
+			amount.value = 1;
+			log.msg(t("adddiary.ok"));
+		})
+		.catch((err) => log.err(err))
+		.finally(() => {
+			setTimeout(function () {
+				disableToDiary.value = false;
+			}, 500);
+		});
+}
+
 function showDetails(id) {
 	current.value = filtered.value.filter((r) => r.id == id)[0];
+	today.value = DateTime.now().toISODate();
+	now.value = DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE);
+	amount.value = 1;
 	main.value.showDetails();
 
 	if ("isowner" in current.value) {
@@ -291,9 +333,25 @@ onMounted(() => (filtered.value = [...recipes.value]));
 				</button>
 			</section>
 			<hr />
-			<section v-if="current.items.length" class="no-edit-mode">
+			<section v-if="current.items.length" class="tracking no-edit-mode">
 				<h2>{{ t("aria.headtrack") }}</h2>
-				<p>Add to diary here</p>
+				<fieldset class="tracking-amount">
+					<div>
+						<label>{{ t("food.amount") }}</label>
+						<input type="number" v-model="amount" name="amount" />
+						<span class="unit">{{ t("recipe.size", amount) }}</span>
+					</div>
+				</fieldset>
+				<fieldset>
+					<label>Add to diary</label>
+					<DiarySelect
+						:label="t('btn.add')"
+						:time="now"
+						:date="today"
+						:disabled="disableToDiary"
+						@confirm="addToDiary"
+					/>
+				</fieldset>
 			</section>
 			<hr />
 			<section>

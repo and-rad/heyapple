@@ -6,6 +6,10 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const main = ref(null);
+
+function onDateSelected(dates) {
+	console.log(dates);
+}
 </script>
 
 <template>
@@ -13,7 +17,7 @@ const main = ref(null);
 		<template #filter>
 			<section>
 				<h2>{{ t("aria.headcal") }}</h2>
-				<Calendar />
+				<Calendar @selection="onDateSelected" />
 			</section>
 			<hr />
 			<section></section>

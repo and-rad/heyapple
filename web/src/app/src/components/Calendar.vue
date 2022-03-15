@@ -5,6 +5,8 @@ import { useI18n } from "vue-i18n";
 import { DateTime } from "luxon";
 
 const { t } = useI18n();
+const prop = defineProps(["mode"]);
+const emit = defineEmits(["selection"]);
 const years = ref([2020, 2021, 2022, 2023]);
 const dates = ref(["2022-03-12", "2022-03-14", "2022-03-15", "2022-03-16"]);
 const month = ref(DateTime.now().month);
@@ -19,6 +21,8 @@ const hasPrev = computed(() => {
 const hasNext = computed(() => {
 	return year.value != years.value[years.value.length - 1] || month.value < 12;
 });
+
+let selection = [];
 
 function onCalendarChanged() {
 	let today = DateTime.now().toISODate();
@@ -49,6 +53,12 @@ function onCalendarChanged() {
 			cell.classList.remove("has-entries");
 		}
 
+		if (selection.indexOf(iso) != -1) {
+			cell.classList.add("active");
+		} else {
+			cell.classList.remove("active");
+		}
+
 		date = date.plus({ days: 1 });
 	});
 }
@@ -70,14 +80,35 @@ function onNext() {
 }
 
 function onDay(evt) {
-	console.log(evt.target.dataset.date);
+	let iso = evt.target.dataset.date;
+
+	if (prop.mode == "toggle") {
+		let idx = selection.indexOf(iso);
+		if (idx == -1) {
+			selection.push(iso);
+		} else {
+			selection.splice(idx, 1);
+		}
+	} else {
+		selection = [iso];
+	}
+
+	calendar.value.querySelectorAll("td>button").forEach((btn) => {
+		if (selection.indexOf(btn.dataset.date) != -1) {
+			btn.parentNode.classList.add("active");
+		} else {
+			btn.parentNode.classList.remove("active");
+		}
+	});
+
+	emit("selection", selection);
 }
 
 onMounted(() => onCalendarChanged());
 </script>
 
 <template>
-	<div class="calendar">
+	<div class="calendar" :class="[mode]">
 		<div>
 			<button class="prev icon" @click="onPrev" :disabled="!hasPrev"><ArrowImage /></button>
 			<div>
@@ -213,7 +244,7 @@ onMounted(() => onCalendarChanged());
 .calendar th,
 .calendar td {
 	width: calc(100% / 7);
-	padding: 0;
+	padding: 1px;
 }
 
 .calendar th {
@@ -222,12 +253,55 @@ onMounted(() => onCalendarChanged());
 }
 
 .calendar td button {
-	width: 100%;
-	height: 40px;
+	width: 38px;
+	height: 38px;
 	background: none;
-	border-radius: 0;
+	/*border-radius: 50%;*/
 	color: var(--color-text);
 	line-height: 1;
+	position: relative;
+}
+
+.calendar td.active button {
+	border: 1px solid var(--color-primary);
+}
+
+.calendar td.active button:hover {
+	box-shadow: inset 0 0 100px var(--color-primary-light);
+}
+
+.calendar td.today button {
+	border: 1px solid var(--color-secondary);
+}
+
+.calendar td.today button:hover {
+	box-shadow: inset 0 0 100px var(--color-secondary-light);
+}
+
+.calendar td.today.active button:before {
+	content: "";
+	border: 1px solid var(--color-primary);
+	position: absolute;
+	top: -4px;
+	right: -4px;
+	bottom: -4px;
+	left: -4px;
+	border-radius: 5px;
+}
+
+.calendar.toggle td.active button {
+	border: none;
+	box-shadow: inset 0 0 100px var(--color-primary);
+	color: #fff;
+}
+
+.calendar.toggle td.today.active button {
+	box-shadow: inset 0 0 100px var(--color-secondary);
+	color: var(--color-text);
+}
+
+.calendar.toggle td.today.active button:before {
+	display: none;
 }
 
 .calendar td.outside button {
@@ -241,13 +315,5 @@ onMounted(() => onCalendarChanged());
 
 .calendar td.outside.has-entries button {
 	font-weight: 400;
-}
-
-.calendar td.today button {
-	border: 1px solid var(--color-primary);
-}
-
-.calendar td.today button:hover {
-	box-shadow: inset 0 0 100px var(--color-primary-light);
 }
 </style>

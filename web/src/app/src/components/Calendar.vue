@@ -1,38 +1,107 @@
 <script setup>
 import ArrowImage from "./images/ImageRightArrow.vue";
-import { ref } from "vue";
+import { ref, computed, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
+import { DateTime } from "luxon";
 
 const { t } = useI18n();
-const years = ref(["2020", "2021", "2022"]);
+const years = ref([2020, 2021, 2022, 2023]);
+const dates = ref(["2022-03-12", "2022-03-14", "2022-03-15", "2022-03-16"]);
+const month = ref(DateTime.now().month);
+const year = ref(DateTime.now().year);
+
+const calendar = ref(null);
+
+const hasPrev = computed(() => {
+	return year.value != years.value[0] || month.value > 1;
+});
+
+const hasNext = computed(() => {
+	return year.value != years.value[years.value.length - 1] || month.value < 12;
+});
+
+function onCalendarChanged() {
+	let today = DateTime.now().toISODate();
+	let date = DateTime.local(year.value, month.value);
+
+	date = date.minus({ days: date.weekday });
+	calendar.value.querySelectorAll("td").forEach((cell) => {
+		let iso = date.toISODate();
+
+		cell.firstElementChild.textContent = date.day;
+		cell.firstElementChild.dataset.date = iso;
+
+		if (date.month != month.value) {
+			cell.classList.add("outside");
+		} else {
+			cell.classList.remove("outside");
+		}
+
+		if (iso == today) {
+			cell.classList.add("today");
+		} else {
+			cell.classList.remove("today");
+		}
+
+		if (dates.value.indexOf(iso) != -1) {
+			cell.classList.add("has-entries");
+		} else {
+			cell.classList.remove("has-entries");
+		}
+
+		date = date.plus({ days: 1 });
+	});
+}
+
+function onPrev() {
+	if (--month.value < 1) {
+		month.value = 12;
+		--year.value;
+	}
+	onCalendarChanged();
+}
+
+function onNext() {
+	if (++month.value > 12) {
+		month.value = 1;
+		++year.value;
+	}
+	onCalendarChanged();
+}
+
+function onDay(evt) {
+	console.log(evt.target.dataset.date);
+}
+
+onMounted(() => onCalendarChanged());
 </script>
 
 <template>
 	<div class="calendar">
 		<div>
-			<button class="prev icon"><ArrowImage /></button>
+			<button class="prev icon" @click="onPrev" :disabled="!hasPrev"><ArrowImage /></button>
 			<div>
-				<select class="month">
-					<option value="0">{{ t("month.1") }}</option>
-					<option value="1">{{ t("month.2") }}</option>
-					<option value="2">{{ t("month.3") }}</option>
-					<option value="3">{{ t("month.4") }}</option>
-					<option value="4">{{ t("month.5") }}</option>
-					<option value="5">{{ t("month.6") }}</option>
-					<option value="6">{{ t("month.7") }}</option>
-					<option value="7">{{ t("month.8") }}</option>
-					<option value="8">{{ t("month.9") }}</option>
-					<option value="9">{{ t("month.10") }}</option>
-					<option value="10">{{ t("month.11") }}</option>
-					<option value="11">{{ t("month.12") }}</option>
+				<select class="month" v-model.number="month" @change="onCalendarChanged">
+					<option value="1">{{ t("month.1") }}</option>
+					<option value="2">{{ t("month.2") }}</option>
+					<option value="3">{{ t("month.3") }}</option>
+					<option value="4">{{ t("month.4") }}</option>
+					<option value="5">{{ t("month.5") }}</option>
+					<option value="6">{{ t("month.6") }}</option>
+					<option value="7">{{ t("month.7") }}</option>
+					<option value="8">{{ t("month.8") }}</option>
+					<option value="9">{{ t("month.9") }}</option>
+					<option value="10">{{ t("month.10") }}</option>
+					<option value="11">{{ t("month.11") }}</option>
+					<option value="12">{{ t("month.12") }}</option>
 				</select>
-				<select class="year">
-					<option v-for="year in years" :value="year">{{ year }}</option>
+				<select class="year" v-model.number="year" @change="onCalendarChanged">
+					<option v-for="y in years" :value="y">{{ y }}</option>
 				</select>
 			</div>
-			<button class="next icon"><ArrowImage /></button>
+			<button class="next icon" @click="onNext" :disabled="!hasNext"><ArrowImage /></button>
 		</div>
-		<table>
+		<table ref="calendar">
 			<thead>
 				<tr>
 					<th>{{ t("day.cal7") }}</th>
@@ -46,58 +115,58 @@ const years = ref(["2020", "2021", "2022"]);
 			</thead>
 			<tbody>
 				<tr>
-					<td><button>1</button></td>
-					<td><button>2</button></td>
-					<td><button>3</button></td>
-					<td><button>4</button></td>
-					<td><button>5</button></td>
-					<td><button>6</button></td>
-					<td><button>7</button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
 				</tr>
 				<tr>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
 				</tr>
 				<tr>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
 				</tr>
 				<tr>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
 				</tr>
 				<tr>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
 				</tr>
 				<tr>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
-					<td><button></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
+					<td><button @click="onDay"></button></td>
 				</tr>
 			</tbody>
 		</table>
@@ -112,6 +181,14 @@ const years = ref(["2020", "2021", "2022"]);
 .calendar > div {
 	display: flex;
 	justify-content: space-between;
+}
+
+.calendar > div button[disabled] {
+	background: none;
+}
+
+.calendar > div button[disabled] svg {
+	fill: #e0e0e0;
 }
 
 .calendar > div > div select {
@@ -151,5 +228,26 @@ const years = ref(["2020", "2021", "2022"]);
 	border-radius: 0;
 	color: var(--color-text);
 	line-height: 1;
+}
+
+.calendar td.outside button {
+	opacity: 0.3;
+	font-weight: 300;
+}
+
+.calendar td.has-entries button {
+	font-weight: 700;
+}
+
+.calendar td.outside.has-entries button {
+	font-weight: 400;
+}
+
+.calendar td.today button {
+	border: 1px solid var(--color-primary);
+}
+
+.calendar td.today button:hover {
+	box-shadow: inset 0 0 100px var(--color-primary-light);
 }
 </style>

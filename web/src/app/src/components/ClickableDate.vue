@@ -1,6 +1,4 @@
 <script setup>
-import { ref, computed } from "vue";
-
 const prop = defineProps(["label", "date", "time", "disabled"]);
 const emit = defineEmits(["confirm"]);
 

@@ -129,5 +129,4 @@ fetch("api/v1/recipes")
 
 fetch("api/v1/diary")
 	.then((response) => response.json())
-	.then(initDiary)
-	.catch(() => initDiary([]));
+	.then(initDiary);

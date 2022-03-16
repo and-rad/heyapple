@@ -171,9 +171,7 @@ func Diary(env *handler.Environment) httprouter.Handle {
 			return
 		}
 
-		if err := env.DB.Fetch(query); err == app.ErrNotFound {
-			w.WriteHeader(http.StatusNotFound)
-		} else if err != nil {
+		if err := env.DB.Fetch(query); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusOK)
@@ -235,9 +233,7 @@ func DiaryEntries(env *handler.Environment) httprouter.Handle {
 			return
 		}
 
-		if err := env.DB.Fetch(query); err == app.ErrNotFound {
-			w.WriteHeader(http.StatusNotFound)
-		} else if err != nil {
+		if err := env.DB.Fetch(query); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {
 			w.WriteHeader(http.StatusOK)

@@ -207,37 +207,32 @@ func TestDiary(t *testing.T) {
 			setCookie: true,
 			status:    http.StatusInternalServerError,
 		},
-		{ //02// diary doesn't exist
-			db:        mock.NewDB().WithError(app.ErrNotFound),
-			setCookie: true,
-			status:    http.StatusNotFound,
-		},
-		{ //03// success
+		{ //02// success
 			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
 			setCookie: true,
 			out:       fmt.Sprintf(`[%s,%s,%s]`, mock.Diary210101Json, mock.Diary210102Json, mock.Diary220301Json),
 			status:    http.StatusOK,
 		},
-		{ //04// invalid year format
+		{ //03// invalid year format
 			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
 			params:    httprouter.Params{{Key: "year", Value: "thisone"}},
 			setCookie: true,
 			status:    http.StatusBadRequest,
 		},
-		{ //05// success for year
+		{ //04// success for year
 			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
 			params:    httprouter.Params{{Key: "year", Value: "2022"}},
 			setCookie: true,
 			out:       fmt.Sprintf(`[%s]`, mock.Diary220301Json),
 			status:    http.StatusOK,
 		},
-		{ //06// invalid month format
+		{ //05// invalid month format
 			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
 			params:    httprouter.Params{{Key: "month", Value: "thisone"}},
 			setCookie: true,
 			status:    http.StatusBadRequest,
 		},
-		{ //07// success for month
+		{ //06// success for month
 			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210201(), mock.Diary220301()),
 			params:    httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "1"}},
 			setCookie: true,
@@ -307,7 +302,8 @@ func TestDiaryEntries(t *testing.T) {
 			db:        mock.NewDB().WithError(app.ErrNotFound),
 			params:    httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "1"}, {Key: "day", Value: "2"}},
 			setCookie: true,
-			status:    http.StatusNotFound,
+			out:       "[]",
+			status:    http.StatusOK,
 		},
 		{ //06// success
 			db:        mock.NewDB().WithEntries(mock.Entry1(), mock.Entry2(), mock.Entry3()),

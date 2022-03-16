@@ -21,7 +21,6 @@ package app_test
 import (
 	"bytes"
 	"errors"
-	"fmt"
 	"heyapple/pkg/app"
 	"testing"
 )
@@ -32,22 +31,22 @@ func TestLog_Log(t *testing.T) {
 		out string
 	}{
 		{ //00// nil data
-			out: fmt.Sprintf("Log  : <nil>\n"),
+			out: "Log  : <nil>\n",
 		},
 		{ //01// arbitrary objects
 			in: struct {
 				Name string
 				Age  int
 			}{Name: "Joe", Age: 23},
-			out: fmt.Sprintf("Log  : {Joe 23}\n"),
+			out: "Log  : {Joe 23}\n",
 		},
 		{ //02// strings
 			in:  "Problem with the moonwalk",
-			out: fmt.Sprintf("Log  : Problem with the moonwalk\n"),
+			out: "Log  : Problem with the moonwalk\n",
 		},
 		{ //03// errors
 			in:  errors.New("Danger Will Robinson"),
-			out: fmt.Sprintf("Log  : Danger Will Robinson\n"),
+			out: "Log  : Danger Will Robinson\n",
 		},
 	} {
 		buf := &bytes.Buffer{}
@@ -65,22 +64,22 @@ func TestLog_Warn(t *testing.T) {
 		out string
 	}{
 		{ //00// nil data
-			out: fmt.Sprintf("Warn : <nil>\n"),
+			out: "Warn : <nil>\n",
 		},
 		{ //01// arbitrary objects
 			in: struct {
 				Name string
 				Age  int
 			}{Name: "Joe", Age: 23},
-			out: fmt.Sprintf("Warn : {Joe 23}\n"),
+			out: "Warn : {Joe 23}\n",
 		},
 		{ //02// strings
 			in:  "Problem with the moonwalk",
-			out: fmt.Sprintf("Warn : Problem with the moonwalk\n"),
+			out: "Warn : Problem with the moonwalk\n",
 		},
 		{ //03// errors
 			in:  errors.New("Danger Will Robinson"),
-			out: fmt.Sprintf("Warn : Danger Will Robinson\n"),
+			out: "Warn : Danger Will Robinson\n",
 		},
 	} {
 		buf := &bytes.Buffer{}
@@ -98,22 +97,22 @@ func TestLog_Error(t *testing.T) {
 		out string
 	}{
 		{ //00// nil data
-			out: fmt.Sprintf("Error: <nil>\n"),
+			out: "Error: <nil>\n",
 		},
 		{ //01// arbitrary objects
 			in: struct {
 				Name string
 				Age  int
 			}{Name: "Joe", Age: 23},
-			out: fmt.Sprintf("Error: {Joe 23}\n"),
+			out: "Error: {Joe 23}\n",
 		},
 		{ //02// strings
 			in:  "Problem with the moonwalk",
-			out: fmt.Sprintf("Error: Problem with the moonwalk\n"),
+			out: "Error: Problem with the moonwalk\n",
 		},
 		{ //03// errors
 			in:  errors.New("Danger Will Robinson"),
-			out: fmt.Sprintf("Error: Danger Will Robinson\n"),
+			out: "Error: Danger Will Robinson\n",
 		},
 	} {
 		buf := &bytes.Buffer{}

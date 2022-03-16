@@ -1250,7 +1250,7 @@ func TestDB_DiaryEntries(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(entries, data.entries) {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, entries, data.db.entries)
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, entries, data.entries)
 		}
 	}
 }
@@ -1272,6 +1272,129 @@ func TestDB_DiaryEntries_Race(t *testing.T) {
 
 	go func() {
 		e2[0].Recipe = "Rec 1"
+		wg.Done()
+	}()
+
+	wg.Wait()
+}
+
+func TestDB_DiaryDays(t *testing.T) {
+	for idx, data := range []struct {
+		db    *DB
+		id    int
+		year  int
+		month int
+		day   int
+
+		days []core.DiaryDay
+		err  error
+	}{
+		{ //00// diary doesn't exist
+			id:  1,
+			db:  NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// get everything
+			id: 1,
+			db: &DB{days: dayMap{1: {
+				2021: {1: {mock.Diary210101(), mock.Diary210102()}, 2: {mock.Diary210201(), mock.Diary210202()}},
+				2022: {3: {mock.Diary220301(), mock.Diary220302()}},
+			}}},
+			days: []core.DiaryDay{mock.Diary210101(), mock.Diary210102(), mock.Diary210201(), mock.Diary210202(), mock.Diary220301(), mock.Diary220302()},
+		},
+		{ //02// no entries for specific year
+			id:   1,
+			year: 2020,
+			db: &DB{days: dayMap{1: {
+				2021: {1: {mock.Diary210101(), mock.Diary210102()}, 2: {mock.Diary210201(), mock.Diary210202()}},
+				2022: {3: {mock.Diary220301(), mock.Diary220302()}},
+			}}},
+			days: []core.DiaryDay{},
+		},
+		{ //03// get specific year
+			id:   1,
+			year: 2021,
+			db: &DB{days: dayMap{1: {
+				2021: {1: {mock.Diary210101(), mock.Diary210102()}, 2: {mock.Diary210201(), mock.Diary210202()}},
+				2022: {3: {mock.Diary220301(), mock.Diary220302()}},
+			}}},
+			days: []core.DiaryDay{mock.Diary210101(), mock.Diary210102(), mock.Diary210201(), mock.Diary210202()},
+		},
+		{ //04// no entries for specific month
+			id:    1,
+			year:  2021,
+			month: 4,
+			db: &DB{days: dayMap{1: {
+				2021: {1: {mock.Diary210101(), mock.Diary210102()}, 2: {mock.Diary210201(), mock.Diary210202()}},
+				2022: {3: {mock.Diary220301(), mock.Diary220302()}},
+			}}},
+			days: []core.DiaryDay{},
+		},
+		{ //05// get specific month
+			id:    1,
+			year:  2021,
+			month: 2,
+			db: &DB{days: dayMap{1: {
+				2021: {1: {mock.Diary210101(), mock.Diary210102()}, 2: {mock.Diary210201(), mock.Diary210202()}},
+				2022: {3: {mock.Diary220301(), mock.Diary220302()}},
+			}}},
+			days: []core.DiaryDay{mock.Diary210201(), mock.Diary210202()},
+		},
+		{ //06// no entries for specific day
+			id:    1,
+			year:  2021,
+			month: 2,
+			day:   12,
+			db: &DB{days: dayMap{1: {
+				2021: {1: {mock.Diary210101(), mock.Diary210102()}, 2: {mock.Diary210201(), mock.Diary210202()}},
+				2022: {3: {mock.Diary220301(), mock.Diary220302()}},
+			}}},
+			days: []core.DiaryDay{},
+		},
+		{ //07// get specific day
+			id:    1,
+			year:  2021,
+			month: 2,
+			day:   1,
+			db: &DB{days: dayMap{1: {
+				2021: {1: {mock.Diary210101(), mock.Diary210102()}, 2: {mock.Diary210201(), mock.Diary210202()}},
+				2022: {3: {mock.Diary220301(), mock.Diary220302()}},
+			}}},
+			days: []core.DiaryDay{mock.Diary210201()},
+		},
+	} {
+		days, err := data.db.DiaryDays(data.id, data.year, data.month, data.day)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(days, data.days) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, days, data.days)
+		}
+	}
+}
+
+func TestDB_DiaryDays_Race(t *testing.T) {
+	db := NewDB()
+	db.days = dayMap{1: {
+		2021: {1: {mock.Diary210101(), mock.Diary210102()}, 2: {mock.Diary210201(), mock.Diary210202()}},
+		2022: {3: {mock.Diary220301(), mock.Diary220302()}},
+	}}
+
+	d1, _ := db.DiaryDays(1, 2021, 1, 1)
+	d2, _ := db.DiaryDays(1, 2021, 1, 1)
+
+	wg := &sync.WaitGroup{}
+	wg.Add(2)
+
+	go func() {
+		d1[0].KCal = 123
+		wg.Done()
+	}()
+
+	go func() {
+		d2[0].KCal = 456
 		wg.Done()
 	}()
 

@@ -367,18 +367,21 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 	return entries, nil
 }
 
-func (db *DB) DiaryDays(id, year, month int) ([]core.DiaryDay, error) {
+func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {
 	if err := db.popError(); err != nil {
 		return nil, err
 	}
 
-	if year < 1 && month < 1 {
+	if year < 1 && month < 1 && day < 1 {
 		return db.Days, nil
 	}
 
 	comp := strconv.FormatInt(int64(year), 10)
 	if month > 0 {
 		comp += "-" + strconv.FormatInt(int64(month), 10)
+	}
+	if day > 0 {
+		comp += "-" + strconv.FormatInt(int64(day), 10)
 	}
 
 	var days []core.DiaryDay

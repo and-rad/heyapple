@@ -24,6 +24,7 @@ package memory
 import (
 	"bytes"
 	"encoding/json"
+	"fmt"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"heyapple/pkg/job"
@@ -413,34 +414,41 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 	return nil, app.ErrNotFound
 }
 
-func (db *DB) DiaryDays(id, year, month int) ([]core.DiaryDay, error) {
+func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {
 	years, ok := db.days[id]
 	if !ok {
 		return nil, app.ErrNotFound
 	}
 
 	result := []core.DiaryDay{}
-	if year == 0 && month == 0 {
+	if year == 0 && month == 0 && day == 0 {
 		for _, months := range years {
 			for _, m := range months {
 				result = append(result, m...)
 			}
 		}
-		return result, nil
-	}
-
-	months, ok := years[year]
-	if !ok {
-		return result, nil
-	}
-
-	if month == 0 {
-		for _, m := range months {
-			result = append(result, m...)
+	} else if months, ok := years[year]; ok {
+		if month == 0 {
+			for _, m := range months {
+				result = append(result, m...)
+			}
+		} else if days, ok := months[month]; ok {
+			if day == 0 {
+				result = append(result, days...)
+			} else {
+				date := fmt.Sprintf("%04d-%02d-%02d", year, month, day)
+				for _, d := range days {
+					if d.Date == date {
+						return []core.DiaryDay{d}, nil
+					}
+				}
+			}
 		}
-	} else if m, ok := months[month]; ok {
-		result = append(result, m...)
 	}
+
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].Date < result[j].Date
+	})
 
 	return result, nil
 }

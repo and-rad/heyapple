@@ -189,7 +189,7 @@ func (q *DiaryDays) Fetch(db DB) error {
 		return ErrNotFound
 	}
 
-	if days, err := db.DiaryDays(q.ID, q.Year, q.Month); err != nil {
+	if days, err := db.DiaryDays(q.ID, q.Year, q.Month, 0); err != nil {
 		return err
 	} else {
 		q.Days = days

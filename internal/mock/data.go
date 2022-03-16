@@ -242,3 +242,39 @@ const (
 	Entry1Json = `{"date":"2022-03-12T08:43:00Z","recipe":"","food":{"id":2,"amount":150}}`
 	Entry2Json = `{"date":"2022-03-12T16:43:00Z","recipe":"","food":{"id":1,"amount":50}}`
 )
+
+func Diary210101() core.DiaryDay {
+	return core.DiaryDay{
+		Date: "2021-01-01",
+	}
+}
+
+func Diary210102() core.DiaryDay {
+	return core.DiaryDay{
+		Date: "2021-01-02",
+	}
+}
+
+func Diary210201() core.DiaryDay {
+	return core.DiaryDay{
+		Date: "2021-02-01",
+	}
+}
+
+func Diary210202() core.DiaryDay {
+	return core.DiaryDay{
+		Date: "2021-02-02",
+	}
+}
+
+func Diary220301() core.DiaryDay {
+	return core.DiaryDay{
+		Date: "2022-03-01",
+	}
+}
+
+func Diary220302() core.DiaryDay {
+	return core.DiaryDay{
+		Date: "2022-03-02",
+	}
+}

@@ -5,14 +5,17 @@ import { useI18n } from "vue-i18n";
 import { DateTime } from "luxon";
 
 const { t } = useI18n();
-const prop = defineProps(["mode"]);
+const prop = defineProps(["mode", "items"]);
 const emit = defineEmits(["selection"]);
-const years = ref([2020, 2021, 2022, 2023]);
-const dates = ref(["2022-03-12", "2022-03-14", "2022-03-15", "2022-03-16"]);
 const month = ref(DateTime.now().month);
 const year = ref(DateTime.now().year);
 
 const calendar = ref(null);
+
+const years = computed(() => {
+	let dates = prop.items.map((i) => parseInt(i.split("-")[0])).filter((i, idx, self) => self.indexOf(i) === idx);
+	return [Math.min(...dates) - 1, ...dates, Math.max(...dates) + 1];
+});
 
 const hasPrev = computed(() => {
 	return year.value != years.value[0] || month.value > 1;
@@ -27,8 +30,12 @@ let selection = [];
 function onCalendarChanged() {
 	let today = DateTime.now().toISODate();
 	let date = DateTime.local(year.value, month.value);
-
 	date = date.minus({ days: date.weekday });
+
+	if (!selection.length && prop.mode != "toggle") {
+		selection = [today];
+	}
+
 	calendar.value.querySelectorAll("td").forEach((cell) => {
 		let iso = date.toISODate();
 
@@ -47,7 +54,7 @@ function onCalendarChanged() {
 			cell.classList.remove("today");
 		}
 
-		if (dates.value.indexOf(iso) != -1) {
+		if (prop.items.indexOf(iso) != -1) {
 			cell.classList.add("has-entries");
 		} else {
 			cell.classList.remove("has-entries");

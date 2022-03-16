@@ -33,8 +33,11 @@ import (
 	"time"
 )
 
-// entryMap       uid     day         entries
+// entryMap   uid     day           entries
 type entryMap map[int]map[time.Time][]core.DiaryEntry
+
+// dayMap   uid     yr      mon     entries
+type dayMap map[int]map[int]map[int][]core.DiaryDay
 
 type DB struct {
 	jobs *job.Scheduler
@@ -45,6 +48,7 @@ type DB struct {
 	food    map[int]core.Food
 	recipes map[int]core.Recipe
 	entries entryMap
+	days    dayMap
 
 	userRec map[int]map[int]int
 	recUser map[int]map[int]int
@@ -63,9 +67,10 @@ func NewDB() *DB {
 		emails:  make(map[string]int),
 		food:    make(map[int]core.Food),
 		recipes: make(map[int]core.Recipe),
-		entries: make(entryMap),
 		userRec: make(map[int]map[int]int),
 		recUser: make(map[int]map[int]int),
+		entries: make(entryMap),
+		days:    make(dayMap),
 	}
 }
 
@@ -406,6 +411,38 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 		}
 	}
 	return nil, app.ErrNotFound
+}
+
+func (db *DB) DiaryDays(id, year, month int) ([]core.DiaryDay, error) {
+	years, ok := db.days[id]
+	if !ok {
+		return nil, app.ErrNotFound
+	}
+
+	result := []core.DiaryDay{}
+	if year == 0 && month == 0 {
+		for _, months := range years {
+			for _, m := range months {
+				result = append(result, m...)
+			}
+		}
+		return result, nil
+	}
+
+	months, ok := years[year]
+	if !ok {
+		return result, nil
+	}
+
+	if month == 0 {
+		for _, m := range months {
+			result = append(result, m...)
+		}
+	} else if m, ok := months[month]; ok {
+		result = append(result, m...)
+	}
+
+	return result, nil
 }
 
 func (db *DB) Execute(c app.Command) error {

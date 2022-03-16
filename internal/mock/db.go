@@ -25,6 +25,8 @@ import (
 	"errors"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -47,6 +49,7 @@ type DB struct {
 	RecipeItem  core.Recipe
 	RecipeItems []core.Recipe
 	Entries     []core.DiaryEntry
+	Days        []core.DiaryDay
 	Access      Access
 
 	Err  []error
@@ -61,6 +64,7 @@ func NewDB() *DB {
 		FoodItems:   []core.Food{},
 		RecipeItems: []core.Recipe{},
 		Entries:     []core.DiaryEntry{},
+		Days:        []core.DiaryDay{},
 	}
 }
 
@@ -116,6 +120,11 @@ func (db *DB) WithAccess(a Access) *DB {
 
 func (db *DB) WithEntries(ents ...core.DiaryEntry) *DB {
 	db.Entries = ents
+	return db
+}
+
+func (db *DB) WithDays(days ...core.DiaryDay) *DB {
+	db.Days = days
 	return db
 }
 
@@ -356,6 +365,30 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 		}
 	}
 	return entries, nil
+}
+
+func (db *DB) DiaryDays(id, year, month int) ([]core.DiaryDay, error) {
+	if err := db.popError(); err != nil {
+		return nil, err
+	}
+
+	if year < 1 && month < 1 {
+		return db.Days, nil
+	}
+
+	comp := strconv.FormatInt(int64(year), 10)
+	if month > 0 {
+		comp += "-" + strconv.FormatInt(int64(month), 10)
+	}
+
+	var days []core.DiaryDay
+	for _, d := range db.Days {
+		if strings.HasPrefix(d.Date, comp) {
+			days = append(days, d)
+		}
+	}
+
+	return days, nil
 }
 
 func (db *DB) popError() error {

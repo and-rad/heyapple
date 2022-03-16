@@ -117,3 +117,85 @@ func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 		}
 	}
 }
+
+func Diary(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		query := &app.DiaryDays{}
+
+		if param := ps.ByName("year"); param != "" {
+			if year, err := strconv.Atoi(param); err == nil {
+				query.Year = year
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+		}
+
+		if param := ps.ByName("month"); param != "" {
+			if month, err := strconv.Atoi(param); err == nil {
+				query.Month = month
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+		}
+
+		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			query.ID = id
+		} else {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		if err := env.DB.Fetch(query); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(query.Days, w)
+		}
+	}
+}
+
+func DiaryEntries(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		year, err := strconv.Atoi(ps.ByName("year"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		month, err := strconv.Atoi(ps.ByName("month"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		day, err := strconv.Atoi(ps.ByName("day"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		query := &app.DiaryEntries{
+			Date: time.Date(year, time.Month(month), day, 0, 0, 0, 0, time.UTC),
+		}
+
+		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			query.ID = id
+		} else {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		if err := env.DB.Fetch(query); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(query.Entries, w)
+		}
+	}
+}

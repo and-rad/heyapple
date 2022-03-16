@@ -155,3 +155,45 @@ func (c *SaveDiaryEntries) Execute(db DB) error {
 
 	return nil
 }
+
+type DiaryEntries struct {
+	Date    time.Time
+	Entries []core.DiaryEntry
+	ID      int
+}
+
+func (q *DiaryEntries) Fetch(db DB) error {
+	if q.ID == 0 {
+		return ErrNotFound
+	}
+
+	date := q.Date.Truncate(time.Hour * 24)
+	if entries, err := db.DiaryEntries(q.ID, date); err != nil {
+		return err
+	} else {
+		q.Entries = entries
+	}
+
+	return nil
+}
+
+type DiaryDays struct {
+	Days  []core.DiaryDay
+	ID    int
+	Year  int
+	Month int
+}
+
+func (q *DiaryDays) Fetch(db DB) error {
+	if q.ID == 0 {
+		return ErrNotFound
+	}
+
+	if days, err := db.DiaryDays(q.ID, q.Year, q.Month); err != nil {
+		return err
+	} else {
+		q.Days = days
+	}
+
+	return nil
+}

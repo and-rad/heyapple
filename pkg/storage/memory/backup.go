@@ -50,8 +50,8 @@ type backupData struct {
 	Tokens  map[string]app.Token      `json:"tokens"`
 	Food    map[int]core.Food         `json:"food"`
 	Recipes map[int]core.Recipe       `json:"recipes"`
-	Entries map[int][]core.DiaryEntry `json:"entries"`
 	UserRec map[int][]access          `json:"recaccess"`
+	Entries map[int][]core.DiaryEntry `json:"entries"`
 	UserID  int                       `json:"userid"`
 	FoodID  int                       `json:"foodid"`
 	RecID   int                       `json:"recid"`

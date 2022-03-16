@@ -157,7 +157,7 @@ func (d DiaryEntry) Day() time.Time {
 }
 
 type DiaryDay struct {
-	Date time.Time `json:"date"`
+	Date string
 
 	KCal    float32 `json:"kcal"`
 	Fat     float32 `json:"fat"`

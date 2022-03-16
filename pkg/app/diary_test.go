@@ -233,22 +233,27 @@ func TestDiaryEntries_Fetch(t *testing.T) {
 			id:  1,
 			err: mock.ErrDOS,
 		},
-		{ //01// diary doesn't exist
+		{ //01// no id provided
 			db:  mock.NewDB(),
 			err: app.ErrNotFound,
 		},
-		{ //02// empty db
+		{ //02// diary doesn't exist
+			db:      mock.NewDB().WithError(app.ErrNotFound),
+			id:      2,
+			entries: []core.DiaryEntry{},
+		},
+		{ //03// empty db
 			db:      mock.NewDB(),
 			id:      1,
 			entries: []core.DiaryEntry{},
 		},
-		{ //03// success
+		{ //04// success
 			db:      mock.NewDB().WithEntries(mock.Entry1(), mock.Entry2()),
 			id:      1,
 			date:    mock.Date1,
 			entries: []core.DiaryEntry{mock.Entry1(), mock.Entry2()},
 		},
-		{ //04// no entries for specified date
+		{ //05// no entries for specified date
 			db:      mock.NewDB().WithEntries(mock.Entry1(), mock.Entry2()),
 			id:      1,
 			date:    mock.Day2,
@@ -283,35 +288,40 @@ func TestDiaryDays_Fetch(t *testing.T) {
 			id:  1,
 			err: mock.ErrDOS,
 		},
-		{ //01// diary doesn't exist
+		{ //01// no id provided
 			db:  mock.NewDB(),
 			err: app.ErrNotFound,
 		},
-		{ //02// empty db
+		{ //02// diary doesn't exist
+			db:   mock.NewDB().WithError(app.ErrNotFound),
+			id:   2,
+			days: []core.DiaryDay{},
+		},
+		{ //03// empty db
 			db:   mock.NewDB(),
 			id:   1,
 			days: []core.DiaryDay{},
 		},
-		{ //03// success
+		{ //04// success
 			db:   mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
 			id:   1,
 			year: 2021,
 			days: []core.DiaryDay{mock.Diary210101(), mock.Diary210102()},
 		},
-		{ //04// no entries for specified date
+		{ //05// no entries for specified date
 			db:   mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
 			id:   1,
 			year: 2020,
 			days: []core.DiaryDay{},
 		},
-		{ //05// success for specific month
+		{ //06// success for specific month
 			db:    mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary210201()),
 			id:    1,
 			year:  2021,
 			month: 2,
 			days:  []core.DiaryDay{mock.Diary210201()},
 		},
-		{ //06// no entries for specified month
+		{ //07// no entries for specified month
 			db:    mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary210201()),
 			id:    1,
 			year:  2021,

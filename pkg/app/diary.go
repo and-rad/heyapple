@@ -171,7 +171,9 @@ func (q *DiaryEntries) Fetch(db DB) error {
 	}
 
 	date := q.Date.Truncate(time.Hour * 24)
-	if entries, err := db.DiaryEntries(q.ID, date); err != nil {
+	if entries, err := db.DiaryEntries(q.ID, date); err == ErrNotFound {
+		q.Entries = []core.DiaryEntry{}
+	} else if err != nil {
 		return err
 	} else {
 		q.Entries = entries
@@ -196,7 +198,9 @@ func (q *DiaryDays) Fetch(db DB) error {
 		return ErrNotFound
 	}
 
-	if days, err := db.DiaryDays(q.ID, q.Year, q.Month, 0); err != nil {
+	if days, err := db.DiaryDays(q.ID, q.Year, q.Month, 0); err == ErrNotFound {
+		q.Days = []core.DiaryDay{}
+	} else if err != nil {
 		return err
 	} else {
 		q.Days = days

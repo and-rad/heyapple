@@ -156,6 +156,9 @@ func (c *SaveDiaryEntries) Execute(db DB) error {
 	return nil
 }
 
+// DiaryEntries is a query to fetch diary entries for
+// a given date and a user identified by ID from the
+// food database.
 type DiaryEntries struct {
 	Date    time.Time
 	Entries []core.DiaryEntry

@@ -23,6 +23,7 @@ package mock
 
 import (
 	"errors"
+	"fmt"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"strconv"
@@ -358,7 +359,7 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 		return nil, err
 	}
 	day := date.Truncate(time.Hour * 24)
-	var entries []core.DiaryEntry
+	entries := []core.DiaryEntry{}
 	for _, e := range db.Entries {
 		if e.Day() == day {
 			entries = append(entries, e)
@@ -378,13 +379,13 @@ func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {
 
 	comp := strconv.FormatInt(int64(year), 10)
 	if month > 0 {
-		comp += "-" + strconv.FormatInt(int64(month), 10)
+		comp += fmt.Sprintf("-%02d", month)
 	}
 	if day > 0 {
-		comp += "-" + strconv.FormatInt(int64(day), 10)
+		comp += fmt.Sprintf("-%02d", day)
 	}
 
-	var days []core.DiaryDay
+	days := []core.DiaryDay{}
 	for _, d := range db.Days {
 		if strings.HasPrefix(d.Date, comp) {
 			days = append(days, d)

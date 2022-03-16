@@ -24,6 +24,7 @@ import (
 	"heyapple/pkg/core"
 	"reflect"
 	"testing"
+	"time"
 )
 
 func TestAddDiaryEntries_Execute(t *testing.T) {
@@ -214,6 +215,119 @@ func TestSaveDiaryEntries_Execute(t *testing.T) {
 
 		if !reflect.DeepEqual(data.db.Entries, data.entries) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.Entries, data.entries)
+		}
+	}
+}
+
+func TestDiaryEntries_Fetch(t *testing.T) {
+	for idx, data := range []struct {
+		db   *mock.DB
+		id   int
+		date time.Time
+
+		entries []core.DiaryEntry
+		err     error
+	}{
+		{ //00// connection failed
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			id:  1,
+			err: mock.ErrDOS,
+		},
+		{ //01// diary doesn't exist
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //02// empty db
+			db:      mock.NewDB(),
+			id:      1,
+			entries: []core.DiaryEntry{},
+		},
+		{ //03// success
+			db:      mock.NewDB().WithEntries(mock.Entry1(), mock.Entry2()),
+			id:      1,
+			date:    mock.Date1,
+			entries: []core.DiaryEntry{mock.Entry1(), mock.Entry2()},
+		},
+		{ //04// no entries for specified date
+			db:      mock.NewDB().WithEntries(mock.Entry1(), mock.Entry2()),
+			id:      1,
+			date:    mock.Day2,
+			entries: []core.DiaryEntry{},
+		},
+	} {
+		qry := &app.DiaryEntries{ID: data.id, Date: data.date}
+		err := qry.Fetch(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(qry.Entries, data.entries) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, qry.Entries, data.entries)
+		}
+	}
+}
+
+func TestDiaryDays_Fetch(t *testing.T) {
+	for idx, data := range []struct {
+		db    *mock.DB
+		id    int
+		year  int
+		month int
+
+		days []core.DiaryDay
+		err  error
+	}{
+		{ //00// connection failed
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			id:  1,
+			err: mock.ErrDOS,
+		},
+		{ //01// diary doesn't exist
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //02// empty db
+			db:   mock.NewDB(),
+			id:   1,
+			days: []core.DiaryDay{},
+		},
+		{ //03// success
+			db:   mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
+			id:   1,
+			year: 2021,
+			days: []core.DiaryDay{mock.Diary210101(), mock.Diary210102()},
+		},
+		{ //04// no entries for specified date
+			db:   mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
+			id:   1,
+			year: 2020,
+			days: []core.DiaryDay{},
+		},
+		{ //05// success for specific month
+			db:    mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary210201()),
+			id:    1,
+			year:  2021,
+			month: 2,
+			days:  []core.DiaryDay{mock.Diary210201()},
+		},
+		{ //06// no entries for specified month
+			db:    mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary210201()),
+			id:    1,
+			year:  2021,
+			month: 3,
+			days:  []core.DiaryDay{},
+		},
+	} {
+		qry := &app.DiaryDays{ID: data.id, Year: data.year, Month: data.month}
+		err := qry.Fetch(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(qry.Days, data.days) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, qry.Days, data.days)
 		}
 	}
 }

@@ -62,6 +62,7 @@ const app = createApp(App);
 let locale = undefined;
 let food = undefined;
 let recipes = undefined;
+let diary = undefined;
 
 function initLocale(messages) {
 	locale = createI18n({
@@ -71,21 +72,29 @@ function initLocale(messages) {
 		messages,
 	});
 
-	if (food && recipes) {
+	if (food && recipes && diary) {
 		mountApp();
 	}
 }
 
 function initFoods(data) {
 	food = data;
-	if (locale && recipes) {
+	if (locale && recipes && diary) {
 		mountApp();
 	}
 }
 
 function initRecipes(data) {
 	recipes = data;
-	if (locale && food) {
+	if (locale && food && diary) {
+		mountApp();
+	}
+}
+
+function initDiary(data) {
+	diary = {};
+	data.forEach((d) => (diary[d.date] = d));
+	if (locale && food && recipes) {
 		mountApp();
 	}
 }
@@ -99,6 +108,7 @@ function mountApp() {
 	app.provide("perms", perms);
 	app.provide("food", ref(food));
 	app.provide("recipes", ref(recipes));
+	app.provide("diary", ref(diary));
 	app.provide("log", log);
 	app.use(router);
 	app.use(locale);
@@ -116,3 +126,8 @@ fetch("api/v1/foods")
 fetch("api/v1/recipes")
 	.then((response) => response.json())
 	.then(initRecipes);
+
+fetch("api/v1/diary")
+	.then((response) => response.json())
+	.then(initDiary)
+	.catch(() => initDiary([]));

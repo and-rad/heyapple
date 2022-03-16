@@ -241,6 +241,7 @@ func Entry4New() core.DiaryEntry {
 const (
 	Entry1Json = `{"date":"2022-03-12T08:43:00Z","recipe":"","food":{"id":2,"amount":150}}`
 	Entry2Json = `{"date":"2022-03-12T16:43:00Z","recipe":"","food":{"id":1,"amount":50}}`
+	Entry3Json = `{"date":"2022-03-13T08:33:00Z","recipe":"","food":{"id":1,"amount":50}}`
 )
 
 func Diary210101() core.DiaryDay {
@@ -286,6 +287,16 @@ func Diary220312() core.DiaryDay {
 		Fat:     Food2.Fat*1.5 + Food1.Fat*0.5,
 		Carbs:   Food2.Carbs*1.5 + Food1.Carbs*0.5,
 		Protein: Food2.Protein*1.5 + Food1.Protein*0.5,
+	}
+}
+
+func Diary220313() core.DiaryDay {
+	return core.DiaryDay{
+		Date:    "2022-03-13",
+		KCal:    Food1.KCal * 0.5,
+		Fat:     Food1.Fat * 0.5,
+		Carbs:   Food1.Carbs * 0.5,
+		Protein: Food1.Protein * 0.5,
 	}
 }
 

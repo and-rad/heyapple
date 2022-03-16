@@ -25,6 +25,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"sort"
 	"time"
 )
 
@@ -117,22 +118,42 @@ func (b *backup) load() {
 
 					month := int(e.Date.Month())
 					if _, ok := b.db.days[k][year][month]; !ok {
-						b.db.days[k][year][month] = []core.DiaryDay{{Date: e.Date.Format("2006-01-02")}}
+						b.db.days[k][year][month] = []core.DiaryDay{}
 					}
 
+					date := e.Date.Format("2006-01-02")
+					amount := e.Food.Amount * 0.01
+					food := b.db.food[e.Food.ID]
+
+					exists := false
 					for i := range b.db.days[k][year][month] {
-						amount := e.Food.Amount * 0.01
-						food := b.db.food[e.Food.ID]
 						day := &b.db.days[k][year][month][i]
-						day.KCal += food.KCal * amount
-						day.Fat += food.Fat * amount
-						day.Carbs += food.Carbs * amount
-						day.Protein += food.Protein * amount
+						if day.Date == date {
+							exists = true
+							day.KCal += food.KCal * amount
+							day.Fat += food.Fat * amount
+							day.Carbs += food.Carbs * amount
+							day.Protein += food.Protein * amount
+							break
+						}
+					}
+
+					if !exists {
+						b.db.days[k][year][month] = append(b.db.days[k][year][month], core.DiaryDay{
+							Date:    date,
+							KCal:    food.KCal * amount,
+							Fat:     food.Fat * amount,
+							Carbs:   food.Carbs * amount,
+							Protein: food.Protein * amount,
+						})
 					}
 				}
 			}
 		}
 	}
+
+	//fmt.Printf("%v\n", b.db.entries)
+	//fmt.Printf("%v\n", b.db.days)
 }
 
 func (b *backup) save() error {
@@ -181,6 +202,9 @@ func (b *backup) bytes() []byte {
 		for _, list := range days {
 			entries[id] = append(entries[id], list...)
 		}
+		sort.Slice(entries[id], func(i, j int) bool {
+			return entries[id][i].Date.Before(entries[id][j].Date)
+		})
 	}
 
 	data, _ := json.Marshal(backupData{

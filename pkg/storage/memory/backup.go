@@ -102,12 +102,33 @@ func (b *backup) load() {
 
 			for k, v := range db.Entries {
 				b.db.entries[k] = map[time.Time][]core.DiaryEntry{}
+				b.db.days[k] = map[int]map[int][]core.DiaryDay{}
 				for _, e := range v {
 					day := e.Date.Truncate(time.Hour * 24)
 					if _, ok := b.db.entries[k][day]; !ok {
 						b.db.entries[k][day] = []core.DiaryEntry{}
 					}
 					b.db.entries[k][day] = append(b.db.entries[k][day], e)
+
+					year := e.Date.Year()
+					if _, ok := b.db.days[k][year]; !ok {
+						b.db.days[k][year] = map[int][]core.DiaryDay{}
+					}
+
+					month := int(e.Date.Month())
+					if _, ok := b.db.days[k][year][month]; !ok {
+						b.db.days[k][year][month] = []core.DiaryDay{{Date: e.Date.Format("2006-01-02")}}
+					}
+
+					for i := range b.db.days[k][year][month] {
+						amount := e.Food.Amount * 0.01
+						food := b.db.food[e.Food.ID]
+						day := &b.db.days[k][year][month][i]
+						day.KCal += food.KCal * amount
+						day.Fat += food.Fat * amount
+						day.Carbs += food.Carbs * amount
+						day.Protein += food.Protein * amount
+					}
 				}
 			}
 		}

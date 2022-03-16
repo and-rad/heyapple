@@ -278,3 +278,13 @@ func Diary220302() core.DiaryDay {
 		Date: "2022-03-02",
 	}
 }
+
+func Diary220312() core.DiaryDay {
+	return core.DiaryDay{
+		Date:    "2022-03-12",
+		KCal:    Food2.KCal*1.5 + Food1.KCal*0.5,
+		Fat:     Food2.Fat*1.5 + Food1.Fat*0.5,
+		Carbs:   Food2.Carbs*1.5 + Food1.Carbs*0.5,
+		Protein: Food2.Protein*1.5 + Food1.Protein*0.5,
+	}
+}

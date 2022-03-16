@@ -48,7 +48,7 @@ var (
 		recUser: map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
 		userRec: map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
 		entries: entryMap{mock.User1.ID: {mock.Date1.Truncate(time.Hour * 24): {mock.Entry1(), mock.Entry2()}}},
-		days:    dayMap{},
+		days:    dayMap{mock.User1.ID: {2022: {3: {mock.Diary220312()}}}},
 		userID:  1,
 		foodID:  2,
 		recID:   1,

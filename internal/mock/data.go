@@ -288,3 +288,9 @@ func Diary220312() core.DiaryDay {
 		Protein: Food2.Protein*1.5 + Food1.Protein*0.5,
 	}
 }
+
+const (
+	Diary210101Json = `{"date":"2021-01-01","kcal":0,"fat":0,"carb":0,"prot":0}`
+	Diary210102Json = `{"date":"2021-01-02","kcal":0,"fat":0,"carb":0,"prot":0}`
+	Diary220301Json = `{"date":"2022-03-01","kcal":0,"fat":0,"carb":0,"prot":0}`
+)

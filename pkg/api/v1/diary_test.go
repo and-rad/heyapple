@@ -19,6 +19,7 @@
 package api_test
 
 import (
+	"fmt"
 	"heyapple/internal/mock"
 	"heyapple/pkg/api/v1"
 	"heyapple/pkg/app"
@@ -184,6 +185,157 @@ func TestSaveDiaryEntry(t *testing.T) {
 
 		if !reflect.DeepEqual(data.db.Entries, data.entries) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.Entries, data.entries)
+		}
+	}
+}
+
+func TestDiary(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// no session
+			db:     mock.NewDB(),
+			status: http.StatusUnauthorized,
+		},
+		{ //01// connection failure
+			db:        mock.NewDB().WithError(mock.ErrDOS),
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //02// diary doesn't exist
+			db:        mock.NewDB().WithError(app.ErrNotFound),
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //03// success
+			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
+			setCookie: true,
+			out:       fmt.Sprintf(`[%s,%s,%s]`, mock.Diary210101Json, mock.Diary210102Json, mock.Diary220301Json),
+			status:    http.StatusOK,
+		},
+		{ //04// invalid year format
+			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
+			params:    httprouter.Params{{Key: "year", Value: "thisone"}},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //05// success for year
+			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
+			params:    httprouter.Params{{Key: "year", Value: "2022"}},
+			setCookie: true,
+			out:       fmt.Sprintf(`[%s]`, mock.Diary220301Json),
+			status:    http.StatusOK,
+		},
+		{ //06// invalid month format
+			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
+			params:    httprouter.Params{{Key: "month", Value: "thisone"}},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //07// success for month
+			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210201(), mock.Diary220301()),
+			params:    httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "1"}},
+			setCookie: true,
+			out:       fmt.Sprintf(`[%s]`, mock.Diary210101Json),
+			status:    http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.Diary(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}
+
+func TestDiaryEntries(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// invalid year format
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "year", Value: "thisone"}},
+			status: http.StatusBadRequest,
+		},
+		{ //01// invalid month format
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "thisone"}},
+			status: http.StatusBadRequest,
+		},
+		{ //02// invalid day format
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "1"}, {Key: "day", Value: "today"}},
+			status: http.StatusBadRequest,
+		},
+		{ //03// no session
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "1"}, {Key: "day", Value: "2"}},
+			status: http.StatusUnauthorized,
+		},
+		{ //04// connection failure
+			db:        mock.NewDB().WithError(mock.ErrDOS),
+			params:    httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "1"}, {Key: "day", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //05// diary doesn't exist
+			db:        mock.NewDB().WithError(app.ErrNotFound),
+			params:    httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "1"}, {Key: "day", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //06// success
+			db:        mock.NewDB().WithEntries(mock.Entry1(), mock.Entry2(), mock.Entry3()),
+			params:    httprouter.Params{{Key: "year", Value: "2022"}, {Key: "month", Value: "3"}, {Key: "day", Value: "12"}},
+			setCookie: true,
+			out:       fmt.Sprintf(`[%s,%s]`, mock.Entry1Json, mock.Entry2Json),
+			status:    http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.DiaryEntries(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
 		}
 	}
 }

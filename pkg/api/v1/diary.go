@@ -118,6 +118,30 @@ func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// Diary returns a JSON-formatted list of objects that
+// summarize days from a user's diary. If no query
+// parameters are provided, the entire diary is returned,
+// otherwise only those dates that match {year} and {month}.
+// The function body is empty when errors occur and will
+// always be an array on success, even when there are
+// no entries in the database.
+//
+// Endpoint:
+//   /api/v1/diary/{year}/{month}
+// Methods:
+//   GET
+// Possible status codes:
+//   200 - OK
+//   400 - Malformed query parameters
+//   401 - Insufficient permission
+//   400 - Diary doesn't exist
+//   500 - Internal server error
+// Example output:
+//   [
+//     { "date": "2022-03-12", "kcal": 1987, ... },
+//     { "date": "2022-03-13", "kcal": 2150, ... },
+//     ...
+//   ]
 func Diary(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.DiaryDays{}
@@ -158,6 +182,28 @@ func Diary(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// DiaryEntries returns a JSON-formatted list of food
+// that is recorded in a user's diary. The date params
+// are not optional. The function body is empty when
+// errors occur and will always be an array on success,
+// even when there are no entries in the database.
+//
+// Endpoint:
+//   /api/v1/diary/{year}/{month}/{day}
+// Methods:
+//   GET
+// Possible status codes:
+//   200 - OK
+//   400 - Malformed query parameters
+//   401 - Insufficient permission
+//   400 - Diary doesn't exist
+//   500 - Internal server error
+// Example output:
+//   [
+//     "date": "2022-03-12T08:43:00Z", "food":{"id": 2, "amount": 150}, ...
+//     "date": "2022-03-12T13:05:00Z", "food":{"id": 1, "amount": 240}, ...
+//     ...
+//   ]
 func DiaryEntries(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		year, err := strconv.Atoi(ps.ByName("year"))

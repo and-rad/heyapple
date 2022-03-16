@@ -180,6 +180,10 @@ func (q *DiaryEntries) Fetch(db DB) error {
 	return nil
 }
 
+// DiaryDays is a query to fetch diary summaries for all
+// days that fit the Year and Month query fields. The
+// diary that is searched belongs to the user identified
+// by ID.
 type DiaryDays struct {
 	Days  []core.DiaryDay
 	ID    int

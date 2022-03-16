@@ -201,7 +201,7 @@ func Recipe(env *handler.Environment) httprouter.Handle {
 			return
 		}
 
-		query := &app.GetRecipe{Item: core.Recipe{ID: recID}}
+		query := &app.Recipe{Item: core.Recipe{ID: recID}}
 		if err := env.DB.Fetch(query); err == app.ErrNotFound {
 			w.WriteHeader(http.StatusNotFound)
 		} else if err != nil {

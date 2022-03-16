@@ -249,7 +249,7 @@ func TestRecipeAccess_HasPerms(t *testing.T) {
 	}
 }
 
-func TestGetRecipes_Fetch(t *testing.T) {
+func TestRecipes_Fetch(t *testing.T) {
 	for idx, data := range []struct {
 		db     *mock.DB
 		filter core.Filter
@@ -301,7 +301,7 @@ func TestGetRecipes_Fetch(t *testing.T) {
 	}
 }
 
-func TestGetRecipe_Fetch(t *testing.T) {
+func TestRecipe_Fetch(t *testing.T) {
 	for idx, data := range []struct {
 		id int
 		db *mock.DB
@@ -337,7 +337,7 @@ func TestGetRecipe_Fetch(t *testing.T) {
 			rec: mock.Recipe1(),
 		},
 	} {
-		qry := &app.GetRecipe{Item: core.Recipe{ID: data.rec.ID}}
+		qry := &app.Recipe{Item: core.Recipe{ID: data.rec.ID}}
 		err := qry.Fetch(data.db)
 
 		if err != data.err {

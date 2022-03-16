@@ -149,14 +149,14 @@ func (q *Recipes) Fetch(db DB) error {
 	return nil
 }
 
-// GetRecipe is a query to retrieve a single recipe from
+// Recipe is a query to retrieve a single recipe from
 // the food database. The item's ID is expected to be set
 // before the query is executed.
-type GetRecipe struct {
+type Recipe struct {
 	Item core.Recipe
 }
 
-func (q *GetRecipe) Fetch(db DB) error {
+func (q *Recipe) Fetch(db DB) error {
 	if q.Item.ID == 0 {
 		return ErrNotFound
 	}

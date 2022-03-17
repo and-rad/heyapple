@@ -28,6 +28,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"strconv"
 	"sync"
 	"testing"
 	"testing/fstest"
@@ -1399,4 +1400,80 @@ func TestDB_DiaryDays_Race(t *testing.T) {
 	}()
 
 	wg.Wait()
+}
+
+func TestDB_SetDiaryDay(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+		in core.DiaryDay
+
+		out dayMap
+		err error
+	}{
+		{ //00// diary doesn't exist
+			id:  1,
+			db:  NewDB(),
+			out: dayMap{},
+			err: app.ErrNotFound,
+		},
+		{ //01// date formatting error
+			id:  1,
+			db:  &DB{days: dayMap{1: {}}},
+			in:  core.DiaryDay{Date: "2012-11"},
+			out: dayMap{1: {}},
+			err: app.ErrNotFound,
+		},
+		{ //02// date formatting error
+			id:  1,
+			db:  &DB{days: dayMap{1: {}}},
+			in:  core.DiaryDay{Date: "yabba-dabba-doo"},
+			out: dayMap{1: {}},
+			err: &strconv.NumError{Func: "Atoi", Num: "yabba", Err: strconv.ErrSyntax},
+		},
+		{ //03// date formatting error
+			id:  1,
+			db:  &DB{days: dayMap{1: {}}},
+			in:  core.DiaryDay{Date: "2021-dabba-doo"},
+			out: dayMap{1: {}},
+			err: &strconv.NumError{Func: "Atoi", Num: "dabba", Err: strconv.ErrSyntax},
+		},
+		{ //04// success, add new
+			id:  1,
+			db:  &DB{days: dayMap{1: {}}},
+			in:  core.DiaryDay{Date: "2021-12-02"},
+			out: dayMap{1: {2021: {12: {{Date: "2021-12-02"}}}}},
+		},
+		{ //05// success, add new and sort
+			id: 1,
+			db: &DB{days: dayMap{1: {2021: {12: {{Date: "2021-12-06"}}}}}},
+			in: core.DiaryDay{Date: "2021-12-02"},
+			out: dayMap{1: {2021: {12: {
+				{Date: "2021-12-02"},
+				{Date: "2021-12-06"},
+			}}}},
+		},
+		{ //06// success, replace existing
+			id: 1,
+			db: &DB{days: dayMap{1: {2021: {12: {
+				{Date: "2021-12-02"},
+				{Date: "2021-12-06"},
+			}}}}},
+			in: core.DiaryDay{Date: "2021-12-02", KCal: 100, Fat: 200},
+			out: dayMap{1: {2021: {12: {
+				{Date: "2021-12-02", KCal: 100, Fat: 200},
+				{Date: "2021-12-06"},
+			}}}},
+		},
+	} {
+		err := data.db.SetDiaryDay(data.id, data.in)
+
+		if !reflect.DeepEqual(err, data.err) {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.db.days, data.out) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.days, data.out)
+		}
+	}
 }

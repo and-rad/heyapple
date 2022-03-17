@@ -30,6 +30,8 @@ import (
 	"heyapple/pkg/job"
 	"io/fs"
 	"sort"
+	"strconv"
+	"strings"
 	"sync"
 	"time"
 )
@@ -412,6 +414,49 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 		}
 	}
 	return nil, app.ErrNotFound
+}
+
+func (db *DB) SetDiaryDay(id int, day core.DiaryDay) error {
+	if _, ok := db.days[id]; !ok {
+		return app.ErrNotFound
+	}
+
+	date := strings.Split(day.Date, "-")
+	if len(date) != 3 {
+		return app.ErrNotFound
+	}
+
+	year, err := strconv.Atoi(date[0])
+	if err != nil {
+		return err
+	}
+
+	month, err := strconv.Atoi(date[1])
+	if err != nil {
+		return err
+	}
+
+	if _, ok := db.days[id][year]; !ok {
+		db.days[id][year] = map[int][]core.DiaryDay{}
+	}
+
+	if _, ok := db.days[id][year][month]; !ok {
+		db.days[id][year][month] = []core.DiaryDay{}
+	}
+
+	for i, d := range db.days[id][year][month] {
+		if d.Date == day.Date {
+			db.days[id][year][month][i] = day
+			return nil
+		}
+	}
+
+	db.days[id][year][month] = append(db.days[id][year][month], day)
+	sort.Slice(db.days[id][year][month], func(i, j int) bool {
+		return db.days[id][year][month][i].Date < db.days[id][year][month][j].Date
+	})
+
+	return nil
 }
 
 func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {

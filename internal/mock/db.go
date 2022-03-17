@@ -368,6 +368,20 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 	return entries, nil
 }
 
+func (db *DB) SetDiaryDay(id int, day core.DiaryDay) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+	for i, d := range db.Days {
+		if d.Date == day.Date {
+			db.Days[i] = day
+			return nil
+		}
+	}
+	db.Days = append(db.Days, day)
+	return nil
+}
+
 func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {
 	if err := db.popError(); err != nil {
 		return nil, err

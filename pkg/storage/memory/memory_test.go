@@ -28,7 +28,6 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
-	"strconv"
 	"sync"
 	"testing"
 	"testing/fstest"
@@ -1077,20 +1076,37 @@ func TestDB_NewDiaryEntries(t *testing.T) {
 		id int
 		in []core.DiaryEntry
 
-		out entryMap
-		err error
+		entries entryMap
+		days    dayMap
+		err     error
 	}{
 		{ //00// create new entry
-			id:  1,
-			db:  NewDB(),
-			in:  []core.DiaryEntry{mock.Entry1()},
-			out: entryMap{1: {mock.Day1: {mock.Entry1()}}},
+			id: 1,
+			db: &DB{
+				food:    map[int]core.Food{1: mock.Food1, 2: mock.Food2},
+				entries: entryMap{},
+				days:    dayMap{},
+			},
+			in:      []core.DiaryEntry{mock.Entry1()},
+			entries: entryMap{1: {mock.Day1: {mock.Entry1()}}},
+			days: dayMap{1: {2022: {3: {{
+				Date:    "2022-03-12",
+				KCal:    mock.Food2.KCal * 1.5,
+				Fat:     mock.Food2.Fat * 1.5,
+				Carbs:   mock.Food2.Carbs * 1.5,
+				Protein: mock.Food2.Protein * 1.5,
+			}}}}},
 		},
 		{ //01// make sure entries are sorted
-			id:  1,
-			db:  NewDB(),
-			in:  []core.DiaryEntry{mock.Entry2(), mock.Entry1()},
-			out: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}},
+			id: 1,
+			db: &DB{
+				food:    map[int]core.Food{1: mock.Food1, 2: mock.Food2},
+				entries: entryMap{},
+				days:    dayMap{},
+			},
+			in:      []core.DiaryEntry{mock.Entry2(), mock.Entry1()},
+			entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}},
+			days:    dayMap{1: {2022: {3: {mock.Diary220312()}}}},
 		},
 	} {
 		err := data.db.NewDiaryEntries(data.id, data.in...)
@@ -1099,8 +1115,12 @@ func TestDB_NewDiaryEntries(t *testing.T) {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
 		}
 
-		if !reflect.DeepEqual(data.db.entries, data.out) {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.out)
+		if !reflect.DeepEqual(data.db.entries, data.entries) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.entries)
+		}
+
+		if !reflect.DeepEqual(data.db.days, data.days) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.days, data.days)
 		}
 	}
 }
@@ -1111,42 +1131,55 @@ func TestDB_DelDiaryEntries(t *testing.T) {
 		id int
 		in []core.DiaryEntry
 
-		out entryMap
-		err error
+		entries entryMap
+		days    dayMap
+		err     error
 	}{
 		{ //00// diary doesn't exist
-			id:  1,
-			db:  NewDB(),
-			out: entryMap{},
-			err: app.ErrNotFound,
+			id:      1,
+			db:      NewDB(),
+			entries: entryMap{},
+			days:    dayMap{},
+			err:     app.ErrNotFound,
 		},
 		{ //01// empty diary, nothing to do
-			id:  1,
-			db:  &DB{entries: entryMap{1: {}}},
-			in:  []core.DiaryEntry{mock.Entry1()},
-			out: entryMap{1: {}},
+			id:      1,
+			db:      &DB{entries: entryMap{1: {}}},
+			in:      []core.DiaryEntry{mock.Entry1()},
+			entries: entryMap{1: {}},
 		},
 		{ //02// success, simple case
-			id:  1,
-			db:  &DB{entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}}},
-			in:  []core.DiaryEntry{mock.Entry2()},
-			out: entryMap{1: {mock.Day1: {mock.Entry1()}}},
+			id: 1,
+			db: &DB{
+				entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}},
+				days:    dayMap{1: {2022: {3: {mock.Diary220312()}}}},
+			},
+			in:      []core.DiaryEntry{mock.Entry2()},
+			entries: entryMap{1: {mock.Day1: {mock.Entry1()}}},
+			days:    dayMap{1: {2022: {3: {}}}},
 		},
 		{ //03// success, complex case
 			id: 1,
-			db: &DB{entries: entryMap{1: {
-				mock.Day1: {mock.Entry1(), mock.Entry2()},
-				mock.Day2: {mock.Entry3(), mock.Entry4()},
-			}}},
+			db: &DB{
+				entries: entryMap{1: {
+					mock.Day1: {mock.Entry1(), mock.Entry2()},
+					mock.Day2: {mock.Entry3(), mock.Entry4()},
+				}},
+				days: dayMap{1: {2022: {3: {
+					mock.Diary220312(),
+					mock.Diary220313(),
+				}}}},
+			},
 			in: []core.DiaryEntry{
 				mock.Entry3(),
 				mock.Entry4(),
 				mock.Entry2(),
 			},
-			out: entryMap{1: {
+			entries: entryMap{1: {
 				mock.Day1: {mock.Entry1()},
 				mock.Day2: {},
 			}},
+			days: dayMap{1: {2022: {3: {}}}},
 		},
 	} {
 		err := data.db.DelDiaryEntries(data.id, data.in...)
@@ -1155,8 +1188,12 @@ func TestDB_DelDiaryEntries(t *testing.T) {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
 		}
 
-		if !reflect.DeepEqual(data.db.entries, data.out) {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.out)
+		if !reflect.DeepEqual(data.db.entries, data.entries) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.entries)
+		}
+
+		if !reflect.DeepEqual(data.db.days, data.days) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.days, data.days)
 		}
 	}
 }
@@ -1167,42 +1204,81 @@ func TestDB_SetDiaryEntries(t *testing.T) {
 		id int
 		in []core.DiaryEntry
 
-		out entryMap
-		err error
+		entries entryMap
+		days    dayMap
+		err     error
 	}{
 		{ //00// diary doesn't exist
-			id:  1,
-			db:  NewDB(),
-			out: entryMap{},
-			err: app.ErrNotFound,
+			id:      1,
+			db:      NewDB(),
+			entries: entryMap{},
+			days:    dayMap{},
+			err:     app.ErrNotFound,
 		},
 		{ //01// empty diary, nothing to do
-			id:  1,
-			db:  &DB{entries: entryMap{1: {}}},
-			in:  []core.DiaryEntry{mock.Entry1()},
-			out: entryMap{1: {}},
+			id:      1,
+			db:      &DB{entries: entryMap{1: {}}},
+			in:      []core.DiaryEntry{mock.Entry1()},
+			entries: entryMap{1: {}},
 		},
 		{ //02// success, simple case
-			id:  1,
-			db:  &DB{entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}}},
-			in:  []core.DiaryEntry{mock.Entry1New()},
-			out: entryMap{1: {mock.Day1: {mock.Entry1New(), mock.Entry2()}}},
+			id: 1,
+			db: &DB{
+				food:    map[int]core.Food{1: mock.Food1, 2: mock.Food2},
+				entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}},
+				days:    dayMap{1: {2022: {3: {mock.Diary220312()}}}},
+			},
+			in:      []core.DiaryEntry{mock.Entry1New()},
+			entries: entryMap{1: {mock.Day1: {mock.Entry1New(), mock.Entry2()}}},
+			days: dayMap{1: {2022: {3: {{
+				Date:    "2022-03-12",
+				KCal:    mock.Food2.KCal*0.75 + mock.Food1.KCal*0.5,
+				Fat:     mock.Food2.Fat*0.75 + mock.Food1.Fat*0.5,
+				Carbs:   mock.Food2.Carbs*0.75 + mock.Food1.Carbs*0.5,
+				Protein: mock.Food2.Protein*0.75 + mock.Food1.Protein*0.5,
+			}}}}},
 		},
 		{ //03// success, complex case
 			id: 1,
-			db: &DB{entries: entryMap{1: {
-				mock.Day1: {mock.Entry1(), mock.Entry2()},
-				mock.Day2: {mock.Entry3(), mock.Entry4()},
-			}}},
+			db: &DB{
+				food: map[int]core.Food{
+					1: mock.Food1,
+					2: mock.Food2,
+				},
+				entries: entryMap{1: {
+					mock.Day1: {mock.Entry1(), mock.Entry2()},
+					mock.Day2: {mock.Entry3(), mock.Entry4()},
+				}},
+				days: dayMap{1: {2022: {3: {
+					mock.Diary220312(),
+					mock.Diary220313(),
+				}}}},
+			},
 			in: []core.DiaryEntry{
 				mock.Entry3New(),
 				mock.Entry4New(),
 				mock.Entry2New(),
 			},
-			out: entryMap{1: {
+			entries: entryMap{1: {
 				mock.Day1: {mock.Entry1(), mock.Entry2New()},
 				mock.Day2: {mock.Entry3New(), mock.Entry4New()},
 			}},
+			days: dayMap{1: {2022: {3: {
+				{
+					Date:    "2022-03-12",
+					KCal:    mock.Food2.KCal*1.5 + mock.Food1.KCal*0.9,
+					Fat:     mock.Food2.Fat*1.5 + mock.Food1.Fat*0.9,
+					Carbs:   mock.Food2.Carbs*1.5 + mock.Food1.Carbs*0.9,
+					Protein: mock.Food2.Protein*1.5 + mock.Food1.Protein*0.9,
+				},
+				{
+					Date:    "2022-03-13",
+					KCal:    mock.Food2.KCal*1.5 + mock.Food1.KCal*5.2,
+					Fat:     mock.Food2.Fat*1.5 + mock.Food1.Fat*5.2,
+					Carbs:   mock.Food2.Carbs*1.5 + mock.Food1.Carbs*5.2,
+					Protein: mock.Food2.Protein*1.5 + mock.Food1.Protein*5.2,
+				},
+			}}}},
 		},
 	} {
 		err := data.db.SetDiaryEntries(data.id, data.in...)
@@ -1211,8 +1287,12 @@ func TestDB_SetDiaryEntries(t *testing.T) {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
 		}
 
-		if !reflect.DeepEqual(data.db.entries, data.out) {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.out)
+		if !reflect.DeepEqual(data.db.entries, data.entries) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.entries, data.entries)
+		}
+
+		if !reflect.DeepEqual(data.db.days, data.days) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.days, data.days)
 		}
 	}
 }
@@ -1402,78 +1482,55 @@ func TestDB_DiaryDays_Race(t *testing.T) {
 	wg.Wait()
 }
 
-func TestDB_SetDiaryDay(t *testing.T) {
+func TestDB_refreshDiaryDay(t *testing.T) {
 	for idx, data := range []struct {
-		db *DB
-		id int
-		in core.DiaryDay
+		db   *DB
+		id   int
+		date time.Time
 
-		out dayMap
-		err error
+		days dayMap
 	}{
-		{ //00// diary doesn't exist
-			id:  1,
-			db:  NewDB(),
-			out: dayMap{},
-			err: app.ErrNotFound,
+		{ //00// empty data, technically correct
+			db:   &DB{food: map[int]core.Food{}, entries: entryMap{}, days: dayMap{}},
+			days: dayMap{0: {1: {1: {core.DiaryDay{Date: "0001-01-01"}}}}},
 		},
-		{ //01// date formatting error
-			id:  1,
-			db:  &DB{days: dayMap{1: {}}},
-			in:  core.DiaryDay{Date: "2012-11"},
-			out: dayMap{1: {}},
-			err: app.ErrNotFound,
+		{ //01// no entries, clear the day
+			db: &DB{
+				entries: entryMap{},
+				days:    dayMap{1: {2022: {3: {mock.Diary220312()}}}},
+			},
+			id:   1,
+			date: mock.Day1,
+			days: dayMap{1: {2022: {3: {}}}},
 		},
-		{ //02// date formatting error
-			id:  1,
-			db:  &DB{days: dayMap{1: {}}},
-			in:  core.DiaryDay{Date: "yabba-dabba-doo"},
-			out: dayMap{1: {}},
-			err: &strconv.NumError{Func: "Atoi", Num: "yabba", Err: strconv.ErrSyntax},
+		{ //02// update existing day
+			db: &DB{
+				food:    map[int]core.Food{1: mock.Food1, 2: mock.Food2},
+				entries: entryMap{1: {mock.Day1: {mock.Entry1(), mock.Entry2()}}},
+				days:    dayMap{1: {2022: {3: {core.DiaryDay{Date: "2022-03-12"}}}}},
+			},
+			id:   1,
+			date: mock.Day1,
+			days: dayMap{1: {2022: {3: {mock.Diary220312()}}}},
 		},
-		{ //03// date formatting error
-			id:  1,
-			db:  &DB{days: dayMap{1: {}}},
-			in:  core.DiaryDay{Date: "2021-dabba-doo"},
-			out: dayMap{1: {}},
-			err: &strconv.NumError{Func: "Atoi", Num: "dabba", Err: strconv.ErrSyntax},
-		},
-		{ //04// success, add new
-			id:  1,
-			db:  &DB{days: dayMap{1: {}}},
-			in:  core.DiaryDay{Date: "2021-12-02"},
-			out: dayMap{1: {2021: {12: {{Date: "2021-12-02"}}}}},
-		},
-		{ //05// success, add new and sort
-			id: 1,
-			db: &DB{days: dayMap{1: {2021: {12: {{Date: "2021-12-06"}}}}}},
-			in: core.DiaryDay{Date: "2021-12-02"},
-			out: dayMap{1: {2021: {12: {
-				{Date: "2021-12-02"},
-				{Date: "2021-12-06"},
-			}}}},
-		},
-		{ //06// success, replace existing
-			id: 1,
-			db: &DB{days: dayMap{1: {2021: {12: {
-				{Date: "2021-12-02"},
-				{Date: "2021-12-06"},
-			}}}}},
-			in: core.DiaryDay{Date: "2021-12-02", KCal: 100, Fat: 200},
-			out: dayMap{1: {2021: {12: {
-				{Date: "2021-12-02", KCal: 100, Fat: 200},
-				{Date: "2021-12-06"},
-			}}}},
+		{ //03// add new day
+			db: &DB{
+				food: map[int]core.Food{1: mock.Food1, 2: mock.Food2},
+				entries: entryMap{1: {
+					mock.Day1: {mock.Entry1(), mock.Entry2()},
+					mock.Day2: {mock.Entry3()},
+				}},
+				days: dayMap{1: {2022: {3: {mock.Diary220312()}}}},
+			},
+			id:   1,
+			date: mock.Day2,
+			days: dayMap{1: {2022: {3: {mock.Diary220312(), mock.Diary220313()}}}},
 		},
 	} {
-		err := data.db.SetDiaryDay(data.id, data.in)
+		data.db.refreshDiaryDay(data.id, data.date)
 
-		if !reflect.DeepEqual(err, data.err) {
-			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
-		}
-
-		if !reflect.DeepEqual(data.db.days, data.out) {
-			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.days, data.out)
+		if !reflect.DeepEqual(data.db.days, data.days) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.days, data.days)
 		}
 	}
 }

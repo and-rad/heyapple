@@ -115,3 +115,27 @@ func TestDiaryEntry_Day(t *testing.T) {
 		}
 	}
 }
+
+func TestDiaryDay_Empty(t *testing.T) {
+	for idx, data := range []struct {
+		day core.DiaryDay
+		ok  bool
+	}{
+		{ //00// empty day
+			day: core.DiaryDay{},
+			ok:  true,
+		},
+		{ //01// ignore date
+			day: core.DiaryDay{Date: "2022-03-12"},
+			ok:  true,
+		},
+		{ //02//
+			day: core.DiaryDay{KCal: 100},
+			ok:  false,
+		},
+	} {
+		if ok := data.day.Empty(); ok != data.ok {
+			t.Errorf("test case %d: result mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)
+		}
+	}
+}

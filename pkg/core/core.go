@@ -164,3 +164,7 @@ type DiaryDay struct {
 	Carbs   float32 `json:"carb"`
 	Protein float32 `json:"prot"`
 }
+
+func (d DiaryDay) Empty() bool {
+	return d == (DiaryDay{Date: d.Date})
+}

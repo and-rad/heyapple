@@ -38,6 +38,7 @@ var (
 
 	Date1Date = Date1.Format("2006-01-02")
 	Date2Date = Date2.Format("2006-01-02")
+	Date3Date = Date3.Format("2006-01-02")
 
 	Date1Time = Date1.Format("15:04")
 	Date2Time = Date2.Format("15:04")

@@ -30,8 +30,6 @@ import (
 	"heyapple/pkg/job"
 	"io/fs"
 	"sort"
-	"strconv"
-	"strings"
 	"sync"
 	"time"
 )
@@ -339,20 +337,26 @@ func (db *DB) NewDiaryEntries(id int, entries ...core.DiaryEntry) error {
 	}
 
 	dirty := map[time.Time]struct{}{}
+	unsorted := map[time.Time]struct{}{}
 	for _, e := range entries {
 		date := e.Date.Truncate(time.Hour * 24)
 		if _, ok := days[date]; !ok {
 			days[date] = []core.DiaryEntry{e}
-			continue
+		} else {
+			days[date] = append(days[date], e)
+			unsorted[date] = struct{}{}
 		}
-		days[date] = append(days[date], e)
 		dirty[date] = struct{}{}
 	}
 
-	for date := range dirty {
+	for date := range unsorted {
 		sort.Slice(days[date], func(i, j int) bool {
 			return days[date][i].Date.Before(days[date][j].Date)
 		})
+	}
+
+	for date := range dirty {
+		db.refreshDiaryDay(id, date)
 	}
 
 	return nil
@@ -364,6 +368,7 @@ func (db *DB) SetDiaryEntries(id int, entries ...core.DiaryEntry) error {
 		return app.ErrNotFound
 	}
 
+	dirty := map[time.Time]struct{}{}
 	for _, entry := range entries {
 		date := entry.Day()
 		if _, ok := days[date]; !ok {
@@ -373,9 +378,14 @@ func (db *DB) SetDiaryEntries(id int, entries ...core.DiaryEntry) error {
 		for i, e := range days[date] {
 			if e.Equal(entry) {
 				days[date][i] = entry
+				dirty[date] = struct{}{}
 				break
 			}
 		}
+	}
+
+	for date := range dirty {
+		db.refreshDiaryDay(id, date)
 	}
 
 	return nil
@@ -387,6 +397,7 @@ func (db *DB) DelDiaryEntries(id int, entries ...core.DiaryEntry) error {
 		return app.ErrNotFound
 	}
 
+	dirty := map[time.Time]struct{}{}
 	for _, entry := range entries {
 		date := entry.Day()
 		if _, ok := days[date]; !ok {
@@ -401,7 +412,14 @@ func (db *DB) DelDiaryEntries(id int, entries ...core.DiaryEntry) error {
 			}
 		}
 
-		days[date] = days[date][:end]
+		if end != len(days[date]) {
+			days[date] = days[date][:end]
+			dirty[date] = struct{}{}
+		}
+	}
+
+	for date := range dirty {
+		db.refreshDiaryDay(id, date)
 	}
 
 	return nil
@@ -414,49 +432,6 @@ func (db *DB) DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error) {
 		}
 	}
 	return nil, app.ErrNotFound
-}
-
-func (db *DB) SetDiaryDay(id int, day core.DiaryDay) error {
-	if _, ok := db.days[id]; !ok {
-		return app.ErrNotFound
-	}
-
-	date := strings.Split(day.Date, "-")
-	if len(date) != 3 {
-		return app.ErrNotFound
-	}
-
-	year, err := strconv.Atoi(date[0])
-	if err != nil {
-		return err
-	}
-
-	month, err := strconv.Atoi(date[1])
-	if err != nil {
-		return err
-	}
-
-	if _, ok := db.days[id][year]; !ok {
-		db.days[id][year] = map[int][]core.DiaryDay{}
-	}
-
-	if _, ok := db.days[id][year][month]; !ok {
-		db.days[id][year][month] = []core.DiaryDay{}
-	}
-
-	for i, d := range db.days[id][year][month] {
-		if d.Date == day.Date {
-			db.days[id][year][month][i] = day
-			return nil
-		}
-	}
-
-	db.days[id][year][month] = append(db.days[id][year][month], day)
-	sort.Slice(db.days[id][year][month], func(i, j int) bool {
-		return db.days[id][year][month][i].Date < db.days[id][year][month][j].Date
-	})
-
-	return nil
 }
 
 func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {
@@ -508,6 +483,58 @@ func (db *DB) Fetch(q app.Query) error {
 	db.mtx.RLock()
 	defer db.mtx.RUnlock()
 	return q.Fetch(db)
+}
+
+func (db *DB) refreshDiaryDay(id int, date time.Time) {
+	if _, ok := db.days[id]; !ok {
+		db.days[id] = map[int]map[int][]core.DiaryDay{}
+	}
+
+	day := core.DiaryDay{Date: date.Format("2006-01-02")}
+	entries := db.entries[id][date]
+	for _, e := range entries {
+		if f, ok := db.food[e.Food.ID]; ok {
+			amount := e.Food.Amount * 0.01
+			day.KCal += f.KCal * amount
+			day.Fat += f.Fat * amount
+			day.Carbs += f.Carbs * amount
+			day.Protein += f.Protein * amount
+		}
+	}
+
+	year := date.Year()
+	month := int(date.Month())
+
+	if day.Empty() {
+		months := db.days[id][year]
+		for i, d := range months[month] {
+			if d.Date == day.Date {
+				months[month] = append(months[month][:i], months[month][i+1:]...)
+				return
+			}
+		}
+	}
+
+	if _, ok := db.days[id][year]; !ok {
+		db.days[id][year] = map[int][]core.DiaryDay{}
+	}
+
+	if _, ok := db.days[id][year][month]; !ok {
+		db.days[id][year][month] = []core.DiaryDay{}
+	}
+
+	months := db.days[id][year]
+	for i, d := range months[month] {
+		if d.Date == day.Date {
+			months[month][i] = day
+			return
+		}
+	}
+
+	months[month] = append(months[month], day)
+	sort.Slice(months[month], func(i, j int) bool {
+		return months[month][i].Date < months[month][j].Date
+	})
 }
 
 func loadDefault(fs fs.FS, name string) []byte {

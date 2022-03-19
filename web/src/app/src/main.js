@@ -1,5 +1,6 @@
 import { createApp, ref } from "vue";
 import { createI18n } from "vue-i18n";
+import { Settings } from "luxon";
 import App from "./App.vue";
 import router from "./router";
 
@@ -8,6 +9,7 @@ let lang = document.documentElement.lang || navigator.language;
 if (!lang && navigator.languages != undefined) {
 	lang = navigator.languages[0];
 }
+Settings.defaultLocale = lang;
 
 // CSRF protection
 const csrfMeta = document.querySelector("meta[name='_csrf']");

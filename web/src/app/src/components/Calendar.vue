@@ -229,13 +229,19 @@ onMounted(() => onCalendarChanged());
 	fill: #e0e0e0;
 }
 
+.calendar > div > div {
+	display: flex;
+	margin: 0 0.25em;
+}
+
 .calendar > div > div select {
-	width: auto;
 	display: inline-block;
+	flex-basis: 40%;
 }
 
 .calendar > div > div .month {
 	margin-right: 0.25em;
+	flex-basis: 60%;
 }
 
 .calendar .prev svg {

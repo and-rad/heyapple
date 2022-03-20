@@ -136,7 +136,13 @@ function onDateSelected(dates) {
 			<section v-if="current">
 				<h2>{{ t("aria.headlog") }}</h2>
 				<p class="msg-noitems" v-if="!current.entries" v-html="t('diary.noitems')"></p>
-				<EntryList ref="entries" :entries="current.entries" :nutrient="currentNutrient" :disabled="!editMode" />
+				<EntryList
+					ref="entries"
+					v-if="current.entries"
+					:entries="current.entries"
+					:nutrient="currentNutrient"
+					:disabled="!editMode"
+				/>
 			</section>
 		</template>
 	</Main>

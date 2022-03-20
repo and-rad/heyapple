@@ -38,7 +38,6 @@ function groupedByHour() {
 	if (prop.entries) {
 		let groups = {};
 		prop.entries.forEach((entry) => {
-			console.log(entry);
 			let hour = parseInt(entry.time);
 			let start = DateTime.fromObject({ hours: hour - (hour % 2) });
 			let name = start.toFormat("t") + " - " + start.plus({ hours: 2 }).toFormat("t");
@@ -78,7 +77,6 @@ function groupedByHour() {
 
 		result = Object.values(groups);
 		result.sort((a, b) => a.name < b.name);
-		console.log(result);
 	}
 
 	return result;

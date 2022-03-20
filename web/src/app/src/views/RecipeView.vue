@@ -469,6 +469,10 @@ onMounted(() => (filtered.value = [...recipes.value]));
 	text-align: center;
 }
 
+#details .ingredients label {
+	color: var(--color-text);
+}
+
 @media only screen and (min-width: 400px) {
 	#details section.prep > div {
 		display: flex;

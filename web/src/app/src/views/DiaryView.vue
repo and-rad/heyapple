@@ -218,4 +218,8 @@ function onDateSelected(dates) {
 	border-color: var(--color-secondary);
 	color: var(--color-text);
 }
+
+#details .diary-entry-list label {
+	color: var(--color-text);
+}
 </style>

@@ -234,6 +234,7 @@ main.open-details #details {
 
 #details label {
 	flex-basis: 60%;
+	width: 5em;
 	margin-right: 0.5em;
 	white-space: nowrap;
 	text-overflow: ellipsis;

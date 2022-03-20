@@ -282,16 +282,17 @@ onMounted(() => {
 	border: 1px solid var(--color-primary);
 }
 
-.calendar td.active button:hover {
-	box-shadow: inset 0 0 100px var(--color-primary-light);
-}
-
 .calendar td.today button {
 	border: 1px solid var(--color-secondary);
 }
 
-.calendar td.today button:hover {
-	box-shadow: inset 0 0 100px var(--color-secondary-light);
+@media (hover: hover) {
+	.calendar td.active button:hover {
+		box-shadow: inset 0 0 100px var(--color-primary-light);
+	}
+	.calendar td.today button:hover {
+		box-shadow: inset 0 0 100px var(--color-secondary-light);
+	}
 }
 
 .calendar td.today.active button:before {

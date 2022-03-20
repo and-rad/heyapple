@@ -65,6 +65,7 @@ let locale = undefined;
 let food = undefined;
 let recipes = undefined;
 let diary = undefined;
+let prefs = undefined;
 
 function initLocale(messages) {
 	locale = createI18n({
@@ -74,21 +75,21 @@ function initLocale(messages) {
 		messages,
 	});
 
-	if (food && recipes && diary) {
+	if (food && recipes && diary && prefs) {
 		mountApp();
 	}
 }
 
 function initFoods(data) {
 	food = data;
-	if (locale && recipes && diary) {
+	if (locale && recipes && diary && prefs) {
 		mountApp();
 	}
 }
 
 function initRecipes(data) {
 	recipes = data;
-	if (locale && food && diary) {
+	if (locale && food && diary && prefs) {
 		mountApp();
 	}
 }
@@ -96,7 +97,14 @@ function initRecipes(data) {
 function initDiary(data) {
 	diary = {};
 	data.forEach((d) => (diary[d.date] = d));
-	if (locale && food && recipes) {
+	if (locale && food && recipes && prefs) {
+		mountApp();
+	}
+}
+
+function initPrefs(data) {
+	prefs = data;
+	if (locale && food && recipes && diary) {
 		mountApp();
 	}
 }
@@ -111,6 +119,7 @@ function mountApp() {
 	app.provide("food", ref(food));
 	app.provide("recipes", ref(recipes));
 	app.provide("diary", ref(diary));
+	app.provide("prefs", ref(prefs));
 	app.provide("log", log);
 	app.use(router);
 	app.use(locale);
@@ -132,3 +141,18 @@ fetch("api/v1/recipes")
 fetch("api/v1/diary")
 	.then((response) => response.json())
 	.then(initDiary);
+
+// TODO this needs an actual implementation
+fetch("api/v1/prefs")
+	.then((response) => response.json())
+	.then(initPrefs)
+	.catch(() => {
+		initPrefs({
+			rdi: {
+				kcal: 2000,
+				fat: 60,
+				carb: 270,
+				prot: 80,
+			},
+		});
+	});

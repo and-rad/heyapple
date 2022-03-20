@@ -98,6 +98,7 @@ defineExpose({ showDetails });
 #details > section > h2,
 #filter > section > h2 {
 	margin-bottom: 1rem;
+	padding: 0;
 	font-size: 12px;
 	font-weight: 700;
 	color: var(--color-text);
@@ -205,6 +206,7 @@ main.open-details #details {
 }
 
 #details label + span,
+#details label + button + span,
 #details input:disabled,
 #details input[type="text"]:read-only,
 #details input[type="number"]:read-only {
@@ -239,6 +241,7 @@ main.open-details #details {
 }
 
 #details label + span,
+#details label + button + span,
 #details input[type="text"],
 #details input[type="number"] {
 	flex-basis: 2.5em;
@@ -251,6 +254,7 @@ main.open-details #details {
 }
 
 #details label + span:last-child,
+#details label + button + span:last-child,
 #details input[type="text"]:last-child,
 #details input[type="number"]:last-child {
 	padding: 0;

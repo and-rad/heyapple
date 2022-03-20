@@ -111,7 +111,10 @@ function onDay(evt) {
 	emit("selection", selection);
 }
 
-onMounted(() => onCalendarChanged());
+onMounted(() => {
+	onCalendarChanged();
+	emit("selection", selection);
+});
 </script>
 
 <template>

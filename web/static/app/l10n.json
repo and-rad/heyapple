@@ -21,6 +21,7 @@
 		"aria": {
 			"headcal": "Calendar",
 			"headingred": "Ingredients",
+			"headlog": "Log",
 			"headmacro1": "Primary Macronutrients",
 			"headmacro2": "Secondary Macronutrients",
 			"headnew": "New item",
@@ -58,6 +59,9 @@
 		},
 		"details": {
 			"noitem": "Select an item for details"
+		},
+		"diary": {
+			"noitems": "There is no food logged for this day.<br>Time to <a href='#/food'>add some</a>!"
 		},
 		"err": {
 			"err": "Unknown error occurred"

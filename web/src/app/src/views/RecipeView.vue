@@ -18,6 +18,7 @@ const log = inject("log");
 const csrf = inject("csrfToken");
 const perms = inject("perms");
 const recipes = inject("recipes");
+const diary = inject("diary");
 
 const filtered = ref([]);
 const current = ref(null);
@@ -179,6 +180,11 @@ function addToDiary(date, time) {
 			if (!response.ok) {
 				throw t("adddiary.err" + response.status);
 			}
+			return fetch("/api/v1/diary/" + date.replaceAll("-", "/"));
+		})
+		.then((response) => response.json())
+		.then((data) => {
+			diary.value[date] = data[0];
 			amount.value = 1;
 			log.msg(t("adddiary.ok"));
 		})

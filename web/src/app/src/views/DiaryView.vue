@@ -24,12 +24,14 @@ let hasTabDrag = false;
 
 function onTabSlide(evt) {
 	evt.stopPropagation();
+	evt.preventDefault();
 	moveTabBar(evt.target.closest("ul"), evt.movementX);
 	hasTabDrag = true;
 }
 
 function onTabWheel(evt) {
 	evt.stopPropagation();
+	evt.preventDefault();
 	let delta = Math.max(-16, Math.min(-evt.deltaY, 16));
 	moveTabBar(evt.target.closest("ul"), delta);
 }

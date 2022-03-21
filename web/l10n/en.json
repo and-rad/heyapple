@@ -38,6 +38,7 @@
 	"form.pass": "Password",
 	"form.reset": "Save password",
 
+	"home.betawarn": "HeyApple is still in its beta phase. As such, many features are incomplete or missing. A full release is planned for late 2022.",
 	"home.copy": "&copy; 2021-2022 the HeyApple development team",
 	"home.copyshort": "&copy; 2021-2022",
 	"home.legal": "Legal Notice",

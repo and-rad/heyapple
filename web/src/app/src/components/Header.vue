@@ -40,7 +40,7 @@ document.addEventListener("click", function () {
 <template>
 	<header>
 		<HeaderImage id="logo" />
-		<div id="app-name"><span>Hey</span><span>Apple</span></div>
+		<div id="app-name"><span>Hey</span><span>Apple<sup>beta</sup></span></div>
 		<nav>
 			<button @click="toggleMenu">
 				<BackArrow />
@@ -107,6 +107,12 @@ header #app-name {
 
 header #app-name span:last-child {
 	font-weight: 300;
+}
+
+header #app-name sup {
+	text-transform: lowercase;
+	font-size: 0.5em;
+	margin-left: 0.25em;
 }
 
 header nav {

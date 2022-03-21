@@ -89,7 +89,8 @@ func main() {
 	router.GET("/api/v1/diary", chain(api.Diary(env), mw.JSON()))
 	router.GET("/api/v1/diary/:year", chain(api.Diary(env), mw.JSON()))
 	router.GET("/api/v1/diary/:year/:month", chain(api.Diary(env), mw.JSON()))
-	router.GET("/api/v1/diary/:year/:month/:day", chain(api.DiaryEntries(env), mw.JSON()))
+	router.GET("/api/v1/diary/:year/:month/:day", chain(api.Diary(env), mw.JSON()))
+	router.GET("/api/v1/diary/:year/:month/:day/entries", chain(api.DiaryEntries(env), mw.JSON()))
 	router.POST("/api/v1/diary/:date", chain(api.SaveDiaryEntry(env), mw.JSON()))
 	router.PUT("/api/v1/diary/:date", chain(api.SaveDiaryEntry(env), mw.JSON()))
 

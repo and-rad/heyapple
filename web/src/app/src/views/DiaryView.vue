@@ -78,7 +78,7 @@ function onDateSelected(dates) {
 		return;
 	}
 
-	fetch("/api/v1/diary/" + date.replaceAll("-", "/"))
+	fetch(`/api/v1/diary/${date.replaceAll("-", "/")}/entries`)
 		.then((response) => response.json())
 		.then((data) => {
 			data.forEach((d) => (d.time = d.date.split("T")[1].slice(0, 5)));

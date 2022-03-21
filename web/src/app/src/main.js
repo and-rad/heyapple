@@ -130,20 +130,20 @@ fetch("/app/l10n.json")
 	.then((response) => response.json())
 	.then(initLocale);
 
-fetch("api/v1/foods")
+fetch("/api/v1/foods")
 	.then((response) => response.json())
 	.then(initFoods);
 
-fetch("api/v1/recipes")
+fetch("/api/v1/recipes")
 	.then((response) => response.json())
 	.then(initRecipes);
 
-fetch("api/v1/diary")
+fetch("/api/v1/diary")
 	.then((response) => response.json())
 	.then(initDiary);
 
 // TODO this needs an actual implementation
-fetch("api/v1/prefs")
+fetch("/api/v1/prefs")
 	.then((response) => response.json())
 	.then(initPrefs)
 	.catch(() => {

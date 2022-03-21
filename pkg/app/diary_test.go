@@ -279,6 +279,7 @@ func TestDiaryDays_Fetch(t *testing.T) {
 		id    int
 		year  int
 		month int
+		day   int
 
 		days []core.DiaryDay
 		err  error
@@ -328,8 +329,24 @@ func TestDiaryDays_Fetch(t *testing.T) {
 			month: 3,
 			days:  []core.DiaryDay{},
 		},
+		{ //08// success for specific day
+			db:    mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary210201()),
+			id:    1,
+			year:  2021,
+			month: 1,
+			day:   2,
+			days:  []core.DiaryDay{mock.Diary210102()},
+		},
+		{ //09// no entries for specified day
+			db:    mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary210201()),
+			id:    1,
+			year:  2021,
+			month: 2,
+			day:   3,
+			days:  []core.DiaryDay{},
+		},
 	} {
-		qry := &app.DiaryDays{ID: data.id, Year: data.year, Month: data.month}
+		qry := &app.DiaryDays{ID: data.id, Year: data.year, Month: data.month, Day: data.day}
 		err := qry.Fetch(data.db)
 
 		if err != data.err {

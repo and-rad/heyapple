@@ -164,6 +164,15 @@ func Diary(env *handler.Environment) httprouter.Handle {
 			}
 		}
 
+		if param := ps.ByName("day"); param != "" {
+			if day, err := strconv.Atoi(param); err == nil {
+				query.Day = day
+			} else {
+				w.WriteHeader(http.StatusBadRequest)
+				return
+			}
+		}
+
 		if id, ok := env.Session.Get(r.Context(), "id").(int); ok {
 			query.ID = id
 		} else {
@@ -187,7 +196,7 @@ func Diary(env *handler.Environment) httprouter.Handle {
 // even when there are no entries in the database.
 //
 // Endpoint:
-//   /api/v1/diary/{year}/{month}/{day}
+//   /api/v1/diary/{year}/{month}/{day}/entries
 // Methods:
 //   GET
 // Possible status codes:

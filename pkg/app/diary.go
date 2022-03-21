@@ -191,6 +191,7 @@ type DiaryDays struct {
 	ID    int
 	Year  int
 	Month int
+	Day   int
 }
 
 func (q *DiaryDays) Fetch(db DB) error {
@@ -198,7 +199,7 @@ func (q *DiaryDays) Fetch(db DB) error {
 		return ErrNotFound
 	}
 
-	if days, err := db.DiaryDays(q.ID, q.Year, q.Month, 0); err == ErrNotFound {
+	if days, err := db.DiaryDays(q.ID, q.Year, q.Month, q.Day); err == ErrNotFound {
 		q.Days = []core.DiaryDay{}
 	} else if err != nil {
 		return err

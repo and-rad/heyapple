@@ -79,13 +79,14 @@ function groupedByHour() {
 			if (entry.recipe) {
 				let exists = false;
 				groups[name].entries.every((e) => {
-					if (e.name == entry.recipe) {
+					if (e.isrec && e.name == entry.recipe) {
 						e.entries.push(next);
 						e.amount += next.amount;
 						e.nutrient += next.nutrient;
 						exists = true;
 						return false;
 					}
+					return true;
 				});
 				if (!exists) {
 					groups[name].entries.push({

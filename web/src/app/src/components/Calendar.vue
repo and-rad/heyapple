@@ -1,6 +1,6 @@
 <script setup>
 import ArrowImage from "./images/ImageRightArrow.vue";
-import { ref, computed, onMounted } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { DateTime } from "luxon";
 
@@ -26,6 +26,19 @@ const hasNext = computed(() => {
 });
 
 let selection = [];
+
+watch(
+	() => prop.items,
+	() => {
+		calendar.value.querySelectorAll("td>button").forEach((btn) => {
+			if (prop.items.indexOf(btn.dataset.date) != -1) {
+				btn.parentNode.classList.add("has-entries");
+			} else {
+				btn.parentNode.classList.remove("has-entries");
+			}
+		});
+	}
+);
 
 function onCalendarChanged() {
 	let today = DateTime.now().toISODate();

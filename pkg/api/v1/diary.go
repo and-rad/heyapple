@@ -19,6 +19,7 @@
 package api
 
 import (
+	"fmt"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"heyapple/pkg/handler"
@@ -71,15 +72,18 @@ func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 		}
 
 		r.ParseForm()
+
+		fmt.Printf("%v\n", r.Form)
+
 		ids := r.Form["id"]
 		amounts := r.Form["amount"]
 		times := r.Form["time"]
-		if !(len(ids) == len(amounts) && len(ids) == len(times)) {
+		recs := r.Form["recipe"]
+		if !(len(ids) == len(amounts) && len(ids) == len(times) && len(ids) == len(recs)) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
 
-		recipe := r.FormValue("recipe")
 		entries := []core.DiaryEntry{}
 		for i := range ids {
 			id, err := strconv.Atoi(ids[i])
@@ -97,7 +101,7 @@ func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 			}
 			entries = append(entries, core.DiaryEntry{
 				Date:   date,
-				Recipe: recipe,
+				Recipe: recs[i],
 				Food:   core.Ingredient{ID: id, Amount: float32(amount)},
 			})
 		}

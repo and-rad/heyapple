@@ -161,11 +161,12 @@ function saveIngredients(id) {
 function addToDiary(date, time) {
 	disableToDiary.value = true;
 
-	let params = new URLSearchParams({ recipe: current.value.name });
+	let params = new URLSearchParams();
 	current.value.items.forEach((i) => {
 		params.append("id", i.id);
 		params.append("amount", perServing(i.amount) * amount.value);
 		params.append("time", time);
+		params.append("recipe", current.value.name);
 	});
 
 	fetch(`/api/v1/diary/${date}`, {

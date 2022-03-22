@@ -130,6 +130,7 @@ function addToDiary(date, time) {
 			id: current.value.id,
 			amount: amount.value,
 			time: time,
+			recipe: "",
 		}),
 	})
 		.then((response) => {

@@ -72,7 +72,9 @@ function onTabClick(evt) {
 }
 
 function onEditMode() {
-	editMode.value ? saveEntries() : (editMode.value = true);
+	if (current.value && current.value.entries) {
+		editMode.value ? saveEntries() : (editMode.value = true);
+	}
 }
 
 function saveEntries() {
@@ -151,7 +153,7 @@ function onDateSelected(dates) {
 </script>
 
 <template>
-	<Main ref="main" class="diary">
+	<Main ref="main" class="diary" :class="{ 'edit-mode': editMode }" @detailVisibility="editMode = false">
 		<template #filter>
 			<section>
 				<h2>{{ t("aria.headcal") }}</h2>

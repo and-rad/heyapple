@@ -6,10 +6,7 @@
 	</head>
 
 	<body class="legal">
-		<header>
-			<img src="/img/logomono.svg" id="logo">
-			<div id="app-name"><span>Hey</span><span>Apple</span></div>
-		</header>
+		{{ template "header" . }}
 
 		<main>
 			<h1>{{ l10n "legal.head" }}</h1>

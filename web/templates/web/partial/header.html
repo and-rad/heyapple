@@ -1,0 +1,15 @@
+{{ define "header" }}
+<header>
+	<a href="/">
+		<img src="/img/logomono.svg" id="logo">
+	</a>
+	<div id="app-name">
+		<span>Hey</span><span>Apple<sup>beta</sup></span>
+	</div>
+	<nav id="auth">
+		<a href="/auth">{{ l10n "home.login" }}</a>
+		<a href="/auth#/signup">{{ l10n "home.register" }}</a>
+	</nav>
+	<aside class="warn">{{ l10n "home.betawarn" }}</aside>
+</header>
+{{ end }}

@@ -140,8 +140,6 @@ function toggleNutrientMode() {
 
 function onRecipeDetails(evt) {
 	let parent = evt.target.closest("div");
-	let fields = parent.querySelector("fieldset");
-	fields.style.setProperty("--max-height", fields.childElementCount * 41 + "px");
 	parent.classList.toggle("open");
 }
 
@@ -199,7 +197,7 @@ defineExpose({ getDiff });
 					<span class="nutrient" :class="[nutrient, nutrientMode]">
 						{{ entry.nutrient }}{{ nutrientUnit }}
 					</span>
-					<fieldset :disabled="disabled">
+					<fieldset :disabled="disabled"  :style="{'--max-height': (entry.entries.length * 41) + 'px'}">
 						<div v-for="food in entry.entries" :key="food.id">
 							<label>{{ food.name }}</label>
 							<input type="number" name="amount" :value="food.amount" @change="onInput" />
@@ -288,6 +286,7 @@ defineExpose({ getDiff });
 	transition: 0.15s ease-in;
 }
 
+.edit-mode .diary-entry-list .recipe fieldset,
 .diary-entry-list .recipe.open fieldset {
 	margin: 0.5em 0;
 	border-top: var(--border-light) !important;

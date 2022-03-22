@@ -151,9 +151,6 @@ func (b *backup) load() {
 			}
 		}
 	}
-
-	//fmt.Printf("%v\n", b.db.entries)
-	//fmt.Printf("%v\n", b.db.days)
 }
 
 func (b *backup) save() error {

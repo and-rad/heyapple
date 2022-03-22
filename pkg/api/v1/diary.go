@@ -19,7 +19,6 @@
 package api
 
 import (
-	"fmt"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
 	"heyapple/pkg/handler"
@@ -72,8 +71,6 @@ func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 		}
 
 		r.ParseForm()
-
-		fmt.Printf("%v\n", r.Form)
 
 		ids := r.Form["id"]
 		amounts := r.Form["amount"]

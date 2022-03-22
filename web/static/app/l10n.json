@@ -2,14 +2,6 @@
 	"en": {
 		"1": "Apple",
 		"2": "Banana",
-		"adddiary": {
-			"err400": "Malformed or missing input data.",
-			"err401": "You do not have permission to edit this diary.",
-			"err403": "It doesn't look like you're allowed to do that.",
-			"err404": "The requested diary does not exist.",
-			"err500": "Internal server error. This shouldn't happen.",
-			"ok": "Success! The diary was updated."
-		},
 		"addfood": {
 			"err400": "Malformed or missing input data.",
 			"err401": "You do not have permission to edit this recipe.",
@@ -123,6 +115,14 @@
 		},
 		"recowner": {
 			"err": "Could not determine recipe ownership."
+		},
+		"savediary": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to edit this diary.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "The requested diary does not exist.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! The diary was updated."
 		},
 		"savefood": {
 			"err400": "Malformed or missing input data.",

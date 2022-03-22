@@ -179,7 +179,7 @@ function addToDiary(date, time) {
 	})
 		.then((response) => {
 			if (!response.ok) {
-				throw t("adddiary.err" + response.status);
+				throw t("savediary.err" + response.status);
 			}
 			return fetch("/api/v1/diary/" + date.replaceAll("-", "/"));
 		})
@@ -187,7 +187,7 @@ function addToDiary(date, time) {
 		.then((data) => {
 			diary.value[date] = data[0];
 			amount.value = 1;
-			log.msg(t("adddiary.ok"));
+			log.msg(t("savediary.ok"));
 		})
 		.catch((err) => log.err(err))
 		.finally(() => {

@@ -10,12 +10,16 @@ import { DateTime, Duration } from "luxon";
 
 const { t } = useI18n();
 const log = inject("log");
+const csrf = inject("csrfToken");
 const diary = inject("diary");
+
 const current = ref(null);
 const currentDate = ref(DateTime.now());
 const currentNutrient = ref("kcal");
 const disableSave = ref(false);
 const editMode = ref(false);
+
+const entries = ref(null);
 const main = ref(null);
 
 const daysWithEntries = computed(() => Object.keys(diary.value));
@@ -65,6 +69,61 @@ function onTabClick(evt) {
 	if (!hasTabDrag) {
 		currentNutrient.value = evt.target.dataset.name;
 	}
+}
+
+function onEditMode() {
+	editMode.value ? saveEntries() : (editMode.value = true);
+}
+
+function saveEntries() {
+	let items = entries.value.getDiff();
+	if (items.length == 0) {
+		editMode.value = false;
+		return;
+	}
+
+	disableSave.value = true;
+
+	let date = current.value.date;
+	let params = new URLSearchParams();
+	items.forEach((i) => {
+		params.append("id", i.id);
+		params.append("amount", i.amount);
+		params.append("time", i.time);
+		params.append("recipe", i.recipe);
+	});
+
+	fetch(`/api/v1/diary/${date}`, {
+		method: "PUT",
+		body: params,
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("savediary.err" + response.status);
+			}
+			editMode.value = false;
+			return fetch("/api/v1/diary/" + date.replaceAll("-", "/"));
+		})
+		.then((response) => response.json())
+		.then((data) => {
+			if (data[0] && data[0].kcal) {
+				diary.value[date] = data[0];
+			} else {
+				delete diary.value[date];
+			}
+			onDateSelected([date]);
+			log.msg(t("savediary.ok"));
+		})
+		.catch((err) => log.err(err))
+		.finally(() => {
+			setTimeout(function () {
+				disableSave.value = false;
+			}, 500);
+		});
 }
 
 function onDateSelected(dates) {

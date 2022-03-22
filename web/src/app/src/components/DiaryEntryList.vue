@@ -69,11 +69,13 @@ function groupedByHour() {
 			}
 
 			let next = {
+				id: entry.food.id,
 				name: t(entry.food.id.toString()),
 				amount: entry.food.amount,
 				nutrient: getNutrient(entry.food),
+				recipe: entry.recipe,
+				time: entry.time,
 				isrec: false,
-				id: entry.food.id,
 			};
 
 			if (entry.recipe) {
@@ -155,8 +157,27 @@ function getDiff() {
 	let data = new FormData(form.value);
 	let ids = data.getAll("id");
 	let amounts = data.getAll("amount");
+	let recipes = data.getAll("recipe");
+	let times = data.getAll("time");
 
 	let result = [];
+	prop.entries.forEach((entry) => {
+		for (let i = 0; i < ids.length; ++i) {
+			if (ids[i] != entry.food.id) {
+				continue;
+			}
+			if (recipes[i] != entry.recipe) {
+				continue;
+			}
+			if (times[i] != entry.time) {
+				continue;
+			}
+			if (amounts[i] != entry.food.amount) {
+				result.push({ id: ids[i], amount: amounts[i], recipe: recipes[i], time: times[i] });
+			}
+			break;
+		}
+	});
 	return result;
 }
 
@@ -187,6 +208,8 @@ defineExpose({ getDiff });
 								{{ food.nutrient }}{{ nutrientUnit }}
 							</span>
 							<input type="hidden" name="id" :value="food.id" />
+							<input type="hidden" name="recipe" :value="food.recipe" />
+							<input type="hidden" name="time" :value="food.time" />
 						</div>
 					</fieldset>
 				</template>
@@ -198,6 +221,8 @@ defineExpose({ getDiff });
 						{{ entry.nutrient }}{{ nutrientUnit }}
 					</span>
 					<input type="hidden" name="id" :value="entry.id" />
+					<input type="hidden" name="recipe" :value="entry.recipe" />
+					<input type="hidden" name="time" :value="entry.time" />
 				</template>
 			</div>
 		</fieldset>

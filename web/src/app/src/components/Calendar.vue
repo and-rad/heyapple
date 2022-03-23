@@ -14,6 +14,9 @@ const calendar = ref(null);
 
 const years = computed(() => {
 	let dates = prop.items.map((i) => parseInt(i.split("-")[0])).filter((i, idx, self) => self.indexOf(i) === idx);
+	if (dates.length == 0) {
+		dates = [DateTime.now().year];
+	}
 	return [Math.min(...dates) - 1, ...dates, Math.max(...dates) + 1];
 });
 

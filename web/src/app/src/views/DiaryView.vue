@@ -13,6 +13,7 @@ const { t } = useI18n();
 const log = inject("log");
 const csrf = inject("csrfToken");
 const diary = inject("diary");
+const prefs = inject("prefs");
 
 const current = ref(null);
 const currentDate = ref(DateTime.now());
@@ -165,11 +166,47 @@ function onDateSelected(dates) {
 		</template>
 
 		<template #main>
-			<section>
-				<PieChart class="kcal" />
-				<PieChart />
-				<PieChart />
-				<PieChart />
+			<section id="charts-macro">
+				<PieChart
+					class="kcal"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.energy')"
+					:unit="t('unit.cal')"
+					:value="current ? current.kcal : 0"
+					:max="prefs.rdi.kcal"
+				/>
+				<PieChart
+					class="fat"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.fat')"
+					:unit="t('unit.g')"
+					:value="current ? current.fat : 0"
+					:max="prefs.rdi.fat"
+				/>
+				<PieChart
+					class="carb"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.carbs2')"
+					:unit="t('unit.g')"
+					:value="current ? current.carb : 0"
+					:max="prefs.rdi.carb"
+				/>
+				<PieChart
+					class="prot"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.protein')"
+					:unit="t('unit.g')"
+					:value="current ? current.prot : 0"
+					:max="prefs.rdi.prot"
+				/>
 			</section>
 		</template>
 
@@ -220,7 +257,18 @@ function onDateSelected(dates) {
 </template>
 
 <style>
-#main section {
+:root {
+	--color-kcal: var(--color-primary);
+	--color-kcal-light: var(--color-primary-light);
+	--color-fat: #03a9f4;
+	--color-fat-light: #e1f5fe;
+	--color-carb: #ffa726;
+	--color-carb-light: #ffe0b2;
+	--color-prot: #ab47bc;
+	--color-prot-light: #f3e5f5;
+}
+
+#charts-macro {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -228,28 +276,64 @@ function onDateSelected(dates) {
 	padding: 1em;
 }
 
-#main section > .pie-chart {
+#charts-macro .pie-chart {
 	flex-basis: 30%;
 	margin: 1em 0;
 	width: auto;
 	height: auto;
 }
 
-#main section > .pie-chart.kcal {
+#charts-macro .pie-chart.kcal {
 	flex-basis: 100%;
 	margin: 1em 15%;
 }
 
+#charts-macro .pie-chart figcaption {
+	bottom: 12%;
+}
+
+#charts-macro .pie-chart.kcal circle.base {
+	stroke: var(--color-kcal-light);
+}
+
+#charts-macro .pie-chart.kcal circle.good {
+	stroke: var(--color-kcal);
+}
+
+#charts-macro .pie-chart.fat circle.base {
+	stroke: var(--color-fat-light);
+}
+
+#charts-macro .pie-chart.fat circle.good {
+	stroke: var(--color-fat);
+}
+
+#charts-macro .pie-chart.carb circle.base {
+	stroke: var(--color-carb-light);
+}
+
+#charts-macro .pie-chart.carb circle.good {
+	stroke: var(--color-carb);
+}
+
+#charts-macro .pie-chart.prot circle.base {
+	stroke: var(--color-prot-light);
+}
+
+#charts-macro .pie-chart.prot circle.good {
+	stroke: var(--color-prot);
+}
+
 @media only screen and (min-width: 800px) {
-	#main section {
+	#charts-macro {
 		flex-wrap: nowrap;
 	}
 
-	#main section > .pie-chart {
+	#charts-macro .pie-chart {
 		flex-basis: 20%;
 	}
 
-	#main section > .pie-chart.kcal {
+	#charts-macro .pie-chart.kcal {
 		flex-basis: 30%;
 		margin: 1em 0;
 	}

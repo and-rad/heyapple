@@ -2,6 +2,7 @@
 import Main from "../components/Main.vue";
 import Calendar from "../components/Calendar.vue";
 import EntryList from "../components/DiaryEntryList.vue";
+import PieChart from "../components/PieChart.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
 import { ref, computed, inject } from "vue";
@@ -163,7 +164,14 @@ function onDateSelected(dates) {
 			<section></section>
 		</template>
 
-		<template #main> Diary </template>
+		<template #main>
+			<section>
+				<PieChart class="kcal" />
+				<PieChart />
+				<PieChart />
+				<PieChart />
+			</section>
+		</template>
 
 		<template #head-details>
 			<h2 class="no-edit-mode">{{ currentDate.weekdayLong }}</h2>
@@ -212,6 +220,41 @@ function onDateSelected(dates) {
 </template>
 
 <style>
+#main section {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	align-items: center;
+	padding: 1em;
+}
+
+#main section > .pie-chart {
+	flex-basis: 30%;
+	margin: 1em 0;
+	width: auto;
+	height: auto;
+}
+
+#main section > .pie-chart.kcal {
+	flex-basis: 100%;
+	margin: 1em 15%;
+}
+
+@media only screen and (min-width: 800px) {
+	#main section {
+		flex-wrap: nowrap;
+	}
+
+	#main section > .pie-chart {
+		flex-basis: 20%;
+	}
+
+	#main section > .pie-chart.kcal {
+		flex-basis: 30%;
+		margin: 1em 0;
+	}
+}
+
 #details section.tabs {
 	padding: 0 3em 0 0;
 	position: relative;

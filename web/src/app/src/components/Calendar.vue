@@ -46,7 +46,7 @@ watch(
 function onCalendarChanged() {
 	let today = DateTime.now().toISODate();
 	let date = DateTime.local(year.value, month.value);
-	date = date.minus({ days: date.weekday });
+	date = date.minus({ days: date.weekday - 1 });
 
 	if (!selection.length && prop.mode != "toggle") {
 		selection = [today];
@@ -161,13 +161,13 @@ onMounted(() => {
 		<table ref="calendar">
 			<thead>
 				<tr>
-					<th>{{ t("day.cal7") }}</th>
 					<th>{{ t("day.cal1") }}</th>
 					<th>{{ t("day.cal2") }}</th>
 					<th>{{ t("day.cal3") }}</th>
 					<th>{{ t("day.cal4") }}</th>
 					<th>{{ t("day.cal5") }}</th>
 					<th>{{ t("day.cal6") }}</th>
+					<th>{{ t("day.cal7") }}</th>
 				</tr>
 			</thead>
 			<tbody>

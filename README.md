@@ -1,19 +1,23 @@
-# Hey Apple
+# HeyApple
 
-## What it is
-An app for creating & managing grocery lists from data exported from [FDDB](https://fddb.info).
+**HeyApple** is an online food & nutrient tracker, recipe manager, and shopping list generator.
 
-FDDB is an online calorie tracker that does a lot of things well, but it lacks a convenient way of creating grocery
-lists from the diary or any of the recipes. It allows exporting to CSV, though, which is what this app uses to
-provie the missing functionality.
+There are many apps out there for tracking nutrients and just as many for managing recipes and
+generating shopping lists. There are hardly any that combine these two into a full food management
+solution. HeyApple fills that void.
 
-A shopping list is created from data exported in CSV format and stored in the cloud. Items from different days
-are combined into one entry, showing the total amount needed for the selected time frame. Food can be associated
-with store aisles and sorted by name or aisle.
+You can track your daily nutrient intake down to individual minerals and vitamins, combine food 
+into recipes, store cooking instructions and prep times. Shopping lists are generated automatically
+by simply selecting the days you plan to do your shopping for.
 
-## What it isn't
-This app is not a full calorie & nutrient tracker and doesn't provide any tracking functionality on its own.
-Given time, it might evolve in that direction. Don't quote me on that, though.
+## Building & Testing
 
-## Building the app
-Place the app in the **nextcloud/apps/** directory.
+Execute the following command in the project's root directory:
+```
+$ make build
+```
+This will perform most unit tests, build the server app and the web front end, and puts everything
+in the `./out` directory. All the necessary files to run and deploy the app are embedded into the
+executable file, so this is the only file that needs to be distributed.
+
+A number of additional `make` commands can be used during development.

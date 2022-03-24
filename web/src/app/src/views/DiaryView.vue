@@ -198,9 +198,8 @@ function onDateSelected(dates) {
 				>
 					<PieChart range="360" :value="day.value" :max="prefs.rdi.kcal">
 						<template #details>
-							{{ day.weekday }}
-							<hr />
-							{{ day.calday }}
+							<span>{{ day.weekday }}</span>
+							<span>{{ day.calday }}</span>
 						</template>
 					</PieChart>
 				</button>
@@ -324,40 +323,20 @@ function onDateSelected(dates) {
 	flex-basis: 14%;
 	max-width: 4em;
 	max-height: 4em;
+	font-size: 12px;
+	line-height: normal;
 }
 
-@media (hover: hover) {
-	#charts-week button:hover .pie-chart circle.base {
-		fill: var(--color-good-light) !important;
-	}
-
-	#charts-week button.today:hover .pie-chart circle.base {
-		fill: var(--color-warn-light) !important;
-	}
+#charts-week button.active {
+	color: var(--color-primary-dark);
 }
 
-#charts-week button.today .pie-chart circle.base {
-	stroke: var(--color-secondary-light);
+#charts-week button.today.active {
+	color: var(--color-secondary-dark);
 }
 
-#charts-week button.today .pie-chart circle.good {
-	stroke: var(--color-secondary);
-}
-
-#charts-week button.active .pie-chart circle.base {
-	fill: var(--color-good-light) !important;
-}
-
-#charts-week button.active hr {
-	border-bottom: 1px solid var(--color-primary);
-}
-
-#charts-week button.today.active .pie-chart circle.base {
-	fill: var(--color-warn-light) !important;
-}
-
-#charts-week button.today.active hr {
-	border-bottom: 1px solid var(--color-secondary);
+#charts-week button div span:first-child {
+	font-weight: 700;
 }
 
 #charts-week .pie-chart {
@@ -367,26 +346,44 @@ function onDateSelected(dates) {
 	pointer-events: none;
 }
 
-#charts-week .pie-chart > div {
-	font-size: 12px;
-	line-height: normal;
-}
-
-#charts-week .pie-chart circle {
-	stroke-width: 8;
+#charts-week .pie-chart circle.base {
+	stroke: var(--color-background);
+	fill: var(--color-primary-lighter);
+	stroke-width: 16;
 }
 
 #charts-week .pie-chart circle.good {
-	stroke: var(--color-primary);
-	stroke-width: 12;
+	stroke-width: 8;
 }
 
 #charts-week .pie-chart circle.bad {
 	stroke-width: 24;
 }
 
-#charts-week .pie-chart figcaption {
-	bottom: -0.5em;
+#charts-week button.today .pie-chart circle.base {
+	fill: var(--color-secondary-lighter);
+}
+
+#charts-week button.today .pie-chart circle.good {
+	stroke: var(--color-secondary);
+}
+
+#charts-week button.active .pie-chart circle.base {
+	fill: var(--color-primary-light);
+}
+
+#charts-week button.today.active .pie-chart circle.base {
+	fill: var(--color-secondary-light);
+}
+
+@media (hover: hover) {
+	#charts-week button:hover .pie-chart circle.base {
+		fill: var(--color-primary-light);
+	}
+
+	#charts-week button.today:hover .pie-chart circle.base {
+		fill: var(--color-secondary-light);
+	}
 }
 
 #charts-macro {
@@ -446,7 +443,7 @@ function onDateSelected(dates) {
 }
 
 @media only screen and (min-width: 800px) {
-	#charts-week .pie-chart > div {
+	#charts-week button {
 		font-size: unset;
 	}
 
@@ -465,10 +462,6 @@ function onDateSelected(dates) {
 
 	#charts-macro .pie-chart figcaption {
 		bottom: 10%;
-	}
-
-	#charts-week .pie-chart circle.good {
-		stroke-width: 8;
 	}
 }
 

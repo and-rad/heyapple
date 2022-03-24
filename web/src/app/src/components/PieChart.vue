@@ -69,8 +69,8 @@ const overArc = computed(() => {
 
 .pie-chart circle {
 	stroke-width: 12;
-	fill: none !important;
-	transition: 0.5s ease-in-out;
+	fill: none;
+	transition: all 0.5s ease-in-out, fill 0.25s;
 }
 
 .pie-chart circle.base {
@@ -107,5 +107,8 @@ const overArc = computed(() => {
 	min-width: 50%;
 	max-width: 75%;
 	text-align: center;
+}
+.pie-chart > div > * {
+	display: block;
 }
 </style>

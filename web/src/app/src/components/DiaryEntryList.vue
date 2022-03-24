@@ -143,6 +143,13 @@ function onRecipeDetails(evt) {
 	parent.classList.toggle("open");
 }
 
+function onKeydown(evt) {
+	if (evt.key == "Enter") {
+		evt.preventDefault();
+		onInput(evt);
+	}
+}
+
 function onInput(evt) {
 	evt.target.blur();
 	let val = parseFloat(evt.target.value);
@@ -197,10 +204,16 @@ defineExpose({ getDiff });
 					<span class="nutrient" :class="[nutrient, nutrientMode]">
 						{{ entry.nutrient }}{{ nutrientUnit }}
 					</span>
-					<fieldset :disabled="disabled"  :style="{'--max-height': (entry.entries.length * 41) + 'px'}">
+					<fieldset :disabled="disabled" :style="{ '--max-height': entry.entries.length * 41 + 'px' }">
 						<div v-for="food in entry.entries" :key="food.id">
 							<label>{{ food.name }}</label>
-							<input type="number" name="amount" :value="food.amount" @change="onInput" />
+							<input
+								type="number"
+								name="amount"
+								:value="food.amount"
+								@keydown="onKeydown"
+								@change="onInput"
+							/>
 							<span class="unit">{{ t("unit.g") }}</span>
 							<span class="nutrient" :class="[nutrient, nutrientMode]">
 								{{ food.nutrient }}{{ nutrientUnit }}
@@ -213,7 +226,14 @@ defineExpose({ getDiff });
 				</template>
 				<template v-else>
 					<label>{{ entry.name }}</label>
-					<input type="number" name="amount" :value="entry.amount" :disabled="disabled" @change="onInput" />
+					<input
+						type="number"
+						name="amount"
+						:value="entry.amount"
+						:disabled="disabled"
+						@keydown="onKeydown"
+						@change="onInput"
+					/>
 					<span class="unit">{{ t("unit.g") }}</span>
 					<span class="nutrient" :class="[nutrient, nutrientMode]">
 						{{ entry.nutrient }}{{ nutrientUnit }}

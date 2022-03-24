@@ -28,7 +28,7 @@ const valueArc = computed(() => {
 const overArc = computed(() => {
 	let normalized = (parseFloat(prop.value) || 0) / (parseFloat(prop.max) || 1);
 	let range = parseFloat(prop.range) || 0;
-	let ratio = (Math.max(normalized - 1, 0) * range) / 360;
+	let ratio = (Math.min(Math.max(0, normalized - 1), 1) * range) / 360;
 	return Math.PI * 2 * radius * ratio + " 710";
 });
 </script>
@@ -59,6 +59,10 @@ const overArc = computed(() => {
 	height: 4em;
 }
 
+.pie-chart > svg {
+	display: block;
+}
+
 .pie-chart hr {
 	border-bottom: var(--border);
 }
@@ -70,11 +74,11 @@ const overArc = computed(() => {
 }
 
 .pie-chart circle.base {
-	stroke: var(--color-good-light);
+	stroke: var(--color-primary-light);
 }
 
 .pie-chart circle.good {
-	stroke: var(--color-good);
+	stroke: var(--color-primary);
 }
 
 .pie-chart circle.bad {

@@ -127,6 +127,8 @@ function onDay(evt) {
 	emit("selection", selection);
 }
 
+defineExpose({onDay})
+
 onMounted(() => {
 	onCalendarChanged();
 	emit("selection", selection);

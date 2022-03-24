@@ -21,10 +21,33 @@ const currentNutrient = ref("kcal");
 const disableSave = ref(false);
 const editMode = ref(false);
 
+const calendar = ref(null);
 const entries = ref(null);
 const main = ref(null);
 
 const daysWithEntries = computed(() => Object.keys(diary.value));
+
+const currentWeek = computed(() => {
+	let result = [];
+
+	let isoNow = DateTime.now().toISODate();
+	let isoCurrent = currentDate.value.toISODate();
+	let date = currentDate.value.minus({ days: currentDate.value.weekday - 1 });
+	for (let i = 0; i < 7; ++i) {
+		let iso = date.toISODate();
+		result.push({
+			weekday: t("day.cal" + date.weekday),
+			calday: date.day,
+			date: iso,
+			active: iso == isoCurrent,
+			today: iso == isoNow,
+			value: diary.value[iso] ? diary.value[iso].kcal : 0,
+		});
+		date = date.plus({ days: 1 });
+	}
+
+	return result;
+});
 
 let hasTabDrag = false;
 
@@ -159,13 +182,29 @@ function onDateSelected(dates) {
 		<template #filter>
 			<section>
 				<h2>{{ t("aria.headcal") }}</h2>
-				<Calendar :items="daysWithEntries" @selection="onDateSelected" />
+				<Calendar ref="calendar" :items="daysWithEntries" @selection="onDateSelected" />
 			</section>
 			<hr />
 			<section></section>
 		</template>
 
 		<template #main>
+			<section id="charts-week">
+				<button
+					v-for="day in currentWeek"
+					:data-date="day.date"
+					:class="{ today: day.today, active: day.active }"
+					@click="calendar.onDay"
+				>
+					<PieChart range="360" :value="day.value" :max="prefs.rdi.kcal">
+						<template #details>
+							{{ day.weekday }}
+							<hr />
+							{{ day.calday }}
+						</template>
+					</PieChart>
+				</button>
+			</section>
 			<section id="charts-macro">
 				<PieChart
 					class="kcal"
@@ -268,6 +307,88 @@ function onDateSelected(dates) {
 	--color-prot-light: #f3e5f5;
 }
 
+#charts-week {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0 1em 1em;
+}
+
+#charts-week button {
+	background: none;
+	box-shadow: none !important;
+	border-radius: 50%;
+	margin: 0;
+	padding: 0;
+	color: var(--color-text);
+	flex-basis: 14%;
+	max-width: 4em;
+	max-height: 4em;
+}
+
+@media (hover: hover) {
+	#charts-week button:hover .pie-chart circle.base {
+		fill: var(--color-good-light) !important;
+	}
+
+	#charts-week button.today:hover .pie-chart circle.base {
+		fill: var(--color-warn-light) !important;
+	}
+}
+
+#charts-week button.today .pie-chart circle.base {
+	stroke: var(--color-secondary-light);
+}
+
+#charts-week button.today .pie-chart circle.good {
+	stroke: var(--color-secondary);
+}
+
+#charts-week button.active .pie-chart circle.base {
+	fill: var(--color-good-light) !important;
+}
+
+#charts-week button.active hr {
+	border-bottom: 1px solid var(--color-primary);
+}
+
+#charts-week button.today.active .pie-chart circle.base {
+	fill: var(--color-warn-light) !important;
+}
+
+#charts-week button.today.active hr {
+	border-bottom: 1px solid var(--color-secondary);
+}
+
+#charts-week .pie-chart {
+	width: auto;
+	height: auto;
+	user-select: none;
+	pointer-events: none;
+}
+
+#charts-week .pie-chart > div {
+	font-size: 12px;
+	line-height: normal;
+}
+
+#charts-week .pie-chart circle {
+	stroke-width: 8;
+}
+
+#charts-week .pie-chart circle.good {
+	stroke: var(--color-primary);
+	stroke-width: 12;
+}
+
+#charts-week .pie-chart circle.bad {
+	stroke-width: 24;
+}
+
+#charts-week .pie-chart figcaption {
+	bottom: -0.5em;
+}
+
 #charts-macro {
 	display: flex;
 	flex-wrap: wrap;
@@ -288,8 +409,8 @@ function onDateSelected(dates) {
 	margin: 1em 15%;
 }
 
-#charts-macro .pie-chart figcaption {
-	bottom: 12%;
+#charts-macro .pie-chart.kcal figcaption {
+	bottom: 10%;
 }
 
 #charts-macro .pie-chart.kcal circle.base {
@@ -325,6 +446,10 @@ function onDateSelected(dates) {
 }
 
 @media only screen and (min-width: 800px) {
+	#charts-week .pie-chart > div {
+		font-size: unset;
+	}
+
 	#charts-macro {
 		flex-wrap: nowrap;
 	}
@@ -336,6 +461,14 @@ function onDateSelected(dates) {
 	#charts-macro .pie-chart.kcal {
 		flex-basis: 30%;
 		margin: 1em 0;
+	}
+
+	#charts-macro .pie-chart figcaption {
+		bottom: 10%;
+	}
+
+	#charts-week .pie-chart circle.good {
+		stroke-width: 8;
 	}
 }
 

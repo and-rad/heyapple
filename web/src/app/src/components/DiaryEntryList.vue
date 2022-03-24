@@ -105,7 +105,6 @@ function groupedByHour() {
 		});
 
 		result = Object.values(groups);
-		result.sort((a, b) => a.name < b.name);
 	}
 
 	return result;

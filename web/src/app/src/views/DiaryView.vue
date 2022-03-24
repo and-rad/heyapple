@@ -170,6 +170,11 @@ function onDateSelected(dates) {
 		.then((response) => response.json())
 		.then((data) => {
 			data.forEach((d) => (d.time = d.date.split("T")[1].slice(0, 5)));
+			data.sort((a, b) => {
+				if (a.time < b.time) return -1;
+				if (b.time < a.time) return 1;
+				return 0;
+			});
 			diary.value[date].entries = data;
 		})
 		.catch((err) => log.err(err))

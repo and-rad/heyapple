@@ -14,7 +14,7 @@ function confirm(evt) {
 
 <template>
 	<form class="clickable-input">
-		<input type="text" v-model="value" :placeholder="placeholder" />
+		<input type="text" autocomplete="off" v-model="value" :placeholder="placeholder" />
 		<input type="submit" @click="confirm" :value="label" />
 	</form>
 </template>

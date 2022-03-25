@@ -22,7 +22,7 @@ function fetchData(form) {
 
 <template>
 	<form>
-		<input type="text" name="name" :placeholder="placeholder" @input="confirm" />
+		<input type="text" name="name" autocomplete="off" :placeholder="placeholder" @input="confirm" />
 		<slot :confirm="confirm">Additional filters</slot>
 	</form>
 </template>

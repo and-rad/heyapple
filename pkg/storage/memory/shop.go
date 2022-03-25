@@ -43,7 +43,7 @@ func (db *DB) ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error) {
 			if !ok {
 				item.ID = fid
 				// TODO these ned to be implemented
-				item.Price = [2]float32{}
+				item.Price = db.prices[id][fid]
 				item.Aisle = db.aisle(id, fid)
 				item.Done = false
 			}

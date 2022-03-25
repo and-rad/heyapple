@@ -62,10 +62,12 @@ func TestDB_ShoppingList(t *testing.T) {
 					mock.Day2: {mock.Entry3(), mock.Entry4()},
 				}},
 				aisles: aisleMap{1: {1: 12}},
+				prices: priceMap{1: {2: [2]float32{1.2, 3.5}}},
 			},
 			list: func() []core.ShopItem {
 				l := mock.List12()
 				l[0].Aisle = 12
+				l[1].Price = [2]float32{1.2, 3.5}
 				return l
 			}(),
 		},

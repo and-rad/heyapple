@@ -41,6 +41,9 @@ type dayMap map[int]map[int]map[int][]core.DiaryDay
 // aisleMap   uid     food    aisle
 type aisleMap map[int]map[int]core.Aisle
 
+// priceMap   uid     food    price range
+type priceMap map[int]map[int][2]float32
+
 type DB struct {
 	jobs *job.Scheduler
 
@@ -51,10 +54,12 @@ type DB struct {
 	recipes map[int]core.Recipe
 	entries entryMap
 	days    dayMap
-	aisles  aisleMap
 
 	userRec map[int]map[int]int
 	recUser map[int]map[int]int
+
+	aisles aisleMap
+	prices priceMap
 
 	userID int
 	foodID int
@@ -75,6 +80,7 @@ func NewDB() *DB {
 		entries: make(entryMap),
 		days:    make(dayMap),
 		aisles:  make(aisleMap),
+		prices:  make(priceMap),
 	}
 }
 

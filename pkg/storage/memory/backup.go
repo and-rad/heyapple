@@ -54,6 +54,7 @@ type backupData struct {
 	UserRec map[int][]access          `json:"recaccess"`
 	Entries map[int][]core.DiaryEntry `json:"entries"`
 	Aisles  aisleMap                  `json:"aisles"`
+	Prices  priceMap                  `json:"prices"`
 	UserID  int                       `json:"userid"`
 	FoodID  int                       `json:"foodid"`
 	RecID   int                       `json:"recid"`
@@ -87,6 +88,7 @@ func (b *backup) load() {
 			b.db.recipes = db.Recipes
 			b.db.recID = db.RecID
 			b.db.aisles = db.Aisles
+			b.db.prices = db.Prices
 
 			for k, v := range b.db.users {
 				b.db.emails[v.Email] = k
@@ -214,6 +216,7 @@ func (b *backup) bytes() []byte {
 		Recipes: b.db.recipes,
 		Entries: entries,
 		Aisles:  b.db.aisles,
+		Prices:  b.db.prices,
 		RecID:   b.db.recID,
 		Tokens:  b.db.tokens,
 		UserRec: recAccess,

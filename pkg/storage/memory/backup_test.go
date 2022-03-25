@@ -33,9 +33,9 @@ import (
 )
 
 var (
-	backup0 = `{"users":{},"tokens":{},"food":{},"recipes":{},"recaccess":{},"entries":{},"aisles":{},"userid":0,"foodid":0,"recid":0}`
+	backup0 = `{"users":{},"tokens":{},"food":{},"recipes":{},"recaccess":{},"entries":{},"aisles":{},"prices":{},"userid":0,"foodid":0,"recid":0}`
 	backup1 = fmt.Sprintf(
-		`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"recaccess":{"1":[{"res":1,"perms":3840}]},"entries":{"1":[%s,%s,%s]},"aisles":{"0":{"1":1,"2":12}},"userid":1,"foodid":2,"recid":1}`,
+		`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"recaccess":{"1":[{"res":1,"perms":3840}]},"entries":{"1":[%s,%s,%s]},"aisles":{"0":{"1":1,"2":12}},"prices":{"1":{"2":[1.5,2.5]}},"userid":1,"foodid":2,"recid":1}`,
 		mock.User1Json, mock.Food1Json, mock.Food2Json, mock.Recipe1Json, mock.Entry1Json, mock.Entry2Json, mock.Entry3Json,
 	)
 
@@ -50,6 +50,7 @@ var (
 		entries: entryMap{mock.User1.ID: {mock.Date1.Truncate(time.Hour * 24): {mock.Entry1(), mock.Entry2()}, mock.Day2: {mock.Entry3()}}},
 		days:    dayMap{mock.User1.ID: {2022: {3: {mock.Diary220312(), mock.Diary220313()}}}},
 		aisles:  aisleMap{0: {mock.Food1.ID: 1, mock.Food2.ID: 12}},
+		prices:  priceMap{mock.User1.ID: {mock.Food2.ID: [2]float32{1.5, 2.5}}},
 		userID:  1,
 		foodID:  2,
 		recID:   1,

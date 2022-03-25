@@ -12,7 +12,16 @@
 		},
 		"aisle": {
 			"0": "",
-			"1": "A. Fruit & vegetables"
+			"1": "A. Fruit & vegetables",
+			"2": "B. Spices & Seasonings",
+			"3": "C. Bread & Cereals",
+			"4": "D. Milk & Dairy",
+			"5": "E. Meat",
+			"6": "F. Seafood",
+			"7": "G. Frozen Food",
+			"8": "H. Beverages",
+			"9": "I. Cleaning Supplies",
+			"10": "J. Health & Beauty"
 		},
 		"aria": {
 			"headcal": "Calendar",

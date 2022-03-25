@@ -63,10 +63,12 @@ func TestDB_ShoppingList(t *testing.T) {
 				}},
 				aisles: aisleMap{1: {1: 12}},
 				prices: priceMap{1: {2: [2]float32{1.2, 3.5}}},
+				done:   doneMap{1: {1: true}},
 			},
 			list: func() []core.ShopItem {
 				l := mock.List12()
 				l[0].Aisle = 12
+				l[0].Done = true
 				l[1].Price = [2]float32{1.2, 3.5}
 				return l
 			}(),

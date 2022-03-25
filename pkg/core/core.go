@@ -34,6 +34,13 @@ const (
 	FlagBeef    = 0x00000020
 )
 
+type Aisle int
+
+const (
+	AisleNone Aisle = iota
+	AisleFruit
+)
+
 // Food represents an edible object. All nutrients are
 // stored per 100 base units. The base unit is either gram
 // or milliliter. The actual unit of measurement for
@@ -156,6 +163,10 @@ func (d DiaryEntry) Day() time.Time {
 	return d.Date.Truncate(time.Hour * 24)
 }
 
+// DiaryDay represents a summary of the diary entries
+// for a given day. It acts as a cache of all the nutrient
+// values taken from the entries and updated whenever
+// the entries change.
 type DiaryDay struct {
 	Date string `json:"date"`
 
@@ -167,4 +178,18 @@ type DiaryDay struct {
 
 func (d DiaryDay) Empty() bool {
 	return d == (DiaryDay{Date: d.Date})
+}
+
+// ShopItem represents an item on the shopping list.
+// It can be associated with a food item, in which
+// case the Name field will usually be empty. If it is
+// associated with non-food groceries, the ID will
+// usually be 0.
+type ShopItem struct {
+	Name   string     `json:"name,omitempty"`
+	Price  [2]float32 `json:"price,omitempty"`
+	Done   bool       `json:"done"`
+	Amount float32    `json:"amount"`
+	Aisle  Aisle      `json:"aisle"`
+	ID     int        `json:"id"`
 }

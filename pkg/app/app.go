@@ -45,6 +45,7 @@ const (
 var (
 	ErrCredentials = errors.New("nomatch")
 	ErrExists      = errors.New("exists")
+	ErrMissing     = errors.New("missing")
 	ErrNotFound    = errors.New("notfound")
 	ErrPermission  = errors.New("permission")
 )
@@ -80,6 +81,8 @@ type DB interface {
 	DelDiaryEntries(id int, entries ...core.DiaryEntry) error
 	DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error)
 	DiaryDays(id, year, month, day int) ([]core.DiaryDay, error)
+
+	ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error)
 }
 
 // A Command encapsulates a single action that changes the

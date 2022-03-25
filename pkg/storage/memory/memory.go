@@ -473,6 +473,45 @@ func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {
 	return result, nil
 }
 
+func (db *DB) ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error) {
+	days, ok := db.entries[id]
+	if !ok {
+		return nil, app.ErrNotFound
+	}
+
+	items := map[int]core.ShopItem{}
+	for _, dd := range date {
+		day, ok := days[dd.Truncate(time.Hour*24)]
+		if !ok {
+			continue
+		}
+		for _, entry := range day {
+			id := entry.Food.ID
+			item, ok := items[id]
+			if !ok {
+				item.ID = id
+				// TODO these ned to be implemented
+				item.Price = [2]float32{}
+				item.Aisle = 0
+				item.Done = false
+			}
+			item.Amount += entry.Food.Amount
+			items[id] = item
+		}
+	}
+
+	result := make([]core.ShopItem, 0, len(items))
+	for _, i := range items {
+		result = append(result, i)
+	}
+
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].ID < result[j].ID
+	})
+
+	return result, nil
+}
+
 func (db *DB) Execute(c app.Command) error {
 	db.mtx.Lock()
 	defer db.mtx.Unlock()

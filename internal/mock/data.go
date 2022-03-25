@@ -306,3 +306,45 @@ const (
 	Diary210102Json = `{"date":"2021-01-02","kcal":0,"fat":0,"carb":0,"prot":0}`
 	Diary220301Json = `{"date":"2022-03-01","kcal":0,"fat":0,"carb":0,"prot":0}`
 )
+
+func List1() []core.ShopItem {
+	return []core.ShopItem{
+		{
+			ID:     Entry2().Food.ID,
+			Amount: Entry2().Food.Amount,
+			Price:  [2]float32{},
+			Aisle:  0,
+			Done:   false,
+		},
+		{
+			ID:     Entry1().Food.ID,
+			Amount: Entry1().Food.Amount,
+			Price:  [2]float32{},
+			Aisle:  0,
+			Done:   false,
+		},
+	}
+}
+
+func List12() []core.ShopItem {
+	return []core.ShopItem{
+		{
+			ID:     Entry2().Food.ID,
+			Amount: Entry2().Food.Amount + Entry3().Food.Amount,
+			Price:  [2]float32{},
+			Aisle:  0,
+			Done:   false,
+		},
+		{
+			ID:     Entry1().Food.ID,
+			Amount: Entry1().Food.Amount + Entry4().Food.Amount,
+			Price:  [2]float32{},
+			Aisle:  0,
+			Done:   false,
+		},
+	}
+}
+
+const (
+	List1Json = `[{"price":[0,0],"done":false,"amount":50,"aisle":0,"id":1},{"price":[0,0],"done":false,"amount":150,"aisle":0,"id":2}]`
+)

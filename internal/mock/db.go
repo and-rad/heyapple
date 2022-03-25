@@ -26,6 +26,7 @@ import (
 	"fmt"
 	"heyapple/pkg/app"
 	"heyapple/pkg/core"
+	"sort"
 	"strconv"
 	"strings"
 	"time"
@@ -51,6 +52,7 @@ type DB struct {
 	RecipeItems []core.Recipe
 	Entries     []core.DiaryEntry
 	Days        []core.DiaryDay
+	ShopList    []core.ShopItem
 	Access      Access
 
 	Err  []error
@@ -58,6 +60,8 @@ type DB struct {
 	Name string
 
 	Filter core.Filter
+
+	date time.Time
 }
 
 func NewDB() *DB {
@@ -104,6 +108,11 @@ func (db *DB) WithName(name string) *DB {
 	return db
 }
 
+func (db *DB) WithDate(date time.Time) *DB {
+	db.date = date.Truncate(time.Hour * 24)
+	return db
+}
+
 func (db *DB) WithRecipe(rec core.Recipe) *DB {
 	db.RecipeItem = rec
 	return db
@@ -126,6 +135,11 @@ func (db *DB) WithEntries(ents ...core.DiaryEntry) *DB {
 
 func (db *DB) WithDays(days ...core.DiaryDay) *DB {
 	db.Days = days
+	return db
+}
+
+func (db *DB) WithShoppingList(items ...core.ShopItem) *DB {
+	db.ShopList = items
 	return db
 }
 
@@ -393,6 +407,24 @@ func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {
 	}
 
 	return days, nil
+}
+
+func (db *DB) ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error) {
+	if err := db.popError(); err != nil {
+		return nil, err
+	}
+	if len(date) == 0 {
+		return []core.ShopItem{}, nil
+	}
+	day := date[0].Truncate(time.Hour * 24)
+	if day != db.date {
+		return []core.ShopItem{}, nil
+	}
+	result := append([]core.ShopItem{}, db.ShopList...)
+	sort.Slice(result, func(i, j int) bool {
+		return result[i].ID < result[j].ID
+	})
+	return result, nil
 }
 
 func (db *DB) popError() error {

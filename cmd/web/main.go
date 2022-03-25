@@ -94,6 +94,9 @@ func main() {
 	router.POST("/api/v1/diary/:date", chain(api.SaveDiaryEntry(env), mw.JSON()))
 	router.PUT("/api/v1/diary/:date", chain(api.SaveDiaryEntry(env), mw.JSON()))
 
+	router.GET("/api/v1/lists", chain(api.ShoppingLists(env), mw.JSON()))
+	router.GET("/api/v1/list/:name", chain(api.ShoppingList(env), mw.JSON()))
+
 	if dir := os.Getenv("HEYAPPLE_DATA_DIR"); dir != "" {
 		router.ServeFiles("/data/*filepath", http.Dir(dir))
 	}

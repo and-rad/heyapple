@@ -38,17 +38,17 @@ func (db *DB) ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error) {
 			continue
 		}
 		for _, entry := range day {
-			id := entry.Food.ID
-			item, ok := items[id]
+			fid := entry.Food.ID
+			item, ok := items[fid]
 			if !ok {
-				item.ID = id
+				item.ID = fid
 				// TODO these ned to be implemented
 				item.Price = [2]float32{}
-				item.Aisle = 0
+				item.Aisle = db.aisle(id, fid)
 				item.Done = false
 			}
 			item.Amount += entry.Food.Amount
-			items[id] = item
+			items[fid] = item
 		}
 	}
 
@@ -62,4 +62,13 @@ func (db *DB) ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error) {
 	})
 
 	return result, nil
+}
+
+func (db *DB) aisle(uid, fid int) core.Aisle {
+	if aisles, ok := db.aisles[uid]; ok {
+		if aisle, ok := aisles[fid]; ok {
+			return aisle
+		}
+	}
+	return db.aisles[0][fid]
 }

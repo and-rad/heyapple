@@ -56,11 +56,18 @@ func TestDB_ShoppingList(t *testing.T) {
 		{ //03// success with multiple days
 			id:   1,
 			date: []time.Time{mock.Day1, mock.Day2},
-			db: &DB{entries: entryMap{1: {
-				mock.Day1: {mock.Entry1(), mock.Entry2()},
-				mock.Day2: {mock.Entry3(), mock.Entry4()},
-			}}},
-			list: mock.List12(),
+			db: &DB{
+				entries: entryMap{1: {
+					mock.Day1: {mock.Entry1(), mock.Entry2()},
+					mock.Day2: {mock.Entry3(), mock.Entry4()},
+				}},
+				aisles: aisleMap{1: {1: 12}},
+			},
+			list: func() []core.ShopItem {
+				l := mock.List12()
+				l[0].Aisle = 12
+				return l
+			}(),
 		},
 		{ //04// no date provided, empty list
 			id: 1,

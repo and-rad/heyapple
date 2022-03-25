@@ -124,6 +124,7 @@ func TestDB_WithDefaults(t *testing.T) {
 			db: func() *DB {
 				db := NewDB()
 				db.food = map[int]core.Food{1: mock.Food1}
+				db.aisles = aisleMap{0: {1: 0}}
 				db.foodID = 1
 				return db
 			}(),

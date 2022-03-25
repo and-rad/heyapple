@@ -16,9 +16,6 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-// Package memory provides an implementation of the app.DB interface
-// that lives entirely in the application's runtime memory. It can be
-// saved to and loaded from JSON files for persistence.
 package memory
 
 import (

@@ -16,6 +16,9 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
+// Package memory provides an implementation of the app.DB interface
+// that lives entirely in the application's runtime memory. It can be
+// saved to and loaded from JSON files for persistence.
 package memory
 
 import (
@@ -35,6 +38,9 @@ type entryMap map[int]map[time.Time][]core.DiaryEntry
 // dayMap   uid     yr      mon     entries
 type dayMap map[int]map[int]map[int][]core.DiaryDay
 
+// aisleMap   uid     food    aisle
+type aisleMap map[int]map[int]core.Aisle
+
 type DB struct {
 	jobs *job.Scheduler
 
@@ -45,6 +51,7 @@ type DB struct {
 	recipes map[int]core.Recipe
 	entries entryMap
 	days    dayMap
+	aisles  aisleMap
 
 	userRec map[int]map[int]int
 	recUser map[int]map[int]int
@@ -67,6 +74,7 @@ func NewDB() *DB {
 		recUser: make(map[int]map[int]int),
 		entries: make(entryMap),
 		days:    make(dayMap),
+		aisles:  make(aisleMap),
 	}
 }
 
@@ -86,15 +94,23 @@ func (db *DB) WithDefaults(fs fs.FS) *DB {
 	}
 
 	if len(db.food) == 0 {
-		food := []core.Food{}
+		food := []struct {
+			core.Food
+			Aisle core.Aisle
+		}{}
 		data := loadDefault(fs, "food.json")
 		if err := json.Unmarshal(data, &food); err != nil {
 			return db
 		}
 
-		db.foodID = len(food)
+		if num := len(food); num > 0 {
+			db.foodID = len(food)
+			db.aisles[0] = map[int]core.Aisle{}
+		}
+
 		for _, f := range food {
-			db.food[f.ID] = f
+			db.food[f.ID] = f.Food
+			db.aisles[0][f.ID] = f.Aisle
 		}
 	}
 

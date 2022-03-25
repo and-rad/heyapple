@@ -10,6 +10,10 @@
 			"err500": "Internal server error. This shouldn't happen.",
 			"ok": "Success! The ingredient was added."
 		},
+		"aisle": {
+			"0": "",
+			"1": "A. Fruit & vegetables"
+		},
 		"aria": {
 			"headcal": "Calendar",
 			"headingred": "Ingredients",
@@ -59,6 +63,7 @@
 			"err": "Unknown error occurred"
 		},
 		"food": {
+			"aisle": "Aisle",
 			"amount": "Amount",
 			"carbs": "Carbohydrates",
 			"carbs2": "Carbs",
@@ -75,6 +80,13 @@
 			"protein": "Protein",
 			"salt": "Salt",
 			"sugar": "Sugar"
+		},
+		"getlist": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to access this shopping list.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "There is no shopping list by that name.",
+			"err500": "Internal server error. This shouldn't happen."
 		},
 		"month": {
 			"1": "January",
@@ -151,6 +163,7 @@
 		"unit": {
 			"cal": "kcal",
 			"g": "g",
+			"kg": "kg",
 			"mg": "mg",
 			"min": "min"
 		}

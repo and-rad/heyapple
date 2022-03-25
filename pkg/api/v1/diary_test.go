@@ -271,11 +271,11 @@ func TestDiary(t *testing.T) {
 		api.Diary(env)(res, req, data.params)
 
 		if status := res.Result().StatusCode; status != data.status {
-			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
 		}
 
 		if body := res.Body.String(); body != data.out {
-			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, body, data.out)
 		}
 	}
 }
@@ -344,11 +344,11 @@ func TestDiaryEntries(t *testing.T) {
 		api.DiaryEntries(env)(res, req, data.params)
 
 		if status := res.Result().StatusCode; status != data.status {
-			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
 		}
 
 		if body := res.Body.String(); body != data.out {
-			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, body, data.out)
 		}
 	}
 }

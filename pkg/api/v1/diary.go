@@ -204,7 +204,6 @@ func Diary(env *handler.Environment) httprouter.Handle {
 //   200 - OK
 //   400 - Malformed query parameters
 //   401 - Insufficient permission
-//   400 - Diary doesn't exist
 //   500 - Internal server error
 // Example output:
 //   [

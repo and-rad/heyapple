@@ -1,12 +1,16 @@
 <script setup>
 import Arrow from "./images/ImageSortArrow.vue";
 import Checkbox from "./Checkbox.vue";
-import { computed, ref } from "vue";
+import { computed, ref, inject } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t, locale } = useI18n();
+const log = inject("log");
+const csrf = inject("csrfToken");
+
 const prop = defineProps(["items"]);
 const emit = defineEmits("selected");
+
 const sortBy = ref("amount");
 const sortDir = ref("desc");
 
@@ -48,13 +52,48 @@ function setActive(evt) {
 
 function onCheckedAll(evt) {
 	let val = evt.target.checked;
-	prop.items.forEach((i) => (i.done = val));
+	let params = new URLSearchParams();
+	prop.items.forEach((i) => {
+		i.done = val;
+		params.append("id", i.id);
+		params.append("done", i.done);
+	});
+
+	fetch("/api/v1/list/diary/done", {
+		method: "PUT",
+		body: params,
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw response;
+			}
+		})
+		.catch((err) => log.err(err));
 }
 
 function onChecked(evt) {
 	let id = evt.target.closest("label").dataset.id;
 	let val = evt.target.checked;
 	prop.items.filter((i) => i.id == id)[0].done = val;
+
+	fetch("/api/v1/list/diary/done", {
+		method: "PUT",
+		body: new URLSearchParams({ id: id, done: val }),
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw response;
+			}
+		})
+		.catch((err) => log.err(err));
 }
 </script>
 

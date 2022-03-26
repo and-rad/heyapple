@@ -406,6 +406,10 @@ function onDateSelected(dates) {
 	height: auto;
 }
 
+#charts-macro .pie-chart > div span:last-child {
+	color: var(--color-text-light);
+}
+
 #charts-macro .pie-chart.kcal {
 	flex-basis: 100%;
 	margin: 1em 15%;

@@ -111,7 +111,7 @@
 	--icon-triangle-up: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgdmlld2JveD0iMCAwIDE2IDE2IiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiPjxwYXRoIGQ9Ik0xMiAxMEw4IDYgNCA5Ljk5NHoiIGZpbGw9IiMwMDAiLz48L3N2Zz4K);
 	--icon-triangle-down: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgdmlld2JveD0iMCAwIDE2IDE2IiB3aWR0aD0iMTYiIGhlaWdodD0iMTYiPjxwYXRoIGQ9Ik00IDZsNCA0IDQtMy45OTR6IiBmaWxsPSIjMDAwIi8+PC9zdmc+Cg==);
 
-	--shadow-menu: 0 0 6px #aaaaaa;
+	--shadow-menu: 0 0 8px #ccc;
 	--shadow-button: 0 0 6px #888;
 
 	--transition-move: 0.25s ease-in-out;

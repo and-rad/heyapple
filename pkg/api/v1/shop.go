@@ -22,10 +22,71 @@ import (
 	"heyapple/pkg/app"
 	"heyapple/pkg/handler"
 	"net/http"
+	"strconv"
 	"time"
 
 	"github.com/julienschmidt/httprouter"
 )
+
+// SaveListDone enables or disables items on the shopping
+// list identified by {name}. Disabled here represents the
+// "already bought" state. The response body will always
+// be empty, success or failure is communicated by the
+// status codes.
+//
+// Endpoint:
+//   /api/v1/list/{name}/done
+// Methods:
+//   Put
+// Possible status codes:
+//   204 - Update successful
+//   400 - Malformed or missing input data
+//   401 - Insufficient permission
+//   500 - Internal server error
+// Example input:
+//   id=1&done=true&id=23&done=false
+func SaveListDone(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		cmd := &app.SaveShoppingListDone{
+			ID:    env.Session.GetInt(r.Context(), "id"),
+			Name:  ps.ByName("name"),
+			Items: map[int]bool{},
+		}
+
+		if cmd.ID == 0 {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		r.ParseForm()
+		ids := r.Form["id"]
+		done := r.Form["done"]
+		if len(ids) != len(done) {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		for i := range ids {
+			id, err := strconv.Atoi(ids[i])
+			if err != nil {
+				continue
+			}
+			ok, err := strconv.ParseBool(done[i])
+			if err != nil {
+				continue
+			}
+			cmd.Items[id] = ok
+		}
+
+		if err := env.DB.Execute(cmd); err == app.ErrMissing {
+			w.WriteHeader(http.StatusBadRequest)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusNoContent)
+		}
+	}
+}
 
 // ShoppingLists returns a JSON-formatted list with
 // the names of a user's custom shopping lists.
@@ -54,7 +115,7 @@ func ShoppingLists(env *handler.Environment) httprouter.Handle {
 // ShoppingList returns a JSON-formatted list of shopping
 // items generated from a user's diary. It expects at least
 // one valid date in the request body in the yyyy-mm-dd
-// format. The function body is empty when errors occur
+// format. The response body is empty when errors occur
 // and will always be an array on success, even when there
 // are no entries in the database.
 //

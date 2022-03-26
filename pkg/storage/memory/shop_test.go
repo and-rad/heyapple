@@ -93,3 +93,43 @@ func TestDB_ShoppingList(t *testing.T) {
 		}
 	}
 }
+
+func TestDB_SetShoppingListDone(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+		in map[int]bool
+
+		out doneMap
+		err error
+	}{
+		{ //00// create if not exist
+			db:  NewDB(),
+			id:  1,
+			in:  map[int]bool{2: true},
+			out: doneMap{1: {2: true}},
+		},
+		{ //01// update existing
+			db:  &DB{done: doneMap{1: {2: false}}},
+			id:  1,
+			in:  map[int]bool{2: true},
+			out: doneMap{1: {2: true}},
+		},
+		{ //02// delete if false
+			db:  &DB{done: doneMap{1: {2: true, 12: true}}},
+			id:  1,
+			in:  map[int]bool{3: true, 12: false},
+			out: doneMap{1: {2: true, 3: true}},
+		},
+	} {
+		err := data.db.SetShoppingListDone(data.id, data.in)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.db.done, data.out) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.done, data.out)
+		}
+	}
+}

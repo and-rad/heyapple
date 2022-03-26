@@ -82,6 +82,7 @@ type DB interface {
 	DiaryEntries(id int, date time.Time) ([]core.DiaryEntry, error)
 	DiaryDays(id, year, month, day int) ([]core.DiaryDay, error)
 
+	SetShoppingListDone(id int, done map[int]bool) error
 	ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error)
 }
 

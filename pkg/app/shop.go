@@ -23,6 +23,44 @@ import (
 	"time"
 )
 
+type SaveShoppingListDone struct {
+	Items map[int]bool
+	Name  string
+	ID    int
+}
+
+func (c *SaveShoppingListDone) Execute(db DB) error {
+	if c.ID == 0 {
+		return ErrMissing
+	}
+
+	if len(c.Items) == 0 {
+		return ErrMissing
+	}
+
+	if c.Name == "" {
+		return ErrMissing
+	}
+
+	clean := make(map[int]bool, len(c.Items))
+	for k, v := range c.Items {
+		if ok, _ := db.FoodExists(k); ok {
+			clean[k] = v
+		}
+	}
+
+	if len(clean) == 0 {
+		return nil
+	}
+
+	if c.Name != "diary" {
+		// TODO implement custom shopping lists
+		return ErrNotFound
+	}
+
+	return db.SetShoppingListDone(c.ID, clean)
+}
+
 type ShoppingList struct {
 	Name  string
 	Date  []time.Time

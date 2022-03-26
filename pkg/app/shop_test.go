@@ -87,3 +87,58 @@ func TestShoppingList_Fetch(t *testing.T) {
 		}
 	}
 }
+
+func TestSaveShoppingListDone_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db  *mock.DB
+		cmd *app.SaveShoppingListDone
+
+		items []core.ShopItem
+		err   error
+	}{
+		{ //00// no id provided
+			db:  mock.NewDB(),
+			cmd: &app.SaveShoppingListDone{},
+			err: app.ErrMissing,
+		},
+		{ //01// no data
+			cmd: &app.SaveShoppingListDone{ID: 12},
+			db:  mock.NewDB(),
+			err: app.ErrMissing,
+		},
+		{ //02// missing name
+			cmd: &app.SaveShoppingListDone{ID: 12, Items: map[int]bool{1: true}},
+			db:  mock.NewDB(),
+			err: app.ErrMissing,
+		},
+		{ //03// connection failed
+			db:  mock.NewDB().WithError(nil, mock.ErrDOS).WithFoods(mock.Food1),
+			cmd: &app.SaveShoppingListDone{ID: 1, Name: "diary", Items: map[int]bool{1: true}},
+			err: mock.ErrDOS,
+		},
+		{ //04// ignore non-existent food
+			db:  mock.NewDB(),
+			cmd: &app.SaveShoppingListDone{ID: 1, Name: "diary", Items: map[int]bool{1: true}},
+		},
+		{ //05// success
+			cmd:   &app.SaveShoppingListDone{ID: 1, Name: "diary", Items: map[int]bool{1: true}},
+			db:    mock.NewDB().WithShoppingList(mock.List1()...).WithFoods(mock.Food1),
+			items: func() []core.ShopItem { l := mock.List1(); l[0].Done = true; return l }(),
+		},
+		{ //06// invalid shopping list name
+			db:  mock.NewDB().WithFoods(mock.Food1),
+			cmd: &app.SaveShoppingListDone{ID: 1, Name: "Dinner", Items: map[int]bool{1: true}},
+			err: app.ErrNotFound,
+		},
+	} {
+		err := data.cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.db.ShopList, data.items) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.ShopList, data.items)
+		}
+	}
+}

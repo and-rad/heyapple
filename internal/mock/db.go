@@ -409,6 +409,18 @@ func (db *DB) DiaryDays(id, year, month, day int) ([]core.DiaryDay, error) {
 	return days, nil
 }
 
+func (db *DB) SetShoppingListDone(id int, done map[int]bool) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+	for i, l := range db.ShopList {
+		if v, ok := done[l.ID]; ok {
+			db.ShopList[i].Done = v
+		}
+	}
+	return nil
+}
+
 func (db *DB) ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error) {
 	if err := db.popError(); err != nil {
 		return nil, err

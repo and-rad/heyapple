@@ -33,6 +33,82 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+func TestSaveListDone(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		values    url.Values
+		setCookie bool
+
+		status int
+	}{
+		{ //00// no session
+			db:     mock.NewDB(),
+			status: http.StatusUnauthorized,
+		},
+		{ //01// missing input data
+			db:        mock.NewDB(),
+			params:    httprouter.Params{{Key: "name", Value: "diary"}},
+			values:    url.Values{},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //02// number of input values is off
+			db:        mock.NewDB(),
+			params:    httprouter.Params{},
+			values:    url.Values{"id": {"1", "2"}, "done": {"true"}},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //03// invalid data type
+			db:        mock.NewDB(),
+			params:    httprouter.Params{},
+			values:    url.Values{"id": {"one"}, "done": {"true"}},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //04// invalid data type
+			db:        mock.NewDB(),
+			params:    httprouter.Params{},
+			values:    url.Values{"id": {"1"}, "done": {"hellyeah"}},
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //05// connection failure
+			db:        mock.NewDB().WithError(nil, mock.ErrDOS).WithFoods(mock.Food1),
+			params:    httprouter.Params{{Key: "name", Value: "diary"}},
+			values:    url.Values{"id": {"1"}, "done": {"true"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //06// success
+			db:        mock.NewDB().WithFoods(mock.Food1),
+			params:    httprouter.Params{{Key: "name", Value: "diary"}},
+			values:    url.Values{"id": {"1"}, "done": {"true"}},
+			setCookie: true,
+			status:    http.StatusNoContent,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.values.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.SaveListDone(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+	}
+}
+
 func TestShoppingList(t *testing.T) {
 	for idx, data := range []struct {
 		db        *mock.DB

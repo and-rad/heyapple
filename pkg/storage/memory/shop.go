@@ -25,6 +25,23 @@ import (
 	"time"
 )
 
+func (db *DB) SetShoppingListDone(id int, done map[int]bool) error {
+	if _, ok := db.done[id]; !ok {
+		db.done[id] = map[int]bool{}
+	}
+
+	d := db.done[id]
+	for k, v := range done {
+		if v {
+			d[k] = v
+		} else {
+			delete(d, k)
+		}
+	}
+
+	return nil
+}
+
 func (db *DB) ShoppingList(id int, date ...time.Time) ([]core.ShopItem, error) {
 	days, ok := db.entries[id]
 	if !ok {

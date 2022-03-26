@@ -3,39 +3,46 @@ import MenuImage from "./images/ImageMenu.vue";
 import DetailsImage from "./images/ImageHeaderMono.vue";
 import MoreImage from "./images/ImageMore.vue";
 import BackArrow from "./images/ImageRightArrow.vue";
-import { ref } from "vue";
+import { ref, inject, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+const prefs = inject("prefs");
 const emit = defineEmits(["detailVisibility"]);
-const filter = ref("");
-const details = ref("");
+const filter = ref(false);
+const details = ref(false);
+
+const mainClass = computed(() => ({
+	"open-filter": filter.value,
+	"open-details": details.value,
+	"neutral-charts": prefs.value.ui.neutralCharts,
+}));
 
 function toggleFilter() {
-	if (filter.value == "") {
-		filter.value = "open-filter";
-		details.value = "";
+	if (!filter.value) {
+		filter.value = true;
+		details.value = false;
 		emit("detailVisibility");
 	} else {
-		filter.value = "";
+		filter.value = false;
 	}
 }
 
 function toggleDetails() {
 	emit("detailVisibility");
-	if (details.value == "") {
-		details.value = "open-details";
-		filter.value = "";
+	if (!details.value) {
+		details.value = true;
+		filter.value = false;
 	} else {
-		details.value = "";
+		details.value = false;
 	}
 }
 
 function showDetails() {
 	emit("detailVisibility");
-	if (details.value == "") {
-		details.value = "open-details";
-		filter.value = "";
+	if (!details.value) {
+		details.value = true;
+		filter.value = false;
 	}
 }
 
@@ -43,7 +50,7 @@ defineExpose({ showDetails });
 </script>
 
 <template>
-	<main :class="[filter, details]">
+	<main :class="mainClass">
 		<div id="filter">
 			<slot name="filter"> This is the main search & filter area</slot>
 		</div>

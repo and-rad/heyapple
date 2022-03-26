@@ -154,5 +154,8 @@ fetch("/api/v1/prefs")
 				carb: 270,
 				prot: 80,
 			},
+			ui: {
+				neutralCharts: false,
+			},
 		});
 	});

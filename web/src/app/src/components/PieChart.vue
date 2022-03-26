@@ -83,8 +83,13 @@ const overArc = computed(() => {
 
 .pie-chart circle.bad {
 	stroke: var(--color-bad);
-	stroke-width: 16;
+	stroke-width: 13;
 	transition: 0.5s 0.5s ease-in-out;
+}
+
+main.neutral-charts .pie-chart circle.bad {
+	stroke: var(--color-primary);
+	stroke-width: 32;
 }
 
 .pie-chart circle.soft {

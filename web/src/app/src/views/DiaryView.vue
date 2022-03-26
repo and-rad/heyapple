@@ -373,6 +373,10 @@ function onDateSelected(dates) {
 	stroke: var(--color-secondary);
 }
 
+main.neutral-charts #charts-week button.today .pie-chart circle.bad {
+	stroke: var(--color-secondary);
+}
+
 #charts-week button.active .pie-chart circle.base {
 	fill: var(--color-primary-light);
 }
@@ -435,6 +439,10 @@ function onDateSelected(dates) {
 	stroke: var(--color-fat);
 }
 
+main.neutral-charts #charts-macro .pie-chart.fat circle.bad {
+	stroke: var(--color-fat);
+}
+
 #charts-macro .pie-chart.carb circle.base {
 	stroke: var(--color-carb-light);
 }
@@ -443,11 +451,19 @@ function onDateSelected(dates) {
 	stroke: var(--color-carb);
 }
 
+main.neutral-charts #charts-macro .pie-chart.carb circle.bad {
+	stroke: var(--color-carb);
+}
+
 #charts-macro .pie-chart.prot circle.base {
 	stroke: var(--color-prot-light);
 }
 
 #charts-macro .pie-chart.prot circle.good {
+	stroke: var(--color-prot);
+}
+
+main.neutral-charts #charts-macro .pie-chart.prot circle.bad {
 	stroke: var(--color-prot);
 }
 

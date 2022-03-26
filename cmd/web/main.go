@@ -64,6 +64,7 @@ func main() {
 	router.GET("/terms", handler.Terms(env))
 	router.GET("/confirm/:token", handler.Confirm(env))
 	router.GET("/reset/:token", handler.Reset(env))
+	router.HEAD("/ping", handler.Ping)
 
 	router.POST("/auth/local", auth.LocalLogin(env))
 	router.POST("/auth/reset", auth.ResetRequest(env))

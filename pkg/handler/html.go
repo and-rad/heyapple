@@ -29,6 +29,10 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+func Ping(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	w.WriteHeader(http.StatusOK)
+}
+
 func Home(env *Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		data := map[string]interface{}{}

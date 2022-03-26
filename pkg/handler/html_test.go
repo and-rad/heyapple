@@ -448,3 +448,22 @@ func TestReset(t *testing.T) {
 
 	web.Reset = tmp
 }
+
+func TestPing(t *testing.T) {
+	for idx, data := range []struct {
+		status int
+	}{
+		{ //00//
+			status: http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+
+		handler.Ping(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+	}
+}

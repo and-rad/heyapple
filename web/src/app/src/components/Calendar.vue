@@ -5,7 +5,7 @@ import { useI18n } from "vue-i18n";
 import { DateTime } from "luxon";
 
 const { t } = useI18n();
-const prop = defineProps(["mode", "items"]);
+const prop = defineProps(["mode", "items", "storage"]);
 const emit = defineEmits(["selection"]);
 const month = ref(DateTime.now().month);
 const year = ref(DateTime.now().year);
@@ -124,12 +124,28 @@ function onDay(evt) {
 		}
 	});
 
+	saveDatesLocal();
 	emit("selection", selection);
 }
 
-defineExpose({onDay})
+function saveDatesLocal() {
+	if (prop.storage) {
+		let str = JSON.stringify(selection);
+		window.localStorage.setItem(prop.storage, str);
+	}
+}
+
+function loadDatesLocal() {
+	if (prop.storage) {
+		let str = window.localStorage.getItem(prop.storage);
+		selection = JSON.parse(str) || [];
+	}
+}
+
+defineExpose({ onDay });
 
 onMounted(() => {
+	loadDatesLocal();
 	onCalendarChanged();
 	emit("selection", selection);
 });

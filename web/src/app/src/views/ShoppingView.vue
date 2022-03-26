@@ -46,7 +46,7 @@ function showDetails(id) {
 		<template #filter>
 			<section>
 				<h2>{{ t("aria.headcal") }}</h2>
-				<Calendar mode="toggle" :items="daysWithEntries" @selection="onDateSelected" />
+				<Calendar mode="toggle" storage="calshop" :items="daysWithEntries" @selection="onDateSelected" />
 			</section>
 			<hr />
 			<section></section>

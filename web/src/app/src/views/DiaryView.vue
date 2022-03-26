@@ -187,7 +187,7 @@ function onDateSelected(dates) {
 		<template #filter>
 			<section>
 				<h2>{{ t("aria.headcal") }}</h2>
-				<Calendar ref="calendar" :items="daysWithEntries" @selection="onDateSelected" />
+				<Calendar ref="calendar" storage="caldiary" :items="daysWithEntries" @selection="onDateSelected" />
 			</section>
 			<hr />
 			<section></section>

@@ -195,7 +195,7 @@ function onRelease(evt) {
 	border: var(--border);
 	top: -8px;
 	cursor: pointer;
-	transition: box-shadow 0.3s ease;
+	transition: box-shadow var(--transition-style);
 }
 
 .slider .bar .handle.min {

@@ -27,7 +27,7 @@ label > input[type="checkbox"] + div {
 	background-repeat: no-repeat;
 	background-size: 1em;
 	background-position: center;
-	transition: 0.25s;
+	transition: var(--transition-style);
 }
 
 @media (hover: hover) {

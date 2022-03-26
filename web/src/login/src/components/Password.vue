@@ -32,6 +32,6 @@ function updatePasswordStrength(password) {
 	width: 0;
 	margin-top: 4px;
 	background: transparent;
-	transition: 0.2s ease-in-out;
+	transition: var(--transition-move);
 }
 </style>

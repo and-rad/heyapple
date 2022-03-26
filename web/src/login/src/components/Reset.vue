@@ -65,7 +65,7 @@ function clearForm(evt) {
 a.back {
 	display: block;
 	margin-bottom: 2em;
-	transition: color 0.2s;
+	transition: color var(--transition-style);
 }
 
 a.back:hover {

@@ -113,6 +113,9 @@
 
 	--shadow-menu: 0 0 6px #aaaaaa;
 	--shadow-button: 0 0 6px #888;
+
+	--transition-move: 0.25s ease-in-out;
+	--transition-style: 0.25s;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -239,7 +242,7 @@ button {
 	width: 100%;
 	background-color: var(--color-primary);
 	color: #fff;
-	transition: box-shadow 0.2s, background-color 0.2s;
+	transition: box-shadow var(--transition-style), background-color var(--transition-style);
 }
 
 input::-webkit-outer-spin-button,

@@ -116,7 +116,7 @@ defineExpose({ showDetails });
 	padding-bottom: 2em;
 	border-right: var(--border-light);
 	white-space: nowrap;
-	transition: left 0.25s;
+	transition: left var(--transition-move);
 }
 
 main.open-filter #filter {
@@ -144,7 +144,7 @@ main.open-filter #filter {
 	width: 480px;
 	max-width: 100%;
 	box-shadow: var(--shadow-menu);
-	transition: right 0.25s;
+	transition: right var(--transition-move);
 	display: flex;
 	flex-direction: column;
 }
@@ -285,7 +285,7 @@ main.open-details #details {
 	right: 0;
 	display: flex;
 	flex-direction: column;
-	transition: 0.25s;
+	transition: var(--transition-move);
 }
 
 main.open-filter #main {
@@ -293,7 +293,7 @@ main.open-filter #main {
 }
 
 main .no-edit-mode {
-	transition: opacity 0.2s;
+	transition: opacity var(--transition-style);
 }
 
 main.edit-mode .no-edit-mode {
@@ -352,7 +352,7 @@ main .controls {
 
 #main th.sort .icon {
 	opacity: 0;
-	transition: opacity 0.2s;
+	transition: opacity var(--transition-style);
 }
 
 #main th.sort.active .icon {

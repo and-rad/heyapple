@@ -530,7 +530,7 @@ function onDateSelected(dates) {
 	border-radius: 0;
 	padding: 0.5em 0.5em 0.35em;
 	border-bottom: 2px solid transparent;
-	transition: color 0.2s, border-color 0.2s;
+	transition: color var(--transition-style), border-color var(--transition-style);
 }
 
 @media (hover: hover) {

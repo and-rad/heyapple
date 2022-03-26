@@ -124,7 +124,7 @@ header nav {
 	box-shadow: var(--shadow-menu);
 	z-index: 110;
 	padding-top: 4em;
-	transition: right 0.25s ease-in-out;
+	transition: right var(--transition-move);
 }
 
 header nav.open {
@@ -165,7 +165,7 @@ header nav a {
 	padding: 0.5em 1em;
 	color: var(--color-text);
 	border-left: 3px solid transparent;
-	transition: color 0.2s;
+	transition: color var(--transition-style);
 }
 
 header nav a:hover,
@@ -189,7 +189,7 @@ header button svg {
 	width: 2em;
 	height: 2em;
 	fill: var(--color-primary);
-	transition: 0.2s;
+	transition: var(--transition-style);
 }
 
 header button:hover {
@@ -244,7 +244,7 @@ header button:hover svg {
 		margin: 0;
 		padding: 0.5em 0;
 		opacity: 0;
-		transition: opacity 0.25s ease-in-out;
+		transition: opacity var(--transition-style);
 	}
 
 	header nav.open #nav-user {

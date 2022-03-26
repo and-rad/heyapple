@@ -327,17 +327,32 @@ main .controls {
 	white-space: nowrap;
 }
 
+#main tr {
+	transition: var(--transition-style);
+}
+
+#main tr.done {
+	opacity: 0.3;
+	background-color: #f0f0f0;
+	color: var(--color-text-light);
+}
+
 #main td,
 #main th {
 	padding: 1em 0.5em;
 	text-align: left;
 	cursor: default;
 	overflow: hidden;
+	text-overflow: ellipsis;
 	max-width: 6em;
 }
 
-#main td.name {
-	text-overflow: ellipsis;
+#main th.select,
+#main td.select {
+	width: 3em;
+	padding-left: 1em;
+	padding-right: 1em;
+	text-align: center;
 }
 
 #main th {

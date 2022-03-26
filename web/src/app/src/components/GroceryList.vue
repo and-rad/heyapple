@@ -1,5 +1,6 @@
 <script setup>
 import Arrow from "./images/ImageSortArrow.vue";
+import Checkbox from "./Checkbox.vue";
 import { computed, ref } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -23,6 +24,8 @@ const sortedItems = computed(() => {
 	}
 });
 
+const allChecked = computed(() => prop.items.length && prop.items.length == prop.items.filter((i) => i.done).length);
+
 function formattedAmount(item) {
 	if (item.amount > 999) {
 		var amount = +parseFloat(item.amount * 0.001).toFixed(1);
@@ -42,28 +45,45 @@ function setActive(evt) {
 		sortBy.value = cat;
 	}
 }
+
+function onCheckedAll(evt) {
+	let val = evt.target.checked;
+	prop.items.forEach((i) => (i.done = val));
+}
+
+function onChecked(evt) {
+	let id = evt.target.closest("label").dataset.id;
+	let val = evt.target.checked;
+	prop.items.filter((i) => i.id == id)[0].done = val;
+}
 </script>
 
 <template>
 	<table>
 		<thead>
 			<tr :class="sortDir">
+				<th class="select">
+					<Checkbox :checked="allChecked" @click="onCheckedAll" />
+				</th>
 				<th class="num sort" :class="{ active: sortBy == 'amount' }" @click="setActive" data-sort="amount">
 					<Arrow /> {{ t("food.amount") }}
 				</th>
 				<th class="name sort" :class="{ active: sortBy == 'name' }" @click="setActive" data-sort="name">
 					{{ t("food.name") }} <Arrow />
 				</th>
-				<th class="m sort" :class="{ active: sortBy == 'aisle' }" @click="setActive" data-sort="aisle">
+				<th class="s sort" :class="{ active: sortBy == 'aisle' }" @click="setActive" data-sort="aisle">
 					<Arrow /> {{ t("food.aisle") }}
 				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr v-for="item in sortedItems" :key="item.id">
+			<tr v-for="item in sortedItems" :key="item.id" :class="{ done: item.done }">
+				<td class="select">
+					<Checkbox :data-id="item.id" :checked="item.done" @change="onChecked" />
+				</td>
 				<td class="num" v-html="formattedAmount(item)"></td>
 				<td class="name" @click="$emit('selected', item.id)">{{ item.name }}</td>
-				<td class="m">{{ t("aisle." + item.aisle) }}</td>
+				<td class="s">{{ t("aisle." + item.aisle) }}</td>
 			</tr>
 		</tbody>
 	</table>

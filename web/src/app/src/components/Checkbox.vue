@@ -1,15 +1,19 @@
 <script setup>
 const prop = defineProps(["checked"]);
-const emit = defineEmits(["change"]);
+const emit = defineEmits(["change", "click"]);
 
 function onChange(evt) {
 	emit("change", evt);
+}
+
+function onClick(evt) {
+	emit("click", evt);
 }
 </script>
 
 <template>
 	<label>
-		<input type="checkbox" :checked="checked" @change="onChange" />
+		<input type="checkbox" :checked="checked" @change="onChange" @click="onClick" />
 		<div></div>
 	</label>
 </template>

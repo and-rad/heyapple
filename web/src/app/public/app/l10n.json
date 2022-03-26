@@ -40,6 +40,10 @@
 			"add": "Add",
 			"new": "New"
 		},
+		"conn": {
+			"off": "Connection to server lost, using local copy.",
+			"on": "Connection to server restored."
+		},
 		"createfood": {
 			"err401": "You do not have permission to create food items.",
 			"err403": "It doesn't look like you're allowed to do that.",

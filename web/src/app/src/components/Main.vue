@@ -91,6 +91,7 @@ defineExpose({ showDetails });
 #details > section,
 #filter > section {
 	padding: 0.5em;
+	transition: opacity var(--transition-style);
 }
 
 #details fieldset legend,

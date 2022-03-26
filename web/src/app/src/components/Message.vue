@@ -28,7 +28,7 @@ onMounted(() => {
 	border-radius: 4px;
 	margin: 8px 16px;
 	font-size: 14px;
-	box-shadow: 0 0 4px #bbb;
+	box-shadow: 0 0 8px #bbb;
 	position: relative;
 	display: flex;
 	align-items: center;

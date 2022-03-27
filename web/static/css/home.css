@@ -241,6 +241,12 @@ body.legal h2 {
 	margin: 2em 0 1em;
 }
 
+body.legal h3 {
+	font-weight: 300;
+	font-size: 1.25em;
+	margin: 2em 0 1em;
+}
+
 #jumbo {
 	display: flex;
 	justify-content: space-between;

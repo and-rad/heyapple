@@ -102,7 +102,13 @@
 		"sourcebody": "HeyApple is released under the AGPL. You can inspect the code, contribute, or fork it at any time."
 	},
 	"privacy": {
-		"privacy.head": "Privacy Policy"
+		"contactbody": "TODO",
+		"contacthead":"Designated Responsible Representative",
+		"head": "Privacy Policy",
+		"mainbody":"TODO",
+		"mainhead": "General Information",
+		"superbody": "TODO",
+		"superhead":"State Supervisory Authority"
 	},
 	"recipe": {
 		"title": "Your Favorite Recipes",

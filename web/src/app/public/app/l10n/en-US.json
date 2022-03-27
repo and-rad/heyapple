@@ -1,0 +1,184 @@
+{
+	"en-US": {
+		"1": "Apple",
+		"2": "Banana",
+		"addfood": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to edit this recipe.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "The requested recipe does not exist.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! The ingredient was added."
+		},
+		"aisle": {
+			"0": "",
+			"1": "A. Fruit & vegetables",
+			"2": "B. Spices & Seasonings",
+			"3": "C. Bread & Cereals",
+			"4": "D. Milk & Dairy",
+			"5": "E. Meat",
+			"6": "F. Seafood",
+			"7": "G. Frozen Food",
+			"8": "H. Beverages",
+			"9": "I. Cleaning Supplies",
+			"10": "J. Health & Beauty"
+		},
+		"aria": {
+			"headcal": "Calendar",
+			"headingred": "Ingredients",
+			"headlog": "Log",
+			"headmacro1": "Primary Macronutrients",
+			"headmacro2": "Secondary Macronutrients",
+			"headnew": "New item",
+			"headnewrec": "New recipe",
+			"headnutrients": "Nutrients",
+			"headprep": "Preparation",
+			"headsearch": "Search and filter",
+			"headtrack": "Tracking"
+		},
+		"btn": {
+			"add": "Add",
+			"new": "New"
+		},
+		"conn": {
+			"off": "Connection to server lost, using local copy.",
+			"on": "Connection to server restored."
+		},
+		"createfood": {
+			"err401": "You do not have permission to create food items.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! New food item created."
+		},
+		"createrec": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to create recipes.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! New recipe created."
+		},
+		"day": {
+			"cal1": "Mo",
+			"cal2": "Tu",
+			"cal3": "We",
+			"cal4": "Th",
+			"cal5": "Fr",
+			"cal6": "Sa",
+			"cal7": "Su"
+		},
+		"details": {
+			"noitem": "Select an item for details"
+		},
+		"diary": {
+			"noitems": "There is no food logged for this day.<br>Time to <a href='#/food'>add some</a>!"
+		},
+		"err": {
+			"err": "Unknown error occurred"
+		},
+		"food": {
+			"aisle": "Aisle",
+			"amount": "Amount",
+			"carbs": "Carbohydrates",
+			"carbs2": "Carbs",
+			"energy": "Energy",
+			"fat": "Fat",
+			"fato3": "Fat, Ω-3",
+			"fato6": "Fat, Ω-6",
+			"fatsat": "Fat, saturated",
+			"fiber": "Fiber",
+			"hintnew": "New name...",
+			"hintrec": "Select recipe...",
+			"hintsearch": "Find food...",
+			"name": "Name",
+			"protein": "Protein",
+			"salt": "Salt",
+			"sugar": "Sugar"
+		},
+		"getlist": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to access this shopping list.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "There is no shopping list by that name.",
+			"err500": "Internal server error. This shouldn't happen."
+		},
+		"month": {
+			"1": "January",
+			"2": "February",
+			"3": "March",
+			"4": "April",
+			"5": "May",
+			"6": "June",
+			"7": "July",
+			"8": "August",
+			"9": "September",
+			"10": "October",
+			"11": "November",
+			"12": "December"
+		},
+		"nav": {
+			"diary": "Diary",
+			"food": "Food",
+			"help": "Help",
+			"profile": "Profile",
+			"recipes": "Recipes",
+			"settings": "Settings",
+			"shopping": "Shopping Lists",
+			"signout": "Sign out"
+		},
+		"recipe": {
+			"cooktime": "Cooking",
+			"hintnew": "New name...",
+			"hintsearch": "Find a recipe...",
+			"isowner": "Your recipe",
+			"ispublic": "Public recipe",
+			"misctime": "Additional",
+			"noitems": "This recipe is currently empty.<br>Time to add some <a href='#/food'>food</a>!",
+			"owner": "<strong>{name}</strong>'s recipe",
+			"preptime": "Preparation",
+			"size": "Serving|Servings",
+			"time": "Total time"
+		},
+		"recowner": {
+			"err": "Could not determine recipe ownership."
+		},
+		"savediary": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to edit this diary.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "The requested diary does not exist.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! The diary was updated."
+		},
+		"savefood": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to edit food items.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "The requested food item does not exist.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! All edits saved."
+		},
+		"saverec": {
+			"err400": "Malformed or missing input data.",
+			"err401": "You do not have permission to edit this recipe.",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err404": "The requested recipe does not exist.",
+			"err500": "Internal server error. This shouldn't happen.",
+			"ok": "Success! All edits saved."
+		},
+		"signout": {
+			"err404": "Sign out failed, session not found. Are you even signd in?",
+			"err403": "It doesn't look like you're allowed to do that.",
+			"err500": "Sign out failed, internal server error. This shouldn't happen."
+		},
+		"todo": {
+			"instructions": "Instructions coming soon"
+		},
+		"unit": {
+			"cal": "kcal",
+			"g": "g",
+			"kg": "kg",
+			"mg": "mg",
+			"min": "min"
+		}
+	}
+}

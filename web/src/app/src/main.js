@@ -70,7 +70,7 @@ let prefs = undefined;
 function initLocale(messages) {
 	locale = createI18n({
 		legacy: false,
-		locale: lang.split("-")[0],
+		locale: lang,
 		fallbackLocale: "en",
 		messages,
 	});
@@ -126,9 +126,14 @@ function mountApp() {
 	app.mount("#app");
 }
 
-fetch("/app/l10n.json")
+fetch(`/app/l10n/${lang}.json`)
 	.then((response) => response.json())
-	.then(initLocale);
+	.then(initLocale)
+	.catch(() => {
+		fetch("/app/l10n/en.json")
+			.then((response) => response.json())
+			.then(initLocale);
+	});
 
 fetch("/api/v1/foods")
 	.then((response) => response.json())

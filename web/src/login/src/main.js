@@ -18,7 +18,7 @@ fetch("/login/l10n.json")
 
 		const i18n = createI18n({
 			legacy: false,
-			locale: lang.split("-")[0],
+			locale: lang,
 			fallbackLocale: "en",
 			messages,
 		});

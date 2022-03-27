@@ -1,6 +1,6 @@
 <script setup>
 import ArrowImage from "./images/ImageRightArrow.vue";
-import { ref, computed, onMounted, watch } from "vue";
+import { ref, computed, onBeforeMount, onMounted, watch } from "vue";
 import { useI18n } from "vue-i18n";
 import { DateTime } from "luxon";
 
@@ -9,6 +9,7 @@ const prop = defineProps(["mode", "items", "storage"]);
 const emit = defineEmits(["selection"]);
 const month = ref(DateTime.now().month);
 const year = ref(DateTime.now().year);
+const selection = ref([])
 
 const calendar = ref(null);
 
@@ -28,8 +29,6 @@ const hasNext = computed(() => {
 	return year.value != years.value[years.value.length - 1] || month.value < 12;
 });
 
-let selection = [];
-
 watch(
 	() => prop.items,
 	() => {
@@ -47,10 +46,6 @@ function onCalendarChanged() {
 	let today = DateTime.now().toISODate();
 	let date = DateTime.local(year.value, month.value);
 	date = date.minus({ days: date.weekday - 1 });
-
-	if (!selection.length && prop.mode != "toggle") {
-		selection = [today];
-	}
 
 	calendar.value.querySelectorAll("td").forEach((cell) => {
 		let iso = date.toISODate();
@@ -76,7 +71,7 @@ function onCalendarChanged() {
 			cell.classList.remove("has-entries");
 		}
 
-		if (selection.indexOf(iso) != -1) {
+		if (selection.value.indexOf(iso) != -1) {
 			cell.classList.add("active");
 		} else {
 			cell.classList.remove("active");
@@ -106,18 +101,18 @@ function onDay(evt) {
 	let iso = evt.target.dataset.date;
 
 	if (prop.mode == "toggle") {
-		let idx = selection.indexOf(iso);
+		let idx = selection.value.indexOf(iso);
 		if (idx == -1) {
-			selection.push(iso);
+			selection.value.push(iso);
 		} else {
-			selection.splice(idx, 1);
+			selection.value.splice(idx, 1);
 		}
 	} else {
-		selection = [iso];
+		selection.value = [iso];
 	}
 
 	calendar.value.querySelectorAll("td>button").forEach((btn) => {
-		if (selection.indexOf(btn.dataset.date) != -1) {
+		if (selection.value.indexOf(btn.dataset.date) != -1) {
 			btn.parentNode.classList.add("active");
 		} else {
 			btn.parentNode.classList.remove("active");
@@ -125,12 +120,12 @@ function onDay(evt) {
 	});
 
 	saveDatesLocal();
-	emit("selection", selection);
+	emit("selection", selection.value);
 }
 
 function saveDatesLocal() {
 	if (prop.storage) {
-		let str = JSON.stringify(selection);
+		let str = JSON.stringify(selection.value);
 		window.localStorage.setItem(prop.storage, str);
 	}
 }
@@ -138,16 +133,21 @@ function saveDatesLocal() {
 function loadDatesLocal() {
 	if (prop.storage) {
 		let str = window.localStorage.getItem(prop.storage);
-		selection = JSON.parse(str) || [];
+		selection.value = JSON.parse(str) || [];
+	}
+	if (!selection.value.length && prop.mode != "toggle") {
+		selection.value = [DateTime.now().toISODate()];
 	}
 }
 
-defineExpose({ onDay });
+defineExpose({ onDay, selection });
+
+onBeforeMount(() => {
+	loadDatesLocal();
+});
 
 onMounted(() => {
-	loadDatesLocal();
 	onCalendarChanged();
-	emit("selection", selection);
 });
 </script>
 

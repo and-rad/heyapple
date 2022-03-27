@@ -5,7 +5,7 @@ import EntryList from "../components/DiaryEntryList.vue";
 import PieChart from "../components/PieChart.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
-import { ref, computed, inject } from "vue";
+import { ref, computed, inject, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { DateTime, Duration } from "luxon";
 
@@ -180,6 +180,10 @@ function onDateSelected(dates) {
 		.catch((err) => log.err(err))
 		.finally(() => (current.value = diary.value[date]));
 }
+
+onMounted(() => {
+	onDateSelected(calendar.value.selection);
+});
 </script>
 
 <template>

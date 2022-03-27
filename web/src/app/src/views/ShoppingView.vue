@@ -13,6 +13,7 @@ const filtered = ref([]);
 const offline = ref(false);
 
 const main = ref(null);
+const calendar = ref(null);
 
 const daysWithEntries = computed(() => Object.keys(diary.value));
 
@@ -76,10 +77,13 @@ function loadItemsLocal() {
 	filtered.value = JSON.parse(str);
 }
 
+function ping() {
+	return fetch("/ping", { method: "HEAD" }).then(onOnline, onOffline);
+}
+
 onMounted(() => {
-	pingIntervalHandle = setInterval(() => {
-		fetch("/ping", { method: "HEAD" }).then(onOnline, onOffline);
-	}, 15000);
+	pingIntervalHandle = setInterval(ping, 15000);
+	ping().then(() => onDateSelected(calendar.value.selection));
 });
 
 onUnmounted(() => {
@@ -92,7 +96,13 @@ onUnmounted(() => {
 		<template #filter>
 			<section :class="{ offline: offline }">
 				<h2>{{ t("aria.headcal") }}</h2>
-				<Calendar mode="toggle" storage="calshop" :items="daysWithEntries" @selection="onDateSelected" />
+				<Calendar
+					ref="calendar"
+					mode="toggle"
+					storage="calshop"
+					:items="daysWithEntries"
+					@selection="onDateSelected"
+				/>
 			</section>
 			<hr />
 			<section></section>

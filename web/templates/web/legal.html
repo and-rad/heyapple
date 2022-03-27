@@ -2,7 +2,7 @@
 <html lang='{{ l10n "lang" }}' dir="ltr">
 	<head>
 		{{ template "meta" . }}
-		<link rel="stylesheet" href="/css/home.css">
+		<link rel="stylesheet" href="/css/home.css" />
 	</head>
 
 	<body class="legal">
@@ -10,6 +10,12 @@
 
 		<main>
 			<h1>{{ l10n "legal.head" }}</h1>
+
+			<h2>{{ l10n "legal.contacthead" }}</h2>
+			{{ raw (l10n "legal.contactbody" )}}
+
+			<h2>{{ l10n "legal.mainhead" }}</h2>
+			{{ raw (l10n "legal.mainbody" )}}
 		</main>
 
 		{{ template "footer-home" . }}

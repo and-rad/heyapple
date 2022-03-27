@@ -1,7 +1,7 @@
 <script setup>
 import Arrow from "./images/ImageSortArrow.vue";
 import Checkbox from "./Checkbox.vue";
-import { computed, ref, inject } from "vue";
+import { computed, ref, inject, watch } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t, locale } = useI18n();
@@ -35,6 +35,8 @@ const allChecked = computed(() => {
 	return false;
 });
 
+watch(() => prop.offline, resync);
+
 function formattedAmount(item) {
 	if (item.amount > 999) {
 		var amount = +parseFloat(item.amount * 0.001).toFixed(1);
@@ -55,11 +57,36 @@ function setActive(evt) {
 	}
 }
 
+function resync() {
+	if (!prop.offline) {
+		let params = new URLSearchParams();
+		prop.items.forEach((i) => {
+			if (i.local) {
+				params.append("id", i.id);
+				params.append("done", i.done);
+				i.local = false;
+			}
+		});
+
+		if (params.has("id")) {
+			fetch("/api/v1/list/diary/done", {
+				method: "PUT",
+				body: params,
+				headers: {
+					"Content-Type": "application/x-www-form-urlencoded",
+					"X-CSRF-Token": csrf,
+				},
+			}).catch((err) => log.err(err));
+		}
+	}
+}
+
 function onCheckedAll(evt) {
 	let val = evt.target.checked;
 	let params = new URLSearchParams();
 	prop.items.forEach((i) => {
 		i.done = val;
+		i.local = prop.offline;
 		params.append("id", i.id);
 		params.append("done", i.done);
 	});
@@ -79,7 +106,9 @@ function onCheckedAll(evt) {
 function onChecked(evt) {
 	let id = evt.target.closest("label").dataset.id;
 	let val = evt.target.checked;
-	prop.items.filter((i) => i.id == id)[0].done = val;
+	let item = prop.items.filter((i) => i.id == id)[0];
+	item.done = val;
+	item.local = prop.offline;
 
 	if (!prop.offline) {
 		fetch("/api/v1/list/diary/done", {

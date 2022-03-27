@@ -2,7 +2,7 @@
 import Main from "../components/Main.vue";
 import Calendar from "../components/Calendar.vue";
 import FoodList from "../components/GroceryList.vue";
-import { ref, computed, inject, watch, onMounted, onUnmounted } from "vue";
+import { ref, computed, inject, watch, onBeforeMount, onMounted, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -27,6 +27,10 @@ function onDateSelected(dates) {
 		return;
 	}
 
+	if (offline.value) {
+		return;
+	}
+
 	let params = new URLSearchParams(dates.map((d) => ["date", d]));
 	fetch("/api/v1/list/diary?" + params)
 		.then((response) => {
@@ -36,23 +40,23 @@ function onDateSelected(dates) {
 			return response.json();
 		})
 		.then((data) => {
-			data.forEach((d) => (d.name = t(d.id.toString())));
+			data.forEach((d) => {
+				d.name = t(d.id.toString());
+				let old = filtered.value.filter((i) => i.id == d.id)[0];
+				if (old && old.local) {
+					d.local = true;
+					d.done = old.done;
+				}
+			});
 			filtered.value = data;
 		})
-		.catch((err) => {
-			if (err instanceof TypeError) {
-				onOffline();
-			} else {
-				log.err(err);
-			}
-		});
+		.catch((err) => log.err(err));
 }
 
 function onOffline() {
 	if (!offline.value) {
 		offline.value = true;
 		log.warn(t("conn.off"));
-		loadItemsLocal();
 	}
 }
 
@@ -80,6 +84,10 @@ function loadItemsLocal() {
 function ping() {
 	return fetch("/ping", { method: "HEAD" }).then(onOnline, onOffline);
 }
+
+onBeforeMount(()=>{
+	loadItemsLocal();
+})
 
 onMounted(() => {
 	pingIntervalHandle = setInterval(ping, 15000);

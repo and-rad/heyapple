@@ -1,7 +1,7 @@
 <script setup>
 import Arrow from "./images/ImageSortArrow.vue";
 import Checkbox from "./Checkbox.vue";
-import { computed, ref, inject, watch } from "vue";
+import { computed, ref, inject, watch, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t, locale } = useI18n();
@@ -64,7 +64,6 @@ function resync() {
 			if (i.local) {
 				params.append("id", i.id);
 				params.append("done", i.done);
-				i.local = false;
 			}
 		});
 
@@ -76,7 +75,13 @@ function resync() {
 					"Content-Type": "application/x-www-form-urlencoded",
 					"X-CSRF-Token": csrf,
 				},
-			}).catch((err) => log.err(err));
+			})
+				.then((response) => {
+					if (response.ok) {
+						prop.items.forEach((i) => (i.local = false));
+					}
+				})
+				.catch(() => {});
 		}
 	}
 }
@@ -121,6 +126,8 @@ function onChecked(evt) {
 		}).catch(() => {});
 	}
 }
+
+onMounted(resync);
 </script>
 
 <template>

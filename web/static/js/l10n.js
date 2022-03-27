@@ -16,7 +16,12 @@ HA.L10n = (function () {
 		},
 
 		t: function (key) {
-			return _locmap[key] || key;
+			let tr = _locmap;
+			key.split(".").every((part) => {
+				tr = tr[part];
+				return tr;
+			});
+			return tr || key;
 		},
 	};
 })();

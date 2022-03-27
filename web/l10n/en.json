@@ -1,105 +1,136 @@
 {
-	"confirm.200": "Your e-mail address has been confirmed successfully. You are ready to sign in!",
-	"confirm.400": "Confirmation token missing! You should double-check whether you entered the correct URL.",
-	"confirm.404": "There was a problem with your request. Please make sure that you entered the correct URL. It's also possible that the action you want to perform has already been performed.",
-	"confirm.500": "There was an internal server problem, something's wrong on our end. Please try again later.",
-	"confirm.return": "Click here to return to HeyApple",
-	"confirm.signin": "Click here to sign in",
-	"confirm.title1": "Account ",
-	"confirm.title2": "Activation",
-
-	"diary.title": "Meal Planning and Nutrient Tracking",
-	"diary.subtitle": "Add recipes to your diary with the click of a button. Adjust the amount, add or remove ingredients; planning ahead and living in the moment have never been easier.",
-	"diary.list.1": "Organize your diary by time of day or create custom meals for grouping.",
-	"diary.list.2": "Adjust daily recommended doses based on your individual circumstances.",
-	"diary.list.3": "Favorites make it even faster to add food that you eat often.",
-	"diary.list.4": "Use templates to build a meal plan for an entire week with one push of a button.",
-	"diary.list.5": "Never lose data: The diary stays organized even after years of adjusting ingredients and deleting or renaming recipes.",
-
-	"email.action.1": "Activate Account",
-	"email.action.3": "Reset Password",
-	"email.foot": "&copy; 2021-2022 the HeyApple development team",
-	"email.info.3": "<p>If you did not ask to reset your password, you might want to review your recent account access for any unusual activity. You can do so in your profile settings.</p>",
-	"email.msg.1": "<h2>Hello and welcome to HeyApple,</h2><p>Your registration is almost complete. Click this link to confirm your e-mail address and enable the account login:</p>",
-	"email.msg.3": "<p>Hello,</p><p>You asked for help getting back into your HeyApple account? Click this link to set a new password:",
-	"email.plain": "If the link above does not work, copy the following address and paste it into the address bar of your internet browser:",
-	"email.sub.1": "Welcome to HeyApple!",
-	"email.sub.3": "Your password reset request",
-
-	"err.err": "Error",
-
-	"food.title": "Detailed Food Database",
-	"food.subtitle": "Search thousands of foods and compare macro nutrients, minerals, and vitamins.",
-	"food.list.1": "The database tracks more than 35 nutrients, including different types of fats and carbs.",
-	"food.list.2": "Every new entry is verified with official international food databases.",
-	"food.list.3": "Quality over quantity: Unprocessed, natural foods make up most of the database.",
-
-	"form.confirm": "Confirm Password",
-	"form.pass": "Password",
-	"form.reset": "Save password",
-
-	"home.betawarn": "HeyApple is still in its beta phase. As such, many features are incomplete or missing. A full release is planned for late 2022.",
-	"home.copy": "&copy; 2021-2022 the HeyApple development team",
-	"home.copyshort": "&copy; 2021-2022",
-	"home.legal": "Legal Notice",
-	"home.login": "Sign in",
-	"home.privacy": "Privacy Policy",
-	"home.register": "Sign up",
-	"home.terms": "Terms",
-
-	"jumbo.title": "The Complete Food Tracking Solution",
-	"jumbo.subtitle": "From frying pan to shopping cart, HeyApple provides everything you need to track nutrients and plan your meals.",
-	"jumbo.diary.head": "Meal Planner",
-	"jumbo.diary.intro": "Plan and track your meals, set nutrient targets, analyze the data",
-	"jumbo.food.head": "Food Database",
-	"jumbo.food.intro": "Find the food that fits your macros and more than 30 other nutrients",
-	"jumbo.recipe.head": "Recipe Manager",
-	"jumbo.recipe.intro": "Create your own cookbook, share it if you like, get inspired by others",
-	"jumbo.shop.head": "Shopping List",
-	"jumbo.shop.intro": "Automatic shopping lists make every grocery run a walk in the park",
-
+	"confirm": {
+		"200": "Your e-mail address has been confirmed successfully. You are ready to sign in!",
+		"400": "Confirmation token missing! You should double-check whether you entered the correct URL.",
+		"404": "There was a problem with your request. Please make sure that you entered the correct URL. It's also possible that the action you want to perform has already been performed.",
+		"500": "There was an internal server problem, something's wrong on our end. Please try again later.",
+		"return": "Click here to return to HeyApple",
+		"signin": "Click here to sign in",
+		"title1": "Account ",
+		"title2": "Activation"
+	},
+	"diary": {
+		"title": "Meal Planning and Nutrient Tracking",
+		"subtitle": "Add recipes to your diary with the click of a button. Adjust the amount, add or remove ingredients; planning ahead and living in the moment have never been easier.",
+		"list": {
+			"1": "Organize your diary by time of day or create custom meals for grouping.",
+			"2": "Adjust daily recommended doses based on your individual circumstances.",
+			"3": "Favorites make it even faster to add food that you eat often.",
+			"4": "Use templates to build a meal plan for an entire week with one push of a button.",
+			"5": "Never lose data: The diary stays organized even after years of adjusting ingredients and deleting or renaming recipes."
+		}
+	},
+	"email": {
+		"action": {
+			"1": "Activate Account",
+			"3": "Reset Password"
+		},
+		"foot": "&copy; 2021-2022 the HeyApple development team",
+		"info": {
+			"3": "<p>If you did not ask to reset your password, you might want to review your recent account access for any unusual activity. You can do so in your profile settings.</p>"
+		},
+		"msg": {
+			"1": "<h2>Hello and welcome to HeyApple,</h2><p>Your registration is almost complete. Click this link to confirm your e-mail address and enable the account login:</p>",
+			"3": "<p>Hello,</p><p>You asked for help getting back into your HeyApple account? Click this link to set a new password:"
+		},
+		"plain": "If the link above does not work, copy the following address and paste it into the address bar of your internet browser:",
+		"sub": {
+			"1": "Welcome to HeyApple!",
+			"3": "Your password reset request"
+		}
+	},
+	"err": {
+		"err": "Error"
+	},
+	"food": {
+		"title": "Detailed Food Database",
+		"subtitle": "Search thousands of foods and compare macro nutrients, minerals, and vitamins.",
+		"list": {
+			"1": "The database tracks more than 35 nutrients, including different types of fats and carbs.",
+			"2": "Every new entry is verified with official international food databases.",
+			"3": "Quality over quantity: Unprocessed, natural foods make up most of the database."
+		}
+	},
+	"form": {
+		"confirm": "Confirm Password",
+		"pass": "Password",
+		"reset": "Save password"
+	},
+	"home": {
+		"betawarn": "HeyApple is still in its beta phase. As such, many features are incomplete or missing. A full release is planned for late 2022.",
+		"copy": "&copy; 2021-2022 the HeyApple development team",
+		"copyshort": "&copy; 2021-2022",
+		"legal": "Legal Notice",
+		"login": "Sign in",
+		"privacy": "Privacy Policy",
+		"register": "Sign up",
+		"terms": "Terms"
+	},
+	"jumbo": {
+		"title": "The Complete Food Tracking Solution",
+		"subtitle": "From frying pan to shopping cart, HeyApple provides everything you need to track nutrients and plan your meals.",
+		"diaryhead": "Meal Planner",
+		"diaryintro": "Plan and track your meals, set nutrient targets, analyze the data",
+		"foodhead": "Food Database",
+		"foodintro": "Find the food that fits your macros and more than 30 other nutrients",
+		"recipehead": "Recipe Manager",
+		"recipeintro": "Create your own cookbook, share it if you like, get inspired by others",
+		"shophead": "Shopping List",
+		"shopintro": "Automatic shopping lists make every grocery run a walk in the park"
+	},
 	"lang": "en",
-
-	"legal.head": "Legal Notice",
-
-	"more.title": "More Goodies",
-	"more.apps.head": "There's an app for that",
-	"more.apps.body": "We have dedicated apps for every major OS and browser. You can even write your own!",
-	"more.donate.head": "...but doesn't have to be",
-	"more.donate.body": "If you want to support HeyApple development, you can donate to the development fund.",
-	"more.free.head": "It's free...",
-	"more.free.body": "You don't have to pay anything to use all of HeyApple's features.",
-	"more.privacy.head": "Private by design",
-	"more.privacy.body": "We respect your privacy and keep the collection of personal data to a minimum. We don't even ask your name!",
-	"more.quality.head": "Quality information",
-	"more.quality.body": "All nutrients are verified before they make it into the database.",
-	"more.source.head": "Make it your own",
-	"more.source.body": "HeyApple is released under the AGPL. You can inspect the code, contribute, or fork it at any time.",
-
-	"privacy.head": "Privacy Policy",
-
-	"recipe.title": "Your Favorite Recipes",
-	"recipe.subtitle": "Create recipes to stay on top of your nutrient targets. Or just because you like cooking.",
-	"recipe.list.1": "Add instructions and preparation times to your favorite meals.",
-	"recipe.list.2": "Recipes track whether they're vegan or dairy, and what types of meat they contain.",
-	"recipe.list.3": "Share your recipes with selected users or make them public for the whole world to see.",
-
-	"reset.200": "Your password was updated successfully. You can now try to sign in again.",
-	"reset.400": "The password must not be empty.",
-	"reset.403": "It doesn't look like you're allowed to do that.",
-	"reset.404": "There was a problem with your request. Please make sure that you entered the correct URL. It's also possible that the action you want to perform has already been performed.",
-	"reset.500": "There was an internal server problem, something's wrong on our end. Please try again later.",
-	"reset.hint": "You can set a new account password below. Once you're done, you should be able to sign in again using your new password. Remeber, passwords need to be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters!",
-	"reset.nomatch": "The passwords don't match.",
-	"reset.return": "Return to HeyApple",
-	"reset.title1": "Password ",
-	"reset.title2": "Reset",
-
-	"shop.title": "Automatic Shopping Lists",
-	"shop.subtitle": "See what you need to buy on your next run to the store at a single glance. No need to maintain separate lists or use multiple apps.",
-	"shop.list.1": "Select the days you want to shop for to let the list update automatically.",
-	"shop.list.2": "Sort items by name or aisle.",
-	"shop.list.3": "Create custom shopping lists for non-food items.",
-
-	"terms.head": "Terms of Service"
+	"legal": {
+		"head": "Legal Notice"
+	},
+	"more": {
+		"title": "More Goodies",
+		"appshead": "There's an app for that",
+		"appsbody": "We have dedicated apps for every major OS and browser. You can even write your own!",
+		"donatehead": "...but doesn't have to be",
+		"donatebody": "If you want to support HeyApple development, you can donate to the development fund.",
+		"freehead": "It's free...",
+		"freebody": "You don't have to pay anything to use all of HeyApple's features.",
+		"privacyhead": "Private by design",
+		"privacybody": "We respect your privacy and keep the collection of personal data to a minimum. We don't even ask your name!",
+		"qualityhead": "Quality information",
+		"qualitybody": "All nutrients are verified before they make it into the database.",
+		"sourcehead": "Make it your own",
+		"sourcebody": "HeyApple is released under the AGPL. You can inspect the code, contribute, or fork it at any time."
+	},
+	"privacy": {
+		"privacy.head": "Privacy Policy"
+	},
+	"recipe": {
+		"title": "Your Favorite Recipes",
+		"subtitle": "Create recipes to stay on top of your nutrient targets. Or just because you like cooking.",
+		"list": {
+			"1": "Add instructions and preparation times to your favorite meals.",
+			"2": "Recipes track whether they're vegan or dairy, and what types of meat they contain.",
+			"3": "Share your recipes with selected users or make them public for the whole world to see."
+		}
+	},
+	"reset": {
+		"200": "Your password was updated successfully. You can now try to sign in again.",
+		"400": "The password must not be empty.",
+		"403": "It doesn't look like you're allowed to do that.",
+		"404": "There was a problem with your request. Please make sure that you entered the correct URL. It's also possible that the action you want to perform has already been performed.",
+		"500": "There was an internal server problem, something's wrong on our end. Please try again later.",
+		"hint": "You can set a new account password below. Once you're done, you should be able to sign in again using your new password. Remeber, passwords need to be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters!",
+		"nomatch": "The passwords don't match.",
+		"return": "Return to HeyApple",
+		"title1": "Password ",
+		"title2": "Reset"
+	},
+	"shop": {
+		"title": "Automatic Shopping Lists",
+		"subtitle": "See what you need to buy on your next run to the store at a single glance. No need to maintain separate lists or use multiple apps.",
+		"list": {
+			"1": "Select the days you want to shop for to let the list update automatically.",
+			"2": "Sort items by name or aisle.",
+			"3": "Create custom shopping lists for non-food items."
+		}
+	},
+	"terms": {
+		"head": "Terms of Service"
+	}
 }

@@ -249,6 +249,7 @@ header button:hover svg {
 	}
 
 	header nav.open #nav-user {
+		border-radius: 8px;
 		right: 0.5em;
 		opacity: 1;
 	}

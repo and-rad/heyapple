@@ -106,24 +106,24 @@ func TestL10n(t *testing.T) {
 		tr     *mock.Translator
 		params httprouter.Params
 
-		out    map[string]string
+		out    map[string]interface{}
 		status int
 	}{
 		{ //00// empty params, return fallback
 			tr: &mock.Translator{
-				Map:  map[string]string{"hi": "Hi!", "bye": "Bye!"},
+				Map:  map[string]interface{}{"hi": "Hi!", "bye": "Bye!"},
 				Lang: "en",
 			},
-			out:    map[string]string{},
+			out:    map[string]interface{}{},
 			status: 200,
 		},
 		{ //01// success
 			tr: &mock.Translator{
-				Map:  map[string]string{"hi": "Hi!", "bye": "Bye!"},
+				Map:  map[string]interface{}{"hi": "Hi!", "bye": "Bye!"},
 				Lang: "en",
 			},
 			params: httprouter.Params{{Key: "lang", Value: "en"}},
-			out:    map[string]string{"hi": "Hi!", "bye": "Bye!"},
+			out:    map[string]interface{}{"hi": "Hi!", "bye": "Bye!"},
 			status: 200,
 		},
 	} {
@@ -136,7 +136,7 @@ func TestL10n(t *testing.T) {
 			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
 		}
 
-		out := map[string]string{}
+		out := map[string]interface{}{}
 		body := res.Body.Bytes()
 		json.Unmarshal(body, &out)
 		if !reflect.DeepEqual(out, data.out) {

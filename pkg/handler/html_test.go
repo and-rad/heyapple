@@ -67,7 +67,7 @@ func TestHome(t *testing.T) {
 		env := &handler.Environment{
 			DB:      mock.NewDB(),
 			Session: scs.New(),
-			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+			L10n:    &mock.Translator{Map: map[string]interface{}{"msg.hi": "Hi!"}},
 		}
 
 		handler.Home(env)(res, req, nil)
@@ -114,7 +114,7 @@ func TestLogin(t *testing.T) {
 		env := &handler.Environment{
 			DB:      mock.NewDB(),
 			Session: scs.New(),
-			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+			L10n:    &mock.Translator{Map: map[string]interface{}{"msg.hi": "Hi!"}},
 		}
 
 		handler.Login(env)(res, req, nil)
@@ -161,7 +161,7 @@ func TestApp(t *testing.T) {
 		env := &handler.Environment{
 			DB:      mock.NewDB(),
 			Session: scs.New(),
-			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+			L10n:    &mock.Translator{Map: map[string]interface{}{"msg.hi": "Hi!"}},
 		}
 
 		handler.App(env)(res, req, nil)
@@ -208,7 +208,7 @@ func TestLegal(t *testing.T) {
 		env := &handler.Environment{
 			DB:      mock.NewDB(),
 			Session: scs.New(),
-			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+			L10n:    &mock.Translator{Map: map[string]interface{}{"msg.hi": "Hi!"}},
 		}
 
 		handler.Legal(env)(res, req, nil)
@@ -255,7 +255,7 @@ func TestPrivacy(t *testing.T) {
 		env := &handler.Environment{
 			DB:      mock.NewDB(),
 			Session: scs.New(),
-			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+			L10n:    &mock.Translator{Map: map[string]interface{}{"msg.hi": "Hi!"}},
 		}
 
 		handler.Privacy(env)(res, req, nil)
@@ -302,7 +302,7 @@ func TestTerms(t *testing.T) {
 		env := &handler.Environment{
 			DB:      mock.NewDB(),
 			Session: scs.New(),
-			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+			L10n:    &mock.Translator{Map: map[string]interface{}{"msg.hi": "Hi!"}},
 		}
 
 		handler.Terms(env)(res, req, nil)
@@ -377,7 +377,7 @@ func TestConfirm(t *testing.T) {
 		env := &handler.Environment{
 			DB:      data.db,
 			Session: scs.New(),
-			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+			L10n:    &mock.Translator{Map: map[string]interface{}{"msg.hi": "Hi!"}},
 		}
 
 		handler.Confirm(env)(res, req, data.ps)
@@ -432,7 +432,7 @@ func TestReset(t *testing.T) {
 		env := &handler.Environment{
 			DB:      data.db,
 			Session: scs.New(),
-			L10n:    &mock.Translator{Map: map[string]string{"msg.hi": "Hi!"}},
+			L10n:    &mock.Translator{Map: map[string]interface{}{"msg.hi": "Hi!"}},
 		}
 
 		handler.Reset(env)(res, req, data.ps)

@@ -28,10 +28,11 @@ import (
 	"golang.org/x/text/language"
 )
 
-type translation map[string]map[string]string
+type translation map[string]interface{}
+type translations map[string]translation
 
 type translator struct {
-	data  translation
+	data  translations
 	debug bool
 }
 
@@ -60,8 +61,14 @@ func (t *translator) Translate(input interface{}, lang string) string {
 	}
 
 	if data, ok := t.data[t.match(lang)]; ok {
-		if val, ok := data[key]; ok {
-			return val
+		parts := strings.Split(key, ".")
+		for _, p := range parts {
+			if val, ok := data[p].(string); ok {
+				return val
+			}
+			if val, ok := data[p].(translation); ok {
+				data = val
+			}
 		}
 	}
 
@@ -69,11 +76,11 @@ func (t *translator) Translate(input interface{}, lang string) string {
 }
 
 // Get implements the app.Translator interface.
-func (t *translator) Get(lang string) map[string]string {
+func (t *translator) Get(lang string) map[string]interface{} {
 	if data, ok := t.data[t.match(lang)]; ok {
 		return data
 	}
-	return map[string]string{}
+	return translation{}
 }
 
 // Default implements the app.Translator interface.
@@ -107,8 +114,8 @@ func (t *translator) match(lang string) string {
 	return lang
 }
 
-func loadTranslations(dir fs.FS) translation {
-	out := translation{}
+func loadTranslations(dir fs.FS) translations {
+	out := translations{}
 
 	if files, err := fs.ReadDir(dir, "l10n"); err == nil {
 		for _, f := range files {
@@ -117,14 +124,27 @@ func loadTranslations(dir fs.FS) translation {
 				panic(fmt.Sprintf("error reading language file: %s", err))
 			}
 
-			l10n := map[string]string{}
+			l10n := translation{}
 			if err = json.Unmarshal(data, &l10n); err != nil {
 				panic(fmt.Sprintf("error parsing localization data: %s", err))
 			}
 
-			out[strings.TrimSuffix(f.Name(), ".json")] = l10n
+			out[strings.TrimSuffix(f.Name(), ".json")] = parseMap(l10n)
 		}
 	}
 
 	return out
+}
+
+func parseMap(tr translation) translation {
+	result := translation{}
+	for k, v := range tr {
+		switch t := v.(type) {
+		case map[string]interface{}:
+			result[k] = parseMap(translation(t))
+		default:
+			result[k] = t
+		}
+	}
+	return result
 }

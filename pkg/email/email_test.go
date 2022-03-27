@@ -99,7 +99,7 @@ func TestNotifier_subject(t *testing.T) {
 			out: "email.sub.0",
 		},
 		{ //01// key found
-			tr: &mock.Translator{Map: map[string]string{
+			tr: &mock.Translator{Map: map[string]interface{}{
 				"email.sub.1": "Subject 1",
 			}},
 			msg:  app.RegisterNotification,
@@ -143,7 +143,7 @@ func TestNotifier_message(t *testing.T) {
 		},
 		{ //02// translate content
 			msg:  app.RegisterNotification,
-			tr:   &mock.Translator{Map: map[string]string{"hi": "Hello"}},
+			tr:   &mock.Translator{Map: map[string]interface{}{"hi": "Hello"}},
 			tmpl: `{{ l10n "hi" }}`,
 			out:  "Hello",
 		},

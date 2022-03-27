@@ -26,9 +26,11 @@ import (
 const (
 	envDebug   = "HEYAPPLE_APP_DEBUG"
 	envDefault = "HEYAPPLE_APP_LANG"
+	envDir     = "HEYAPPLE_DATA_DIR"
 )
 
 type config struct {
+	dataDir     string
 	defaultLang string
 	debugMode   bool
 }
@@ -37,10 +39,14 @@ func getConfig() config {
 	cfg := config{
 		debugMode:   false,
 		defaultLang: "en",
+		dataDir:     "/tmp/heyapple/data",
 	}
 
 	if lang := os.Getenv(envDefault); lang != "" {
 		cfg.defaultLang = lang
+	}
+	if dir := os.Getenv(envDir); dir != "" {
+		cfg.dataDir = dir
 	}
 	if debug, err := strconv.ParseBool(os.Getenv(envDebug)); err == nil {
 		cfg.debugMode = debug

@@ -32,6 +32,7 @@ func Test_getConfig(t *testing.T) {
 			cfg: config{
 				debugMode:   false,
 				defaultLang: "en",
+				dataDir:     "/tmp/heyapple/data",
 			},
 		},
 		{ //01// ignore other vars
@@ -41,6 +42,7 @@ func Test_getConfig(t *testing.T) {
 			cfg: config{
 				debugMode:   false,
 				defaultLang: "en",
+				dataDir:     "/tmp/heyapple/data",
 			},
 		},
 		{ //02// invalid type
@@ -50,16 +52,19 @@ func Test_getConfig(t *testing.T) {
 			cfg: config{
 				debugMode:   false,
 				defaultLang: "en",
+				dataDir:     "/tmp/heyapple/data",
 			},
 		},
 		{ //03// load all vars
 			env: map[string]string{
 				envDebug:   "true",
 				envDefault: "fr",
+				envDir:     "/tmp/overrides",
 			},
 			cfg: config{
 				debugMode:   true,
 				defaultLang: "fr",
+				dataDir:     "/tmp/overrides",
 			},
 		},
 	} {

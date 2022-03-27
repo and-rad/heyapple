@@ -23,6 +23,7 @@ import (
 	"fmt"
 	"heyapple/web"
 	"io/fs"
+	"os"
 	"strings"
 
 	"golang.org/x/text/language"
@@ -39,8 +40,11 @@ type translator struct {
 // NewTranslator returns an implementation of the app.Translator interface.
 func NewTranslator() *translator {
 	conf := getConfig()
+	base := loadTranslations(web.L10n)
+	user := loadTranslations(os.DirFS(conf.dataDir))
+
 	return &translator{
-		data:  loadTranslations(web.L10n),
+		data:  mergeTranslations(base, user),
 		debug: conf.debugMode,
 	}
 }
@@ -134,6 +138,44 @@ func loadTranslations(dir fs.FS) translations {
 	}
 
 	return out
+}
+
+func mergeTranslations(base translations, custom translations) translations {
+	for lang, newTrn := range custom {
+		if oldTrn, ok := base[lang]; ok {
+			base[lang] = mergeTranslation(oldTrn, newTrn)
+		} else {
+			base[lang] = newTrn
+		}
+	}
+	return base
+}
+
+func mergeTranslation(base translation, custom translation) translation {
+	for newKey, newVal := range custom {
+		oldVal, ok := base[newKey]
+		if !ok {
+			base[newKey] = newVal
+			continue
+		}
+		if newVal == "" {
+			continue
+		}
+		if newStr, ok := newVal.(string); ok {
+			if _, ok := oldVal.(string); ok {
+				base[newKey] = newStr
+				continue
+			}
+		}
+
+		if newTrn, ok := newVal.(translation); ok {
+			if oldTrn, ok := oldVal.(translation); ok {
+				base[newKey] = mergeTranslation(oldTrn, newTrn)
+			}
+		}
+	}
+
+	return base
 }
 
 func parseMap(tr translation) translation {

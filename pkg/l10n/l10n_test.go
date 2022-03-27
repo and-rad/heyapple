@@ -345,3 +345,88 @@ func Test_loadTranslations(t *testing.T) {
 		}
 	}
 }
+
+func Test_mergeTranslations(t *testing.T) {
+	for idx, data := range []struct {
+		base translations
+		more translations
+		out  translations
+	}{
+		{ //00//
+			out: nil,
+		},
+		{ //01//
+			base: translations{"en": {"key": "value"}},
+			out:  translations{"en": {"key": "value"}},
+		},
+		{ //02//
+			base: translations{
+				"en": {"key1": "value 1", "key2": "value 2"},
+				"de": {"key1": "Wert 1", "key3": "Wert 3"},
+			},
+			out: translations{
+				"en": {"key1": "value 1", "key2": "value 2"},
+				"de": {"key1": "Wert 1", "key3": "Wert 3"},
+			},
+		},
+		{ //03//
+			base: translations{
+				"en": {"key1": "value 1", "key2": "value 2"},
+				"de": {"key1": "Wert 1", "key3": "Wert 3"},
+			},
+			more: translations{
+				"en": {"key1": "new value 1", "key3": "value 3"},
+			},
+			out: translations{
+				"en": {"key1": "new value 1", "key2": "value 2", "key3": "value 3"},
+				"de": {"key1": "Wert 1", "key3": "Wert 3"},
+			},
+		},
+		{ //04//
+			base: translations{
+				"en": {"key1": "value 1", "key2": "value 2"},
+				"de": {"key1": "Wert 1", "key3": "Wert 3"},
+			},
+			more: translations{
+				"en": {"key1": "new value 1", "key3": "value 3"},
+				"es": {"key1": "hola"},
+				"de": {"key2": "Wert 2"},
+			},
+			out: translations{
+				"en": {"key1": "new value 1", "key2": "value 2", "key3": "value 3"},
+				"de": {"key1": "Wert 1", "key2": "Wert 2", "key3": "Wert 3"},
+				"es": {"key1": "hola"},
+			},
+		},
+		{ //05// don't merge empty strings
+			base: translations{
+				"en": {"key1": "value 1", "key2": "value 2"},
+				"de": {"key1": "Wert 1", "key3": "Wert 3"},
+			},
+			more: translations{
+				"en": {"key1": "", "key2": "new value 2"},
+			},
+			out: translations{
+				"en": {"key1": "value 1", "key2": "new value 2"},
+				"de": {"key1": "Wert 1", "key3": "Wert 3"},
+			},
+		},
+		{ //06// merge nested translations
+			base: translations{
+				"en": {"key": translation{"key1": "value 1", "key2": "value 2"}},
+			},
+			more: translations{
+				"en": {"key": translation{"key1": "new value 1"}},
+			},
+			out: translations{
+				"en": {"key": translation{"key1": "new value 1", "key2": "value 2"}},
+			},
+		},
+	} {
+		out := mergeTranslations(data.base, data.more)
+
+		if !reflect.DeepEqual(out, data.out) {
+			t.Errorf("test case %d: translator mismatch \nhave: %v \nwant: %v", idx, out, data.out)
+		}
+	}
+}

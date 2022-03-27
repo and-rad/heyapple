@@ -2,7 +2,7 @@
 import Main from "../components/Main.vue";
 import Calendar from "../components/Calendar.vue";
 import FoodList from "../components/GroceryList.vue";
-import { ref, computed, inject, onMounted, onUnmounted } from "vue";
+import { ref, computed, inject, watch, onMounted, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -18,10 +18,11 @@ const daysWithEntries = computed(() => Object.keys(diary.value));
 
 let pingIntervalHandle = undefined;
 
+watch(filtered, (val) => saveItemsLocal(), { deep: true });
+
 function onDateSelected(dates) {
 	if (dates.length == 0) {
 		filtered.value = [];
-		saveItemsLocal();
 		return;
 	}
 
@@ -36,7 +37,6 @@ function onDateSelected(dates) {
 		.then((data) => {
 			data.forEach((d) => (d.name = t(d.id.toString())));
 			filtered.value = data;
-			saveItemsLocal();
 		})
 		.catch((err) => {
 			if (err instanceof TypeError) {
@@ -99,7 +99,7 @@ onUnmounted(() => {
 		</template>
 
 		<template #main>
-			<FoodList :items="filtered" @selected="showDetails" />
+			<FoodList :items="filtered" :offline="offline" @selected="showDetails" />
 		</template>
 	</Main>
 </template>
@@ -124,5 +124,4 @@ section.offline:after {
 	background-repeat: no-repeat;
 	opacity: 0.2;
 }
-
 </style>

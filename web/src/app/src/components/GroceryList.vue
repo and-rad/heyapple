@@ -8,7 +8,7 @@ const { t, locale } = useI18n();
 const log = inject("log");
 const csrf = inject("csrfToken");
 
-const prop = defineProps(["items"]);
+const prop = defineProps(["items", "offline"]);
 const emit = defineEmits("selected");
 
 const sortBy = ref("amount");
@@ -28,7 +28,12 @@ const sortedItems = computed(() => {
 	}
 });
 
-const allChecked = computed(() => prop.items.length && prop.items.length == prop.items.filter((i) => i.done).length);
+const allChecked = computed(() => {
+	if (prop.items && prop.items.length) {
+		return prop.items.length == prop.items.filter((i) => i.done).length;
+	}
+	return false;
+});
 
 function formattedAmount(item) {
 	if (item.amount > 999) {
@@ -59,20 +64,16 @@ function onCheckedAll(evt) {
 		params.append("done", i.done);
 	});
 
-	fetch("/api/v1/list/diary/done", {
-		method: "PUT",
-		body: params,
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded",
-			"X-CSRF-Token": csrf,
-		},
-	})
-		.then((response) => {
-			if (!response.ok) {
-				throw response;
-			}
-		})
-		.catch((err) => log.err(err));
+	if (!prop.offline) {
+		fetch("/api/v1/list/diary/done", {
+			method: "PUT",
+			body: params,
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				"X-CSRF-Token": csrf,
+			},
+		}).catch(() => {});
+	}
 }
 
 function onChecked(evt) {
@@ -80,20 +81,16 @@ function onChecked(evt) {
 	let val = evt.target.checked;
 	prop.items.filter((i) => i.id == id)[0].done = val;
 
-	fetch("/api/v1/list/diary/done", {
-		method: "PUT",
-		body: new URLSearchParams({ id: id, done: val }),
-		headers: {
-			"Content-Type": "application/x-www-form-urlencoded",
-			"X-CSRF-Token": csrf,
-		},
-	})
-		.then((response) => {
-			if (!response.ok) {
-				throw response;
-			}
-		})
-		.catch((err) => log.err(err));
+	if (!prop.offline) {
+		fetch("/api/v1/list/diary/done", {
+			method: "PUT",
+			body: new URLSearchParams({ id: id, done: val }),
+			headers: {
+				"Content-Type": "application/x-www-form-urlencoded",
+				"X-CSRF-Token": csrf,
+			},
+		}).catch(() => {});
+	}
 }
 </script>
 

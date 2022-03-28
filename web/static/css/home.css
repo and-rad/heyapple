@@ -247,6 +247,26 @@ body.legal h3 {
 	margin: 2em 0 1em;
 }
 
+body.numbered {
+	counter-reset: h2count;
+}
+
+body.numbered h2 {
+	counter-reset: h3count;
+}
+
+body.numbered h2::before {
+	counter-increment: h2count;
+	content: counter(h2count) ".";
+	margin-right: 0.5em;
+}
+
+body.numbered h3::before {
+	counter-increment: h3count;
+	content: counter(h2count) "." counter(h3count) ".";
+	margin-right: 0.5em;
+}
+
 #jumbo {
 	display: flex;
 	justify-content: space-between;

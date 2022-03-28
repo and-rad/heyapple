@@ -5,11 +5,20 @@
 		<link rel="stylesheet" href="/css/home.css">
 	</head>
 
-	<body class="legal">
+	<body class="legal numbered">
 		{{ template "header" . }}
 
 		<main>
 			<h1>{{ l10n "terms.head" }}</h1>
+
+			<h2>{{ l10n "terms.warrantyhead" }}</h2>
+			{{ raw (l10n "terms.warrantybody" )}}
+
+			<h2>{{ l10n "terms.conducthead" }}</h2>
+			{{ raw (l10n "terms.conductbody" )}}
+
+			<h2>{{ l10n "terms.deletehead" }}</h2>
+			{{ raw (l10n "terms.deletebody" )}}
 		</main>
 
 		{{ template "footer-home" . }}

@@ -141,6 +141,12 @@
 		}
 	},
 	"terms": {
-		"head": "Terms of Service"
+		"conductbody": "TODO",
+		"conducthead": "Code of Conduct",
+		"deletebody": "TODO",
+		"deletehead": "Account Termination",
+		"head": "Terms of Service",
+		"warrantybody": "TODO",
+		"warrantyhead": "Warranty & Liability"
 	}
 }

@@ -2,10 +2,6 @@ NUM_TESTS := `find -name "*_test.go"|xargs grep "{ //"|wc -l`
 INSTALL_DIR := /tmp/heyapple
 CONFIG_DIR := /tmp/heyapple
 
-build-web:
-	@npm run build --prefix ./web/src/login
-	@npm run build --prefix ./web/src/app
-
 build-server:
 	@rm -rf ./out/server
 	@if command -v scour &> /dev/null; then \

@@ -142,6 +142,24 @@ func TestNewTranslator(t *testing.T) {
 			key:  "yes.maybe",
 			out:  "Vielleicht",
 		},
+		{ //13// fall back to English if lang exists but key isn't found...
+			tr: translator{data: translations{
+				"de": {"yes": "Ja!"},
+				"en": {"yes": "Yes!", "no": "Nope!"},
+			}},
+			key:  "no",
+			lang: "de",
+			out:  "Nope!",
+		},
+		{ //14// ...but don't do it in debug mode
+			tr: translator{debug: true, data: translations{
+				"de": {"yes": "Ja!"},
+				"en": {"yes": "Yes!", "no": "Nope!"},
+			}},
+			key:  "no",
+			lang: "de",
+			out:  "no",
+		},
 	} {
 		val := data.tr.Translate(data.key, data.lang)
 

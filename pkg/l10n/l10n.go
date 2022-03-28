@@ -64,14 +64,20 @@ func (t *translator) Translate(input interface{}, lang string) string {
 		}
 	}
 
-	if data, ok := t.data[t.match(lang)]; ok {
-		parts := strings.Split(key, ".")
-		for _, p := range parts {
-			if val, ok := data[p].(string); ok {
-				return val
+	for _, l := range []string{lang, t.Default()} {
+		if data, ok := t.data[t.match(l)]; ok {
+			parts := strings.Split(key, ".")
+			for _, p := range parts {
+				if val, ok := data[p].(string); ok {
+					return val
+				}
+				if val, ok := data[p].(translation); ok {
+					data = val
+				}
 			}
-			if val, ok := data[p].(translation); ok {
-				data = val
+
+			if t.debug {
+				return key
 			}
 		}
 	}

@@ -11,6 +11,8 @@
 		<main>
 			<h1>{{ l10n "terms.head" }}</h1>
 
+			{{ raw (l10n "terms.privacy" )}}
+
 			<h2>{{ l10n "terms.warrantyhead" }}</h2>
 			{{ raw (l10n "terms.warrantybody" )}}
 
@@ -19,6 +21,9 @@
 
 			<h2>{{ l10n "terms.deletehead" }}</h2>
 			{{ raw (l10n "terms.deletebody" )}}
+
+			<h2>{{ l10n "terms.severhead" }}</h2>
+			{{ raw (l10n "terms.severbody" )}}
 		</main>
 
 		{{ template "footer-home" . }}

@@ -81,10 +81,10 @@
 	"lang": "en",
 	"legal": {
 		"contactbody": "TODO",
-		"contacthead":"Site Ownership",
+		"contacthead": "Site Ownership",
 		"head": "Legal Notice",
-		"mainbody":"<p>We make every effort to keep the information on our Web site current, but accept no liability whatsoever for the content provided. Pursuant to §7 par. 1 of TMG (German Tele-Media Act), the law limits our responsibility as a service provider to our own content on these Web pages. According to §§8 to 10 of TMG, we are not obligated to monitor third party information provided or stored on our Web site. However, we shall promptly remove any content upon becoming aware that it violates the law. Our liability in such an instance shall commence at the time we become aware of the respective violation.</p><h2>Liability for Links</h2><p>Our site contains links to third-party Web sites. We have no influence whatsoever on the information on these Web sites and accept no guaranty for its correctness. The content of such third-party sites is the responsibility of the respective owners/providers. At the time third-party Web sites were linked to ours, we found NO GROUNDS WHATSOEVER of any likely contravention of the law. We shall promptly delete a link upon becoming aware that it violates the law.</p><h2>Copyrights</h2><p>The content and works provided on these Web pages are governed by the copyright laws of Germany. Duplication, processing, distribution, or any form of commercialization of such material beyond the scope of the copyright law shall require the prior written consent of its respective author or creator.</p>",
-		"mainhead":"Liability for Content"
+		"mainbody": "<p>We make every effort to keep the information on our Web site current, but accept no liability whatsoever for the content provided. Pursuant to §7 par. 1 of TMG (German Tele-Media Act), the law limits our responsibility as a service provider to our own content on these Web pages. According to §§8 to 10 of TMG, we are not obligated to monitor third party information provided or stored on our Web site. However, we shall promptly remove any content upon becoming aware that it violates the law. Our liability in such an instance shall commence at the time we become aware of the respective violation.</p><h2>Liability for Links</h2><p>Our site contains links to third-party Web sites. We have no influence whatsoever on the information on these Web sites and accept no guaranty for its correctness. The content of such third-party sites is the responsibility of the respective owners/providers. At the time third-party Web sites were linked to ours, we found NO GROUNDS WHATSOEVER of any likely contravention of the law. We shall promptly delete a link upon becoming aware that it violates the law.</p><h2>Copyrights</h2><p>The content and works provided on these Web pages are governed by the copyright laws of Germany. Duplication, processing, distribution, or any form of commercialization of such material beyond the scope of the copyright law shall require the prior written consent of its respective author or creator.</p>",
+		"mainhead": "Liability for Content"
 	},
 	"more": {
 		"title": "More Goodies",
@@ -103,12 +103,12 @@
 	},
 	"privacy": {
 		"contactbody": "TODO",
-		"contacthead":"Designated Responsible Representative",
+		"contacthead": "Designated Responsible Representative",
 		"head": "Privacy Policy",
-		"mainbody":"TODO",
+		"mainbody": "TODO",
 		"mainhead": "General Information",
 		"superbody": "TODO",
-		"superhead":"State Supervisory Authority"
+		"superhead": "State Supervisory Authority"
 	},
 	"recipe": {
 		"title": "Your Favorite Recipes",
@@ -141,12 +141,15 @@
 		}
 	},
 	"terms": {
-		"conductbody": "TODO",
+		"conductbody": "<p>The usage of the Software is governed by a code of conduct that you are expected to follow. The code of conduct covers behavior towards the providers of the Software, in cases such as requesting support and reporting errors, and other users of the software when making use of any of the Software's social features.</p><h3>Providers of the Software</h3><p>When contacting the providers of the Software, you're entering a professional setting and are expected to act accordingly. Don't swear at anyone, be clear and concise. When reporting a problem, assume positive intent from the other person. Feedback is welcome, but keep your criticism constructive.</p><p>Failure to comply with these guidelines might lead us to stop responding to your requests.</p><h3>Users of the Software</h3><p>The following rules apply to any social feature provided by the Software, both current and upcoming, where users can communicate with each other.</p><ul><li>Do be polite and courteous.</li><li>Do assume positive intent. Keep in mind that you might not share the same native language and that misunderstandings happen as a result of that language barrier.</li><li>Do respect and tolerate others regardless of gender identity and expression, sexual orientation, disability, physical appearance, body size, race, ethnicity, language proficiency, age, political orientation, nationality, religion, or other similar characteristics.</li><li>Do respect others' wishes, their privacy and boundaries.</li><li>Don't harass others, don't be intentionally offensive.</li><li>Don't spam or troll others. Don't engage in aggressive advertizing of your services to other users.</li></ul><h3>Violations of the Code of Conduct</h3><p>If you're found to be in violation of these rules, we reserve the right to limit or disable your access to certain features of the Software. These include any social features the app provides or might provide in the future. We reserve the right to deactivate your account entirely in severe cases of conduct breaches. These measures might be taken without prior notification.</p>",
 		"conducthead": "Code of Conduct",
-		"deletebody": "TODO",
+		"deletebody": "<h3>By Us</h3><p>We reserve the right to terminate your user account immediately, irrevocably, and without prior notification if you're found to be in severe violation of the terms of service. At the time of writing, the following types of behavior will lead to an immediate ban:</p><ul><li>Trying with or without success to gain unauthorized access to other users' data</li><li>Trying with or without success to gain unauthorized access to elevated user privileges</li><li>Publishing other users' data without express consent from each affected individual</li></ul><p>Security researchers can apply for a limited, temporary exception from some of these rules if they hand in a written request prior to conducting any such activity. We reserve the right to revoke any such exception at any time.</p><h3>By You</h3><p>You are provided with the means to delete your account on your own at any time. The account deletion will be immediate and you will not have access to any of your user data thereafter. You will be given the opportunity to export the information stored in your diary to a file in a structured, machine-readable format (JSON).</p><p>After an account is deleted successfully, all data connected to that account is irretrievably lost and cannot be restored. In cases where account information is stored in backups, we reserve the right to refuse restoration from the backups if your account was terminated as a result of violating any of the terms stated here.</p>",
 		"deletehead": "Account Termination",
 		"head": "Terms of Service",
-		"warrantybody": "TODO",
+		"privacy": "<p>Please refer to the <a href='/privacy'>privacy policy</a> in addition to these terms and conditions to learn about your privacy rights and how we handle and protect your data.</p>",
+		"severbody": "<p>If any part, term or provision of this Agreement is held to be illegal, in conflict with any law or otherwise invalid, the remaining portion or portions shall be considered severable and not be affected by such determination, and the rights and obligations of the parties shall be construed and enforced as if the Agreement did not contain the particular part, term or provisions held to be illegal or invalid.</p>",
+		"severhead": "Severability",
+		"warrantybody": "<h3>Disclaimer of Warranty</h3><p>The Software offers a service in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE, to the extent permitted by applicable law.</p><h3>Limitation of Liability</h3><p>In no event unless required by applicable law or agreed to in writing will the provider of the Software be liable to you for damages, including any general, special, incidental or consequential damages arising out of the use or inability to use the program (including but not limited to loss of data or data being rendered inaccurate or losses sustained by you or third parties or a failure of the program to operate with any other programs).</p><p>If the disclaimer of warranty and limitation of liability provided above cannot be given local legal effect according to their terms, reviewing courts shall apply local law that most closely approximates an absolute waiver of all civil liability in connection with the Software, unless a warranty or assumption of liability accompanies a copy of the Software in return for a fee.</p>",
 		"warrantyhead": "Warranty & Liability"
 	}
 }

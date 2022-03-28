@@ -1,0 +1,26 @@
+{
+    "de": {
+        "aisle": {
+			"0": "",
+			"1": "A. Obst & Gemüse",
+			"2": "B. Gewürze",
+			"3": "C. Brot & Müsli",
+			"4": "D. Milch & Milchprodukte",
+			"5": "E. Fleisch",
+			"6": "F. Fisch & Meeresfrüchte",
+			"7": "G. Tiefkühlware",
+			"8": "H. Nudeln, Reis & Hülsenfrüchte",
+			"9": "I. Saucen & Dips",
+			"10": "J. Konserven",
+			"11": "K. Essig & Öl",
+			"12": "L. Backzutaten",
+			"13": "M. Snacks",
+			"14": "N. Feinkost",
+			"15": "O. Internationale Küche",
+			"16": "P. Getränke",
+			"17": "Q. Reinigungsmittel",
+			"18": "R. Pflege & Gesundheit",
+			"19": "S. Babybedarf"
+        }
+    }
+}

@@ -1,4 +1,5 @@
 NUM_TESTS := `find -name "*_test.go"|xargs grep "{ //"|wc -l`
+TEST_PACKAGES := `go list ./internal/... | grep -v -e /defaults/ -e /mock -e /web`
 INSTALL_DIR := /tmp/heyapple
 CONFIG_DIR := /tmp/heyapple
 
@@ -19,11 +20,11 @@ run-server:
 
 test-server:
 	@echo "testing ${NUM_TESTS} cases:"
-	@go test -short -cover -p 1 -timeout 30m ./internal/...
+	@go test -short -cover -p 1 -timeout 30m ${TEST_PACKAGES}
 
 test-all-server:
 	@echo "testing ${NUM_TESTS} cases:"
-	@go test -cover -race -p 1 -timeout 30m ./internal/...
+	@go test -cover -race -p 1 -timeout 30m ${TEST_PACKAGES}
 
 install-server:
 	@cp ./out/server/${BINARY_NAME}-amd64 ${INSTALL_DIR}/

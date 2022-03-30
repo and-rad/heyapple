@@ -28,12 +28,12 @@ import (
 	"github.com/and-rad/heyapple/internal/api/v1"
 	"github.com/and-rad/heyapple/internal/app"
 	"github.com/and-rad/heyapple/internal/auth"
+	"github.com/and-rad/heyapple/internal/db/mem"
 	"github.com/and-rad/heyapple/internal/defaults"
 	"github.com/and-rad/heyapple/internal/email"
 	"github.com/and-rad/heyapple/internal/handler"
 	"github.com/and-rad/heyapple/internal/l10n"
 	"github.com/and-rad/heyapple/internal/mw"
-	"github.com/and-rad/heyapple/internal/storage/memory"
 	"github.com/and-rad/heyapple/internal/web"
 
 	"github.com/and-rad/scs/v2"
@@ -44,7 +44,7 @@ func main() {
 	log := app.NewLog(os.Stdout)
 	translator := l10n.NewTranslator()
 	notifier := email.NewNotifier(translator)
-	db := memory.NewDB().WithBackup(log).WithDefaults(defaults.Get())
+	db := mem.NewDB().WithBackup(log).WithDefaults(defaults.Get())
 	sessions := scs.New()
 
 	env := &handler.Environment{

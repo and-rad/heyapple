@@ -19,7 +19,7 @@
 package app
 
 import (
-	"heyapple/internal/core"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 // CreateRecipe is a command to create a new named recipe

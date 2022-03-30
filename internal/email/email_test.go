@@ -20,15 +20,16 @@ package email
 
 import (
 	"errors"
-	"heyapple/internal/app"
-	"heyapple/internal/mock"
-	"heyapple/internal/web"
 	"html/template"
 	"net"
 	"net/smtp"
 	"net/textproto"
 	"reflect"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/mock"
+	"github.com/and-rad/heyapple/internal/web"
 
 	"github.com/jordan-wright/email"
 )

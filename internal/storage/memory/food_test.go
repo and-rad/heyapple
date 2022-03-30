@@ -19,11 +19,12 @@
 package memory
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/core"
-	"heyapple/internal/mock"
 	"reflect"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
+	"github.com/and-rad/heyapple/internal/mock"
 )
 
 func TestDB_NewFood(t *testing.T) {

@@ -27,8 +27,9 @@ package app
 
 import (
 	"errors"
-	"heyapple/internal/core"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 type (

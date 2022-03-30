@@ -19,10 +19,11 @@
 package handler
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/web"
 	"html/template"
 	"net/http"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/web"
 
 	"github.com/and-rad/scs/v2"
 	"github.com/gorilla/csrf"

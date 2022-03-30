@@ -19,11 +19,12 @@
 package core_test
 
 import (
-	"heyapple/internal/core"
-	"heyapple/internal/mock"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/core"
+	"github.com/and-rad/heyapple/internal/mock"
 )
 
 func TestNewRecipe(t *testing.T) {

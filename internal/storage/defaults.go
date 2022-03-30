@@ -20,9 +20,10 @@ package storage
 
 import (
 	"embed"
-	"heyapple/internal/data/dev"
-	"heyapple/internal/data/prod"
 	"os"
+
+	"github.com/and-rad/heyapple/internal/data/dev"
+	"github.com/and-rad/heyapple/internal/data/prod"
 )
 
 const envPreset = "HEYAPPLE_STORAGE_PRESET"

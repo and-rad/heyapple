@@ -19,11 +19,12 @@
 package api
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/handler"
 	"net/http"
 	"strconv"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/handler"
 
 	"github.com/julienschmidt/httprouter"
 )

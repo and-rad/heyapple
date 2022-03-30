@@ -21,8 +21,9 @@ package app_test
 import (
 	"bytes"
 	"errors"
-	"heyapple/internal/app"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
 )
 
 func TestLog_Log(t *testing.T) {

@@ -20,13 +20,14 @@ package memory
 
 import (
 	"encoding/json"
-	"heyapple/internal/app"
-	"heyapple/internal/core"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 const (

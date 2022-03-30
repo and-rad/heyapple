@@ -19,11 +19,12 @@
 package api
 
 import (
-	"heyapple/internal/core"
-	"heyapple/internal/mock"
 	"net/http"
 	"net/http/httptest"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/core"
+	"github.com/and-rad/heyapple/internal/mock"
 )
 
 func Test_sendResponse(t *testing.T) {

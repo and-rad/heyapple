@@ -20,10 +20,11 @@ package memory
 
 import (
 	"fmt"
-	"heyapple/internal/app"
-	"heyapple/internal/core"
 	"sort"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 func (db *DB) NewDiaryEntries(id int, entries ...core.DiaryEntry) error {

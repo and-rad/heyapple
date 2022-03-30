@@ -19,10 +19,11 @@
 package memory
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/mock"
 	"reflect"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/mock"
 )
 
 func TestDB_UserByName(t *testing.T) {

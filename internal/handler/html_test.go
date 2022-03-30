@@ -19,15 +19,16 @@
 package handler_test
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/handler"
-	"heyapple/internal/mock"
-	"heyapple/internal/web"
 	"html/template"
 	"net/http"
 	"net/http/httptest"
 	"strings"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/handler"
+	"github.com/and-rad/heyapple/internal/mock"
+	"github.com/and-rad/heyapple/internal/web"
 
 	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"

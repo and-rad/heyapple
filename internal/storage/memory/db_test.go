@@ -20,9 +20,6 @@ package memory
 
 import (
 	"fmt"
-	"heyapple/internal/app"
-	"heyapple/internal/core"
-	"heyapple/internal/mock"
 	"io/fs"
 	"io/ioutil"
 	"os"
@@ -31,6 +28,10 @@ import (
 	"testing"
 	"testing/fstest"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
+	"github.com/and-rad/heyapple/internal/mock"
 )
 
 const (

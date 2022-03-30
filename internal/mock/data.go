@@ -19,9 +19,10 @@
 package mock
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/core"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 var (

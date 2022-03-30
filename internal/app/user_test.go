@@ -19,9 +19,10 @@
 package app_test
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/mock"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/mock"
 )
 
 func TestAuthenticate_Fetch(t *testing.T) {

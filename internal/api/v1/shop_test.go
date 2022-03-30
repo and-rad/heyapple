@@ -19,15 +19,16 @@
 package api_test
 
 import (
-	"heyapple/internal/api/v1"
-	"heyapple/internal/app"
-	"heyapple/internal/handler"
-	"heyapple/internal/mock"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/api/v1"
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/handler"
+	"github.com/and-rad/heyapple/internal/mock"
 
 	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"

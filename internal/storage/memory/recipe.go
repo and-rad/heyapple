@@ -19,9 +19,10 @@
 package memory
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/core"
 	"sort"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 func (db *DB) NewRecipe(name string) (int, error) {

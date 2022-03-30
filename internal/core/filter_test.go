@@ -19,10 +19,11 @@
 package core_test
 
 import (
-	"heyapple/internal/core"
-	"heyapple/internal/mock"
 	"reflect"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/core"
+	"github.com/and-rad/heyapple/internal/mock"
 )
 
 func TestFoodMin(t *testing.T) {

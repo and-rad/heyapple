@@ -21,7 +21,7 @@
 package handler
 
 import (
-	"heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/app"
 
 	"github.com/and-rad/scs/v2"
 )

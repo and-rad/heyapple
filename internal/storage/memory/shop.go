@@ -19,10 +19,11 @@
 package memory
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/core"
 	"sort"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 func (db *DB) SetShoppingListDone(id int, done map[int]bool) error {

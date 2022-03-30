@@ -22,10 +22,11 @@ package mw
 
 import (
 	"errors"
-	"heyapple/internal/handler"
 	"net/http"
 	"os"
 	"strconv"
+
+	"github.com/and-rad/heyapple/internal/handler"
 
 	"github.com/gorilla/csrf"
 	"github.com/julienschmidt/httprouter"

@@ -1,13 +1,14 @@
 package api
 
 import (
-	"heyapple/internal/core"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 func Test_getRecipeFilter(t *testing.T) {

@@ -19,9 +19,11 @@
 package auth
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/handler"
+	"context"
 	"net/http"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/handler"
 
 	"github.com/and-rad/scs/v2"
 	"github.com/julienschmidt/httprouter"
@@ -169,4 +171,17 @@ func ResetConfirm(env *handler.Environment) httprouter.Handle {
 			w.WriteHeader(http.StatusOK)
 		}
 	}
+}
+
+// logOut can be used to invalidate the session that
+// belongs to the user identified by id. It should be
+// called after making permission changes on that user
+// as an extra security step.
+func logOut(sm *scs.SessionManager, r *http.Request, id int) error {
+	return sm.Iterate(r.Context(), func(ctx context.Context) error {
+		if uid, ok := sm.Get(ctx, "id").(int); ok && uid == id {
+			return sm.Destroy(ctx)
+		}
+		return nil
+	})
 }

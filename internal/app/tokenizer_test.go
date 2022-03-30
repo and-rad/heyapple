@@ -19,8 +19,9 @@
 package app_test
 
 import (
-	"heyapple/internal/app"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
 )
 
 func TestTokenizerCreate(t *testing.T) {

@@ -2,11 +2,12 @@ package storage_test
 
 import (
 	"embed"
-	"heyapple/internal/data/dev"
-	"heyapple/internal/data/prod"
-	"heyapple/internal/storage"
 	"os"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/data/dev"
+	"github.com/and-rad/heyapple/internal/data/prod"
+	"github.com/and-rad/heyapple/internal/storage"
 )
 
 func TestDefaults(t *testing.T) {

@@ -19,8 +19,9 @@
 package mock
 
 import (
-	"heyapple/internal/app"
 	"net/smtp"
+
+	"github.com/and-rad/heyapple/internal/app"
 
 	"github.com/jordan-wright/email"
 )

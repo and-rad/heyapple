@@ -19,9 +19,10 @@
 package app_test
 
 import (
-	"heyapple/internal/app"
 	"os"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
 
 	"golang.org/x/crypto/bcrypt"
 )

@@ -24,12 +24,13 @@ package memory
 import (
 	"bytes"
 	"encoding/json"
-	"heyapple/internal/app"
-	"heyapple/internal/core"
-	"heyapple/internal/job"
 	"io/fs"
 	"sync"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
+	"github.com/and-rad/heyapple/internal/job"
 )
 
 // entryMap   uid     day           entries

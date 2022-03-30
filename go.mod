@@ -1,4 +1,4 @@
-module heyapple
+module github.com/and-rad/heyapple
 
 go 1.17
 

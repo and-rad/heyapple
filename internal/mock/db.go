@@ -24,12 +24,13 @@ package mock
 import (
 	"errors"
 	"fmt"
-	"heyapple/internal/app"
-	"heyapple/internal/core"
 	"sort"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 // Error definitions

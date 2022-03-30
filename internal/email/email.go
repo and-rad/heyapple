@@ -23,11 +23,12 @@ package email
 import (
 	"bytes"
 	"fmt"
-	"heyapple/internal/app"
-	"heyapple/internal/web"
 	"html/template"
 	"net/smtp"
 	"net/textproto"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/web"
 
 	"github.com/jordan-wright/email"
 )

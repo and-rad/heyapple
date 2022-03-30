@@ -19,8 +19,9 @@
 package app
 
 import (
-	"heyapple/internal/core"
 	"reflect"
+
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 // CreateFood is a command to create a new food item in the

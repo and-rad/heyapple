@@ -12,7 +12,7 @@ build-server:
 			--enable-comment-stripping \
 			--strip-xml-prolog \
 			--strip-xml-space; fi
-	@CGO_ENABLED=0 GOARCH=amd64 go build -o ./out/server/${BINARY_NAME}-amd64 heyapple/cmd/web
+	@CGO_ENABLED=0 GOARCH=amd64 go build -o ./out/server/${BINARY_NAME}-amd64 github.com/and-rad/heyapple/cmd/web
 
 run-server:
 	@./out/server/${BINARY_NAME}-${TEST_ARCH}

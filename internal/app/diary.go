@@ -19,8 +19,9 @@
 package app
 
 import (
-	"heyapple/internal/core"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 // AddDiaryEntries is a command to add several food

@@ -19,9 +19,10 @@
 package job
 
 import (
-	"heyapple/internal/mock"
 	"testing"
 	"time"
+
+	"github.com/and-rad/heyapple/internal/mock"
 )
 
 const (

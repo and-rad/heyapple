@@ -21,10 +21,11 @@ package l10n
 import (
 	"encoding/json"
 	"fmt"
-	"heyapple/internal/web"
 	"io/fs"
 	"os"
 	"strings"
+
+	"github.com/and-rad/heyapple/internal/web"
 
 	"golang.org/x/text/language"
 )

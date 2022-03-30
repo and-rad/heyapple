@@ -27,10 +27,11 @@ package api
 
 import (
 	"encoding/json"
-	"heyapple/internal/app"
-	"heyapple/internal/core"
 	"net/http"
 	"strconv"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 func sendResponse(data interface{}, w http.ResponseWriter) {

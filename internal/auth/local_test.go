@@ -19,15 +19,16 @@
 package auth_test
 
 import (
-	"heyapple/internal/app"
-	"heyapple/internal/auth"
-	"heyapple/internal/handler"
-	"heyapple/internal/mock"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
 	"strings"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/auth"
+	"github.com/and-rad/heyapple/internal/handler"
+	"github.com/and-rad/heyapple/internal/mock"
 
 	"github.com/and-rad/scs/v2"
 	"github.com/and-rad/scs/v2/memstore"

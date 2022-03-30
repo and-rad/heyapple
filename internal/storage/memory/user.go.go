@@ -19,7 +19,7 @@
 package memory
 
 import (
-	"heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/app"
 )
 
 func (db *DB) NewUser(name, hash, token string) (int, error) {

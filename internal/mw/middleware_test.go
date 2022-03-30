@@ -19,15 +19,16 @@
 package mw_test
 
 import (
-	"heyapple/internal/handler"
-	"heyapple/internal/mock"
-	"heyapple/internal/mw"
 	"net/http"
 	"net/http/httptest"
 	"os"
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/and-rad/heyapple/internal/handler"
+	"github.com/and-rad/heyapple/internal/mock"
+	"github.com/and-rad/heyapple/internal/mw"
 
 	"github.com/and-rad/scs/v2"
 )

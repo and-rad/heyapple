@@ -19,10 +19,17 @@
 package mock
 
 import (
+	"bytes"
+	"embed"
 	"time"
 
 	"github.com/and-rad/heyapple/internal/app"
 	"github.com/and-rad/heyapple/internal/core"
+)
+
+var (
+	//go:embed *.json
+	convFS embed.FS
 )
 
 var (
@@ -349,3 +356,14 @@ func List12() []core.ShopItem {
 const (
 	List1Json = `[{"price":[0,0],"done":false,"amount":50,"aisle":0,"id":1},{"price":[0,0],"done":false,"amount":150,"aisle":0,"id":2}]`
 )
+
+func USDA1() []byte {
+	if file, err := convFS.Open("usda.json"); err == nil {
+		defer file.Close()
+		var buf bytes.Buffer
+		if _, err := buf.ReadFrom(file); err == nil {
+			return buf.Bytes()
+		}
+	}
+	panic("usda")
+}

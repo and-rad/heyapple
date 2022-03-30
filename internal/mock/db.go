@@ -24,8 +24,8 @@ package mock
 import (
 	"errors"
 	"fmt"
-	"heyapple/pkg/app"
-	"heyapple/pkg/core"
+	"heyapple/internal/app"
+	"heyapple/internal/core"
 	"sort"
 	"strconv"
 	"strings"

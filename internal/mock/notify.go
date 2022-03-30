@@ -19,7 +19,7 @@
 package mock
 
 import (
-	"heyapple/pkg/app"
+	"heyapple/internal/app"
 	"net/smtp"
 
 	"github.com/jordan-wright/email"

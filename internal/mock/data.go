@@ -19,8 +19,8 @@
 package mock
 
 import (
-	"heyapple/pkg/app"
-	"heyapple/pkg/core"
+	"heyapple/internal/app"
+	"heyapple/internal/core"
 	"time"
 )
 

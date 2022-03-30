@@ -5,7 +5,7 @@ CONFIG_DIR := /tmp/heyapple
 build-server:
 	@rm -rf ./out/server
 	@if command -v scour &> /dev/null; then \
-		scour ./assets/icons.svg ./web/static/img/icons.svg \
+		scour ./assets/icons.svg ./internal/web/static/img/icons.svg \
 			--enable-id-stripping \
 			--protect-ids-noninkscape \
 			--remove-descriptive-elements \
@@ -19,11 +19,11 @@ run-server:
 
 test-server:
 	@echo "testing ${NUM_TESTS} cases:"
-	@go test -short -cover -p 1 -timeout 30m ./pkg/...
+	@go test -short -cover -p 1 -timeout 30m ./internal/...
 
 test-all-server:
 	@echo "testing ${NUM_TESTS} cases:"
-	@go test -cover -race -p 1 -timeout 30m ./pkg/...
+	@go test -cover -race -p 1 -timeout 30m ./internal/...
 
 install-server:
 	@cp ./out/server/${BINARY_NAME}-amd64 ${INSTALL_DIR}/

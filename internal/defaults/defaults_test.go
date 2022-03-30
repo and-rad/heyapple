@@ -1,16 +1,16 @@
-package storage_test
+package defaults_test
 
 import (
 	"embed"
 	"os"
 	"testing"
 
-	"github.com/and-rad/heyapple/internal/data/dev"
-	"github.com/and-rad/heyapple/internal/data/prod"
-	"github.com/and-rad/heyapple/internal/storage"
+	"github.com/and-rad/heyapple/internal/defaults"
+	"github.com/and-rad/heyapple/internal/defaults/dev"
+	"github.com/and-rad/heyapple/internal/defaults/prod"
 )
 
-func TestDefaults(t *testing.T) {
+func TestGet(t *testing.T) {
 	for idx, data := range []struct {
 		env string
 		fs  embed.FS
@@ -35,7 +35,7 @@ func TestDefaults(t *testing.T) {
 		os.Setenv("HEYAPPLE_STORAGE_PRESET", data.env)
 		defer os.Unsetenv("HEYAPPLE_STORAGE_PRESET")
 
-		if fs := storage.Defaults(); fs != data.fs {
+		if fs := defaults.Get(); fs != data.fs {
 			t.Errorf("test case %d: files mismatch \nhave: %v \nwant: %v", idx, fs, data.fs)
 		}
 	}

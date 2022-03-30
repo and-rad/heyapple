@@ -16,19 +16,19 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-package storage
+package defaults
 
 import (
 	"embed"
 	"os"
 
-	"github.com/and-rad/heyapple/internal/data/dev"
-	"github.com/and-rad/heyapple/internal/data/prod"
+	"github.com/and-rad/heyapple/internal/defaults/dev"
+	"github.com/and-rad/heyapple/internal/defaults/prod"
 )
 
 const envPreset = "HEYAPPLE_STORAGE_PRESET"
 
-func Defaults() embed.FS {
+func Get() embed.FS {
 	switch os.Getenv(envPreset) {
 	case "none":
 		return embed.FS{}

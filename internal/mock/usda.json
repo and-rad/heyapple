@@ -302,7 +302,7 @@
 						"rank": 8700,
 						"unitName": "µg"
 					},
-					"amount": 1.10
+					"amount": 1.15
 				},
 				{
 					"type": "FoodNutrient",
@@ -422,7 +422,7 @@
 						"rank": 7300,
 						"unitName": "µg"
 					},
-					"amount": 0.540
+					"amount": 0.560
 				},
 				{
 					"type": "FoodNutrient",
@@ -1228,7 +1228,7 @@
 						"rank": 8700,
 						"unitName": "µg"
 					},
-					"amount": 0.100
+					"amount": 0.15
 				},
 				{
 					"type": "FoodNutrient",
@@ -1336,7 +1336,7 @@
 						"rank": 6900,
 						"unitName": "µg"
 					},
-					"amount": 51.0
+					"amount": 52.0
 				},
 				{
 					"type": "FoodNutrient",
@@ -1348,7 +1348,7 @@
 						"rank": 7300,
 						"unitName": "µg"
 					},
-					"amount": 0.930
+					"amount": 0.950
 				},
 				{
 					"type": "FoodNutrient",

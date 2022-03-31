@@ -20,6 +20,7 @@ package conv
 
 import (
 	"encoding/json"
+	"math"
 
 	"github.com/and-rad/heyapple/internal/core"
 )
@@ -62,7 +63,57 @@ func FromUSDA(data []byte) ([]Food, error) {
 		for _, n := range inFood.Nutrients {
 			switch n.Data.ID {
 			case 1003:
-				outFood.Protein = n.Amount
+				outFood.Protein = usdaAmount(n, "g")
+			case 1004:
+				outFood.Fat = usdaAmount(n, "g")
+			case 1005:
+				outFood.Carbs = usdaAmount(n, "g")
+			case 1008:
+				outFood.KCal = usdaAmount(n, "kcal")
+			case 1079:
+				outFood.Fiber = usdaAmount(n, "g")
+			case 1087:
+				outFood.Calcium = usdaAmount(n, "mg")
+			case 1089:
+				outFood.Iron = usdaAmount(n, "mg")
+			case 1090:
+				outFood.Magnesium = usdaAmount(n, "mg")
+			case 1091:
+				outFood.Phosphorus = usdaAmount(n, "mg")
+			case 1092:
+				outFood.Potassium = usdaAmount(n, "mg")
+			case 1093:
+				outFood.Sodium = usdaAmount(n, "mg")
+			case 1095:
+				outFood.Zinc = usdaAmount(n, "mg")
+			case 1098:
+				outFood.Copper = usdaAmount(n, "mg")
+			case 1103:
+				outFood.Selenium = usdaAmount(n, "mg")
+			case 1106:
+				outFood.VitA = usdaAmount(n, "mg")
+			case 1109:
+				outFood.VitE = usdaAmount(n, "mg")
+			case 1114:
+				outFood.VitD = usdaAmount(n, "mg")
+			case 1162:
+				outFood.VitC = usdaAmount(n, "mg")
+			case 1165:
+				outFood.VitB1 = usdaAmount(n, "mg")
+			case 1166:
+				outFood.VitB2 = usdaAmount(n, "mg")
+			case 1167:
+				outFood.VitB3 = usdaAmount(n, "mg")
+			case 1175:
+				outFood.VitB6 = usdaAmount(n, "mg")
+			case 1177:
+				outFood.VitB9 = usdaAmount(n, "mg")
+			case 1178:
+				outFood.VitB12 = usdaAmount(n, "mg")
+			case 1185:
+				outFood.VitK = usdaAmount(n, "mg")
+			case 1258:
+				outFood.FatSat = usdaAmount(n, "g")
 			}
 		}
 
@@ -70,4 +121,22 @@ func FromUSDA(data []byte) ([]Food, error) {
 	}
 
 	return foods, nil
+}
+
+func usdaAmount(n usdaNutrient, base string) float32 {
+	if n.Data.Unit == base {
+		return n.Amount
+	}
+
+	var i, j int
+	for k, v := range []string{"g", "mg", "µg"} {
+		if base == v {
+			i = k
+		}
+		if n.Data.Unit == v {
+			j = k
+		}
+	}
+
+	return n.Amount * float32(math.Pow(1000, float64(i-j)))
 }

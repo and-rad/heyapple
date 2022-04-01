@@ -49,7 +49,8 @@ func TestFromUSDA(t *testing.T) {
 					Aisle: 0,
 					Name:  "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
 					Food: core.Food{
-						ID: 1,
+						ID:  1,
+						Cat: core.CatFruit,
 
 						KCal:    52,
 						Fat:     0.17,

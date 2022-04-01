@@ -59,6 +59,37 @@ const (
 	AisleBaby
 )
 
+type Category int
+
+const (
+	CatNone Category = iota
+	CatDairy
+	CatSpice
+	CatBaby
+	CatFat
+	CatPoultry
+	CatSoup
+	CatSausage
+	CatCereal
+	CatFruit
+	CatPork
+	CatVegetable
+	CatNut
+	CatBeef
+	CatDrink
+	CatFish
+	CatLegume
+	CatLamb
+	CatBaked
+	CatSweets
+	CatGrains
+	CatFastFood
+	CatMeals
+	CatSnacks
+	CatRestaurant
+	CatAlcohol
+)
+
 // Food represents an edible object. All nutrients are
 // stored per 100 base units. The base unit is either gram
 // or milliliter. The actual unit of measurement for
@@ -67,6 +98,8 @@ const (
 type Food struct {
 	ID    int `json:"id"`
 	Brand int `json:"brand"`
+
+	Cat Category `json:"cat"`
 
 	KCal    float32 `json:"kcal"`
 	Fat     float32 `json:"fat"`

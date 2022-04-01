@@ -25,6 +25,36 @@ import (
 	"github.com/and-rad/heyapple/internal/core"
 )
 
+var (
+	usdaCats = map[string]core.Category{
+		"Dairy and Egg Products":            core.CatDairy,
+		"Spices and Herbs":                  core.CatSpice,
+		"Baby Foods":                        core.CatBaby,
+		"Fats and Oils":                     core.CatFat,
+		"Poultry Products":                  core.CatPoultry,
+		"Soups, Sauces, and Gravies":        core.CatSoup,
+		"Sausages and Luncheon Meats":       core.CatSausage,
+		"Breakfast Cereals":                 core.CatCereal,
+		"Fruits and Fruit Juices":           core.CatFruit,
+		"Pork Products":                     core.CatPork,
+		"Vegetables and Vegetable Products": core.CatVegetable,
+		"Nut and Seed Products":             core.CatNut,
+		"Beef Products":                     core.CatBeef,
+		"Beverages":                         core.CatDrink,
+		"Finfish and Shellfish Products":    core.CatFish,
+		"Legumes and Legume Products":       core.CatLegume,
+		"Lamb, Veal, and Game Products":     core.CatLamb,
+		"Baked Products":                    core.CatBaked,
+		"Sweets":                            core.CatSweets,
+		"Cereal Grains and Pasta":           core.CatGrains,
+		"Fast Foods":                        core.CatFastFood,
+		"Meals, Entrees, and Side Dishes":   core.CatMeals,
+		"Snacks":                            core.CatSnacks,
+		"Restaurant Foods":                  core.CatRestaurant,
+		"Alcoholic Beverages":               core.CatAlcohol,
+	}
+)
+
 type usdaNutrientData struct {
 	Name string `json:"name"`
 	Unit string `json:"unitName"`
@@ -36,8 +66,13 @@ type usdaNutrient struct {
 	Amount float32          `json:"amount"`
 }
 
+type usdaCategory struct {
+	Desc string `json:"description"`
+}
+
 type usdaFood struct {
 	Desc      string         `json:"description"`
+	Category  usdaCategory   `json:"foodCategory"`
 	Nutrients []usdaNutrient `json:"foodNutrients"`
 }
 
@@ -56,7 +91,8 @@ func FromUSDA(data []byte) ([]Food, error) {
 		outFood := Food{
 			Name: inFood.Desc,
 			Food: core.Food{
-				ID: i + 1,
+				ID:  i + 1,
+				Cat: usdaCats[inFood.Category.Desc],
 			},
 		}
 

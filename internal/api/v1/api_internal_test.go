@@ -49,7 +49,7 @@ func Test_sendResponse(t *testing.T) {
 		},
 		{ //03// food
 			data:   core.Food{ID: 1, Protein: 23, Magnesium: 144},
-			out:    `{"id":1,"brand":0,"kcal":0,"fat":0,"fatsat":0,"fato3":0,"fato6":0,"carb":0,"sug":0,"prot":23,"fib":0,"salt":0,"pot":0,"chl":0,"sod":0,"calc":0,"phos":0,"mag":144,"iron":0,"zinc":0,"mang":0,"cop":0,"iod":0,"chr":0,"mol":0,"sel":0,"vita":0,"vitb1":0,"vitb2":0,"vitb3":0,"vitb5":0,"vitb6":0,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0,"vitd":0,"vite":0,"vitk":0}`,
+			out:    `{"id":1,"brand":0,"cat":0,"kcal":0,"fat":0,"fatsat":0,"fato3":0,"fato6":0,"carb":0,"sug":0,"prot":23,"fib":0,"salt":0,"pot":0,"chl":0,"sod":0,"calc":0,"phos":0,"mag":144,"iron":0,"zinc":0,"mang":0,"cop":0,"iod":0,"chr":0,"mol":0,"sel":0,"vita":0,"vitb1":0,"vitb2":0,"vitb3":0,"vitb5":0,"vitb6":0,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0,"vitd":0,"vite":0,"vitk":0}`,
 			status: http.StatusOK,
 		},
 	} {

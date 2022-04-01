@@ -38,7 +38,25 @@ type Aisle int
 
 const (
 	AisleNone Aisle = iota
-	AisleFruit
+	AisleProduce
+	AisleSpice
+	AisleBread
+	AisleDairy
+	AisleMeat
+	AisleFish
+	AisleFrozen
+	AislePasta
+	AisleSauce
+	AisleCanned
+	AisleOil
+	AisleBaking
+	AisleSnacks
+	AisleDeli
+	AisleIntl
+	AisleDrink
+	AisleCleaning
+	AisleHealth
+	AisleBaby
 )
 
 // Food represents an edible object. All nutrients are

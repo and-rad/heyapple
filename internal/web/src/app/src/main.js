@@ -112,6 +112,7 @@ function initPrefs(data) {
 function mountApp() {
 	food.forEach((f) => {
 		f.name = locale.global.t(f.id.toString());
+		f.cat = locale.global.t("cat." + f.cat);
 	});
 
 	app.provide("csrfToken", csrfToken);

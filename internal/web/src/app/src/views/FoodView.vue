@@ -46,6 +46,7 @@ function newFood(name) {
 		})
 		.then((data) => {
 			data.name = name;
+			data.cat = "";
 			foods.value.push(data);
 			filtered.value.push(data);
 			log.msg(t("createfood.ok"));
@@ -75,6 +76,7 @@ function saveFood() {
 		.then((response) => response.json())
 		.then((data) => {
 			data.name = t(data.id.toString());
+			data.cat = t("cat." + data.cat);
 			foods.value = foods.value.map((f) => (data.id == f.id ? data : f));
 			filtered.value = filtered.value.map((f) => (data.id == f.id ? data : f));
 			current.value = current.value.id == data.id ? data : current.value;
@@ -302,7 +304,7 @@ function onInput(evt) {
 		</template>
 
 		<template #details v-if="current">
-			<section class="subtitle">Some food category</section>
+			<section class="subtitle">{{ current.cat }}</section>
 			<section class="tags">
 				<span class="tag">Tag 1</span>
 				<span class="tag">Tag 2</span>

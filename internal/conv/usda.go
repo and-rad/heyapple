@@ -42,7 +42,7 @@ type usdaFood struct {
 }
 
 type usda struct {
-	Foods []usdaFood `json:"SurveyFoods"`
+	Foods []usdaFood `json:"SRLegacyFoods"`
 }
 
 func FromUSDA(data []byte) ([]Food, error) {
@@ -104,9 +104,11 @@ func FromUSDA(data []byte) ([]Food, error) {
 				outFood.VitB2 = usdaAmount(n, "mg")
 			case 1167:
 				outFood.VitB3 = usdaAmount(n, "mg")
+			case 1170:
+				outFood.VitB5 = usdaAmount(n, "mg")
 			case 1175:
 				outFood.VitB6 = usdaAmount(n, "mg")
-			case 1177:
+			case 1190:
 				outFood.VitB9 = usdaAmount(n, "mg")
 			case 1178:
 				outFood.VitB12 = usdaAmount(n, "mg")
@@ -114,6 +116,10 @@ func FromUSDA(data []byte) ([]Food, error) {
 				outFood.VitK = usdaAmount(n, "mg")
 			case 1258:
 				outFood.FatSat = usdaAmount(n, "g")
+			case 1272, 1278, 1280, 1404:
+				outFood.FatO3 += usdaAmount(n, "g")
+			case 1313, 1316, 1321, 1406, 1408:
+				outFood.FatO6 += usdaAmount(n, "g")
 			}
 		}
 

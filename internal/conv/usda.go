@@ -170,8 +170,8 @@ func FromUSDA(data []byte) ([]Food, error) {
 				outFood.VitB9 = usdaAmount(n, "mg")
 			case 1178:
 				outFood.VitB12 = usdaAmount(n, "mg")
-			case 1185:
-				outFood.VitK = usdaAmount(n, "mg")
+			case 1184, 1185:
+				outFood.VitK += usdaAmount(n, "mg")
 			case 1258:
 				outFood.FatSat = usdaAmount(n, "g")
 			case 1272, 1278, 1280, 1404:

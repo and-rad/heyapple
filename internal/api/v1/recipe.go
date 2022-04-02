@@ -370,25 +370,29 @@ func getRecipeFilter(r *http.Request) core.Filter {
 		f["name"] = name
 		delete(r.Form, "name")
 	}
+
 	if size, err := asInt("size", r); err == nil {
 		f["size"] = size
-		delete(r.Form, "size")
 	}
+	delete(r.Form, "size")
+
 	if time, err := asInt("preptime", r); err == nil {
 		f["preptime"] = time
-		delete(r.Form, "preptime")
 	}
+	delete(r.Form, "preptime")
+
 	if time, err := asInt("cooktime", r); err == nil {
 		f["cooktime"] = time
-		delete(r.Form, "cooktime")
 	}
+	delete(r.Form, "cooktime")
+
 	if time, err := asInt("misctime", r); err == nil {
 		f["misctime"] = time
-		delete(r.Form, "misctime")
 	}
+	delete(r.Form, "misctime")
 
 	for i := 0; i < core.RecipeType.NumField(); i++ {
-		param := core.FoodType.Field(i).Tag.Get("json")
+		param := core.RecipeType.Field(i).Tag.Get("json")
 		if val, err := asFloat(param, r); err == nil {
 			f[param] = val
 		}

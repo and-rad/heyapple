@@ -28,11 +28,13 @@ import (
 	"path/filepath"
 
 	"github.com/and-rad/heyapple/internal/conv"
+	"github.com/and-rad/heyapple/internal/core"
 )
 
 var (
 	flagConvert = flag.String("convert", "", "convert food data in specified file to a format usd by HeyApple internally")
 	flagFrom    = flag.String("from", "", "the input data format for conversion")
+	flagCat     = flag.Int("cat", -1, "limit converted food to this category")
 	flagOut     = flag.String("out", "", "the output file name")
 )
 
@@ -40,7 +42,7 @@ type cli struct {
 	cwd string
 }
 
-func (c *cli) convert(in, out, format string) {
+func (c *cli) convert(in, out, format string, cat int) {
 	path, err := filepath.Abs(in)
 	if err != nil {
 		log.Fatal(err.Error())
@@ -59,6 +61,14 @@ func (c *cli) convert(in, out, format string) {
 
 	if err != nil {
 		log.Fatal(err.Error())
+	}
+
+	if cat != -1 {
+		for i := len(foods) - 1; i >= 0; i-- {
+			if foods[i].Category != core.Category(cat) {
+				foods = append(foods[:i], foods[i+1:]...)
+			}
+		}
 	}
 
 	data, err = json.Marshal(foods)
@@ -88,6 +98,6 @@ func main() {
 	cli := cli{cwd: filepath.Dir(exe)}
 
 	if *flagConvert != "" {
-		cli.convert(*flagConvert, *flagOut, *flagFrom)
+		cli.convert(*flagConvert, *flagOut, *flagFrom, *flagCat)
 	}
 }

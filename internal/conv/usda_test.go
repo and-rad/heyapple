@@ -49,8 +49,8 @@ func TestFromUSDA(t *testing.T) {
 					Aisle: core.AisleProduce,
 					Name:  "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
 					Food: core.Food{
-						ID:  1,
-						Cat: core.CatFruit,
+						ID:       1,
+						Category: core.CatFruit,
 
 						KCal:    52,
 						Fat:     0.17,
@@ -96,8 +96,8 @@ func TestFromUSDA(t *testing.T) {
 					Aisle: core.AisleSnacks,
 					Name:  "Snacks, potato chips, made from dried potatoes, reduced fat",
 					Food: core.Food{
-						ID:  2,
-						Cat: core.CatSnacks,
+						ID:       2,
+						Category: core.CatSnacks,
 
 						KCal:    502,
 						Fat:     26.1,

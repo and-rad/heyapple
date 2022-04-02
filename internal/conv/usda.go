@@ -113,8 +113,8 @@ func FromUSDA(data []byte) ([]Food, error) {
 			Name:  inFood.Desc,
 			Aisle: usdaAisles[category],
 			Food: core.Food{
-				ID:  i + 1,
-				Cat: category,
+				ID:       i + 1,
+				Category: category,
 			},
 		}
 

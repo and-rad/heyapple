@@ -99,7 +99,7 @@ type Food struct {
 	ID    int `json:"id"`
 	Brand int `json:"brand"`
 
-	Cat Category `json:"cat"`
+	Category Category `json:"cat"`
 
 	KCal    float32 `json:"kcal"`
 	Fat     float32 `json:"fat"`

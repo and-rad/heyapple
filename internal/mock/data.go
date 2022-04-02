@@ -62,14 +62,14 @@ var (
 
 	// apple
 	Food1 = core.Food{
-		ID:      1,
-		Cat:     9,
-		KCal:    54,
-		Fat:     0.1,
-		Carbs:   14.4,
-		Sugar:   10.3,
-		Protein: 0.3,
-		Fiber:   2,
+		ID:       1,
+		Category: 9,
+		KCal:     54,
+		Fat:      0.1,
+		Carbs:    14.4,
+		Sugar:    10.3,
+		Protein:  0.3,
+		Fiber:    2,
 
 		Iron:       0.2,
 		Zinc:       0.1,
@@ -92,14 +92,14 @@ var (
 
 	// banana
 	Food2 = core.Food{
-		ID:      2,
-		Cat:     9,
-		KCal:    93,
-		Fat:     0.2,
-		Carbs:   20,
-		Sugar:   17,
-		Protein: 1,
-		Fiber:   2,
+		ID:       2,
+		Category: 9,
+		KCal:     93,
+		Fat:      0.2,
+		Carbs:    20,
+		Sugar:    17,
+		Protein:  1,
+		Fiber:    2,
 
 		Iron:       0.4,
 		Zinc:       0.2,

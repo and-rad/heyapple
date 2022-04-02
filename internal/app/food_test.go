@@ -97,7 +97,7 @@ func TestSaveFood_Execute(t *testing.T) {
 				"vita": 33, "vitb1": 34, "vitb2": 35, "vitb3": 36, "vitb5": 37, "vitb6": 38, "vitb7": 39, "vitb9": 40, "vitb12": 41, "vitc": 42, "vitd": 43, "vite": 44, "vitk": 45,
 			},
 			food: core.Food{
-				ID: 1, Cat: 9, KCal: 10, Fat: 11, FatSat: 12, FatO3: 13, FatO6: 14, Carbs: 15, Sugar: 16, Protein: 17, Fiber: 18,
+				ID: 1, Category: 9, KCal: 10, Fat: 11, FatSat: 12, FatO3: 13, FatO6: 14, Carbs: 15, Sugar: 16, Protein: 17, Fiber: 18,
 				Potassium: 19, Chlorine: 20, Sodium: 21, Calcium: 22, Phosphorus: 23, Magnesium: 24, Iron: 25, Zinc: 26, Manganse: 27, Copper: 28, Iodine: 29, Chromium: 30, Molybdenum: 31, Selenium: 32,
 				VitA: 33, VitB1: 34, VitB2: 35, VitB3: 36, VitB5: 37, VitB6: 38, VitB7: 39, VitB9: 40, VitB12: 41, VitC: 42, VitD: 43, VitE: 44, VitK: 45,
 			},

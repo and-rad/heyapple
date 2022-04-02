@@ -148,6 +148,7 @@ func FromUSDA(data []byte) ([]Food, error) {
 				outFood.Potassium = usdaAmount(n, "mg")
 			case 1093:
 				outFood.Sodium = usdaAmount(n, "mg")
+				outFood.Salt = outFood.Sodium * 0.0025
 			case 1095:
 				outFood.Zinc = usdaAmount(n, "mg")
 			case 1098:

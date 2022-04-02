@@ -64,6 +64,7 @@ func TestFromUSDA(t *testing.T) {
 						Sucrose:  2.07,
 						Protein:  0.26,
 						Fiber:    2.4,
+						Salt:     0.0025,
 
 						Calcium:    6,
 						Chlorine:   0,
@@ -114,6 +115,7 @@ func TestFromUSDA(t *testing.T) {
 						Sucrose:  0.39,
 						Protein:  4.56,
 						Fiber:    3.2,
+						Salt:     1.125,
 
 						Calcium:    29,
 						Chlorine:   0,

@@ -53,6 +53,26 @@ var (
 		"Restaurant Foods":                  core.CatRestaurant,
 		"Alcoholic Beverages":               core.CatAlcohol,
 	}
+
+	usdaAisles = map[core.Category]core.Aisle{
+		core.CatDairy:     core.AisleDairy,
+		core.CatSpice:     core.AisleSpice,
+		core.CatBaby:      core.AisleBaby,
+		core.CatFish:      core.AisleFish,
+		core.CatFruit:     core.AisleProduce,
+		core.CatVegetable: core.AisleProduce,
+		core.CatPoultry:   core.AisleMeat,
+		core.CatPork:      core.AisleMeat,
+		core.CatBeef:      core.AisleMeat,
+		core.CatLegume:    core.AislePasta,
+		core.CatLamb:      core.AisleMeat,
+		core.CatBaked:     core.AisleBread,
+		core.CatSweets:    core.AisleSnacks,
+		core.CatGrains:    core.AislePasta,
+		core.CatSnacks:    core.AisleSnacks,
+		core.CatDrink:     core.AisleDrink,
+		core.CatAlcohol:   core.AisleDrink,
+	}
 )
 
 type usdaNutrientData struct {
@@ -88,11 +108,13 @@ func FromUSDA(data []byte) ([]Food, error) {
 
 	foods := []Food{}
 	for i, inFood := range usda.Foods {
+		category := usdaCats[inFood.Category.Desc]
 		outFood := Food{
-			Name: inFood.Desc,
+			Name:  inFood.Desc,
+			Aisle: usdaAisles[category],
 			Food: core.Food{
 				ID:  i + 1,
-				Cat: usdaCats[inFood.Category.Desc],
+				Cat: category,
 			},
 		}
 

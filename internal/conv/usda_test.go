@@ -46,7 +46,7 @@ func TestFromUSDA(t *testing.T) {
 			in: mock.USDA1(),
 			out: []conv.Food{
 				{
-					Aisle: 0,
+					Aisle: core.AisleProduce,
 					Name:  "Apples, raw, with skin (Includes foods for USDA's Food Distribution Program)",
 					Food: core.Food{
 						ID:  1,

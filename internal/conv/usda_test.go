@@ -58,6 +58,7 @@ func TestFromUSDA(t *testing.T) {
 						FatO3:   0,
 						FatO6:   0,
 						Carbs:   13.8,
+						Sugar:   10.4,
 						Protein: 0.26,
 						Fiber:   2.4,
 
@@ -104,6 +105,7 @@ func TestFromUSDA(t *testing.T) {
 						FatO3:   0.066,
 						FatO6:   12.003,
 						Carbs:   64.8,
+						Sugar:   0.63,
 						Protein: 4.56,
 						Fiber:   3.2,
 

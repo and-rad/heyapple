@@ -180,6 +180,8 @@ func FromUSDA(data []byte) ([]Food, error) {
 				outFood.FatO3 += usdaAmount(n, "g")
 			case 1313, 1316, 1321, 1406, 1408:
 				outFood.FatO6 += usdaAmount(n, "g")
+			case 2000:
+				outFood.Sugar = usdaAmount(n, "g")
 			}
 		}
 

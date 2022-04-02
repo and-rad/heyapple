@@ -146,6 +146,8 @@ func FromUSDA(data []byte) ([]Food, error) {
 				outFood.Zinc = usdaAmount(n, "mg")
 			case 1098:
 				outFood.Copper = usdaAmount(n, "mg")
+			case 1101:
+				outFood.Manganse = usdaAmount(n, "mg")
 			case 1103:
 				outFood.Selenium = usdaAmount(n, "mg")
 			case 1106:

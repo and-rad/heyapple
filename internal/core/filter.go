@@ -27,16 +27,19 @@ var (
 	FoodType = reflect.TypeOf(Food{})
 	FoodMin  = reflect.ValueOf(Food{})
 	FoodMax  = reflect.ValueOf(Food{
-		KCal:    900,
-		Fat:     100,
-		FatSat:  83,
-		FatO3:   54,
-		FatO6:   70,
-		Carbs:   100,
-		Sugar:   100,
-		Protein: 89,
-		Fiber:   71,
-		Salt:    100,
+		KCal:     900,
+		Fat:      100,
+		FatSat:   83,
+		FatO3:    54,
+		FatO6:    70,
+		Carbs:    100,
+		Sugar:    100,
+		Fructose: 56,
+		Glucose:  36,
+		Sucrose:  100,
+		Protein:  89,
+		Fiber:    71,
+		Salt:     100,
 	})
 
 	foodFieldsByTag = getFieldsByTag(FoodType)

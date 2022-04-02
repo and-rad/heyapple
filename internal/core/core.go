@@ -101,16 +101,19 @@ type Food struct {
 
 	Category Category `json:"cat"`
 
-	KCal    float32 `json:"kcal"`
-	Fat     float32 `json:"fat"`
-	FatSat  float32 `json:"fatsat"`
-	FatO3   float32 `json:"fato3"`
-	FatO6   float32 `json:"fato6"`
-	Carbs   float32 `json:"carb"`
-	Sugar   float32 `json:"sug"`
-	Protein float32 `json:"prot"`
-	Fiber   float32 `json:"fib"`
-	Salt    float32 `json:"salt"`
+	KCal     float32 `json:"kcal"`
+	Fat      float32 `json:"fat"`
+	FatSat   float32 `json:"fatsat"`
+	FatO3    float32 `json:"fato3"`
+	FatO6    float32 `json:"fato6"`
+	Carbs    float32 `json:"carb"`
+	Sugar    float32 `json:"sug"`
+	Fructose float32 `json:"fruc"`
+	Glucose  float32 `json:"gluc"`
+	Sucrose  float32 `json:"suc"`
+	Protein  float32 `json:"prot"`
+	Fiber    float32 `json:"fib"`
+	Salt     float32 `json:"salt"`
 
 	Potassium  float32 `json:"pot"`
 	Chlorine   float32 `json:"chl"`

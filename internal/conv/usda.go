@@ -128,6 +128,12 @@ func FromUSDA(data []byte) ([]Food, error) {
 				outFood.Carbs = usdaAmount(n, "g")
 			case 1008:
 				outFood.KCal = usdaAmount(n, "kcal")
+			case 1010:
+				outFood.Sucrose = usdaAmount(n, "g")
+			case 1011:
+				outFood.Glucose = usdaAmount(n, "g")
+			case 1012:
+				outFood.Fructose = usdaAmount(n, "g")
 			case 1079:
 				outFood.Fiber = usdaAmount(n, "g")
 			case 1087:

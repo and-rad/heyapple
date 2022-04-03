@@ -57,6 +57,7 @@ const (
 	AisleCleaning
 	AisleHealth
 	AisleBaby
+	AisleVegan
 )
 
 type Category int
@@ -88,6 +89,7 @@ const (
 	CatSnacks
 	CatRestaurant
 	CatAlcohol
+	CatVegan
 )
 
 // Food represents an edible object. All nutrients are

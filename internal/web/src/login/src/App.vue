@@ -21,6 +21,7 @@ import { RouterView } from "vue-router";
 	margin: 0 auto;
 	display: flex;
 	flex-direction: column;
+	hyphens: auto;
 }
 
 #app > div {
@@ -31,7 +32,7 @@ import { RouterView } from "vue-router";
 
 main {
 	width: 100%;
-	max-width: 480px;
+	max-width: 560px;
 	margin: 0 auto;
 	padding: 1em;
 }

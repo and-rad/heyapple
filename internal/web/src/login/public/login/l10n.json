@@ -1,14 +1,51 @@
 {
 	"de": {
+		"form": {
+			"back": "Zurück",
+			"confirm": "Passwort bestätigen",
+			"email": "E-Mail",
+			"pass": "Passwort",
+			"reset": "Passwort zurücksetzen"
+		},
+		"foot": {
+			"copy": "© 2021-2022",
+			"legal": "Impressum",
+			"privacy": "Datenschutz",
+			"terms": "AGB"
+		},
 		"login": {
+			"action": "Anmelden",
+			"err400": "Benutzername oder Passwort fehlt",
+			"err401": "Benutzername oder Passwort falsch",
+			"err403": "Es sieht so aus, als dürftest du das nicht.",
+			"err500": "Unbekannter Fehler",
+			"errmail": "Keine gültige E-Mail-Adresse",
+			"signup": "Noch kein Konto?",
 			"title1": "An",
 			"title2": "melden"
 		},
 		"register": {
+			"action": "Registrieren",
+			"err401": "Passwort zu schwach",
+			"err403": "Es sieht so aus, als dürftest du das nicht.",
+			"err409": "Diese E-Mail-Adresse wird bereits verwendet",
+			"err500": "Unbekannter Fehler",
+			"errpassempty": "Beide Passwortfelder müssen ausgefüllt sein",
+			"errpassmatch": "Die Passwörter stimmen nicht überein",
+			"hint": "Passwörter müssen <strong>mindestens 10 Zeichen</strong> lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten. Mit dem Klick auf \"Registrieren\" erklärst du, dass du die <a href='/terms' target='_blank'>Nutzungsbedingungen</a> und die <a href='/privacy' target='_blank'>Datenschutzbestimmungen</a> kennst und akzeptierst.",
+			"signin": "Du hast schon ein Konto?",
+			"success": "Registrierung erfolgreich! Wir haben eine E-Mail an {addr} gesendet. Öffne sie, um das Benutzerkonto zu aktivieren.",
 			"title1": "Regis",
 			"title2": "trieren"
 		},
 		"reset": {
+			"action": "E-Mail senden",
+			"err400": "E-Mail-Adresse fehlt",
+			"err403": "Es sieht so aus, als dürftest du das nicht.",
+			"err404": "Diese E-Mail-Adresse ist nicht mit einem HeyApple-Konto verknüpft.",
+			"err500": "Unbekannter Fehler",
+			"hint": "Gib die E-Mail-Adresse deines Benutzerkontos hier ein. Wir senden dir Anweisungen zum Zurücksetzen des Passworts.",
+			"success": "Wir haben eine E-Mail an {addr} gesendet. Öffne sie, um ein neues Passwort für dein Konto zu vergeben.",
 			"title1": "Passwort ",
 			"title2": "zurücksetzen"
 		}
@@ -46,7 +83,7 @@
 			"err500": "Unknown error occurred",
 			"errpassempty": "Both password fields must be filled out",
 			"errpassmatch": "The passwords don't match",
-			"hint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters. By clicking the \"Sign up\" button below, you agree to the <a href='/terms' target='_blank'>terms and conditions</a> and the <a href='/privacy' target='_blank'>privacy policy</a>. Please make sure you've read them carefully.",
+			"hint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters. By clicking \"Sign up\", you agree to the <a href='/terms' target='_blank'>terms and conditions</a> and the <a href='/privacy' target='_blank'>privacy policy</a>. Please make sure you've read them carefully.",
 			"signin": "Already have an account?",
 			"success": "Registration successful! We've sent an email to {addr}. Open it up to activate your account.",
 			"title1": "Sign ",

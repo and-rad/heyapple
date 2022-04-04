@@ -85,6 +85,14 @@
 		"7331": "Wasser, Kohlensäure",
 		"898": "Gurke",
 		"951": "Spinat",
+		"addfood": {
+			"err400": "Fehlerhafte oder fehlende Eingabe.",
+			"err401": "Du bist nicht berechtigt, dieses Rezept zu bearbeiten.",
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err404": "Das Rezept existiert nicht.",
+			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
+			"ok": "Erfolg! Die Zutat wurde hinzugefügt."
+		},
 		"aisle": {
 			"0": "",
 			"1": "A. Obst & Gemüse",
@@ -108,9 +116,26 @@
 			"19": "S. Babybedarf",
 			"20": "T. Fleischersatz"
 		},
+		"aria": {
+			"headcal": "Kalender",
+			"headingred": "Zutaten",
+			"headlog": "Log",
+			"headmacro1": "Primäre Makronährstoffe",
+			"headmacro2": "Sekundäre Makronährstoffe",
+			"headnew": "Neuer Eintrag",
+			"headnewrec": "Neues Rezept",
+			"headnutrients": "Nährwerte",
+			"headprep": "Zubereitung",
+			"headsearch": "Suchen und filtern",
+			"headtrack": "Konsum"
+		},
+		"btn": {
+			"add": "Okay",
+			"new": "Neu"
+		},
 		"cat": {
 			"0": "",
-			"1": "Milch und Eier",
+			"1": "Milchprodukte und Eier",
 			"2": "Gewürze",
 			"3": "Babynahrung",
 			"4": "Fette und Öle",
@@ -135,6 +160,148 @@
 			"23": "Snacks",
 			"24": "Restaurant",
 			"25": "Alkoholische Getränke"
+		},
+		"conn": {
+			"off": "Verbindung zum Server verloren, verwende lokale Kopie.",
+			"on": "Verbindung wiederhergestellt."
+		},
+		"createfood": {
+			"err401": "Du bist nicht berechtigt, neue Lebensmittel anzulegen.",
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
+			"ok": "Erfolg! Neues Lebensmittel angelegt."
+		},
+		"createrec": {
+			"err400": "Fehlerhafte oder fehlende Eingabe.",
+			"err401": "Du bist nicht berechtigt, Rezepte zu erstellen.",
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
+			"ok": "Erfolg! Neues Rezept erstellt."
+		},
+		"day": {
+			"cal1": "Mo",
+			"cal2": "Di",
+			"cal3": "Mi",
+			"cal4": "Do",
+			"cal5": "Fr",
+			"cal6": "Sa",
+			"cal7": "So"
+		},
+		"details": {
+			"noitem": "Für Details Eintrag auswählen"
+		},
+		"diary": {
+			"noitems": "Für diesen Tag gibt es noch keine Einträge.<br>Zeit, welche <a href='#/food'>hinzuzufügen</a>!"
+		},
+		"err": {
+			"err": "Unbekannter Fehler"
+		},
+		"food": {
+			"aisle": "Abteilung",
+			"amount": "Menge",
+			"carbs": "Kohlenhydrate",
+			"carbs2": "KH",
+			"energy": "Energie",
+			"fat": "Fett",
+			"fato3": "Fett, Ω-3",
+			"fato6": "Fett, Ω-6",
+			"fatsat": "Fett, gesättigt",
+			"fiber": "Ballaststoffe",
+			"hintnew": "Neuer Name...",
+			"hintrec": "Rezept wählen...",
+			"hintsearch": "Lebensmittel finden...",
+			"name": "Name",
+			"protein": "Protein",
+			"salt": "Salz",
+			"sugar": "Zucker",
+			"todiary": "Zum Tagebuch hinzufügen",
+			"torec": "Zu Rezept hinzufügen"
+		},
+		"getlist": {
+			"err400": "Fehlerhafte oder fehlende Eingabe.",
+			"err401": "Du bist nicht berechtigt, auf diese Liste zuzugreifen.",
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err404": "Es gibt keine Einkaufsliste mit diesem Namen.",
+			"err500": "Interner Serverfehler. Das sollte nicht passieren."
+		},
+		"month": {
+			"1": "Januar",
+			"2": "Februar",
+			"3": "März",
+			"4": "April",
+			"5": "Mai",
+			"6": "Juni",
+			"7": "Juli",
+			"8": "August",
+			"9": "September",
+			"10": "Oktober",
+			"11": "November",
+			"12": "Dezember"
+		},
+		"nav": {
+			"diary": "Tagebuch",
+			"food": "Lebensmittel",
+			"help": "Hilfe",
+			"profile": "Profil",
+			"recipes": "Rezepte",
+			"settings": "Einstellungen",
+			"shopping": "Einkaufen",
+			"signout": "Abmelden"
+		},
+		"recipe": {
+			"cooktime": "Kochen",
+			"hintnew": "Neuer Name...",
+			"hintsearch": "Rezept finden...",
+			"isowner": "Dein Rezept",
+			"ispublic": "Öffentliches Rezept",
+			"misctime": "Zusätzlich",
+			"noitems": "Dieses Rezept ist noch leer.<br>Zeit, ein paar <a href='#/food'>Lebensmittel</a> hinzuzufügen!",
+			"owner": "<strong>{name}</strong>s Rezept",
+			"preptime": "Vorbereitung",
+			"size": "Portion|Portionen",
+			"time": "Gesamtzeit"
+		},
+		"recowner": {
+			"err": "Konnte Rezeptbesitzer nicht ermitteln."
+		},
+		"savediary": {
+			"err400": "Fehlerhafte oder fehlende Eingabe.",
+			"err401": "Du bist nicht berechtigt, dieses Tagebuch zu bearbeiten.",
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err404": "Das Tagebuch existiert nicht.",
+			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
+			"ok": "Erfolg! Das Tagebuch wurde aktualisiert."
+		},
+		"savefood": {
+			"err400": "Fehlerhafte oder fehlende Eingabe.",
+			"err401": "Du bist nicht berechtigt, Lebensmittel zu bearbeiten.",
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err404": "Dieses Lebensmittel existiert nicht.",
+			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
+			"ok": "Erfolg! Alle Änderungen gespeichert."
+		},
+		"saverec": {
+			"err400": "Fehlerhafte oder fehlende Eingabe.",
+			"err401": "Du bist nicht berechtigt, dieses Rezept zu bearbeiten.",
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err404": "Das Rezept existiert nicht.",
+			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
+			"ok": "Erfolg! Alle Änderungen gespeichert."
+		},
+		"signout": {
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err404": "Abmeldung fehlgeschlagen, Session nicht gefunden. Bist du überhaupt angemeldet?",
+			"err500": "Abmeldung fehlgeschlagen, interner Serverfehler. Das sollte nicht passieren."
+		},
+		"todo": {
+			"instructions": "Anleitungen bald verfügbar"
+		},
+		"unit": {
+			"cal": "kcal",
+			"g": "g",
+			"kg": "kg",
+			"mg": "mg",
+			"min": "min"
 		}
 	}
 }

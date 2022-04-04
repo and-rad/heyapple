@@ -350,7 +350,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Add to diary</label>
+					<label>{{ t("food.todiary") }}</label>
 					<DiarySelect
 						:label="t('btn.add')"
 						:time="now"

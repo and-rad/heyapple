@@ -213,7 +213,9 @@
 			"name": "Name",
 			"protein": "Protein",
 			"salt": "Salt",
-			"sugar": "Sugar"
+			"sugar": "Sugar",
+			"todiary": "Add to diary",
+			"torec": "Add to recipe"
 		},
 		"getlist": {
 			"err400": "Malformed or missing input data.",

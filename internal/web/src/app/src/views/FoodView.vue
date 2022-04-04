@@ -330,7 +330,7 @@ function onInput(evt) {
 					</div>
 				</fieldset>
 				<fieldset>
-					<label>Add to recipe</label>
+					<label>{{ t("food.torec") }}</label>
 					<RecipeSelect
 						:label="t('btn.add')"
 						:placeholder="t('food.hintrec')"
@@ -340,7 +340,7 @@ function onInput(evt) {
 					/>
 				</fieldset>
 				<fieldset>
-					<label>Add to diary</label>
+					<label>{{ t("food.todiary") }}</label>
 					<DiarySelect
 						:label="t('btn.add')"
 						:time="now"

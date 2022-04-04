@@ -1,6 +1,8 @@
 {
-    "de": {
-        "aisle": {
+	"de": {
+		"2082": "Kakaopulver, stark entölt",
+		"10002": "Kakaopulver, leicht entölt",
+		"aisle": {
 			"0": "",
 			"1": "A. Obst & Gemüse",
 			"2": "B. Gewürze",
@@ -21,6 +23,6 @@
 			"17": "Q. Reinigungsmittel",
 			"18": "R. Pflege & Gesundheit",
 			"19": "S. Babybedarf"
-        }
-    }
+		}
+	}
 }

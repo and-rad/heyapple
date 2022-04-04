@@ -44,9 +44,9 @@
 	},
 	"food": {
 		"title": "Detailed Food Database",
-		"subtitle": "Search thousands of foods and compare macro nutrients, minerals, and vitamins.",
+		"subtitle": "Search hundreds of foods and compare macro nutrients, minerals, and vitamins.",
 		"list": {
-			"1": "The database tracks more than 35 nutrients, including different types of fats and carbs.",
+			"1": "The database tracks more than 40 nutrients, including different types of fats and carbs.",
 			"2": "Every new entry is verified with official international food databases.",
 			"3": "Quality over quantity: Unprocessed, natural foods make up most of the database."
 		}
@@ -68,7 +68,7 @@
 	},
 	"jumbo": {
 		"title": "The Complete Food Tracking Solution",
-		"subtitle": "From frying pan to shopping cart, HeyApple provides everything you need to track nutrients and plan your meals.",
+		"subtitle": "From frying pan to shopping cart, HeyApple provides everything you need to track nutrients and plan your meals",
 		"diaryhead": "Meal Planner",
 		"diaryintro": "Plan and track your meals, set nutrient targets, analyze the data",
 		"foodhead": "Food Database",
@@ -89,7 +89,7 @@
 	"more": {
 		"title": "More Goodies",
 		"appshead": "There's an app for that",
-		"appsbody": "We have dedicated apps for every major OS and browser. You can even write your own!",
+		"appsbody": "We have dedicated apps for mobile phones and every major browser. You can even write your own!",
 		"donatehead": "...but doesn't have to be",
 		"donatebody": "If you want to support HeyApple development, you can donate to the development fund.",
 		"freehead": "It's free...",

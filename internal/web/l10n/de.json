@@ -9,6 +9,17 @@
 		"title1": "Konto",
 		"title2": "Aktivierung"
 	},
+	"diary": {
+		"title": "Mahlzeiten planen und Nährwerte verfolgen",
+		"subtitle": "Trage Rezepte mit einem einzigen Klick in dein Tagebuch ein. Ändere die Menge, füge Lebensmittel hinzu oder entferne sie. Es war nie einfacher, im Voraus zu planen und gelichzeitig im Hier und Jetzt zu leben.",
+		"list": {
+			"1": "Gruppiere deine Tagebucheinträge automatisch oder definiere deine eigenen Mahlzeiten.",
+			"2": "Definiere deinen eigenen täglichen Nährstoffbedarf.",
+			"3": "Favoriten helfen dir, oft gegessene Lebensmittel noch schneller ins Tagebuch einzutragen.",
+			"4": "Benutze Vorlagen, um einen Plan für eine ganze Woche mit einem Klick aufzustellen.",
+			"5": "Vermeide Datenverlust: Das Tagebuch bleibt auch nach Jahren noch aufgeräumt und übersichtlich."
+		}
+	},
 	"email": {
 		"action": {
 			"1": "Konto aktivieren",
@@ -31,6 +42,15 @@
 	"err": {
 		"err": "Fehler"
 	},
+	"food": {
+		"title": "Detaillierte Lebensmitteldatenbank",
+		"subtitle": "Durchsuche Hunderte von Lebensmitteln und vergleiche Makronährstoffe, Mineralien und Vitamine.",
+		"list": {
+			"1": "Die Datenbank enthält mehr als 40 Nährstoffe, einschließlich unterschiedlicher Fette und Kohlenhydrate.",
+			"2": "Jedes neue Lebensmittel wird mit Hilfe internationaler Datenbanken auf die Richtigkeit der Werte überprüft.",
+			"3": "Qualität vor Qunatität: Natürliche, unverarbeitete Lebensmittel machen den Großteil der Datenbank aus."
+		}
+	},
 	"form": {
 		"confirm": "Passwort bestätigen",
 		"pass": "Passwort",
@@ -46,6 +66,18 @@
 		"register": "Registrieren",
 		"terms": "AGB"
 	},
+	"jumbo": {
+		"title": "Das komplette Ernährungstagebuch",
+		"subtitle": "Von der Bratpfanne zum Einkaufswagen: HeyApple liefert alles, was du brauchst, um Nährstoffe im Blick zu behalten und Mahlzeiten zu planen",
+		"diaryhead": "Mahlzeiten planen",
+		"diaryintro": "Plane Mahlzeiten, definiere Nährstoffziele, analysiere deine Daten",
+		"foodhead": "Lebensmittel-Datenbank",
+		"foodintro": "Finde die Lebensmittel, die zu deinen Makros und mehr als 30 weiteren Nährstoffen passen",
+		"recipehead": "Rezept-Manager",
+		"recipeintro": "Erstelle dein eigenes Kochbuch, teile es, lass dich von anderen inspirieren",
+		"shophead": "Einkaufsliste",
+		"shopintro": "Automatische Einkaufslisten machen den Weg zum Supermarkt zum Spaziergang"
+	},
 	"lang": "de",
 	"legal": {
 		"contactbody": "TODO",
@@ -53,6 +85,21 @@
 		"head": "Impressum",
 		"mainbody": "<p>Als Diensteanbieter sind wir gemäß § 7 Abs.1 TMG für eigene Inhalte auf diesen Seiten nach den allgemeinen Gesetzen verantwortlich. Nach §§ 8 bis 10 TMG sind wir als Diensteanbieter jedoch nicht verpflichtet, übermittelte oder gespeicherte fremde Informationen zu überwachen oder nach Umständen zu forschen, die auf eine rechtswidrige Tätigkeit hinweisen. Verpflichtungen zur Entfernung oder Sperrung der Nutzung von Informationen nach den allgemeinen Gesetzen bleiben hiervon unberührt. Eine diesbezügliche Haftung ist jedoch erst ab dem Zeitpunkt der Kenntnis einer konkreten Rechtsverletzung möglich. Bei Bekanntwerden von entsprechenden Rechtsverletzungen werden wir diese Inhalte umgehend entfernen.</p><h2>Haftung für Links</h2><p>Unser Angebot enthält Links zu externen Webseiten Dritter, auf deren Inhalte wir keinen Einfluss haben. Deshalb können wir für diese fremden Inhalte auch keine Gewähr übernehmen. Für die Inhalte der verlinkten Seiten ist stets der jeweilige Anbieter oder Betreiber der Seiten verantwortlich. Die verlinkten Seiten wurden zum Zeitpunkt der Verlinkung auf mögliche Rechtsverstöße überprüft. Rechtswidrige Inhalte waren zum Zeitpunkt der Verlinkung nicht erkennbar. Eine permanente inhaltliche Kontrolle der verlinkten Seiten ist jedoch ohne konkrete Anhaltspunkte einer Rechtsverletzung nicht zumutbar. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Links umgehend entfernen.</p><h2>Urheberrecht</h2><p>Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers. Downloads und Kopien dieser Seite sind nur für den privaten, nicht kommerziellen Gebrauch gestattet. Soweit die Inhalte auf dieser Seite nicht vom Betreiber erstellt wurden, werden die Urheberrechte Dritter beachtet. Insbesondere werden Inhalte Dritter als solche gekennzeichnet. Sollten Sie trotzdem auf eine Urheberrechtsverletzung aufmerksam werden, bitten wir um einen entsprechenden Hinweis. Bei Bekanntwerden von Rechtsverletzungen werden wir derartige Inhalte umgehend entfernen.</p>",
 		"mainhead": "Haftung für Inhalte"
+	},
+	"more": {
+		"title": "Mehr Schmackhaftes",
+		"appshead": "Dafür gibt's eine App",
+		"appsbody": "Wir haben Apps für Smartphones und alle großen Browser. Du kannst sogar deine eigene schreiben!",
+		"donatehead": "...darf es aber",
+		"donatebody": "Wenn du die Entwicklung von HeyApple unterstützen willst, kannst du Sponsor werden.",
+		"freehead": "Es kostet nichts...",
+		"freebody": "Du musst nichts bezahlen, um sämtliche Features benutzen zu können.",
+		"privacyhead": "Standardmäßig privat",
+		"privacybody": "Wir respektieren deine Privatsphäre und sammeln so wenig Daten wie möglich. Wir wissen nicht mal, wie du heißt!",
+		"qualityhead": "Hochwertige Informationen",
+		"qualitybody": "Alle Nährwerte werden geprüft, bevor sie in die Datenbank aufgenommen werden.",
+		"sourcehead": "Bau dir dein eigenes",
+		"sourcebody": "HeyApple wird unter der AGPL veröffentlicht. Du kannst den Code studieren, bei der Entwicklung helfen oder einen eigenen Fork erstellen."
 	},
 	"privacy": {
 		"contactbody": "TODO",
@@ -62,6 +109,15 @@
 		"mainhead": "Allgemeine Hinweise",
 		"superbody": "TODO",
 		"superhead": "Aufsichtsbehörde"
+	},
+	"recipe": {
+		"title": "Deine Lieblingsrezepte",
+		"subtitle": "Erstelle Rezepte, um den Überblick über deine Nährstoffziele zu behalten. Oder einfach nur, weil du gerne kochst.",
+		"list": {
+			"1": "Speichere Kochanleitungen und Zubereitungszeiten.",
+			"2": "Rezepte verfolgen automatisch, ob sie vegan sind und welche Allergene, Milchprodukte oder Fleischsorten sie enthalten.",
+			"3": "Teile deine Rezepte mit ausgewählten Benutzern oder zeige sie der ganzen Welt."
+		}
 	},
 	"reset": {
 		"200": "Dein Passwort wurde erfolgreich geändert. Du kannst jetzt versuchen, dich wieder anzumelden.",
@@ -74,6 +130,15 @@
 		"return": "Zurück zu HeyApple",
 		"title1": "Passwort ",
 		"title2": "Zurücksetzen"
+	},
+	"shop": {
+		"title": "Automatische Einkaufslisten",
+		"subtitle": "Finde auf einen Blick heraus, was du bei deinem nächsten Trip zum Laden alles brauchst. Alles ohne zusätzliche Listen oder Apps.",
+		"list": {
+			"1": "Wähle die Tage aus, für die du deinen Einkauf erledigen willst, und die Liste wird automatisch aktualisiert.",
+			"2": "Sortiere den Einkauf alphabetisch oder nach Kategorien.",
+			"3": "Erstelle weitere Listen für alles, was nicht in deinem Tagebuch steht."
+		}
 	},
 	"terms": {
 		"conductbody": "<p>Die Benutzung der Software unterliegt Verhaltensregeln. Wir bitten Sie, diesen Regeln zu folgen. Die Verhaltensregeln betreffen die Kommunikation mit den Anbietern der Software, etwa bei Fehlermeldungen oder der Lösung von Problemen, und anderen Benutzern der Software beim Gebrauch der sozialen Funktionen, die von der Software angeboten werden.</p><h3>Anbieter der Software</h3><p>Wenn Sie die Anbieter der Software kontaktieren, begeben Sie sich in eine professionelle Kommunikationssituation. Es wird erwartet, dass Sie sich dementsprechend verhalten. Werden Sie nicht ausfällig, schreiben Sie deutlich und knapp. Wenn Sie ein Problem melden, gehen Sie davon aus, dass die andere Person Ihnen tatsächlich helfen möchte. Feedback ist gern gesehen, aber bleiben Sie konstruktiv.</p><p>Falls Sie sich wiederholt weigern sollten, diese Regeln einzuhalten, behalten wir uns das Recht vor, Ihre zukünftigen Anfragen zu ignorieren.</p><h3>Benutzer der Software</h3><p>Die folgenden Regeln gelten bei der Verwendung sozialer Funktionen der Software, sowohl momentan existierende als auch zukünftige, die es den Benutzern erlauben, miteinander in Kontakt zu treten.</p><ul><li>Seien Sie höflich zueinander.</li><li>Gehen Sie davon aus, dass die andere Person gute Absichten hat. Bedenken Sie, dass Sie eventuell nicht dieselbe Muttersprache sprechen und dass Missverständnisse in solchen Situationen leicht entstehen können.</li><li>Respektieren und tolerieren Sie andere Benutzer unabhängig von geschlechtlicher Identität, sexueller Orientierung, körperlicher Beeinträchtigung, Aussehen, Herkunft, Sprachfertigkeiten, Alter, politischer Einstellung, Nationalität, Religion oder ähnlichen Merkmalen.</li><li>Respektieren Sie die Wünsche und die Privatsphäre anderer Benutzer.</li><li>Bedrohen, belästigen oder beleidigen Sie andere Benutzer niemals.</li><li>Verbreiten Sie keinen Spam. Unterlassen Sie aggressive Werbung für eigene Produkte oder Dienstleistungen.</li></ul><h3>Missachtung der Verhaltensregeln</h3><p>Wenn Sie die oben genannten Regeln missachten, behalten wir uns das Recht vor, Ihren Zugang zu den sozialen Funktionen der Software einzuschränken oder vollständig zu sperren. Dazu zählen alle gegenwärtigen und zukünftigen sozialen Funktionen. Wir behalten uns außerdem das Recht vor, Ihr Benutzerkonto in besonders gravierenden Fällen vollständig zu deaktivieren. Diese Maßnahmen können ohne vorherige Ankündigung erfolgen.</p>",

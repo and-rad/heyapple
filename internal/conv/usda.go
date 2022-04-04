@@ -72,6 +72,7 @@ var (
 		core.CatSnacks:    core.AisleSnacks,
 		core.CatDrink:     core.AisleDrink,
 		core.CatAlcohol:   core.AisleDrink,
+		core.CatFat:       core.AisleOil,
 	}
 )
 

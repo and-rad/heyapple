@@ -116,13 +116,15 @@ func (db *DB) WithDefaults(fs fs.FS) *DB {
 		}
 
 		if num := len(food); num > 0 {
-			db.foodID = len(food)
 			db.aisles[0] = map[int]core.Aisle{}
 		}
 
 		for _, f := range food {
 			db.food[f.ID] = f.Food
 			db.aisles[0][f.ID] = f.Aisle
+			if db.foodID < f.ID {
+				db.foodID = f.ID
+			}
 		}
 	}
 

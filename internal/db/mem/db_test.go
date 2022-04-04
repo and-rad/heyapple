@@ -160,6 +160,19 @@ func TestDB_WithDefaults(t *testing.T) {
 				return db
 			}(),
 		},
+		{ //10// parse food ids correctly
+			fs: fstest.MapFS{
+				"user.json": {Data: []byte(`[]`)},
+				"food.json": {Data: []byte(`[{"id":1},{"id":4},{"id":26}]`)},
+			},
+			db: func() *DB {
+				db := NewDB()
+				db.food = map[int]core.Food{1: {ID: 1}, 4: {ID: 4}, 26: {ID: 26}}
+				db.aisles = aisleMap{0: {1: 0, 4: 0, 26: 0}}
+				db.foodID = 26
+				return db
+			}(),
+		},
 	} {
 		db := NewDB().WithDefaults(data.fs)
 

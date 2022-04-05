@@ -63,7 +63,7 @@ func (f Filter) MatchFood(food Food) bool {
 	for k, v := range f {
 		if k == "flags" {
 			if flag, ok := v.(int); ok {
-				if flag&food.Flags == flag {
+				if flag&food.Flags != 0 {
 					continue
 				}
 			}

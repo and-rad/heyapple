@@ -24,14 +24,22 @@ import (
 )
 
 const (
-	FlagNone    = 0x00000000
-	FlagVegan   = 0x11111100
-	FlagEgg     = 0x00000001
-	FlagDairy   = 0x00000002
-	FlagFish    = 0x00000004
-	FlagPoultry = 0x00000008
-	FlagPork    = 0x00000010
-	FlagBeef    = 0x00000020
+	FlagNone       = 0x00000000
+	FlagVegan      = 0x00000001
+	FlagVegetarian = 0x00000002
+	FlagEgg        = 0x00000004
+	FlagDairy      = 0x00000008
+	FlagFish       = 0x00000010
+	FlagPoultry    = 0x00000020
+	FlagPork       = 0x00000040
+	FlagBeef       = 0x00000080
+	FlagShellfish  = 0x00000100
+	FlagNut        = 0x00000200
+	FlagPeanut     = 0x00000400
+	FlagWheat      = 0x00000800
+	FlagSoy        = 0x00001000
+
+	FlagMeat = FlagFish | FlagPork | FlagPoultry | FlagBeef | FlagShellfish
 )
 
 type Aisle int

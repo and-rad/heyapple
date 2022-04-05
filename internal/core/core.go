@@ -39,7 +39,8 @@ const (
 	FlagWheat      = 0x00000800
 	FlagSoy        = 0x00001000
 
-	FlagMeat = FlagFish | FlagPork | FlagPoultry | FlagBeef | FlagShellfish
+	FlagMeat   = FlagFish | FlagPork | FlagPoultry | FlagBeef | FlagShellfish
+	FlagAnimal = FlagMeat | FlagEgg | FlagDairy
 )
 
 type Aisle int

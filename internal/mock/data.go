@@ -64,7 +64,7 @@ var (
 	Food1 = core.Food{
 		ID:       1,
 		Category: 9,
-		Flags:    core.FlagVegan,
+		Flags:    core.FlagVegan | core.FlagVegetarian,
 		KCal:     54,
 		Fat:      0.1,
 		Carbs:    14.4,
@@ -98,7 +98,7 @@ var (
 	Food2 = core.Food{
 		ID:       2,
 		Category: 9,
-		Flags:    core.FlagVegan,
+		Flags:    core.FlagVegan | core.FlagVegetarian,
 		KCal:     93,
 		Fat:      0.2,
 		Carbs:    20,
@@ -130,8 +130,8 @@ var (
 	}
 
 	Food0Json = `{"id":42,"brand":0,"cat":0,"flags":0,"kcal":0,"fat":0,"fatsat":0,"fato3":0,"fato6":0,"carb":0,"sug":0,"fruc":0,"gluc":0,"suc":0,"fib":0,"prot":0,"salt":0,"pot":0,"chl":0,"sod":0,"calc":0,"phos":0,"mag":0,"iron":0,"zinc":0,"mang":0,"cop":0,"iod":0,"chr":0,"mol":0,"sel":0,"vita":0,"vitb1":0,"vitb2":0,"vitb3":0,"vitb5":0,"vitb6":0,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0,"vitd":0,"vite":0,"vitk":0}`
-	Food1Json = `{"id":1,"brand":0,"cat":9,"flags":1,"kcal":54,"fat":0.1,"fatsat":0,"fato3":0,"fato6":0,"carb":14.4,"sug":10.3,"fruc":5,"gluc":3,"suc":2.3,"fib":2,"prot":0.3,"salt":0,"pot":119,"chl":2.2,"sod":1,"calc":5.3,"phos":11,"mag":5,"iron":0.2,"zinc":0.1,"mang":0,"cop":0.1,"iod":0.008,"chr":0,"mol":0,"sel":0,"vita":0.01,"vitb1":0.04,"vitb2":0.03,"vitb3":0,"vitb5":0,"vitb6":0.1,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":12,"vitd":0,"vite":0.49,"vitk":0}`
-	Food2Json = `{"id":2,"brand":0,"cat":9,"flags":1,"kcal":93,"fat":0.2,"fatsat":0,"fato3":0,"fato6":0,"carb":20,"sug":17,"fruc":10,"gluc":4,"suc":3,"fib":2,"prot":1,"salt":0,"pot":367,"chl":109,"sod":1,"calc":7,"phos":22,"mag":30,"iron":0.4,"zinc":0.2,"mang":0.3,"cop":0.1,"iod":0.003,"chr":0,"mol":0,"sel":0,"vita":0.01,"vitb1":0.04,"vitb2":0.06,"vitb3":0,"vitb5":0,"vitb6":0.36,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":11,"vitd":0,"vite":0.27,"vitk":0}`
+	Food1Json = `{"id":1,"brand":0,"cat":9,"flags":3,"kcal":54,"fat":0.1,"fatsat":0,"fato3":0,"fato6":0,"carb":14.4,"sug":10.3,"fruc":5,"gluc":3,"suc":2.3,"fib":2,"prot":0.3,"salt":0,"pot":119,"chl":2.2,"sod":1,"calc":5.3,"phos":11,"mag":5,"iron":0.2,"zinc":0.1,"mang":0,"cop":0.1,"iod":0.008,"chr":0,"mol":0,"sel":0,"vita":0.01,"vitb1":0.04,"vitb2":0.03,"vitb3":0,"vitb5":0,"vitb6":0.1,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":12,"vitd":0,"vite":0.49,"vitk":0}`
+	Food2Json = `{"id":2,"brand":0,"cat":9,"flags":3,"kcal":93,"fat":0.2,"fatsat":0,"fato3":0,"fato6":0,"carb":20,"sug":17,"fruc":10,"gluc":4,"suc":3,"fib":2,"prot":1,"salt":0,"pot":367,"chl":109,"sod":1,"calc":7,"phos":22,"mag":30,"iron":0.4,"zinc":0.2,"mang":0.3,"cop":0.1,"iod":0.003,"chr":0,"mol":0,"sel":0,"vita":0.01,"vitb1":0.04,"vitb2":0.06,"vitb3":0,"vitb5":0,"vitb6":0.36,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":11,"vitd":0,"vite":0.27,"vitk":0}`
 )
 
 // Recipes need to be functions to make sure the underlying
@@ -149,6 +149,7 @@ func Recipe1() core.Recipe {
 		ID:      1,
 		Name:    "Banana Pie",
 		Size:    1,
+		Flags:   Food2.Flags,
 		KCal:    Food2.KCal * 1.5,
 		Fat:     Food2.Fat * 1.5,
 		Carbs:   Food2.Carbs * 1.5,
@@ -162,6 +163,7 @@ func Recipe2() core.Recipe {
 		ID:    2,
 		Name:  "Fruit Cake",
 		Size:  3,
+		Flags: Food1.Flags | Food2.Flags,
 		KCal:  54*3 + 93*2.5,
 		Items: []core.Ingredient{{ID: 1, Amount: 300}, {ID: 2, Amount: 250}},
 	}
@@ -169,8 +171,8 @@ func Recipe2() core.Recipe {
 
 const (
 	Recipe0Json = `{"name":"","items":[],"id":42,"size":1,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":0,"fat":0,"carb":0,"prot":0}`
-	Recipe1Json = `{"name":"Banana Pie","items":[{"id":2,"amount":150}],"id":1,"size":1,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":139.5,"fat":0.3,"carb":30,"prot":1.5}`
-	Recipe2Json = `{"name":"Fruit Cake","items":[{"id":1,"amount":300},{"id":2,"amount":250}],"id":2,"size":3,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":394.5,"fat":0,"carb":0,"prot":0}`
+	Recipe1Json = `{"name":"Banana Pie","items":[{"id":2,"amount":150}],"id":1,"size":1,"flags":3,"preptime":0,"cooktime":0,"misctime":0,"kcal":139.5,"fat":0.3,"carb":30,"prot":1.5}`
+	Recipe2Json = `{"name":"Fruit Cake","items":[{"id":1,"amount":300},{"id":2,"amount":250}],"id":2,"size":3,"flags":3,"preptime":0,"cooktime":0,"misctime":0,"kcal":394.5,"fat":0,"carb":0,"prot":0}`
 )
 
 var (

@@ -222,11 +222,20 @@ func (c *SaveIngredient) Execute(db DB) error {
 	for _, item := range rec.Items {
 		if f, err := db.Food(item.ID); err == nil {
 			amount := item.Amount * 0.01
+			rec.Flags |= f.Flags
 			rec.KCal += f.KCal * amount
 			rec.Fat += f.Fat * amount
 			rec.Carbs += f.Carbs * amount
 			rec.Protein += f.Protein * amount
 		}
+	}
+
+	if rec.Flags&core.FlagAnimal != 0 {
+		rec.Flags &^= core.FlagVegan
+	}
+
+	if rec.Flags&core.FlagMeat != 0 {
+		rec.Flags &^= core.FlagVegetarian
 	}
 
 	return db.SetRecipe(rec)

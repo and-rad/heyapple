@@ -420,6 +420,26 @@ func TestSaveIngredient_Execute(t *testing.T) {
 				return r
 			}(),
 		},
+		{ //07// handle contradicting flags
+			db:  mock.NewDB().WithRecipe(mock.Recipe1()).WithFoods(mock.Food2, core.Food{ID: 12, Flags: core.FlagBeef}),
+			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 12, Amount: 100},
+			rec: func() core.Recipe {
+				r := mock.Recipe1()
+				r.Items = append(r.Items, core.Ingredient{ID: 12, Amount: 100})
+				r.Flags = core.FlagBeef
+				return r
+			}(),
+		},
+		{ //08// handle contradicting flags
+			db:  mock.NewDB().WithRecipe(mock.Recipe1()).WithFoods(mock.Food2, core.Food{ID: 12, Flags: core.FlagDairy}),
+			cmd: &app.SaveIngredient{RecipeID: 1, IngredientID: 12, Amount: 100},
+			rec: func() core.Recipe {
+				r := mock.Recipe1()
+				r.Items = append(r.Items, core.Ingredient{ID: 12, Amount: 100})
+				r.Flags = core.FlagVegetarian | core.FlagDairy
+				return r
+			}(),
+		},
 	} {
 		err := data.cmd.Execute(data.db)
 

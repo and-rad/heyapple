@@ -6,6 +6,7 @@ import NewRecipe from "../components/ClickableInput.vue";
 import FoodList from "../components/FoodList.vue";
 import DiarySelect from "../components/ClickableDate.vue";
 import IngredientList from "../components/IngredientList.vue";
+import TagList from "../components/TagList.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
 import ListImage from "../components/images/ImageList.vue";
@@ -331,9 +332,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 		<template #details v-if="current">
 			<section class="subtitle no-edit-mode" v-html="ownerInfo"></section>
 			<section class="tags">
-				<span class="tag no-edit-mode">Tag 1</span>
-				<span class="tag no-edit-mode">Tag 2</span>
-				<span class="tag no-edit-mode">Tag 3</span>
+				<TagList :item="current" />
 				<button class="icon async" :disabled="isSaving" @click="onEditMode" v-if="current.isowner">
 					<EditImage v-if="!editMode" />
 					<SaveImage v-if="editMode" />

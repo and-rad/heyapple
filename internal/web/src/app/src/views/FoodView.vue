@@ -6,6 +6,7 @@ import NewFood from "../components/ClickableInput.vue";
 import RecipeSelect from "../components/ClickableSelect.vue";
 import DiarySelect from "../components/ClickableDate.vue";
 import FoodList from "../components/FoodList.vue";
+import TagList from "../components/TagList.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
 import { ref, inject } from "vue";
@@ -306,9 +307,7 @@ function onInput(evt) {
 		<template #details v-if="current">
 			<section class="subtitle">{{ current.cat }}</section>
 			<section class="tags">
-				<span class="tag">Tag 1</span>
-				<span class="tag">Tag 2</span>
-				<span class="tag">Tag 3</span>
+				<TagList :item="current" />
 				<button
 					class="icon async"
 					:disabled="disableSave"

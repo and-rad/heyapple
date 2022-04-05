@@ -61,6 +61,15 @@ func (f Filter) MatchFood(food Food) bool {
 
 	value := reflect.ValueOf(food)
 	for k, v := range f {
+		if k == "flags" {
+			if flag, ok := v.(int); ok {
+				if flag&food.Flags == flag {
+					continue
+				}
+			}
+			return false
+		}
+
 		field := value.FieldByName(foodFieldsByTag[k])
 		val := float32(field.Float())
 		if r, ok := v.(FloatRange); ok {
@@ -71,6 +80,7 @@ func (f Filter) MatchFood(food Food) bool {
 			return false
 		}
 	}
+
 	return true
 }
 

@@ -123,6 +123,16 @@ func TestFilter_MatchFood(t *testing.T) {
 			food:   mock.Food1,
 			ok:     true,
 		},
+		{ //05// match flag
+			filter: core.Filter{"flags": core.FlagBeef},
+			food:   mock.Food1,
+			ok:     false,
+		},
+		{ //06// match flag
+			filter: core.Filter{"flags": core.FlagVegan},
+			food:   mock.Food1,
+			ok:     true,
+		},
 	} {
 		if ok := data.filter.MatchFood(data.food); ok != data.ok {
 			t.Errorf("test case %d: result mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)

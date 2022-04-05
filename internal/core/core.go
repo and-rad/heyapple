@@ -98,10 +98,11 @@ const (
 // macronutrients is grams while micronutrients are stored
 // in milligrams for a smaller memory footprint.
 type Food struct {
-	ID    int `json:"id"`
-	Brand int `json:"brand"`
+	ID int `json:"id"`
 
+	Brand    int      `json:"brand"`
 	Category Category `json:"cat"`
+	Flags    int      `json:"flags"`
 
 	KCal     float32 `json:"kcal"`
 	Fat      float32 `json:"fat"`

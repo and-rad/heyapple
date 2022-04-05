@@ -293,6 +293,21 @@
 			"err403": "It doesn't look like you're allowed to do that.",
 			"err500": "Sign out failed, internal server error. This shouldn't happen."
 		},
+		"tag": {
+			"1": "vegan",
+			"2": "vegetarian",
+			"4": "egg",
+			"8": "dairy",
+			"16": "fish",
+			"32": "poultry",
+			"64": "pork",
+			"128": "beef",
+			"256": "shellfish",
+			"512": "nuts",
+			"1024": "peanuts",
+			"2048": "wheat",
+			"4096": "soy"
+		},
 		"todo": {
 			"instructions": "Instructions coming soon"
 		},

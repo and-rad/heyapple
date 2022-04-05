@@ -293,6 +293,21 @@
 			"err404": "Abmeldung fehlgeschlagen, Session nicht gefunden. Bist du überhaupt angemeldet?",
 			"err500": "Abmeldung fehlgeschlagen, interner Serverfehler. Das sollte nicht passieren."
 		},
+		"tag": {
+			"1": "vegan",
+			"2": "vegetarisch",
+			"4": "Ei",
+			"8": "Milchprodukt",
+			"16": "Fisch",
+			"32": "Geflügel",
+			"64": "Schwein",
+			"128": "Rind",
+			"256": "Schalentier",
+			"512": "Nüsse",
+			"1024": "Erdnüsse",
+			"2048": "Getreide",
+			"4096": "Soja"
+		},
 		"todo": {
 			"instructions": "Anleitungen bald verfügbar"
 		},

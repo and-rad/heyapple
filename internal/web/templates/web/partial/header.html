@@ -1,7 +1,7 @@
 {{ define "header" }}
 <header>
 	<a href="/">
-		<img src="/img/logomono.svg" id="logo">
+		<img src="/img/logomono.svg" id="logo" />
 	</a>
 	<div id="app-name">
 		<span>Hey</span><span>Apple<sup>beta</sup></span>
@@ -10,6 +10,18 @@
 		<a href="/auth">{{ l10n "home.login" }}</a>
 		<a href="/auth#/signup">{{ l10n "home.register" }}</a>
 	</nav>
+	<button>
+		<svg viewBox="0 0 24 24"><use href="/img/icons.svg#account" /></svg>
+	</button>
 	<aside class="warn">{{ l10n "home.betawarn" }}</aside>
+	<script>
+		document.querySelector("nav#auth+button").addEventListener("click", (evt) => {
+			evt.stopPropagation();
+			document.querySelector("nav#auth").classList.toggle("open");
+		});
+		document.addEventListener("click", () => {
+			document.querySelector("nav#auth").classList.remove("open");
+		});
+	</script>
 </header>
 {{ end }}

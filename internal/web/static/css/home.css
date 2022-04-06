@@ -195,6 +195,25 @@ nav#auth > a:focus {
 	color: var(--color-primary-dark);
 }
 
+nav#auth + button {
+	width: 3em;
+	height: 3em;
+	padding: 0.5em;
+	background: none;
+	border: none;
+}
+
+nav#auth + button svg {
+	width: 2em;
+	height: 2em;
+	fill: var(--color-primary);
+	transition: 0.25s;
+}
+
+nav#auth + button:hover svg {
+	fill: var(--color-primary-dark);
+}
+
 @media only screen and (min-width: 640px) {
 	nav#auth {
 		position: static;
@@ -220,6 +239,10 @@ nav#auth > a:focus {
 	nav#auth > a:active,
 	nav#auth > a:focus {
 		border-color: var(--color-primary-dark);
+	}
+
+	nav#auth + button {
+		display: none;
 	}
 }
 
@@ -295,13 +318,13 @@ body.numbered h3::before {
 #jumbo > div h1 {
 	margin: 0;
 	font-weight: 300;
-	font-size: 4em;
+	font-size: 3em;
 }
 
 #jumbo > div h2 {
 	margin: 0 auto;
 	font-weight: 400;
-	font-size: 1.5em;
+	font-size: 1em;
 	color: #888;
 	max-width: 960px;
 	line-height: 125%;
@@ -309,6 +332,7 @@ body.numbered h3::before {
 
 #jumbo nav {
 	display: flex;
+	flex-wrap: wrap;
 	justify-content: space-between;
 	padding: 1em;
 }
@@ -316,7 +340,7 @@ body.numbered h3::before {
 #jumbo figure {
 	border-radius: 8px;
 	box-shadow: 0 0 8px #ddd;
-	flex-basis: 25%;
+	flex-basis: 100%;
 	flex-grow: 1;
 	margin: 1em;
 	padding: 1em;
@@ -363,6 +387,30 @@ body.numbered h3::before {
 	transform: rotate(90deg);
 }
 
+@media only screen and (min-width: 640px) {
+	#jumbo figure {
+		flex-basis: 40%;
+	}
+
+	#jumbo > div h1 {
+		font-size: 4em;
+	}
+
+	#jumbo > div h2 {
+		font-size: 1.5em;
+	}
+}
+
+@media only screen and (min-width: 1080px) {
+	#jumbo nav {
+		flex-wrap: nowrap;
+	}
+
+	#jumbo figure {
+		flex-basis: 25%;
+	}
+}
+
 .section-separator {
 	border-bottom: var(--border-light);
 	position: relative;
@@ -393,16 +441,33 @@ section h2 {
 	font-weight: 300;
 	font-size: 2em;
 	margin-bottom: 0;
+	hyphens: auto;
 }
 
 section > h2 {
 	text-align: center;
-	font-size: 4em;
+	font-size: 2.5em;
 	margin: 0 0 1em;
 }
 
-section article {
-	width: 50%;
+section article ul {
+	padding-left: 1em;
+}
+
+@media only screen and (min-width: 640px) {
+	section > h2 {
+		font-size: 4em;
+	}
+}
+
+@media only screen and (min-width: 960px) {
+	section article {
+		width: 50%;
+	}
+
+	section article ul {
+		padding-left: 2em;
+	}
 }
 
 #more {
@@ -412,9 +477,8 @@ section article {
 }
 
 #more figure {
-	flex-basis: 25%;
+	flex-basis: 100%;
 	margin: 1em 1em 3em;
-	padding: 1em;
 	display: flex;
 	flex-direction: column;
 	align-items: center;
@@ -439,6 +503,19 @@ section article {
 	margin-bottom: 1em;
 }
 
+@media only screen and (min-width: 640px) {
+	#more figure {
+		flex-basis: 40%;
+		padding: 1em;
+	}
+}
+
+@media only screen and (min-width: 1080px) {
+	#more figure {
+		flex-basis: 25%;
+	}
+}
+
 footer {
 	padding: 2em;
 	background-color: var(--color-primary);
@@ -448,15 +525,14 @@ footer {
 
 footer > div {
 	margin: 0 auto;
-	max-width: 960px;
-	display: flex;
-	justify-content: space-between;
+	text-align: center;
 }
 
 footer nav a {
 	margin: 0 0.5em;
 	color: #ffffff;
 	font-weight: bold;
+	display: block;
 }
 
 footer nav a:hover {
@@ -464,6 +540,17 @@ footer nav a:hover {
 }
 
 @media only screen and (min-width: 800px) {
+	footer > div {
+		max-width: 960px;
+		display: flex;
+		justify-content: space-between;
+		text-align: left;
+	}
+
+	footer nav a {
+		display: inline;
+	}
+
 	body.legal h1 {
 		font-size: 3em;
 	}

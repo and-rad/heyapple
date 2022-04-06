@@ -195,19 +195,6 @@ main.open-details #details {
 	margin-right: 1em;
 }
 
-#details .tag {
-	display: inline-block;
-	padding: 2px 4px;
-	min-width: 5em;
-	margin: 0 0.25em;
-	font-size: 12px;
-	font-weight: bold;
-	text-align: center;
-	background-color: var(--color-secondary);
-	color: #fff;
-	border-radius: 4px;
-}
-
 #details label,
 #details .unit {
 	color: var(--color-text-light);

@@ -431,7 +431,7 @@ function onInput(evt) {
 }
 
 #details section.tags {
-	padding: 0.5em 3em 0.5em 0.25em;
+	padding: 0.25em 3em 0.25em 0.25em;
 	position: relative;
 	display: flex;
 	flex-wrap: wrap;

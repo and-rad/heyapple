@@ -165,26 +165,62 @@ header #app-name sup {
 	margin-left: 0.25em;
 }
 
-header nav#auth {
+nav#auth {
 	font-size: 1.2em;
-	display: flex;
-	align-items: center;
+	position: fixed;
+	width: 240px;
+	right: -260px;
+	top: 4em;
+	background-color: #fff;
+	box-shadow: 0 0 8px #ccc;
+	border-radius: 8px;
+	padding: 0.5em 0;
+	opacity: 0;
+	transition: opacity 0.25s;
+}
+
+nav#auth.open {
+	opacity: 1;
+	right: 0.5em;
 }
 
 nav#auth > a {
-	padding: 0.25em 0.5em;
-}
-
-nav#auth > a:last-child {
-	border: 2px solid var(--color-primary);
-	border-radius: 8px;
+	display: block;
+	padding: 0.5em 1em;
 }
 
 nav#auth > a:hover,
 nav#auth > a:active,
 nav#auth > a:focus {
 	color: var(--color-primary-dark);
-	border-color: var(--color-primary-dark);
+}
+
+@media only screen and (min-width: 640px) {
+	nav#auth {
+		position: static;
+		display: flex;
+		align-items: center;
+		box-shadow: none;
+		width: auto;
+		border-radius: 0;
+		padding: 0;
+		opacity: 1;
+	}
+
+	nav#auth > a {
+		padding: 0.25em 0.5em;
+	}
+
+	nav#auth > a:last-child {
+		border: 2px solid var(--color-primary);
+		border-radius: 8px;
+	}
+
+	nav#auth > a:hover,
+	nav#auth > a:active,
+	nav#auth > a:focus {
+		border-color: var(--color-primary-dark);
+	}
 }
 
 main {
@@ -253,6 +289,7 @@ body.numbered h3::before {
 	flex-direction: column;
 	padding: 2em;
 	text-align: center;
+	hyphens: auto;
 }
 
 #jumbo > div h1 {

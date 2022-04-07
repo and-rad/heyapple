@@ -107,9 +107,9 @@ function onRelease(evt) {
 	<div class="slider">
 		<label>
 			<span>{{ label }} ({{ t("unit." + unit) }})</span>
-			<input type="text" :name="name" :value="minVal" @change="onMin" />
+			<input type="number" :name="name" :value="minVal" @change="onMin" />
 			&nbsp;&ndash;&nbsp;
-			<input type="text" :name="name" :value="maxVal" @change="onMax" />
+			<input type="number" :name="name" :value="maxVal" @change="onMax" />
 		</label>
 
 		<div class="bar">
@@ -149,7 +149,7 @@ function onRelease(evt) {
 	margin-right: 1em;
 }
 
-.slider input[type="text"] {
+.slider input[type="number"] {
 	flex-basis: 3em;
 	padding: 0;
 	line-height: 1;

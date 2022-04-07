@@ -402,7 +402,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 					<fieldset :disabled="!editMode" class="col50">
 						<div class="prep-size">
 							<label>{{ t("recipe.size", 2) }}</label>
-							<input type="text" name="size" form="form-recipe" :value="current.size" @change="onInput" />
+							<input type="number" name="size" form="form-recipe" :value="current.size" @change="onInput" />
 							<label>{{ t("recipe.size", current.size) }}</label>
 						</div>
 					</fieldset>
@@ -410,7 +410,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 						<div>
 							<label>{{ t("recipe.time") }}</label>
 							<input
-								type="text"
+								type="number"
 								disabled
 								:value="current.preptime + current.cooktime + current.misctime"
 							/>
@@ -419,7 +419,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 						<div>
 							<label>{{ t("recipe.preptime") }}</label>
 							<input
-								type="text"
+								type="number"
 								name="preptime"
 								form="form-recipe"
 								:value="current.preptime"
@@ -430,7 +430,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 						<div>
 							<label>{{ t("recipe.cooktime") }}</label>
 							<input
-								type="text"
+								type="number"
 								name="cooktime"
 								form="form-recipe"
 								:value="current.cooktime"
@@ -441,7 +441,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 						<div>
 							<label>{{ t("recipe.misctime") }}</label>
 							<input
-								type="text"
+								type="number"
 								name="misctime"
 								form="form-recipe"
 								:value="current.misctime"

@@ -357,54 +357,54 @@ function onInput(evt) {
 						<fieldset :disabled="!editMode" class="col50">
 							<div>
 								<label>{{ t("food.energy") }}</label>
-								<input type="text" :value="current.kcal" name="kcal" @change="onInput" />
+								<input type="number" :value="current.kcal" name="kcal" @change="onInput" />
 								<span class="unit">{{ t("unit.cal") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.fat") }}</label>
-								<input type="text" :value="current.fat" name="fat" @change="onInput" />
+								<input type="number" :value="current.fat" name="fat" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.carbs2") }}</label>
-								<input type="text" :value="current.carb" name="carb" @change="onInput" />
+								<input type="number" :value="current.carb" name="carb" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.protein") }}</label>
-								<input type="text" :value="current.prot" name="prot" @change="onInput" />
+								<input type="number" :value="current.prot" name="prot" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.fiber") }}</label>
-								<input type="text" :value="current.fib" name="fib" @change="onInput" />
+								<input type="number" :value="current.fib" name="fib" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 						</fieldset>
 						<fieldset :disabled="!editMode" class="col50">
 							<div>
 								<label>{{ t("food.fatsat") }}</label>
-								<input type="text" :value="current.fatsat" name="fatsat" @change="onInput" />
+								<input type="number" :value="current.fatsat" name="fatsat" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.fato3") }}</label>
-								<input type="text" :value="current.fato3" name="fato3" @change="onInput" />
+								<input type="number" :value="current.fato3" name="fato3" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.fato6") }}</label>
-								<input type="text" :value="current.fato6" name="fato6" @change="onInput" />
+								<input type="number" :value="current.fato6" name="fato6" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.sugar") }}</label>
-								<input type="text" :value="current.sug" name="sug" @change="onInput" />
+								<input type="number" :value="current.sug" name="sug" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.salt") }}</label>
-								<input type="text" :value="current.salt" name="salt" @change="onInput" />
+								<input type="number" :value="current.salt" name="salt" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 						</fieldset>

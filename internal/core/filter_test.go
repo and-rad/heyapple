@@ -196,6 +196,21 @@ func TestFilter_MatchRecipe(t *testing.T) {
 			rec:    mock.Recipe1(),
 			ok:     true,
 		},
+		{ //09// match flag
+			filter: core.Filter{"flags": core.FlagVegan},
+			rec:    mock.Recipe1(),
+			ok:     true,
+		},
+		{ //10// match flag
+			filter: core.Filter{"flags": core.FlagNut},
+			rec:    mock.Recipe1(),
+			ok:     false,
+		},
+		{ //11// match set of flags against set of flags
+			filter: core.Filter{"flags": core.FlagVegetarian | core.FlagDairy},
+			rec:    core.Recipe{Flags: core.FlagBeef | core.FlagDairy},
+			ok:     true,
+		},
 	} {
 		if ok := data.filter.MatchRecipe(data.rec); ok != data.ok {
 			t.Errorf("test case %d: result mismatch \nhave: %v\nwant: %v", idx, ok, data.ok)

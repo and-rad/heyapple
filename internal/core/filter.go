@@ -91,8 +91,16 @@ func (f Filter) MatchRecipe(rec Recipe) bool {
 
 	value := reflect.ValueOf(rec)
 	for k, v := range f {
-		field := value.FieldByName(recFieldsByTag[k])
+		if k == "flags" {
+			if flag, ok := v.(int); ok {
+				if flag&rec.Flags != 0 {
+					continue
+				}
+			}
+			return false
+		}
 
+		field := value.FieldByName(recFieldsByTag[k])
 		if field.Kind() == reflect.String {
 			val := field.String()
 			if name, ok := v.(string); ok {

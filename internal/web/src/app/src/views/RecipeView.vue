@@ -161,6 +161,8 @@ function saveIngredients(id) {
 
 function addToDiary(date, time) {
 	disableToDiary.value = true;
+	today.value = date;
+	now.value = time;
 
 	let params = new URLSearchParams();
 	current.value.items.forEach((i) => {
@@ -200,9 +202,6 @@ function addToDiary(date, time) {
 
 function showDetails(id) {
 	current.value = filtered.value.filter((r) => r.id == id)[0];
-	today.value = DateTime.now().toISODate();
-	now.value = DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE);
-	amount.value = 1;
 	main.value.showDetails();
 
 	if ("isowner" in current.value) {
@@ -402,7 +401,13 @@ onMounted(() => (filtered.value = [...recipes.value]));
 					<fieldset :disabled="!editMode" class="col50">
 						<div class="prep-size">
 							<label>{{ t("recipe.size", 2) }}</label>
-							<input type="number" name="size" form="form-recipe" :value="current.size" @change="onInput" />
+							<input
+								type="number"
+								name="size"
+								form="form-recipe"
+								:value="current.size"
+								@change="onInput"
+							/>
 							<label>{{ t("recipe.size", current.size) }}</label>
 						</div>
 					</fieldset>

@@ -123,6 +123,9 @@ function addToRecipe(id) {
 
 function addToDiary(date, time) {
 	disableToDiary.value = true;
+	today.value = date;
+	now.value = time;
+
 	fetch(`/api/v1/diary/${date}`, {
 		method: "POST",
 		headers: {
@@ -167,9 +170,6 @@ function updateList(items) {
 
 function showDetails(id) {
 	current.value = filtered.value.filter((f) => f.id == id)[0];
-	today.value = DateTime.now().toISODate();
-	now.value = DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE);
-	amount.value = 100;
 	main.value.showDetails();
 }
 

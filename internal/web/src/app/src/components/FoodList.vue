@@ -67,7 +67,7 @@ function setActive(evt) {
 					{{ item.name }}
 				</td>
 				<td class="num">
-					{{ perServing(item.kcal, item.size) }} <span class="unit">{{ t("unit.cal") }}</span>
+					{{ perServing(item.kcal, item.size, 0) }} <span class="unit">{{ t("unit.cal") }}</span>
 				</td>
 				<td class="m num">
 					{{ perServing(item.fat, item.size) }} <span class="unit">{{ t("unit.g") }}</span>

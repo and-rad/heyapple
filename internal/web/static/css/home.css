@@ -323,7 +323,7 @@ body.numbered h3::before {
 
 #jumbo > div h2 {
 	margin: 0 auto;
-	font-weight: 400;
+	font-weight: 300;
 	font-size: 1em;
 	color: #888;
 	max-width: 960px;
@@ -339,7 +339,7 @@ body.numbered h3::before {
 
 #jumbo figure {
 	border-radius: 8px;
-	box-shadow: 0 0 8px #ddd;
+	box-shadow: 0 4px 8px #ddd;
 	flex-basis: 100%;
 	flex-grow: 1;
 	margin: 1em;

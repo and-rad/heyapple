@@ -154,7 +154,10 @@ onMounted(resync);
 					<Checkbox :data-id="item.id" :checked="item.done" @change="onChecked" />
 				</td>
 				<td class="num" v-html="formattedAmount(item)"></td>
-				<td class="name" @click="$emit('selected', item.id)">{{ item.name }}</td>
+				<td class="name" @click="$emit('selected', item.id)">
+					<span>{{ item.name }}</span>
+					<div class="subtitle">{{ t("aisle." + item.aisle) }}</div>
+				</td>
 				<td class="s">{{ t("aisle." + item.aisle) }}</td>
 			</tr>
 		</tbody>

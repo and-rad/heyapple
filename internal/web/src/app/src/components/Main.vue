@@ -339,6 +339,7 @@ main .controls {
 	cursor: default;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	vertical-align: top;
 	max-width: 6em;
 }
 
@@ -347,6 +348,7 @@ main .controls {
 	width: 3em;
 	padding-left: 1em;
 	padding-right: 1em;
+	vertical-align: middle;
 	text-align: center;
 }
 
@@ -391,6 +393,11 @@ main .controls {
 	display: none;
 }
 
+#main table .subtitle {
+	color: var(--color-text-light);
+	font-size: 0.8em;
+}
+
 @media (hover: hover) {
 	#main tbody tr:hover {
 		background-color: #f8f8f8;
@@ -405,6 +412,10 @@ main .controls {
 @media only screen and (min-width: 400px) {
 	#main table .s {
 		display: table-cell;
+	}
+
+	#main table .subtitle {
+		display: none;
 	}
 }
 

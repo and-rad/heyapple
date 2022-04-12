@@ -440,6 +440,11 @@
 			"err404": "Abmeldung fehlgeschlagen, Session nicht gefunden. Bist du überhaupt angemeldet?",
 			"err500": "Abmeldung fehlgeschlagen, interner Serverfehler. Das sollte nicht passieren."
 		},
+		"sort": {
+			"asc": "aufsteigend",
+			"desc": "absteigend",
+			"hint": "Sortieren..."
+		},
 		"tag": {
 			"1": "vegan",
 			"2": "vegetarisch",

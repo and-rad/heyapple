@@ -48,9 +48,11 @@ function formattedAmount(item) {
 	return `${amount} <span class="unit">${unit}</span>`;
 }
 
-function setActive(evt) {
-	let cat = evt.target.dataset.sort;
-	if (sortBy.value == cat) {
+function setSortCategory(cat, dir) {
+	if (cat && dir) {
+		sortBy.value = cat;
+		sortDir.value = dir;
+	} else if (sortBy.value == cat) {
 		sortDir.value = sortDir.value == "asc" ? "desc" : "asc";
 	} else {
 		sortBy.value = cat;
@@ -127,6 +129,7 @@ function onChecked(evt) {
 	}
 }
 
+defineExpose({ setSortCategory });
 onMounted(resync);
 </script>
 
@@ -137,14 +140,14 @@ onMounted(resync);
 				<th class="select">
 					<Checkbox :checked="allChecked" @click="onCheckedAll" />
 				</th>
-				<th class="num sort" :class="{ active: sortBy == 'amount' }" @click="setActive" data-sort="amount">
+				<th class="num sort" :class="{ active: sortBy == 'amount' }" @click="setSortCategory('amount')">
 					<Arrow /> {{ t("food.amount") }}
 				</th>
-				<th class="name sort" :class="{ active: sortBy == 'name' }" @click="setActive" data-sort="name">
+				<th class="name sort" :class="{ active: sortBy == 'name' }" @click="setSortCategory('name')">
 					{{ t("food.name") }} <Arrow />
 				</th>
-				<th class="s sort" :class="{ active: sortBy == 'aisle' }" @click="setActive" data-sort="aisle">
-					<Arrow /> {{ t("food.aisle") }}
+				<th class="s sort" :class="{ active: sortBy == 'aisle' }" @click="setSortCategory('aisle')">
+					{{ t("food.aisle") }} <Arrow />
 				</th>
 			</tr>
 		</thead>

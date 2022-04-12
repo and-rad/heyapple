@@ -14,6 +14,7 @@ const offline = ref(false);
 
 const main = ref(null);
 const calendar = ref(null);
+const list = ref(null);
 
 const daysWithEntries = computed(() => Object.keys(diary.value));
 
@@ -67,6 +68,12 @@ function onOnline() {
 	}
 }
 
+function onSort(evt) {
+	let [cat, dir] = evt.target.value.split(" ");
+	list.value.setSortCategory(cat, dir);
+	evt.target.selectedIndex = 0;
+}
+
 function showDetails(id) {
 	main.value.showDetails();
 }
@@ -85,9 +92,9 @@ function ping() {
 	return fetch("/ping", { method: "HEAD" }).then(onOnline, onOffline);
 }
 
-onBeforeMount(()=>{
+onBeforeMount(() => {
 	loadItemsLocal();
-})
+});
 
 onMounted(() => {
 	pingIntervalHandle = setInterval(ping, 15000);
@@ -116,8 +123,17 @@ onUnmounted(() => {
 			<section></section>
 		</template>
 
+		<template #controls>
+			<select class="sort s" @change="onSort">
+				<option value="" disabled selected hidden>{{ t("sort.hint") }}</option>
+				<option value="aisle asc">{{ t("food.aisle") }} {{ t("sort.asc") }}</option>
+				<option value="aisle desc">{{ t("food.aisle") }} {{ t("sort.desc") }}</option>
+			</select>
+			<span class="spacer"></span>
+		</template>
+
 		<template #main>
-			<FoodList :items="filtered" :offline="offline" @selected="showDetails" />
+			<FoodList ref="list" :items="filtered" :offline="offline" @selected="showDetails" />
 		</template>
 	</Main>
 </template>

@@ -440,6 +440,11 @@
 			"err403": "It doesn't look like you're allowed to do that.",
 			"err500": "Sign out failed, internal server error. This shouldn't happen."
 		},
+		"sort": {
+			"asc": "ascending",
+			"desc": "descending",
+			"hint": "Sort by..."
+		},
 		"tag": {
 			"1": "vegan",
 			"2": "vegetarian",

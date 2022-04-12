@@ -58,7 +58,7 @@ defineExpose({ showDetails });
 		<div id="main">
 			<div class="controls">
 				<button @click="toggleFilter" class="open-filter icon"><MenuImage /></button>
-				<span class="spacer"></span>
+				<slot name="controls"><span class="spacer"></span></slot>
 				<button @click="toggleDetails" class="open-details icon"><MoreImage /></button>
 			</div>
 			<div class="content">
@@ -83,6 +83,10 @@ defineExpose({ showDetails });
 </template>
 
 <style>
+:root {
+	--icon-sort: url(data:image/svg+xml;base64,PHN2ZyBpZD0ic3ZnODc1IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KIDxwYXRoIGlkPSJwYXRoMTA0NyIgZD0ibTAgM3YyaDI0di0yaC0yNHptMCA4djJoMTZ2LTJoLTE2em0wIDh2Mmg4di0yaC04eiIgZmlsbD0iIzEzYWQ3MyIvPgo8L3N2Zz4=);
+}
+
 #filter,
 #details,
 #main {
@@ -299,11 +303,33 @@ main.edit-mode .no-edit-mode {
 main .controls {
 	display: flex;
 	align-items: center;
-	justify-content: space-between;
 	white-space: nowrap;
 	padding: 0.5em;
 	min-height: 3.5em;
 	user-select: none;
+}
+
+main .controls select.sort {
+	background: var(--icon-sort) center no-repeat;
+	background-size: 24px;
+	border: none;
+	width: 40px;
+	appearance: none;
+	height: 40px;
+	font-size: 0;
+	margin: 0 4px;
+	padding: 8px;
+	transition: box-shadow var(--transition-style);
+}
+
+main .controls select.sort option {
+	font-size: 16px;
+}
+
+@media (hover: hover) {
+	main .controls select.sort:hover {
+		box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
+	}
 }
 
 #main .controls button.open-details > svg {
@@ -417,12 +443,20 @@ main .controls {
 	#main table .subtitle {
 		display: none;
 	}
+
+	main .controls select.sort.s {
+		display: none;
+	}
 }
 
 /* screen size smallish */
 @media only screen and (min-width: 640px) {
 	#main table .m {
 		display: table-cell;
+	}
+
+	main .controls select.sort.m {
+		display: none;
 	}
 }
 
@@ -438,6 +472,10 @@ main .controls {
 	}
 
 	main .controls button.open-filter {
+		display: none;
+	}
+
+	main .controls select.sort.l {
 		display: none;
 	}
 }

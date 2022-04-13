@@ -24,22 +24,22 @@ watch(
 function setMin(value) {
 	let min = parseFloat(prop.min) || 0;
 	let val = parseFloat(value) || min;
-	minVal.value = val;
+	minVal.value = Math.max(val, min);
 	maxVal.value = Math.max(minVal.value, maxVal.value);
 
 	let max = parseFloat(prop.max) || 0;
-	minPercent.value = ((val - min) * 100) / (max - min);
+	minPercent.value = ((minVal.value - min) * 100) / (max - min);
 	maxPercent.value = Math.max(minPercent.value, maxPercent.value);
 }
 
 function setMax(value) {
 	let max = parseFloat(prop.max) || 0;
 	let val = parseFloat(value) || max;
-	maxVal.value = val;
+	maxVal.value = Math.min(val, max);
 	minVal.value = Math.min(minVal.value, maxVal.value);
 
 	let min = parseFloat(prop.min) || 0;
-	maxPercent.value = ((val - min) * 100) / (max - min);
+	maxPercent.value = ((maxVal.value - min) * 100) / (max - min);
 	minPercent.value = Math.min(minPercent.value, maxPercent.value);
 }
 

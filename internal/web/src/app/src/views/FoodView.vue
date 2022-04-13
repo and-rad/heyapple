@@ -33,6 +33,7 @@ const now = ref(DateTime.now().toLocaleString(DateTime.TIME_24_SIMPLE));
 
 const main = ref(null);
 const form = ref(null);
+const list = ref(null);
 
 function newFood(name) {
 	fetch("/api/v1/food", {
@@ -183,6 +184,12 @@ function onInput(evt) {
 		evt.target.value = current.value[evt.target.name];
 	}
 }
+
+function onSort(evt) {
+	let [cat, dir] = evt.target.value.split(" ");
+	list.value.setSortCategory(cat, dir);
+	evt.target.selectedIndex = 0;
+}
 </script>
 
 <template>
@@ -296,8 +303,21 @@ function onInput(evt) {
 			</section>
 		</template>
 
+		<template #controls>
+			<select class="sort m" @change="onSort">
+				<option value="" disabled selected hidden>{{ t("sort.hint") }}</option>
+				<option value="fat asc">{{ t("food.fat") }} {{ t("sort.asc") }}</option>
+				<option value="fat desc">{{ t("food.fat") }} {{ t("sort.desc") }}</option>
+				<option value="carb asc">{{ t("food.carbs2") }} {{ t("sort.asc") }}</option>
+				<option value="carb desc">{{ t("food.carbs2") }} {{ t("sort.desc") }}</option>
+				<option value="prot asc">{{ t("food.protein") }} {{ t("sort.asc") }}</option>
+				<option value="prot desc">{{ t("food.protein") }} {{ t("sort.desc") }}</option>
+			</select>
+			<span class="spacer"></span>
+		</template>
+
 		<template #main>
-			<FoodList :items="filtered" @selected="showDetails" />
+			<FoodList ref="list" :items="filtered" @selected="showDetails" />
 		</template>
 
 		<template #head-details v-if="current">

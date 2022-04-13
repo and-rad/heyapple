@@ -30,33 +30,37 @@ function perServing(val, size, frac = 1) {
 	return val;
 }
 
-function setActive(evt) {
-	let cat = evt.target.dataset.sort;
-	if (sortBy.value == cat) {
+function setSortCategory(cat, dir) {
+	if (cat && dir) {
+		sortBy.value = cat;
+		sortDir.value = dir;
+	} else if (sortBy.value == cat) {
 		sortDir.value = sortDir.value == "asc" ? "desc" : "asc";
 	} else {
 		sortBy.value = cat;
 	}
 }
+
+defineExpose({ setSortCategory });
 </script>
 
 <template>
 	<table>
 		<thead>
 			<tr :class="sortDir">
-				<th class="name sort" :class="{ active: sortBy == 'name' }" @click="setActive" data-sort="name">
+				<th class="name sort" :class="{ active: sortBy == 'name' }" @click="setSortCategory('name')">
 					{{ t("food.name") }} <Arrow />
 				</th>
-				<th class="num sort" :class="{ active: sortBy == 'kcal' }" @click="setActive" data-sort="kcal">
+				<th class="num sort" :class="{ active: sortBy == 'kcal' }" @click="setSortCategory('kcal')">
 					<Arrow /> {{ t("food.energy") }}
 				</th>
-				<th class="m num sort" :class="{ active: sortBy == 'fat' }" @click="setActive" data-sort="fat">
+				<th class="m num sort" :class="{ active: sortBy == 'fat' }" @click="setSortCategory('fat')">
 					<Arrow /> {{ t("food.fat") }}
 				</th>
-				<th class="m num sort" :class="{ active: sortBy == 'carb' }" @click="setActive" data-sort="carb">
+				<th class="m num sort" :class="{ active: sortBy == 'carb' }" @click="setSortCategory('carb')">
 					<Arrow /> {{ t("food.carbs2") }}
 				</th>
-				<th class="m num sort" :class="{ active: sortBy == 'prot' }" @click="setActive" data-sort="prot">
+				<th class="m num sort" :class="{ active: sortBy == 'prot' }" @click="setSortCategory('prot')">
 					<Arrow /> {{ t("food.protein") }}
 				</th>
 			</tr>

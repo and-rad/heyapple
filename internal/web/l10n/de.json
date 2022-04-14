@@ -52,7 +52,6 @@
 		}
 	},
 	"form": {
-		"confirm": "Passwort bestätigen",
 		"pass": "Passwort",
 		"reset": "Passwort speichern"
 	},
@@ -126,7 +125,6 @@
 		"404": "Es gab ein Problem mit deiner Anfrage. Bitte überprüfe, ob du die richtige URL eingegeben hast. Es könnte auch sein, dass die Aktion, die du ausführen möchtest, bereits ausgeführt wurde.",
 		"500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
 		"hint": "Du kannst jetzt ein neues Passwort für dein Benutzerkonto vergeben. Danach solltest du dich mit dem neuen Passwort anmelden können. Denk daran, Passwörter müssen <strong>mindestens 10 Zeichen</strong> lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten!",
-		"nomatch": "Die Passwörter stimmen nicht überein.",
 		"return": "Zurück zu HeyApple",
 		"title1": "Passwort ",
 		"title2": "Zurücksetzen"

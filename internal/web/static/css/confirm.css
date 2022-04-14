@@ -109,12 +109,55 @@ button[disabled] {
 	pointer-events: none;
 }
 
-.password-strength-bar {
+.password {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+}
+
+.password .strength-bar {
 	height: 4px;
 	width: 0;
 	margin-top: 4px;
 	background: transparent;
 	transition: 0.2s ease-in-out;
+}
+
+.password button.visibility {
+	position: absolute;
+	top: 0;
+	right: 0;
+	height: 2.5em;
+	width: 2.5em;
+	background: none;
+	margin: 0;
+}
+
+.password button.visibility svg {
+	fill: var(--color-text-light);
+	transition: 0.25s;
+}
+
+.password button.visibility svg:last-child {
+	display: none;
+}
+
+.password.visible button.visibility svg:first-child {
+	display: none;
+}
+
+.password.visible button.visibility svg:last-child {
+	display: block;
+}
+
+@media (hover: hover) {
+	.password button.visibility:hover {
+		box-shadow: none;
+	}
+
+	.password button.visibility:hover svg {
+		fill: var(--color-text);
+	}
 }
 
 footer {

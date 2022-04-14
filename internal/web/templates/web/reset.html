@@ -21,12 +21,14 @@
 				<form class="reset">
 					<input type="hidden" name="token" value="{{ .token }}" />
 					<label>{{ l10n "form.pass" }}</label>
-					<span class="password-field">
+					<span class="password">
 						<input type="password" name="pass" />
-						<div class="password-strength-bar"></div>
+						<div class="strength-bar"></div>
+						<button class="visibility" type="button" @click="toggle">
+							<svg viewBox="0 0 24 24"><use href="/img/icons.svg#visible" /></svg>
+							<svg viewBox="0 0 24 24"><use href="/img/icons.svg#hidden" /></svg>
+						</button>
 					</span>
-					<label>{{ l10n "form.confirm" }}</label>
-					<input type="password" name="pass" />
 					<input type="submit" value='{{ l10n "form.reset" }}' />
 				</form>
 				<p><a href="/">{{ l10n "reset.return" }}</a></p>

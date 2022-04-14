@@ -2,7 +2,6 @@
 	"de": {
 		"form": {
 			"back": "Zurück",
-			"confirm": "Passwort bestätigen",
 			"email": "E-Mail",
 			"pass": "Passwort",
 			"reset": "Passwort zurücksetzen"
@@ -30,8 +29,7 @@
 			"err403": "Es sieht so aus, als dürftest du das nicht.",
 			"err409": "Diese E-Mail-Adresse wird bereits verwendet",
 			"err500": "Unbekannter Fehler",
-			"errpassempty": "Beide Passwortfelder müssen ausgefüllt sein",
-			"errpassmatch": "Die Passwörter stimmen nicht überein",
+			"errpassempty": "Das Passwortfeld muss ausgefüllt sein",
 			"hint": "Passwörter müssen <strong>mindestens 10 Zeichen</strong> lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten. Mit dem Klick auf \"Registrieren\" erklärst du, dass du die <a href='/terms' target='_blank'>Nutzungsbedingungen</a> und die <a href='/privacy' target='_blank'>Datenschutzbestimmungen</a> kennst und akzeptierst.",
 			"signin": "Du hast schon ein Konto?",
 			"success": "Registrierung erfolgreich! Wir haben eine E-Mail an {addr} gesendet. Öffne sie, um das Benutzerkonto zu aktivieren.",
@@ -53,7 +51,6 @@
 	"en": {
 		"form": {
 			"back": "Back",
-			"confirm": "Confirm Password",
 			"email": "E-Mail",
 			"pass": "Password",
 			"reset": "Reset password"
@@ -81,8 +78,7 @@
 			"err403": "It doesn't look like you're allowed to do that.",
 			"err409": "This e-mail address is already in use",
 			"err500": "Unknown error occurred",
-			"errpassempty": "Both password fields must be filled out",
-			"errpassmatch": "The passwords don't match",
+			"errpassempty": "The password field must be filled out",
 			"hint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters. By clicking \"Sign up\", you agree to the <a href='/terms' target='_blank'>terms and conditions</a> and the <a href='/privacy' target='_blank'>privacy policy</a>. Please make sure you've read them carefully.",
 			"signin": "Already have an account?",
 			"success": "Registration successful! We've sent an email to {addr}. Open it up to activate your account.",

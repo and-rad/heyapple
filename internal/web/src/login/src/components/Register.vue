@@ -10,24 +10,22 @@ const csrf = inject("csrfToken");
 
 const email = ref("");
 const pass1 = ref("");
-const pass2 = ref("");
+
+const passField = ref(null);
 
 const msg = ref({ msg: "", level: "" });
 
 function confirm(evt) {
 	evt.preventDefault();
+	passField.value.hide();
 
 	if (email.value.search(reEmail) == -1) {
 		msg.value = { msg: t("login.errmail"), level: "err" };
 		return false;
 	}
-	if (pass1.value == "" || pass2.value == "") {
+	if (pass1.value == "") {
 		msg.value = { msg: t("register.errpassempty"), level: "err" };
 		return false;
-	}
-	if (pass1.value != pass2.value) {
-		msg.value = { msg: t("register.errpassmatch"), level: "err" };
-		return;
 	}
 
 	let addr = email.value;
@@ -54,7 +52,6 @@ function clearForm(evt) {
 	evt.target.disabled = false;
 	email.value = "";
 	pass1.value = "";
-	pass2.value = "";
 }
 </script>
 
@@ -71,9 +68,7 @@ function clearForm(evt) {
 		<label>{{ t("form.email") }}</label>
 		<input type="email" name="email" v-model="email" />
 		<label>{{ t("form.pass") }}</label>
-		<PasswordField name="pass" withBar=true v-model="pass1" />
-		<label>{{ t("form.confirm") }}</label>
-		<PasswordField name="pass" v-model="pass2" />
+		<PasswordField ref="passField" name="pass" withBar=true v-model="pass1" />
 		<button type="submit" @click="confirm" class="async">{{ t("register.action") }}</button>
 		<p>{{ t("register.signin") }} <RouterLink to="/">{{ t("login.action") }}</RouterLink>.</p>
 	</form>

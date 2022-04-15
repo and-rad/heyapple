@@ -40,7 +40,6 @@ var (
 	Legal   = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/legal.html"))
 	Login   = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/login.html"))
 	Privacy = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/privacy.html"))
-	Reset   = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/reset.html"))
 	Terms   = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/terms.html"))
 )
 

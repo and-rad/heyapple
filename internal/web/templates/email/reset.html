@@ -1,5 +1,5 @@
 {{ define "content" }}
-{{ $addr := print .domain "/reset/" .token }}
+{{ $addr := print .domain "/auth#/reset/" .token }}
 
 {{ raw (l10n "email.msg.3") }}
 {{ template "token-button" all $addr "email.action.3" }}

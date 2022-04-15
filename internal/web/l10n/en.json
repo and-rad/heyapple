@@ -41,14 +41,9 @@
 			"3": "Quality over quantity: Unprocessed, natural foods make up most of the database."
 		}
 	},
-	"form": {
-		"pass": "Password",
-		"reset": "Save password"
-	},
 	"home": {
 		"betawarn": "HeyApple is still in its beta phase. As such, many features are incomplete or missing. A full release is planned for late 2022.",
-		"copy": "&copy; 2021-2022 the HeyApple development team",
-		"copyshort": "&copy; 2021-2022",
+		"copy": "&copy; 2021-2022 the HeyApple developers",
 		"legal": "Legal Notice",
 		"login": "Sign in",
 		"privacy": "Privacy Policy",
@@ -107,17 +102,6 @@
 			"2": "Recipes track whether they're vegan or dairy, and what types of meat they contain.",
 			"3": "Share your recipes with selected users or make them public for the whole world to see."
 		}
-	},
-	"reset": {
-		"200": "Your password was updated successfully. You can now try to sign in again.",
-		"400": "The password must not be empty.",
-		"403": "It doesn't look like you're allowed to do that.",
-		"404": "There was a problem with your request. Please make sure that you entered the correct URL. It's also possible that the action you want to perform has already been performed.",
-		"500": "There was an internal server problem, something's wrong on our end. Please try again later.",
-		"hint": "You can set a new account password below. Once you're done, you should be able to sign in again using your new password. Remeber, passwords need to be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters!",
-		"return": "Return to HeyApple",
-		"title1": "Password ",
-		"title2": "Reset"
 	},
 	"shop": {
 		"title": "Automatic Shopping Lists",

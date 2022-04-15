@@ -41,14 +41,9 @@
 			"3": "Qualität vor Qunatität: Natürliche, unverarbeitete Lebensmittel machen den Großteil der Datenbank aus."
 		}
 	},
-	"form": {
-		"pass": "Passwort",
-		"reset": "Passwort speichern"
-	},
 	"home": {
 		"betawarn": "HeyApple befindet sich momentan in der Beta-Phase. Viele Funktionen fehlen noch oder sind unvollständig. Der offizielle Start ist für Ende 2022 geplant.",
-		"copy": "&copy; 2021-2022 das HeyApple Entwicklerteam",
-		"copyshort": "&copy; 2021-2022",
+		"copy": "&copy; 2021-2022 die HeyApple Entwickler",
 		"legal": "Impressum",
 		"login": "Anmelden",
 		"privacy": "Datenschutz",
@@ -107,17 +102,6 @@
 			"2": "Rezepte verfolgen automatisch, ob sie vegan sind und welche Allergene, Milchprodukte oder Fleischsorten sie enthalten.",
 			"3": "Teile deine Rezepte mit ausgewählten Benutzern oder zeige sie der ganzen Welt."
 		}
-	},
-	"reset": {
-		"200": "Dein Passwort wurde erfolgreich geändert. Du kannst jetzt versuchen, dich wieder anzumelden.",
-		"400": "Das Passwort darf nicht leer sein.",
-		"403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
-		"404": "Es gab ein Problem mit deiner Anfrage. Bitte überprüfe, ob du die richtige URL eingegeben hast. Es könnte auch sein, dass die Aktion, die du ausführen möchtest, bereits ausgeführt wurde.",
-		"500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
-		"hint": "Du kannst jetzt ein neues Passwort für dein Benutzerkonto vergeben. Danach solltest du dich mit dem neuen Passwort anmelden können. Denk daran, Passwörter müssen <strong>mindestens 10 Zeichen</strong> lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten!",
-		"return": "Zurück zu HeyApple",
-		"title1": "Passwort ",
-		"title2": "Zurücksetzen"
 	},
 	"shop": {
 		"title": "Automatische Einkaufslisten",

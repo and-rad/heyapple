@@ -3,6 +3,7 @@ import LoginView from "../components/Login.vue";
 import RegisterView from "../components/Register.vue";
 import ResetView from "../components/Reset.vue";
 import ConfirmView from "../components/Confirm.vue";
+import ResetConfirmView from "../components/ResetConfirm.vue";
 
 const router = createRouter({
 	history: createWebHashHistory(),
@@ -26,6 +27,11 @@ const router = createRouter({
 			path: "/reset",
 			name: "reset",
 			component: ResetView,
+		},
+		{
+			path: "/reset/:token",
+			name: "resetconfirm",
+			component: ResetConfirmView,
 		},
 		{
 			path: "/:pathmatch(.*)",

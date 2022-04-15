@@ -1,14 +1,4 @@
 {
-	"confirm": {
-		"200": "Deine E-Mail-Adresse wurde erfolgreich bestätigt. Du kannst dich nun anmelden!",
-		"400": "Bestätigungstoken fehlt! Du solltest überprüfen, ob du die richtige URL eingegeben hast.",
-		"404": "Es gab ein Problem mit deiner Anfrage. Bitte überprüfe, ob du die richtige URL eingegeben hast. Es könnte auch sein, dass die Aktion, die du ausführen möchtest, bereits ausgeführt wurde.",
-		"500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
-		"return": "Zurück zu HeyApple",
-		"signin": "Zur Anmeldung",
-		"title1": "Konto",
-		"title2": "Aktivierung"
-	},
 	"diary": {
 		"title": "Mahlzeiten planen und Nährwerte verfolgen",
 		"subtitle": "Trage Rezepte mit einem einzigen Klick in dein Tagebuch ein. Ändere die Menge, füge Lebensmittel hinzu oder entferne sie. Es war nie einfacher, im Voraus zu planen und gelichzeitig im Hier und Jetzt zu leben.",

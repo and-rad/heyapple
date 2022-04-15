@@ -34,6 +34,46 @@ import (
 	"github.com/and-rad/scs/v2/memstore"
 )
 
+func TestConfirm(t *testing.T) {
+	for idx, data := range []struct {
+		db *mock.DB
+		in url.Values
+
+		status int
+	}{
+		{ //00// no data
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// connection failure
+			db:     mock.NewDB().WithError(mock.ErrDOS),
+			in:     url.Values{"token": {"abcd"}},
+			status: http.StatusInternalServerError,
+		},
+		{ //02// empty DB
+			db:     mock.NewDB(),
+			in:     url.Values{"token": {"abcd"}},
+			status: http.StatusNotFound,
+		},
+		{ //03// success
+			db:     mock.NewDB().WithUser(app.User{ID: 1}).WithToken(app.Token{ID: 1}),
+			in:     url.Values{"token": {"abcd"}},
+			status: http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db}
+
+		auth.Confirm(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+	}
+}
+
 func TestLocalLogin(t *testing.T) {
 	for idx, data := range []struct {
 		db *mock.DB

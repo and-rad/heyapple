@@ -2,6 +2,7 @@ import { createRouter, createWebHashHistory } from "vue-router";
 import LoginView from "../components/Login.vue";
 import RegisterView from "../components/Register.vue";
 import ResetView from "../components/Reset.vue";
+import ConfirmView from "../components/Confirm.vue";
 
 const router = createRouter({
 	history: createWebHashHistory(),
@@ -15,6 +16,11 @@ const router = createRouter({
 			path: "/signup",
 			name: "signup",
 			component: RegisterView,
+		},
+		{
+			path: "/confirm/:token",
+			name: "confirm",
+			component: ConfirmView,
 		},
 		{
 			path: "/reset",

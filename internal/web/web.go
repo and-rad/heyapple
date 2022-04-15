@@ -36,7 +36,6 @@ var (
 
 var (
 	App     = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/app.html"))
-	Confirm = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/confirm.html"))
 	Home    = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/home.html"))
 	Legal   = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/legal.html"))
 	Login   = template.Must(template.New("").Funcs(funcs).ParseFS(Templates, "templates/web/partial/*.html", "templates/web/login.html"))

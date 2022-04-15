@@ -29,6 +29,38 @@ import (
 	"github.com/julienschmidt/httprouter"
 )
 
+// Confirm completes the user registration by confirming
+// the sign-up token. If successful, the associated token
+// is deleted and the user is able to sign in. The
+// response body is always empty.
+//
+// Endpoint:
+//   /auth/confirm
+// Methods:
+//   PUT
+// Possible status codes:
+//   200 - Registration complete
+//   400 - Malformed or missing form data
+//   404 - User or token doesn't exist
+//   500 - Internal server error
+// Example input:
+//   token=178a6ee3f1da299fed940aa2d7
+func Confirm(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		cmd := &app.Activate{Token: r.FormValue("token")}
+
+		if cmd.Token == "" {
+			w.WriteHeader(http.StatusBadRequest)
+		} else if err := env.DB.Execute(cmd); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
+	}
+}
+
 // LocaLogin handles login for users with local accounts
 // as opposed to users who authenticate with SSO services
 // like OAuth. The response body is always empty.

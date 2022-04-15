@@ -22,7 +22,6 @@ import (
 	"html/template"
 	"net/http"
 
-	"github.com/and-rad/heyapple/internal/app"
 	"github.com/and-rad/heyapple/internal/web"
 
 	"github.com/and-rad/scs/v2"
@@ -105,28 +104,6 @@ func Terms(env *Environment) httprouter.Handle {
 		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
 		tpl := template.Must(web.Terms.Clone()).Funcs(template.FuncMap{"l10n": l10n})
 		if err := tpl.ExecuteTemplate(w, "terms.html", data); err != nil {
-			w.WriteHeader(http.StatusInternalServerError)
-		}
-	}
-}
-
-func Confirm(env *Environment) httprouter.Handle {
-	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		data := map[string]interface{}{}
-		if token := ps.ByName("token"); token == "" {
-			data["status"] = http.StatusBadRequest
-		} else if err := env.DB.Execute(&app.Activate{Token: token}); err == app.ErrNotFound {
-			data["status"] = http.StatusNotFound
-		} else if err != nil {
-			data["status"] = http.StatusInternalServerError
-		} else {
-			data["status"] = http.StatusOK
-		}
-
-		lang, _ := sessionData(env.Session, r)
-		l10n := func(in interface{}) string { return env.L10n.Translate(in, lang) }
-		tpl := template.Must(web.Confirm.Clone()).Funcs(template.FuncMap{"l10n": l10n})
-		if err := tpl.ExecuteTemplate(w, "confirm.html", data); err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		}
 	}

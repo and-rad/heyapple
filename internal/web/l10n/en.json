@@ -1,14 +1,4 @@
 {
-	"confirm": {
-		"200": "Your e-mail address has been confirmed successfully. You are ready to sign in!",
-		"400": "Confirmation token missing! You should double-check whether you entered the correct URL.",
-		"404": "There was a problem with your request. Please make sure that you entered the correct URL. It's also possible that the action you want to perform has already been performed.",
-		"500": "There was an internal server problem, something's wrong on our end. Please try again later.",
-		"return": "Return to HeyApple",
-		"signin": "Sign in",
-		"title1": "Account ",
-		"title2": "Activation"
-	},
 	"diary": {
 		"title": "Meal Planning and Nutrient Tracking",
 		"subtitle": "Add recipes to your diary with the click of a button. Adjust the amount, add or remove ingredients; planning ahead and living in the moment have never been easier.",

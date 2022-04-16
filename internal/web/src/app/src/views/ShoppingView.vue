@@ -2,6 +2,7 @@
 import Main from "../components/Main.vue";
 import Calendar from "../components/Calendar.vue";
 import FoodList from "../components/GroceryList.vue";
+import SortMenu from "../components/SortMenu.vue";
 import { ref, computed, inject, watch, onBeforeMount, onMounted, onUnmounted } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -124,16 +125,12 @@ onUnmounted(() => {
 		</template>
 
 		<template #controls>
-			<select class="sort s" @change="onSort">
-				<option value="" disabled selected hidden>{{ t("sort.hint") }}</option>
-				<option value="aisle asc">{{ t("food.aisle") }} {{ t("sort.asc") }}</option>
-				<option value="aisle desc">{{ t("food.aisle") }} {{ t("sort.desc") }}</option>
-			</select>
+			<SortMenu class="s" :list="list" />
 			<span class="spacer"></span>
 		</template>
 
 		<template #main>
-			<FoodList ref="list" :items="filtered" :offline="offline" @selected="showDetails" />
+			<FoodList class="s" ref="list" :items="filtered" :offline="offline" @selected="showDetails" />
 		</template>
 	</Main>
 </template>

@@ -6,5 +6,4 @@ linters-settings:
 run:
   tests: false
   timeout: 5s
-  skip-dirs:
-    - internal
+

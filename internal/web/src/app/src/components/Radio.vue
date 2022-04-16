@@ -37,7 +37,6 @@ label.radio > input + div {
 	background-repeat: no-repeat;
 	background-size: 0.9em;
 	background-position: center;
-	transition: var(--transition-style);
 }
 
 @media (hover: hover) {

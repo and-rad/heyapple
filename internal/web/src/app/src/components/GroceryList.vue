@@ -16,6 +16,12 @@ const sortDir = ref("desc");
 
 const collator = new Intl.Collator(locale.value, { numeric: true });
 
+const categories = [
+	{ cat: "amount", name: t("food.amount") },
+	{ cat: "name", name: t("food.name") },
+	{ cat: "aisle", name: t("food.aisle") },
+];
+
 const sortedItems = computed(() => {
 	if (sortDir.value == "asc") {
 		return [...prop.items].sort((a, b) => {
@@ -129,7 +135,7 @@ function onChecked(evt) {
 	}
 }
 
-defineExpose({ setSortCategory });
+defineExpose({ setSortCategory, categories, sortBy, sortDir });
 onMounted(resync);
 </script>
 
@@ -156,7 +162,7 @@ onMounted(resync);
 				<td class="select">
 					<Checkbox :data-id="item.id" :checked="item.done" @change="onChecked" />
 				</td>
-				<td class="num" v-html="formattedAmount(item)"></td>
+				<td class="num amount" v-html="formattedAmount(item)"></td>
 				<td class="name" @click="$emit('selected', item.id)">
 					<span>{{ item.name }}</span>
 					<div class="subtitle">{{ t("aisle." + item.aisle) }}</div>
@@ -167,4 +173,8 @@ onMounted(resync);
 	</table>
 </template>
 
-<style></style>
+<style>
+td.amount {
+	width: 4em !important;
+}
+</style>

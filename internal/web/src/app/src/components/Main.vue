@@ -309,27 +309,12 @@ main .controls {
 	user-select: none;
 }
 
-main .controls select.sort {
-	background: var(--icon-sort) center no-repeat;
-	background-size: 24px;
-	border: none;
-	width: 40px;
-	appearance: none;
-	height: 40px;
-	font-size: 0;
-	margin: 0 4px;
-	padding: 8px;
-	transition: box-shadow var(--transition-style);
+main .controls .sort-menu .options {
+	top: 3em;
 }
 
-main .controls select.sort option {
-	font-size: 16px;
-}
-
-@media (hover: hover) {
-	main .controls select.sort:hover {
-		box-shadow: inset 0 0 100px rgba(0, 0, 0, 0.1);
-	}
+#main .controls .sort-menu.open .options {
+	left: -2.5em;
 }
 
 #main .controls button.open-details > svg {
@@ -346,6 +331,12 @@ main .controls select.sort option {
 	border-collapse: separate;
 	border-spacing: 0;
 	white-space: nowrap;
+}
+
+#main table.s thead,
+#main table.m thead,
+#main table.l thead {
+	display: none;
 }
 
 #main tr {
@@ -436,6 +427,10 @@ main .controls select.sort option {
 
 /* screen size small */
 @media only screen and (min-width: 400px) {
+	#main table.s thead {
+		display: table-header-group;
+	}
+
 	#main table .s {
 		display: table-cell;
 	}
@@ -444,18 +439,22 @@ main .controls select.sort option {
 		display: none;
 	}
 
-	main .controls select.sort.s {
+	main .controls .sort-menu.s {
 		display: none;
 	}
 }
 
 /* screen size smallish */
 @media only screen and (min-width: 640px) {
+	#main table.m thead {
+		display: table-header-group;
+	}
+
 	#main table .m {
 		display: table-cell;
 	}
 
-	main .controls select.sort.m {
+	main .controls .sort-menu.m {
 		display: none;
 	}
 }
@@ -475,8 +474,16 @@ main .controls select.sort option {
 		display: none;
 	}
 
-	main .controls select.sort.l {
+	main .controls .sort-menu.l {
 		display: none;
+	}
+
+	#main .controls .sort-menu.open .options {
+		left: 0;
+	}
+
+	#main table.l thead {
+		display: table-header-group;
 	}
 }
 

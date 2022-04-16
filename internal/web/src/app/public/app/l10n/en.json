@@ -441,8 +441,8 @@
 			"err500": "Sign out failed, internal server error. This shouldn't happen."
 		},
 		"sort": {
-			"asc": "ascending",
-			"desc": "descending",
+			"asc": "Ascending",
+			"desc": "Descending",
 			"hint": "Sort by..."
 		},
 		"tag": {

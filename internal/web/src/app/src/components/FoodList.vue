@@ -11,6 +11,14 @@ const sortDir = ref("asc");
 
 const collator = new Intl.Collator(locale.value, { numeric: true });
 
+const categories = [
+	{ cat: "name", name: t("food.name") },
+	{ cat: "kcal", name: t("food.energy") },
+	{ cat: "fat", name: t("food.fat") },
+	{ cat: "carb", name: t("food.carbs") },
+	{ cat: "prot", name: t("food.protein") },
+];
+
 const sortedItems = computed(() => {
 	if (sortDir.value == "asc") {
 		return [...prop.items].sort((a, b) => {
@@ -41,7 +49,7 @@ function setSortCategory(cat, dir) {
 	}
 }
 
-defineExpose({ setSortCategory });
+defineExpose({ setSortCategory, categories, sortBy, sortDir });
 </script>
 
 <template>

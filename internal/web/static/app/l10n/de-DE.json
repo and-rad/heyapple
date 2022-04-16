@@ -441,8 +441,8 @@
 			"err500": "Abmeldung fehlgeschlagen, interner Serverfehler. Das sollte nicht passieren."
 		},
 		"sort": {
-			"asc": "aufsteigend",
-			"desc": "absteigend",
+			"asc": "Aufsteigend",
+			"desc": "Absteigend",
 			"hint": "Sortieren..."
 		},
 		"tag": {

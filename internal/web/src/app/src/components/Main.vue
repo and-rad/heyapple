@@ -435,7 +435,7 @@ main .controls .sort-menu .options {
 		display: table-cell;
 	}
 
-	#main table .subtitle {
+	#main table.s .subtitle {
 		display: none;
 	}
 
@@ -452,6 +452,10 @@ main .controls .sort-menu .options {
 
 	#main table .m {
 		display: table-cell;
+	}
+
+	#main table.m .subtitle {
+		display: none;
 	}
 
 	main .controls .sort-menu.m {
@@ -480,6 +484,10 @@ main .controls .sort-menu .options {
 
 	#main .controls .sort-menu.open .options {
 		left: 0;
+	}
+
+	#main table.l .subtitle {
+		display: none;
 	}
 
 	#main table.l thead {

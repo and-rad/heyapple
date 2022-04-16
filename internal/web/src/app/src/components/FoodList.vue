@@ -32,10 +32,8 @@ const sortedItems = computed(() => {
 });
 
 function perServing(val, size, frac = 1) {
-	if (size) {
-		return +parseFloat(val / size).toFixed(frac);
-	}
-	return val;
+	size = size || 1;
+	return +parseFloat(val / size).toFixed(frac);
 }
 
 function setSortCategory(cat, dir) {
@@ -77,6 +75,11 @@ defineExpose({ setSortCategory, categories, sortBy, sortDir });
 			<tr v-for="item in sortedItems" :key="item.id" @click="$emit('selected', item.id)">
 				<td class="name">
 					{{ item.name }}
+					<div class="subtitle">
+						{{ perServing(item.fat, item.size, 0) }}{{ t("unit.g") }} {{ t("food.fat") }},
+						{{ perServing(item.carb, item.size, 0) }}{{ t("unit.g") }} {{ t("food.carbs2") }},
+						{{ perServing(item.prot, item.size, 0) }}{{ t("unit.g") }} {{ t("food.protein") }}
+					</div>
 				</td>
 				<td class="num">
 					{{ perServing(item.kcal, item.size, 0) }} <span class="unit">{{ t("unit.cal") }}</span>

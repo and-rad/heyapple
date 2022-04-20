@@ -13,10 +13,10 @@ build-server:
 			--enable-comment-stripping \
 			--strip-xml-prolog \
 			--strip-xml-space; fi
-	@CGO_ENABLED=0 GOARCH=amd64 go build -o ./out/server/${BINARY_NAME}-amd64 github.com/and-rad/heyapple/cmd/web
+	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./out/server/heyapple-linux-amd64 github.com/and-rad/heyapple/cmd/web
 
 run-server:
-	@./out/server/${BINARY_NAME}-${TEST_ARCH}
+	@./out/server/heyapple-${DEV_OS}-${DEV_ARCH}
 
 test-server:
 	@echo "testing ${NUM_TESTS} cases:"
@@ -25,8 +25,3 @@ test-server:
 test-all-server:
 	@echo "testing ${NUM_TESTS} cases:"
 	@go test -cover -race -p 1 -timeout 30m ${TEST_PACKAGES}
-
-install-server:
-	@cp ./out/server/${BINARY_NAME}-amd64 ${INSTALL_DIR}/
-	@cp ./configs/sample.env ${CONFIG_DIR}/heyapple.env
-	@if [ -e .env ] ;then cp .env ${CONFIG_DIR}/heyapple.env ;fi

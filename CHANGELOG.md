@@ -3,7 +3,7 @@
 ## [2.0.0.beta2] - 2022-04-16
 
 ### Added
-- A new tabl sorting menu is shown on small device screens, allowing users to
+- A new table sorting menu is shown on small device screens, allowing users to
   sort tables in both directions by columns even when they're hidden or their
   information is not displayed as a table column directly.
 

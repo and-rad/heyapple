@@ -55,14 +55,18 @@ type CreateUser struct {
 }
 
 func (c *CreateUser) Execute(db DB) error {
+	// Doing this first comes with a performance penalty
+	// that is actually desirable here since it helps
+	// making user enumeration attacks a little harder.
+	hash := NewCrypter().Encrypt(c.Pass)
+	token := NewTokenizer().Create()
+
 	if _, err := db.UserByName(c.Email); err == nil {
 		return ErrExists
 	} else if err != ErrNotFound {
 		return err
 	}
 
-	hash := NewCrypter().Encrypt(c.Pass)
-	token := NewTokenizer().Create()
 	if id, err := db.NewUser(c.Email, hash, token); err != nil {
 		return err
 	} else {

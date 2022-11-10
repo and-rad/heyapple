@@ -27,7 +27,7 @@
 		"login": {
 			"action": "Anmelden",
 			"err400": "Benutzername oder Passwort fehlt",
-			"err401": "Benutzername oder Passwort falsch",
+			"err401": "Benutzername oder Passwort falsch, bitte versuche es noch einmal.",
 			"err403": "Es sieht so aus, als dürftest du das nicht.",
 			"err500": "Unbekannter Fehler",
 			"errmail": "Keine gültige E-Mail-Adresse",
@@ -44,7 +44,7 @@
 			"errpassempty": "Das Passwortfeld muss ausgefüllt sein",
 			"hint": "Passwörter müssen <strong>mindestens 10 Zeichen</strong> lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten. Mit dem Klick auf \"Registrieren\" erklärst du, dass du die <a href='/terms' target='_blank'>Nutzungsbedingungen</a> und die <a href='/privacy' target='_blank'>Datenschutzbestimmungen</a> kennst und akzeptierst.",
 			"signin": "Du hast schon ein Konto?",
-			"success": "Registrierung erfolgreich! Wir haben eine E-Mail an {addr} gesendet. Öffne sie, um das Benutzerkonto zu aktivieren.",
+			"success": "Registrierungsanfrage akzeptiert! Wir haben einen Aktivierungslink an {addr} gesendet. Wenn die Nachricht nicht ankommt, liegt sie vielleicht im Spam-Ordner. Es könnte auch sein, dass die E-Mail-Adresse schon registriert ist.",
 			"title1": "Regis",
 			"title2": "trieren"
 		},
@@ -55,7 +55,7 @@
 			"err404": "Diese E-Mail-Adresse ist nicht mit einem HeyApple-Konto verknüpft.",
 			"err500": "Unbekannter Fehler",
 			"hint": "Gib die E-Mail-Adresse deines Benutzerkontos hier ein. Wir senden dir Anweisungen zum Zurücksetzen des Passworts.",
-			"success": "Wir haben eine E-Mail an {addr} gesendet. Öffne sie, um ein neues Passwort für dein Konto zu vergeben.",
+			"success": "Wenn es ein Konto mit dieser E-Mail-Adresse bei uns gibt, haben wir eine E-Mail an {addr} gesendet. Öffne sie und folge dem Link, um ein neues Passwort für dein Konto zu vergeben.",
 			"title1": "Passwort ",
 			"title2": "zurücksetzen"
 		},
@@ -97,7 +97,7 @@
 		"login": {
 			"action": "Sign in",
 			"err400": "Username or password missing",
-			"err401": "Incorrect username or password",
+			"err401": "Incorrect username or password, please try again.",
 			"err403": "It doesn't look like you're allowed to do that.",
 			"err500": "Unknown error occurred",
 			"errmail": "Not a valid e-mail address",
@@ -114,7 +114,7 @@
 			"errpassempty": "The password field must be filled out",
 			"hint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters. By clicking \"Sign up\", you agree to the <a href='/terms' target='_blank'>terms and conditions</a> and the <a href='/privacy' target='_blank'>privacy policy</a>. Please make sure you've read them carefully.",
 			"signin": "Already have an account?",
-			"success": "Registration successful! We've sent an email to {addr}. Open it up to activate your account.",
+			"success": "Registration request received! A link to activate your account has been sent to {addr}. If you can't find the message in your inbox, it might have been put in the spam folder. It could also be that the email address belongs to an already registered account.",
 			"title1": "Sign ",
 			"title2": "Up"
 		},
@@ -125,7 +125,7 @@
 			"err404": "This e-mail address is not in use",
 			"err500": "Unknown error occurred",
 			"hint": "Enter your account's e-mail address. Instructions on how to reset your password will be sent to you.",
-			"success": "We've sent an email to {addr}. Open it up to set a new password for your account.",
+			"success": "If there is an account using this email address, we've sent an email to {addr}. Open it up and click the link to set a new password.",
 			"title1": "Password ",
 			"title2": "Reset"
 		},

@@ -35,16 +35,23 @@ import (
 // response body is always empty.
 //
 // Endpoint:
-//   /auth/confirm
+//
+//	/auth/confirm
+//
 // Methods:
-//   PUT
+//
+//	PUT
+//
 // Possible status codes:
-//   200 - Registration complete
-//   400 - Malformed or missing form data
-//   404 - User or token doesn't exist
-//   500 - Internal server error
+//
+//	200 - Registration complete
+//	400 - Malformed or missing form data
+//	404 - User or token doesn't exist
+//	500 - Internal server error
+//
 // Example input:
-//   token=178a6ee3f1da299fed940aa2d7
+//
+//	token=178a6ee3f1da299fed940aa2d7
 func Confirm(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.Activate{Token: r.FormValue("token")}
@@ -66,16 +73,23 @@ func Confirm(env *handler.Environment) httprouter.Handle {
 // like OAuth. The response body is always empty.
 //
 // Endpoint:
-//   /auth/local
+//
+//	/auth/local
+//
 // Methods:
-//   POST
+//
+//	POST
+//
 // Possible status codes:
-//   200 - Login successful
-//   400 - Malformed or missing form data
-//   401 - Unsuccessful login attempt
-//   500 - Internal server error
+//
+//	200 - Login successful
+//	400 - Malformed or missing form data
+//	401 - Unsuccessful login attempt
+//	500 - Internal server error
+//
 // Example input:
-//   email=user@example.com&pass=topsecret
+//
+//	email=user@example.com&pass=topsecret
 func LocalLogin(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.Authenticate{
@@ -105,13 +119,18 @@ func LocalLogin(env *handler.Environment) httprouter.Handle {
 // like OAuth. The response body is always empty.
 //
 // Endpoint:
-//   /auth/local
+//
+//	/auth/local
+//
 // Methods:
-//   DELETE
+//
+//	DELETE
+//
 // Possible status codes:
-//   200 - Logout successful
-//   404 - Session not found, user is not logged in
-//   500 - Internal server error
+//
+//	200 - Logout successful
+//	404 - Session not found, user is not logged in
+//	500 - Internal server error
 func LocalLogout(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		if err := env.Session.Destroy(r.Context()); err == scs.ErrNoSession {
@@ -127,19 +146,28 @@ func LocalLogout(env *handler.Environment) httprouter.Handle {
 // ResetRequest creates a new password reset request and
 // sends a notification to the user with instructions
 // on how to complete the request. The response body is
-// always empty.
+// always empty. For security reasons, this is one of a handful
+// of functions that return success status codes even when
+// technically failing. This is done to make user enumeration
+// more difficult.
 //
 // Endpoint:
-//   /auth/reset
+//
+//	/auth/reset
+//
 // Methods:
-//   POST
+//
+//	POST
+//
 // Possible status codes:
-//   200 - Request creation successful
-//   400 - Malformed or missing form data
-//   404 - User doesn't exist
-//   500 - Internal server error
+//
+//	202 - Request was accepted
+//	400 - Malformed or missing form data
+//	500 - Internal server error
+//
 // Example input:
-//   email=user@example.com
+//
+//	email=user@example.com
 func ResetRequest(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.ResetPassword{Email: r.FormValue("email")}
@@ -150,7 +178,7 @@ func ResetRequest(env *handler.Environment) httprouter.Handle {
 
 		err := env.DB.Execute(cmd)
 		if err == app.ErrNotFound {
-			w.WriteHeader(http.StatusNotFound)
+			w.WriteHeader(http.StatusAccepted)
 			return
 		}
 		if err != nil {
@@ -158,7 +186,7 @@ func ResetRequest(env *handler.Environment) httprouter.Handle {
 			return
 		}
 
-		w.WriteHeader(http.StatusOK)
+		w.WriteHeader(http.StatusAccepted)
 
 		data := app.NotificationData{
 			"lang":  "en",
@@ -176,16 +204,23 @@ func ResetRequest(env *handler.Environment) httprouter.Handle {
 // password is changed. The response body is always empty.
 //
 // Endpoint:
-//   /auth/reset
+//
+//	/auth/reset
+//
 // Methods:
-//   PUT
+//
+//	PUT
+//
 // Possible status codes:
-//   200 - Password reset successful
-//   400 - Malformed or missing form data
-//   404 - User or token doesn't exist
-//   500 - Internal server error
+//
+//	200 - Password reset successful
+//	400 - Malformed or missing form data
+//	404 - User or token doesn't exist
+//	500 - Internal server error
+//
 // Example input:
-//   email=user@example.com&pass=topsecret
+//
+//	email=user@example.com&pass=topsecret
 func ResetConfirm(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.ChangePassword{

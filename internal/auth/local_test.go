@@ -186,19 +186,19 @@ func TestResetRequest(t *testing.T) {
 			db:     mock.NewDB().WithUser(mock.User1),
 			nf:     mock.NewNotifier().WithError(mock.ErrDOS),
 			in:     url.Values{"email": {"a@a.a"}},
-			status: http.StatusOK,
+			status: http.StatusAccepted,
 			err:    mock.ErrDOS.Error(),
 		},
 		{ //03// user doesn't exist
 			db:     mock.NewDB(),
 			in:     url.Values{"email": {"a@a.a"}},
-			status: http.StatusNotFound,
+			status: http.StatusAccepted,
 		},
 		{ //04// success
 			db:     mock.NewDB().WithUser(mock.User1),
 			nf:     mock.NewNotifier(),
 			in:     url.Values{"email": {"a@a.a"}},
-			status: http.StatusOK,
+			status: http.StatusAccepted,
 		},
 	} {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))

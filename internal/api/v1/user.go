@@ -29,18 +29,29 @@ import (
 
 // NewUser creates a new user and sends out a registration
 // notification on success. The response body is always
-// empty.
+// empty. For security reasons, this is one of a handful
+// of functions that return success status codes even when
+// technically failing. This is done to make user enumeration
+// more difficult.
 //
 // Endpoint:
-//   /api/v1/user
+//
+//	/api/v1/user
+//
 // Methods:
-//   POST
+//
+//	POST
+//
 // Possible status codes:
-//   201 - Creation successful
-//   400 - Malformed or missing form data
-//   500 - Internal server error
+//
+//	202 - Creation request accepted
+//	400 - Malformed or missing form data
+//	401 - The provided password is not strong enough
+//	500 - Internal server error
+//
 // Example input:
-//   email=user@example.com&pass=topsecret
+//
+//	email=user@example.com&pass=topsecret
 func NewUser(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.CreateUser{
@@ -55,7 +66,7 @@ func NewUser(env *handler.Environment) httprouter.Handle {
 
 		err := env.DB.Execute(cmd)
 		if err == app.ErrExists {
-			w.WriteHeader(http.StatusConflict)
+			w.WriteHeader(http.StatusAccepted)
 			return
 		}
 		if err != nil {
@@ -63,7 +74,7 @@ func NewUser(env *handler.Environment) httprouter.Handle {
 			return
 		}
 
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusAccepted)
 
 		data := app.NotificationData{
 			"lang":  "en",
@@ -81,17 +92,24 @@ func NewUser(env *handler.Environment) httprouter.Handle {
 // collection of key-value pairs.
 //
 // Endpoint:
-//   /api/v1/l10n/{lang}
+//
+//	/api/v1/l10n/{lang}
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
+//
+//	200 - OK
+//
 // Example output:
-//   {
-//     "app.name": "HeyApple",
-//     "msg.hello": "What's up?",
-//     ...
-//   }
+//
+//	{
+//	  "app.name": "HeyApple",
+//	  "msg.hello": "What's up?",
+//	  ...
+//	}
 func L10n(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		tr := env.L10n.Get(ps.ByName("lang"))

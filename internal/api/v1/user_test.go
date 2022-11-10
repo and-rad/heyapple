@@ -57,19 +57,19 @@ func TestNewUser(t *testing.T) {
 			db:     mock.NewDB(),
 			nf:     mock.NewNotifier().WithError(mock.ErrDOS),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
-			status: http.StatusCreated,
+			status: http.StatusAccepted,
 			err:    mock.ErrDOS.Error(),
 		},
 		{ //03// username exists
 			db:     mock.NewDB().WithError(app.ErrExists),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
-			status: http.StatusConflict,
+			status: http.StatusAccepted,
 		},
 		{ //04// success
 			db:     mock.NewDB(),
 			nf:     mock.NewNotifier(),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
-			status: http.StatusCreated,
+			status: http.StatusAccepted,
 		},
 	} {
 		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))

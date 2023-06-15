@@ -72,8 +72,8 @@
 	},
 	"more": {
 		"title": "Mehr Schmackhaftes",
-		"appshead": "Dafür gibt's eine App",
-		"appsbody": "Wir haben Apps für Smartphones und alle großen Browser. Du kannst sogar deine eigene schreiben!",
+		"apihead": "RESTful API",
+		"apibody": "Eine robuste REST-API erlaubt dir, die App mit dem Client deiner Wahl zu verwenden.",
 		"donatehead": "...darf es aber",
 		"donatebody": "Wenn du die Entwicklung von HeyApple unterstützen willst, kannst du Sponsor werden.",
 		"freehead": "Es kostet nichts...",

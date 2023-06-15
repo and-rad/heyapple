@@ -72,8 +72,8 @@
 	},
 	"more": {
 		"title": "More Goodies",
-		"appshead": "There's an app for that",
-		"appsbody": "We have dedicated apps for mobile phones and every major browser. You can even write your own!",
+		"apihead": "RESTful API",
+		"apibody": "A robust REST API allows everyone to access the app with custom clients.",
 		"donatehead": "...but doesn't have to be",
 		"donatebody": "If you want to support HeyApple development, you can donate to the development fund.",
 		"freehead": "It's free...",

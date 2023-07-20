@@ -338,11 +338,15 @@ body.numbered h3::before {
 	padding: 1em;
 }
 
+#jumbo nav > a {
+	flex-basis: 100%;
+	flex-grow: 1;
+	color: var(--color-text);
+}
+
 #jumbo figure {
 	border-radius: 8px;
 	box-shadow: 0 4px 8px #ddd;
-	flex-basis: 100%;
-	flex-grow: 1;
 	margin: 1em;
 	padding: 1em;
 	display: flex;
@@ -371,25 +375,22 @@ body.numbered h3::before {
 	width: 33%;
 }
 
-#jumbo figure a {
+#jumbo figure svg.arrow {
 	position: absolute;
 	bottom: 1em;
 	right: 1em;
 	width: 1.5em;
 	height: 1.5em;
-}
-
-#jumbo figure a svg {
 	fill: var(--color-primary);
 	transition: transform 0.5s ease-in-out;
 }
 
-#jumbo figure:hover a svg {
+#jumbo a:hover svg.arrow {
 	transform: rotate(90deg);
 }
 
 @media only screen and (min-width: 640px) {
-	#jumbo figure {
+	#jumbo nav > a {
 		flex-basis: 40%;
 	}
 
@@ -407,7 +408,7 @@ body.numbered h3::before {
 		flex-wrap: nowrap;
 	}
 
-	#jumbo figure {
+	#jumbo nav > a {
 		flex-basis: 25%;
 	}
 }

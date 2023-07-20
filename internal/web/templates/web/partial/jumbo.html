@@ -22,12 +22,14 @@
 {{ end }}
 
 {{ define "jumbo-item" }}
-<figure>
-	<figcaption>
-		<h2>{{ index . 0 }}</h2>
-		<p>{{ index . 1 }}</p>
-	</figcaption>
-	<svg viewBox='0 0 24 24'><use href='/img/icons.svg#{{ index . 2 }}'/></svg>
-	<a href="#{{ index . 3 }}"><svg viewBox='0 0 24 24'><use href='/img/icons.svg#forward'/></svg></a>
-</figure>
+<a href="#{{ index . 3 }}">
+	<figure>
+		<figcaption>
+			<h2>{{ index . 0 }}</h2>
+			<p>{{ index . 1 }}</p>
+		</figcaption>
+		<svg viewBox='0 0 24 24'><use href='/img/icons.svg#{{ index . 2 }}'/></svg>
+		<svg class="arrow" viewBox='0 0 24 24'><use href='/img/icons.svg#forward'/></svg>
+	</figure>
+</a>
 {{ end }}

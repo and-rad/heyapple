@@ -10,3 +10,8 @@
 # client-specific build environment
 .make/env.mk
 .env
+
+# intermediate build files
+/internal/web/static/app/
+/internal/web/static/login/
+/internal/web/static/img/icons.svg

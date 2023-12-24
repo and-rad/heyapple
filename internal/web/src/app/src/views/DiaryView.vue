@@ -213,7 +213,7 @@ onMounted(() => {
 					</PieChart>
 				</button>
 			</section>
-			<section id="charts-macro">
+			<section class="charts-nutrient" id="charts-macro">
 				<PieChart
 					class="kcal"
 					start="225"
@@ -313,6 +313,10 @@ onMounted(() => {
 	--color-carb-light: #ffe0b2;
 	--color-prot: #ab47bc;
 	--color-prot-light: #f3e5f5;
+	--color-vit: #ff4fdc;
+	--color-vit-light: #ffc8f4;
+	--color-mins: #b77400;
+	--color-mins-light: #d7b276;
 }
 
 #charts-week {
@@ -399,7 +403,7 @@ main.neutral-charts #charts-week button.today .pie-chart circle.bad {
 	}
 }
 
-#charts-macro {
+.charts-nutrient {
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -407,24 +411,29 @@ main.neutral-charts #charts-week button.today .pie-chart circle.bad {
 	padding: 1em;
 }
 
-#charts-macro .pie-chart {
+.charts-nutrient .pie-chart {
 	flex-basis: 30%;
-	margin: 1em 0;
+	margin: 0.5em 0;
 	width: auto;
 	height: auto;
 }
 
-#charts-macro .pie-chart > div span:last-child {
+.charts-nutrient .pie-chart figcaption {
+	bottom: -2px;
+}
+
+.charts-nutrient .pie-chart > div span:last-child {
 	color: var(--color-text-light);
 }
 
 #charts-macro .pie-chart.kcal {
 	flex-basis: 100%;
-	margin: 1em 15%;
+	margin: 0 10%;
 }
 
 #charts-macro .pie-chart.kcal figcaption {
 	bottom: 10%;
+	font-size: 1.5rem;
 }
 
 #charts-macro .pie-chart.kcal circle.base {
@@ -435,28 +444,52 @@ main.neutral-charts #charts-week button.today .pie-chart circle.bad {
 	stroke: var(--color-kcal);
 }
 
-#charts-macro .pie-chart.fat circle.base {
+.charts-nutrient .pie-chart.fat circle.base {
 	stroke: var(--color-fat-light);
 }
 
-#charts-macro .pie-chart.fat circle.good {
+.charts-nutrient .pie-chart.fat circle.good {
 	stroke: var(--color-fat);
 }
 
-main.neutral-charts #charts-macro .pie-chart.fat circle.bad {
+main.neutral-charts .charts-nutrient .pie-chart.fat circle.bad {
 	stroke: var(--color-fat);
 }
 
-#charts-macro .pie-chart.carb circle.base {
+.charts-nutrient .pie-chart.carb circle.base {
 	stroke: var(--color-carb-light);
 }
 
-#charts-macro .pie-chart.carb circle.good {
+.charts-nutrient .pie-chart.carb circle.good {
 	stroke: var(--color-carb);
 }
 
-main.neutral-charts #charts-macro .pie-chart.carb circle.bad {
+main.neutral-charts .charts-nutrient .pie-chart.carb circle.bad {
 	stroke: var(--color-carb);
+}
+
+.charts-nutrient .pie-chart.vit circle.base {
+	stroke: var(--color-vit-light);
+}
+
+.charts-nutrient .pie-chart.vit circle.good {
+	stroke: var(--color-vit);
+}
+
+main.neutral-charts .charts-nutrient .pie-chart.vit circle.bad {
+	stroke: var(--color-vit);
+}
+
+.charts-nutrient .pie-chart.mins circle.base {
+	stroke: var(--color-mins-light);
+}
+
+.charts-nutrient .pie-chart.mins circle.good {
+	stroke: var(--color-mins);
+}
+
+main.neutral-charts .charts-nutrient .pie-chart.mins circle.bad {
+	stroke: var(--color-mins);
 }
 
 #charts-macro .pie-chart.prot circle.base {
@@ -476,21 +509,33 @@ main.neutral-charts #charts-macro .pie-chart.prot circle.bad {
 		font-size: unset;
 	}
 
+	.charts-nutrient {
+		justify-content: center;
+	}
+
+	.charts-nutrient .pie-chart {
+		flex-basis: 20%;
+		margin-left: 1em;
+		margin-right: 1em;
+	}
+
+	.charts-nutrient .pie-chart figcaption {
+		bottom: 0;
+	}
+
 	#charts-macro {
 		flex-wrap: nowrap;
+		justify-content: space-between;
 	}
 
 	#charts-macro .pie-chart {
-		flex-basis: 20%;
+		margin-left: 0;
+		margin-right: 0;
 	}
 
 	#charts-macro .pie-chart.kcal {
 		flex-basis: 30%;
-		margin: 1em 0;
-	}
-
-	#charts-macro .pie-chart figcaption {
-		bottom: 10%;
+		margin: 0;
 	}
 }
 

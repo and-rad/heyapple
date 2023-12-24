@@ -146,33 +146,80 @@ func Recipe0() core.Recipe {
 
 func Recipe1() core.Recipe {
 	return core.Recipe{
-		ID:      1,
-		Name:    "Banana Pie",
-		Size:    1,
-		Flags:   Food2.Flags,
-		KCal:    Food2.KCal * 1.5,
-		Fat:     Food2.Fat * 1.5,
-		Carbs:   Food2.Carbs * 1.5,
-		Protein: Food2.Protein * 1.5,
-		Items:   []core.Ingredient{{ID: Food2.ID, Amount: 150}},
+		ID:         1,
+		Name:       "Banana Pie",
+		Size:       1,
+		Flags:      Food2.Flags,
+		KCal:       Food2.KCal * 1.5,
+		Fat:        Food2.Fat * 1.5,
+		Carbs:      Food2.Carbs * 1.5,
+		Sugar:      Food2.Sugar * 1.5,
+		Fructose:   Food2.Fructose * 1.5,
+		Glucose:    Food2.Glucose * 1.5,
+		Sucrose:    Food2.Sucrose * 1.5,
+		Protein:    Food2.Protein * 1.5,
+		Fiber:      Food2.Fiber * 1.5,
+		Iron:       Food2.Iron * 1.5,
+		Zinc:       Food2.Zinc * 1.5,
+		Magnesium:  Food2.Magnesium * 1.5,
+		Chlorine:   Food2.Chlorine * 1.5,
+		Sodium:     Food2.Sodium * 1.5,
+		Calcium:    Food2.Calcium * 1.5,
+		Potassium:  Food2.Potassium * 1.5,
+		Phosphorus: Food2.Phosphorus * 1.5,
+		Copper:     Food2.Copper * 1.5,
+		Iodine:     Food2.Iodine * 1.5,
+		Manganse:   Food2.Manganse * 1.5,
+		VitA:       Food2.VitA * 1.5,
+		VitB1:      Food2.VitB1 * 1.5,
+		VitB2:      Food2.VitB2 * 1.5,
+		VitB6:      Food2.VitB6 * 1.5,
+		VitC:       Food2.VitC * 1.5,
+		VitE:       Food2.VitE * 1.5,
+		Items:      []core.Ingredient{{ID: Food2.ID, Amount: 150}},
 	}
 }
 
 func Recipe2() core.Recipe {
 	return core.Recipe{
-		ID:    2,
-		Name:  "Fruit Cake",
-		Size:  3,
-		Flags: Food1.Flags | Food2.Flags,
-		KCal:  54*3 + 93*2.5,
-		Items: []core.Ingredient{{ID: 1, Amount: 300}, {ID: 2, Amount: 250}},
+		ID:         2,
+		Name:       "Fruit Cake",
+		Size:       3,
+		Flags:      Food1.Flags | Food2.Flags,
+		KCal:       Food1.KCal*3 + Food2.KCal*2.5,
+		Fat:        Food1.Fat*3 + Food2.Fat*2.5,
+		Carbs:      Food1.Carbs*3 + Food2.Carbs*2.5,
+		Sugar:      Food1.Sugar*3 + Food2.Sugar*2.5,
+		Fructose:   Food1.Fructose*3 + Food2.Fructose*2.5,
+		Glucose:    Food1.Glucose*3 + Food2.Glucose*2.5,
+		Sucrose:    Food1.Sucrose*3 + Food2.Sucrose*2.5,
+		Protein:    Food1.Protein*3 + Food2.Protein*2.5,
+		Fiber:      Food1.Fiber*3 + Food2.Fiber*2.5,
+		Iron:       Food1.Iron*3 + Food2.Iron*2.5,
+		Zinc:       Food1.Zinc*3 + Food2.Zinc*2.5,
+		Magnesium:  Food1.Magnesium*3 + Food2.Magnesium*2.5,
+		Chlorine:   Food1.Chlorine*3 + Food2.Chlorine*2.5,
+		Sodium:     Food1.Sodium*3 + Food2.Sodium*2.5,
+		Calcium:    Food1.Calcium*3 + Food2.Calcium*2.5,
+		Potassium:  Food1.Potassium*3 + Food2.Potassium*2.5,
+		Phosphorus: Food1.Phosphorus*3 + Food2.Phosphorus*2.5,
+		Copper:     Food1.Copper*3 + Food2.Copper*2.5,
+		Iodine:     Food1.Iodine*3 + Food2.Iodine*2.5,
+		Manganse:   Food1.Manganse*3 + Food2.Manganse*2.5,
+		VitA:       Food1.VitA*3 + Food2.VitA*2.5,
+		VitB1:      Food1.VitB1*3 + Food2.VitB1*2.5,
+		VitB2:      Food1.VitB2*3 + Food2.VitB2*2.5,
+		VitB6:      Food1.VitB6*3 + Food2.VitB6*2.5,
+		VitC:       Food1.VitC*3 + Food2.VitC*2.5,
+		VitE:       Food1.VitE*3 + Food2.VitE*2.5,
+		Items:      []core.Ingredient{{ID: 1, Amount: 300}, {ID: 2, Amount: 250}},
 	}
 }
 
 const (
-	Recipe0Json = `{"name":"","items":[],"id":42,"size":1,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":0,"fat":0,"carb":0,"prot":0}`
-	Recipe1Json = `{"name":"Banana Pie","items":[{"id":2,"amount":150}],"id":1,"size":1,"flags":3,"preptime":0,"cooktime":0,"misctime":0,"kcal":139.5,"fat":0.3,"carb":30,"prot":1.5}`
-	Recipe2Json = `{"name":"Fruit Cake","items":[{"id":1,"amount":300},{"id":2,"amount":250}],"id":2,"size":3,"flags":3,"preptime":0,"cooktime":0,"misctime":0,"kcal":394.5,"fat":0,"carb":0,"prot":0}`
+	Recipe0Json = `{"name":"","items":[],"id":42,"size":1,"flags":0,"preptime":0,"cooktime":0,"misctime":0,"kcal":0,"fat":0,"fatsat":0,"fato3":0,"fato6":0,"carb":0,"sug":0,"fruc":0,"gluc":0,"suc":0,"fib":0,"prot":0,"salt":0,"pot":0,"chl":0,"sod":0,"calc":0,"phos":0,"mag":0,"iron":0,"zinc":0,"mang":0,"cop":0,"iod":0,"chr":0,"mol":0,"sel":0,"vita":0,"vitb1":0,"vitb2":0,"vitb3":0,"vitb5":0,"vitb6":0,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0,"vitd":0,"vite":0,"vitk":0}`
+	Recipe1Json = `{"name":"Banana Pie","items":[{"id":2,"amount":150}],"id":1,"size":1,"flags":3,"preptime":0,"cooktime":0,"misctime":0,"kcal":139.5,"fat":0.3,"fatsat":0,"fato3":0,"fato6":0,"carb":30,"sug":25.5,"fruc":15,"gluc":6,"suc":4.5,"fib":3,"prot":1.5,"salt":0,"pot":550.5,"chl":163.5,"sod":1.5,"calc":10.5,"phos":33,"mag":45,"iron":0.6,"zinc":0.3,"mang":0.45000002,"cop":0.15,"iod":0.0045,"chr":0,"mol":0,"sel":0,"vita":0.015,"vitb1":0.06,"vitb2":0.089999996,"vitb3":0,"vitb5":0,"vitb6":0.54,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":16.5,"vitd":0,"vite":0.40500003,"vitk":0}`
+	Recipe2Json = `{"name":"Fruit Cake","items":[{"id":1,"amount":300},{"id":2,"amount":250}],"id":2,"size":3,"flags":3,"preptime":0,"cooktime":0,"misctime":0,"kcal":394.5,"fat":0.8,"fatsat":0,"fato3":0,"fato6":0,"carb":93.2,"sug":73.4,"fruc":40,"gluc":19,"suc":14.4,"fib":11,"prot":3.4,"salt":0,"pot":1274.5,"chl":279.1,"sod":5.5,"calc":33.4,"phos":88,"mag":90,"iron":1.6,"zinc":0.8,"mang":0.75,"cop":0.55,"iod":0.0315,"chr":0,"mol":0,"sel":0,"vita":0.055,"vitb1":0.22,"vitb2":0.23999998,"vitb3":0,"vitb5":0,"vitb6":1.2,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":63.5,"vitd":0,"vite":2.145,"vitk":0}`
 )
 
 var (

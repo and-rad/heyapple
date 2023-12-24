@@ -390,7 +390,29 @@ func TestSaveIngredient_Execute(t *testing.T) {
 				r.KCal = mock.Food2.KCal * 2
 				r.Fat = mock.Food2.Fat * 2
 				r.Carbs = mock.Food2.Carbs * 2
+				r.Sugar = mock.Food2.Sugar * 2
+				r.Fructose = mock.Food2.Fructose * 2
+				r.Glucose = mock.Food2.Glucose * 2
+				r.Sucrose = mock.Food2.Sucrose * 2
 				r.Protein = mock.Food2.Protein * 2
+				r.Fiber = mock.Food2.Fiber * 2
+				r.Iron = mock.Food2.Iron * 2
+				r.Zinc = mock.Food2.Zinc * 2
+				r.Magnesium = mock.Food2.Magnesium * 2
+				r.Chlorine = mock.Food2.Chlorine * 2
+				r.Sodium = mock.Food2.Sodium * 2
+				r.Calcium = mock.Food2.Calcium * 2
+				r.Potassium = mock.Food2.Potassium * 2
+				r.Phosphorus = mock.Food2.Phosphorus * 2
+				r.Copper = mock.Food2.Copper * 2
+				r.Iodine = mock.Food2.Iodine * 2
+				r.Manganse = mock.Food2.Manganse * 2
+				r.VitA = mock.Food2.VitA * 2
+				r.VitB1 = mock.Food2.VitB1 * 2
+				r.VitB2 = mock.Food2.VitB2 * 2
+				r.VitB6 = mock.Food2.VitB6 * 2
+				r.VitC = mock.Food2.VitC * 2
+				r.VitE = mock.Food2.VitE * 2
 				return r
 			}(),
 		},
@@ -403,7 +425,29 @@ func TestSaveIngredient_Execute(t *testing.T) {
 				r.KCal = mock.Food2.KCal * 2.73
 				r.Fat = mock.Food2.Fat * 2.73
 				r.Carbs = mock.Food2.Carbs * 2.73
+				r.Sugar = mock.Food2.Sugar * 2.73
+				r.Fructose = mock.Food2.Fructose * 2.73
+				r.Glucose = mock.Food2.Glucose * 2.73
+				r.Sucrose = mock.Food2.Sucrose * 2.73
 				r.Protein = mock.Food2.Protein * 2.73
+				r.Fiber = mock.Food2.Fiber * 2.73
+				r.Iron = mock.Food2.Iron * 2.73
+				r.Zinc = mock.Food2.Zinc * 2.73
+				r.Magnesium = mock.Food2.Magnesium * 2.73
+				r.Chlorine = mock.Food2.Chlorine * 2.73
+				r.Sodium = mock.Food2.Sodium * 2.73
+				r.Calcium = mock.Food2.Calcium * 2.73
+				r.Potassium = mock.Food2.Potassium * 2.73
+				r.Phosphorus = mock.Food2.Phosphorus * 2.73
+				r.Copper = mock.Food2.Copper * 2.73
+				r.Iodine = mock.Food2.Iodine * 2.73
+				r.Manganse = mock.Food2.Manganse * 2.73
+				r.VitA = mock.Food2.VitA * 2.73
+				r.VitB1 = mock.Food2.VitB1 * 2.73
+				r.VitB2 = mock.Food2.VitB2 * 2.73
+				r.VitB6 = mock.Food2.VitB6 * 2.73
+				r.VitC = mock.Food2.VitC * 2.73
+				r.VitE = mock.Food2.VitE * 2.73
 				return r
 			}(),
 		},
@@ -416,7 +460,29 @@ func TestSaveIngredient_Execute(t *testing.T) {
 				r.KCal += mock.Food1.KCal
 				r.Fat += mock.Food1.Fat
 				r.Carbs += mock.Food1.Carbs
+				r.Sugar += mock.Food1.Sugar
+				r.Fructose += mock.Food1.Fructose
+				r.Glucose += mock.Food1.Glucose
+				r.Sucrose += mock.Food1.Sucrose
 				r.Protein += mock.Food1.Protein
+				r.Fiber += mock.Food1.Fiber
+				r.Iron += mock.Food1.Iron
+				r.Zinc += mock.Food1.Zinc
+				r.Magnesium += mock.Food1.Magnesium
+				r.Chlorine += mock.Food1.Chlorine
+				r.Sodium += mock.Food1.Sodium
+				r.Calcium += mock.Food1.Calcium
+				r.Potassium += mock.Food1.Potassium
+				r.Phosphorus += mock.Food1.Phosphorus
+				r.Copper += mock.Food1.Copper
+				r.Iodine += mock.Food1.Iodine
+				r.Manganse += mock.Food1.Manganse
+				r.VitA += mock.Food1.VitA
+				r.VitB1 += mock.Food1.VitB1
+				r.VitB2 += mock.Food1.VitB2
+				r.VitB6 += mock.Food1.VitB6
+				r.VitC += mock.Food1.VitC
+				r.VitE += mock.Food1.VitE
 				return r
 			}(),
 		},

@@ -223,10 +223,49 @@ func (c *SaveIngredient) Execute(db DB) error {
 		if f, err := db.Food(item.ID); err == nil {
 			amount := item.Amount * 0.01
 			rec.Flags |= f.Flags
-			rec.KCal += f.KCal * amount
-			rec.Fat += f.Fat * amount
-			rec.Carbs += f.Carbs * amount
-			rec.Protein += f.Protein * amount
+
+			rec.KCal += amount * f.KCal
+			rec.Fat += amount * f.Fat
+			rec.FatSat += amount * f.FatSat
+			rec.FatO3 += amount * f.FatO3
+			rec.FatO6 += amount * f.FatO6
+			rec.Carbs += amount * f.Carbs
+			rec.Sugar += amount * f.Sugar
+			rec.Fructose += amount * f.Fructose
+			rec.Glucose += amount * f.Glucose
+			rec.Sucrose += amount * f.Sucrose
+			rec.Fiber += amount * f.Fiber
+			rec.Protein += amount * f.Protein
+			rec.Salt += amount * f.Salt
+
+			rec.Potassium += amount * f.Potassium
+			rec.Chlorine += amount * f.Chlorine
+			rec.Sodium += amount * f.Sodium
+			rec.Calcium += amount * f.Calcium
+			rec.Phosphorus += amount * f.Phosphorus
+			rec.Magnesium += amount * f.Magnesium
+			rec.Iron += amount * f.Iron
+			rec.Zinc += amount * f.Zinc
+			rec.Manganse += amount * f.Manganse
+			rec.Copper += amount * f.Copper
+			rec.Iodine += amount * f.Iodine
+			rec.Chromium += amount * f.Chromium
+			rec.Molybdenum += amount * f.Molybdenum
+			rec.Selenium += amount * f.Selenium
+
+			rec.VitA += amount * f.VitA
+			rec.VitB1 += amount * f.VitB1
+			rec.VitB2 += amount * f.VitB2
+			rec.VitB3 += amount * f.VitB3
+			rec.VitB5 += amount * f.VitB5
+			rec.VitB6 += amount * f.VitB6
+			rec.VitB7 += amount * f.VitB7
+			rec.VitB9 += amount * f.VitB9
+			rec.VitB12 += amount * f.VitB12
+			rec.VitC += amount * f.VitC
+			rec.VitD += amount * f.VitD
+			rec.VitE += amount * f.VitE
+			rec.VitK += amount * f.VitK
 		}
 	}
 

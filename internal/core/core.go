@@ -180,10 +180,48 @@ type Recipe struct {
 	CookTime int `json:"cooktime"`
 	MiscTime int `json:"misctime"`
 
-	KCal    float32 `json:"kcal"`
-	Fat     float32 `json:"fat"`
-	Carbs   float32 `json:"carb"`
-	Protein float32 `json:"prot"`
+	KCal     float32 `json:"kcal"`
+	Fat      float32 `json:"fat"`
+	FatSat   float32 `json:"fatsat"`
+	FatO3    float32 `json:"fato3"`
+	FatO6    float32 `json:"fato6"`
+	Carbs    float32 `json:"carb"`
+	Sugar    float32 `json:"sug"`
+	Fructose float32 `json:"fruc"`
+	Glucose  float32 `json:"gluc"`
+	Sucrose  float32 `json:"suc"`
+	Fiber    float32 `json:"fib"`
+	Protein  float32 `json:"prot"`
+	Salt     float32 `json:"salt"`
+
+	Potassium  float32 `json:"pot"`
+	Chlorine   float32 `json:"chl"`
+	Sodium     float32 `json:"sod"`
+	Calcium    float32 `json:"calc"`
+	Phosphorus float32 `json:"phos"`
+	Magnesium  float32 `json:"mag"`
+	Iron       float32 `json:"iron"`
+	Zinc       float32 `json:"zinc"`
+	Manganse   float32 `json:"mang"`
+	Copper     float32 `json:"cop"`
+	Iodine     float32 `json:"iod"`
+	Chromium   float32 `json:"chr"`
+	Molybdenum float32 `json:"mol"`
+	Selenium   float32 `json:"sel"`
+
+	VitA   float32 `json:"vita"`
+	VitB1  float32 `json:"vitb1"`
+	VitB2  float32 `json:"vitb2"`
+	VitB3  float32 `json:"vitb3"`
+	VitB5  float32 `json:"vitb5"`
+	VitB6  float32 `json:"vitb6"`
+	VitB7  float32 `json:"vitb7"`
+	VitB9  float32 `json:"vitb9"`
+	VitB12 float32 `json:"vitb12"`
+	VitC   float32 `json:"vitc"`
+	VitD   float32 `json:"vitd"`
+	VitE   float32 `json:"vite"`
+	VitK   float32 `json:"vitk"`
 }
 
 func NewRecipe(id int) Recipe {

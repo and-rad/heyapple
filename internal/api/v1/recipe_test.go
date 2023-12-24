@@ -491,7 +491,29 @@ func TestSaveIngredient(t *testing.T) {
 				r.KCal += mock.Food2.KCal * 0.5
 				r.Fat += mock.Food2.Fat * 0.5
 				r.Carbs += mock.Food2.Carbs * 0.5
+				r.Sugar += mock.Food2.Sugar * 0.5
+				r.Fructose += mock.Food2.Fructose * 0.5
+				r.Glucose += mock.Food2.Glucose * 0.5
+				r.Sucrose += mock.Food2.Sucrose * 0.5
 				r.Protein += mock.Food2.Protein * 0.5
+				r.Fiber += mock.Food2.Fiber * 0.5
+				r.Iron += mock.Food2.Iron * 0.5
+				r.Zinc += mock.Food2.Zinc * 0.5
+				r.Magnesium += mock.Food2.Magnesium * 0.5
+				r.Chlorine += mock.Food2.Chlorine * 0.5
+				r.Sodium += mock.Food2.Sodium * 0.5
+				r.Calcium += mock.Food2.Calcium * 0.5
+				r.Potassium += mock.Food2.Potassium * 0.5
+				r.Phosphorus += mock.Food2.Phosphorus * 0.5
+				r.Copper += mock.Food2.Copper * 0.5
+				r.Iodine += mock.Food2.Iodine * 0.5
+				r.Manganse += mock.Food2.Manganse * 0.5
+				r.VitA += mock.Food2.VitA * 0.5
+				r.VitB1 += mock.Food2.VitB1 * 0.5
+				r.VitB2 += mock.Food2.VitB2 * 0.5
+				r.VitB6 += mock.Food2.VitB6 * 0.5
+				r.VitC += mock.Food2.VitC * 0.5
+				r.VitE += mock.Food2.VitE * 0.5
 				return r
 			}(),
 		},
@@ -519,7 +541,29 @@ func TestSaveIngredient(t *testing.T) {
 				r.KCal = mock.Food2.KCal * 2
 				r.Fat = mock.Food2.Fat * 2
 				r.Carbs = mock.Food2.Carbs * 2
+				r.Sugar = mock.Food2.Sugar * 2
+				r.Fructose = mock.Food2.Fructose * 2
+				r.Glucose = mock.Food2.Glucose * 2
+				r.Sucrose = mock.Food2.Sucrose * 2
 				r.Protein = mock.Food2.Protein * 2
+				r.Fiber = mock.Food2.Fiber * 2
+				r.Iron = mock.Food2.Iron * 2
+				r.Zinc = mock.Food2.Zinc * 2
+				r.Magnesium = mock.Food2.Magnesium * 2
+				r.Chlorine = mock.Food2.Chlorine * 2
+				r.Sodium = mock.Food2.Sodium * 2
+				r.Calcium = mock.Food2.Calcium * 2
+				r.Potassium = mock.Food2.Potassium * 2
+				r.Phosphorus = mock.Food2.Phosphorus * 2
+				r.Copper = mock.Food2.Copper * 2
+				r.Iodine = mock.Food2.Iodine * 2
+				r.Manganse = mock.Food2.Manganse * 2
+				r.VitA = mock.Food2.VitA * 2
+				r.VitB1 = mock.Food2.VitB1 * 2
+				r.VitB2 = mock.Food2.VitB2 * 2
+				r.VitB6 = mock.Food2.VitB6 * 2
+				r.VitC = mock.Food2.VitC * 2
+				r.VitE = mock.Food2.VitE * 2
 				return r
 			}(),
 		},

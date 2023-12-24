@@ -162,8 +162,8 @@
 			"vitc": "Vitamin C",
 			"vitd": "Vitamin D",
 			"vite": "Vitamin E",
-			"zinc": "Zinc",
-			"vitk": "Vitamin K"
+			"vitk": "Vitamin K",
+			"zinc": "Zinc"
 		},
 		"getlist": {
 			"err400": "Malformed or missing input data.",

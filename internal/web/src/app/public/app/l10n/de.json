@@ -162,8 +162,8 @@
 			"vitc": "Vitamin C",
 			"vitd": "Vitamin D",
 			"vite": "Vitamin E",
-			"zinc": "Zink",
-			"vitk": "Vitamin K"
+			"vitk": "Vitamin K",
+			"zinc": "Zink"
 		},
 		"getlist": {
 			"err400": "Fehlerhafte oder fehlende Eingabe.",

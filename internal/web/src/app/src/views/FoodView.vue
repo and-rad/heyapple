@@ -213,8 +213,7 @@ function onSort(evt) {
 							unit="cal"
 							min="0"
 							max="900"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fat')"
 							@input="slotProps.confirm"
@@ -222,8 +221,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="100"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.carbs')"
 							@input="slotProps.confirm"
@@ -231,8 +229,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="100"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.protein')"
 							@input="slotProps.confirm"
@@ -240,8 +237,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="89"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fiber')"
 							@input="slotProps.confirm"
@@ -249,8 +245,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="71"
-							frac="0"
-						/>
+							frac="0" />
 					</fieldset>
 					<fieldset>
 						<legend>{{ t("aria.headmacro2") }}</legend>
@@ -261,8 +256,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="83"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fato3')"
 							@input="slotProps.confirm"
@@ -270,8 +264,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="54"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fato6')"
 							@input="slotProps.confirm"
@@ -279,8 +272,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="70"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.sugar')"
 							@input="slotProps.confirm"
@@ -288,8 +280,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="100"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fruc')"
 							@input="slotProps.confirm"
@@ -297,8 +288,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="56"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.gluc')"
 							@input="slotProps.confirm"
@@ -306,8 +296,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="36"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.suc')"
 							@input="slotProps.confirm"
@@ -315,8 +304,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="100"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.salt')"
 							@input="slotProps.confirm"
@@ -324,8 +312,7 @@ function onSort(evt) {
 							unit="g"
 							min="0"
 							max="100"
-							frac="0"
-						/>
+							frac="0" />
 					</fieldset>
 					<fieldset>
 						<legend>{{ t("aria.headvits") }}</legend>
@@ -336,8 +323,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="30"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb1')"
 							@input="slotProps.confirm"
@@ -345,8 +331,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="24"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb2')"
 							@input="slotProps.confirm"
@@ -354,8 +339,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="18"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb3')"
 							@input="slotProps.confirm"
@@ -363,8 +347,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="86"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.vitb5')"
 							@input="slotProps.confirm"
@@ -372,8 +355,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="30"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb6')"
 							@input="slotProps.confirm"
@@ -381,8 +363,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="8"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb7')"
 							@input="slotProps.confirm"
@@ -390,8 +371,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="0.2"
-							frac="2"
-						/>
+							frac="2" />
 						<Slider
 							:label="t('food.vitb9')"
 							@input="slotProps.confirm"
@@ -399,8 +379,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="0.6"
-							frac="2"
-						/>
+							frac="2" />
 						<Slider
 							:label="t('food.vitb12')"
 							@input="slotProps.confirm"
@@ -408,8 +387,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="0.1"
-							frac="2"
-						/>
+							frac="2" />
 						<Slider
 							:label="t('food.vitc')"
 							@input="slotProps.confirm"
@@ -417,8 +395,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="210"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.vitd')"
 							@input="slotProps.confirm"
@@ -426,8 +403,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="0.04"
-							frac="3"
-						/>
+							frac="3" />
 						<Slider
 							:label="t('food.vite')"
 							@input="slotProps.confirm"
@@ -435,8 +411,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="45"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.vitk')"
 							@input="slotProps.confirm"
@@ -444,8 +419,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="0.9"
-							frac="2"
-						/>
+							frac="2" />
 					</fieldset>
 					<fieldset>
 						<legend>{{ t("aria.headminerals") }}</legend>
@@ -456,8 +430,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="1200"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.pot')"
 							@input="slotProps.confirm"
@@ -465,8 +438,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="1800"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.sod')"
 							@input="slotProps.confirm"
@@ -474,8 +446,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="5000"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.mag')"
 							@input="slotProps.confirm"
@@ -483,8 +454,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="550"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.iron')"
 							@input="slotProps.confirm"
@@ -492,8 +462,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="35"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.zinc')"
 							@input="slotProps.confirm"
@@ -501,8 +470,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="100"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.chl')"
 							@input="slotProps.confirm"
@@ -510,8 +478,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="850"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.phos')"
 							@input="slotProps.confirm"
@@ -519,8 +486,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="1200"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.mang')"
 							@input="slotProps.confirm"
@@ -528,8 +494,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="60"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.cop')"
 							@input="slotProps.confirm"
@@ -537,8 +502,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="16"
-							frac="2"
-						/>
+							frac="2" />
 						<Slider
 							:label="t('food.iod')"
 							@input="slotProps.confirm"
@@ -546,8 +510,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="3"
-							frac="3"
-						/>
+							frac="3" />
 						<!--<Slider
 							:label="t('food.chr')"
 							@input="slotProps.confirm"
@@ -573,8 +536,7 @@ function onSort(evt) {
 							unit="mg"
 							min="0"
 							max="0.3"
-							frac="3"
-						/>
+							frac="3" />
 					</fieldset>
 				</Search>
 			</section>
@@ -601,8 +563,7 @@ function onSort(evt) {
 					class="icon async"
 					:disabled="disableSave"
 					@click="onEditMode"
-					v-if="perms.canCreateFood || perms.canEditFood"
-				>
+					v-if="perms.canCreateFood || perms.canEditFood">
 					<EditImage v-if="!editMode" />
 					<SaveImage v-if="editMode" />
 				</button>
@@ -624,8 +585,7 @@ function onSort(evt) {
 						:placeholder="t('food.hintrec')"
 						:items="recipes"
 						:disabled="disableToRecipe"
-						@confirm="addToRecipe"
-					/>
+						@confirm="addToRecipe" />
 				</fieldset>
 				<fieldset>
 					<label>{{ t("food.todiary") }}</label>
@@ -634,8 +594,7 @@ function onSort(evt) {
 						:time="now"
 						:date="today"
 						:disabled="disableToDiary"
-						@confirm="addToDiary"
-					/>
+						@confirm="addToDiary" />
 				</fieldset>
 			</section>
 			<hr />
@@ -660,6 +619,11 @@ function onSort(evt) {
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
+								<label>{{ t("food.sugar") }}</label>
+								<input type="number" :value="current.sug" name="sug" @change="onInput" />
+								<span class="unit">{{ t("unit.g") }}</span>
+							</div>
+							<div>
 								<label>{{ t("food.protein") }}</label>
 								<input type="number" :value="current.prot" name="prot" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
@@ -667,6 +631,11 @@ function onSort(evt) {
 							<div>
 								<label>{{ t("food.fiber") }}</label>
 								<input type="number" :value="current.fib" name="fib" @change="onInput" />
+								<span class="unit">{{ t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.salt") }}</label>
+								<input type="number" :value="current.salt" name="salt" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 						</fieldset>
@@ -687,14 +656,156 @@ function onSort(evt) {
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ t("food.sugar") }}</label>
-								<input type="number" :value="current.sug" name="sug" @change="onInput" />
+								<label>{{ t("food.fruc") }}</label>
+								<input type="number" :value="current.fruc" name="fruc" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
-								<label>{{ t("food.salt") }}</label>
-								<input type="number" :value="current.salt" name="salt" @change="onInput" />
+								<label>{{ t("food.gluc") }}</label>
+								<input type="number" :value="current.gluc" name="gluc" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.suc") }}</label>
+								<input type="number" :value="current.suc" name="suc" @change="onInput" />
+								<span class="unit">{{ t("unit.g") }}</span>
+							</div>
+						</fieldset>
+					</div>
+					<div class="nutrient-block">
+						<fieldset :disabled="!editMode" class="col50">
+							<div>
+								<label>{{ t("food.vita") }}</label>
+								<input type="number" :value="current.vita" name="vita" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitb1") }}</label>
+								<input type="number" :value="current.vitb1" name="vitb1" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitb2") }}</label>
+								<input type="number" :value="current.vitb2" name="vitb2" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitb3") }}</label>
+								<input type="number" :value="current.vitb3" name="vitb3" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitb5") }}</label>
+								<input type="number" :value="current.vitb5" name="vitb5" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitb6") }}</label>
+								<input type="number" :value="current.vitb6" name="vitb6" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitb7") }}</label>
+								<input type="number" :value="current.vitb7" name="vitb7" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+						</fieldset>
+						<fieldset :disabled="!editMode" class="col50">
+							<div>
+								<label>{{ t("food.vitb9") }}</label>
+								<input type="number" :value="current.vitb9" name="vitb9" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitb12") }}</label>
+								<input type="number" :value="current.vitb12" name="vitb12" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitc") }}</label>
+								<input type="number" :value="current.vitc" name="vitc" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitd") }}</label>
+								<input type="number" :value="current.vitd" name="vitd" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vite") }}</label>
+								<input type="number" :value="current.vite" name="vite" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.vitk") }}</label>
+								<input type="number" :value="current.vitk" name="vitk" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+						</fieldset>
+					</div>
+					<div class="nutrient-block">
+						<fieldset :disabled="!editMode" class="col50">
+							<div>
+								<label>{{ t("food.calc") }}</label>
+								<input type="number" :value="current.calc" name="calc" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.pot") }}</label>
+								<input type="number" :value="current.pot" name="pot" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.sod") }}</label>
+								<input type="number" :value="current.sod" name="sod" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.mag") }}</label>
+								<input type="number" :value="current.mag" name="mag" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.iron") }}</label>
+								<input type="number" :value="current.iron" name="iron" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.zinc") }}</label>
+								<input type="number" :value="current.zinc" name="zinc" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+						</fieldset>
+						<fieldset :disabled="!editMode" class="col50">
+							<div>
+								<label>{{ t("food.chl") }}</label>
+								<input type="number" :value="current.chl" name="chl" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.phos") }}</label>
+								<input type="number" :value="current.phos" name="phos" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.mang") }}</label>
+								<input type="number" :value="current.mang" name="mang" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.cop") }}</label>
+								<input type="number" :value="current.cop" name="cop" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.iod") }}</label>
+								<input type="number" :value="current.iod" name="iod" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div>
+								<label>{{ t("food.sel") }}</label>
+								<input type="number" :value="current.sel" name="sel" @change="onInput" />
+								<span class="unit">{{ t("unit.mg") }}</span>
 							</div>
 						</fieldset>
 					</div>

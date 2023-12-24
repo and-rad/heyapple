@@ -291,8 +291,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="kcal"
 							unit="cal"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fat')"
 							:min="minSearchAttr('fat')"
@@ -300,8 +299,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="fat"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.carbs')"
 							:min="minSearchAttr('carb')"
@@ -309,8 +307,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="carb"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.protein')"
 							:min="minSearchAttr('prot')"
@@ -318,8 +315,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="prot"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fiber')"
 							:min="minSearchAttr('fib')"
@@ -327,8 +323,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="fib"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 					</fieldset>
 					<fieldset>
 						<legend>{{ t("aria.headmacro2") }}</legend>
@@ -339,8 +334,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="fatsat"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fato3')"
 							:min="minSearchAttr('fato3')"
@@ -348,8 +342,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="fato3"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fato6')"
 							:min="minSearchAttr('fato6')"
@@ -357,8 +350,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="fato6"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.sugar')"
 							:min="minSearchAttr('sug')"
@@ -366,8 +358,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="sug"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.fruc')"
 							:min="minSearchAttr('fruc')"
@@ -375,8 +366,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="fruc"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.gluc')"
 							:min="minSearchAttr('gluc')"
@@ -384,8 +374,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="gluc"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.suc')"
 							:min="minSearchAttr('suc')"
@@ -393,8 +382,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="suc"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.salt')"
 							:min="minSearchAttr('salt')"
@@ -402,8 +390,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="salt"
 							unit="g"
-							frac="0"
-						/>
+							frac="0" />
 					</fieldset>
 					<fieldset>
 						<legend>{{ t("aria.headvits") }}</legend>
@@ -414,8 +401,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vita"
 							unit="mg"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb1')"
 							:min="minSearchAttr('vitb1')"
@@ -423,8 +409,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitb1"
 							unit="mg"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb2')"
 							:min="minSearchAttr('vitb2')"
@@ -432,8 +417,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitb2"
 							unit="mg"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb3')"
 							:min="minSearchAttr('vitb3')"
@@ -441,8 +425,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitb3"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.vitb5')"
 							:min="minSearchAttr('vitb5')"
@@ -450,8 +433,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitb5"
 							unit="mg"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb6')"
 							:min="minSearchAttr('vitb6')"
@@ -459,8 +441,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitb6"
 							unit="mg"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.vitb7')"
 							:min="minSearchAttr('vitb7')"
@@ -468,8 +449,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitb7"
 							unit="mg"
-							frac="2"
-						/>
+							frac="2" />
 						<Slider
 							:label="t('food.vitb9')"
 							:min="minSearchAttr('vitb9')"
@@ -477,8 +457,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitb9"
 							unit="mg"
-							frac="2"
-						/>
+							frac="2" />
 						<Slider
 							:label="t('food.vitb12')"
 							:min="minSearchAttr('vitb12')"
@@ -486,8 +465,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitb12"
 							unit="mg"
-							frac="2"
-						/>
+							frac="2" />
 						<Slider
 							:label="t('food.vitc')"
 							:min="minSearchAttr('vitc')"
@@ -495,8 +473,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitc"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.vitd')"
 							:min="minSearchAttr('vitd')"
@@ -504,8 +481,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitd"
 							unit="mg"
-							frac="3"
-						/>
+							frac="3" />
 						<Slider
 							:label="t('food.vite')"
 							:min="minSearchAttr('vite')"
@@ -513,8 +489,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vite"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.vitk')"
 							:min="minSearchAttr('vitk')"
@@ -522,8 +497,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="vitk"
 							unit="mg"
-							frac="2"
-						/>
+							frac="2" />
 					</fieldset>
 					<fieldset>
 						<legend>{{ t("aria.headminerals") }}</legend>
@@ -534,8 +508,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="calc"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.pot')"
 							:min="minSearchAttr('pot')"
@@ -543,8 +516,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="pot"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.sod')"
 							:min="minSearchAttr('sod')"
@@ -552,8 +524,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="sod"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.mag')"
 							:min="minSearchAttr('mag')"
@@ -561,8 +532,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="mag"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.iron')"
 							:min="minSearchAttr('iron')"
@@ -570,8 +540,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="iron"
 							unit="mg"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.zinc')"
 							:min="minSearchAttr('zinc')"
@@ -579,8 +548,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="zinc"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.chl')"
 							:min="minSearchAttr('chl')"
@@ -588,8 +556,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="chl"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.phos')"
 							:min="minSearchAttr('phos')"
@@ -597,8 +564,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="phos"
 							unit="mg"
-							frac="0"
-						/>
+							frac="0" />
 						<Slider
 							:label="t('food.mang')"
 							:min="minSearchAttr('mang')"
@@ -606,8 +572,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="mang"
 							unit="mg"
-							frac="1"
-						/>
+							frac="1" />
 						<Slider
 							:label="t('food.cop')"
 							:min="minSearchAttr('cop')"
@@ -615,8 +580,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="cop"
 							unit="mg"
-							frac="2"
-						/>
+							frac="2" />
 						<Slider
 							:label="t('food.iod')"
 							:min="minSearchAttr('iod')"
@@ -624,8 +588,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="iod"
 							unit="mg"
-							frac="3"
-						/>
+							frac="3" />
 						<!--<Slider
 							:label="t('food.chr')"
 							:min="minSearchAttr('chr')"
@@ -651,8 +614,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							@input="slotProps.confirm"
 							name="sel"
 							unit="mg"
-							frac="3"
-						/>
+							frac="3" />
 					</fieldset>
 				</Search>
 			</section>
@@ -701,8 +663,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 						:time="now"
 						:date="today"
 						:disabled="disableToDiary"
-						@confirm="addToDiary"
-					/>
+						@confirm="addToDiary" />
 				</fieldset>
 			</section>
 			<hr />
@@ -726,17 +687,199 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							<span>{{ perServing(current.fat, 1) }}</span>
 							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
-					</div>
-					<div class="col50">
 						<div>
 							<label>{{ t("food.carbs2") }}</label>
 							<span>{{ perServing(current.carb, 1) }}</span>
 							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
 						<div>
+							<label>{{ t("food.sugar") }}</label>
+							<span>{{ perServing(current.sug, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+						<div>
 							<label>{{ t("food.protein") }}</label>
 							<span>{{ perServing(current.prot, 1) }}</span>
 							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.fiber") }}</label>
+							<span>{{ perServing(current.fib, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.salt") }}</label>
+							<span>{{ perServing(current.salt, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+					</div>
+					<div class="col50">
+						<div>
+							<label>{{ t("food.fatsat") }}</label>
+							<span>{{ perServing(current.fatsat, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.fato3") }}</label>
+							<span>{{ perServing(current.fato3, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.fato6") }}</label>
+							<span>{{ perServing(current.fato6, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.fruc") }}</label>
+							<span>{{ perServing(current.fruc, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.gluc") }}</label>
+							<span>{{ perServing(current.gluc, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.suc") }}</label>
+							<span>{{ perServing(current.suc, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="nutrient-block">
+					<div class="col50">
+						<div>
+							<label>{{ t("food.vita") }}</label>
+							<span>{{ perServing(current.vita, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitb1") }}</label>
+							<span>{{ perServing(current.vitb1, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitb2") }}</label>
+							<span>{{ perServing(current.vitb2, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitb3") }}</label>
+							<span>{{ perServing(current.vitb3, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitb5") }}</label>
+							<span>{{ perServing(current.vitb5, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitb6") }}</label>
+							<span>{{ perServing(current.vitb6, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitb7") }}</label>
+							<span>{{ perServing(current.vitb7, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+					</div>
+					<div class="col50">
+						<div>
+							<label>{{ t("food.vitb9") }}</label>
+							<span>{{ perServing(current.vitb9, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitb12") }}</label>
+							<span>{{ perServing(current.vitb12, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitc") }}</label>
+							<span>{{ perServing(current.vitc, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitd") }}</label>
+							<span>{{ perServing(current.vitd, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vite") }}</label>
+							<span>{{ perServing(current.vite, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.vitk") }}</label>
+							<span>{{ perServing(current.vitk, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="nutrient-block">
+					<div class="col50">
+						<div>
+							<label>{{ t("food.calc") }}</label>
+							<span>{{ perServing(current.calc, 1) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.pot") }}</label>
+							<span>{{ perServing(current.pot, 1) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.sod") }}</label>
+							<span>{{ perServing(current.sod, 1) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.mag") }}</label>
+							<span>{{ perServing(current.mag, 1) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.iron") }}</label>
+							<span>{{ perServing(current.iron, 2) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.zinc") }}</label>
+							<span>{{ perServing(current.zinc, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+					</div>
+					<div class="col50">
+						<div>
+							<label>{{ t("food.chl") }}</label>
+							<span>{{ perServing(current.chl, 1) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.phos") }}</label>
+							<span>{{ perServing(current.phos, 1) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.mang") }}</label>
+							<span>{{ perServing(current.mang, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.cop") }}</label>
+							<span>{{ perServing(current.cop, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.iod") }}</label>
+							<span>{{ perServing(current.iod, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div>
+							<label>{{ t("food.sel") }}</label>
+							<span>{{ perServing(current.sel, 3) }}</span>
+							<span class="unit">{{ t("unit.mg") }}</span>
 						</div>
 					</div>
 				</div>
@@ -753,8 +896,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 								name="size"
 								form="form-recipe"
 								:value="current.size"
-								@change="onInput"
-							/>
+								@change="onInput" />
 							<label>{{ t("recipe.size", current.size) }}</label>
 						</div>
 					</fieldset>
@@ -764,8 +906,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							<input
 								type="number"
 								disabled
-								:value="current.preptime + current.cooktime + current.misctime"
-							/>
+								:value="current.preptime + current.cooktime + current.misctime" />
 							<span class="unit">{{ t("unit.min") }}</span>
 						</div>
 						<div>
@@ -775,8 +916,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 								name="preptime"
 								form="form-recipe"
 								:value="current.preptime"
-								@change="onInput"
-							/>
+								@change="onInput" />
 							<span class="unit">{{ t("unit.min") }}</span>
 						</div>
 						<div>
@@ -786,8 +926,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 								name="cooktime"
 								form="form-recipe"
 								:value="current.cooktime"
-								@change="onInput"
-							/>
+								@change="onInput" />
 							<span class="unit">{{ t("unit.min") }}</span>
 						</div>
 						<div>
@@ -797,8 +936,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 								name="misctime"
 								form="form-recipe"
 								:value="current.misctime"
-								@change="onInput"
-							/>
+								@change="onInput" />
 							<span class="unit">{{ t("unit.min") }}</span>
 						</div>
 					</fieldset>

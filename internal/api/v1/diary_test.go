@@ -251,10 +251,10 @@ func TestDiary(t *testing.T) {
 			status:    http.StatusBadRequest,
 		},
 		{ //08// success for day
-			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220301()),
-			params:    httprouter.Params{{Key: "year", Value: "2021"}, {Key: "month", Value: "1"}, {Key: "day", Value: "2"}},
+			db:        mock.NewDB().WithDays(mock.Diary210101(), mock.Diary210102(), mock.Diary220312()),
+			params:    httprouter.Params{{Key: "year", Value: "2022"}, {Key: "month", Value: "3"}, {Key: "day", Value: "12"}},
 			setCookie: true,
-			out:       fmt.Sprintf(`[%s]`, mock.Diary210102Json),
+			out:       fmt.Sprintf(`[%s]`, mock.Diary220312Json),
 			status:    http.StatusOK,
 		},
 	} {

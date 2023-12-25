@@ -20,7 +20,6 @@ package mem
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"sort"
@@ -79,7 +78,7 @@ func (b *backup) load() {
 	defer b.db.mtx.Unlock()
 
 	path := filepath.Join(getConfig().storageDir, storageFile+".json")
-	if data, err := ioutil.ReadFile(path); err == nil {
+	if data, err := os.ReadFile(path); err == nil {
 		var db backupData
 		if err = json.Unmarshal(data, &db); err == nil {
 			b.db.userID = db.UserID
@@ -137,21 +136,97 @@ func (b *backup) load() {
 						day := &b.db.days[k][year][month][i]
 						if day.Date == date {
 							exists = true
-							day.KCal += food.KCal * amount
-							day.Fat += food.Fat * amount
-							day.Carbs += food.Carbs * amount
-							day.Protein += food.Protein * amount
+							day.KCal += amount * food.KCal
+							day.Fat += amount * food.Fat
+							day.FatSat += amount * food.FatSat
+							day.FatO3 += amount * food.FatO3
+							day.FatO6 += amount * food.FatO6
+							day.Carbs += amount * food.Carbs
+							day.Sugar += amount * food.Sugar
+							day.Fructose += amount * food.Fructose
+							day.Glucose += amount * food.Glucose
+							day.Sucrose += amount * food.Sucrose
+							day.Fiber += amount * food.Fiber
+							day.Protein += amount * food.Protein
+							day.Salt += amount * food.Salt
+
+							day.Potassium += amount * food.Potassium
+							day.Chlorine += amount * food.Chlorine
+							day.Sodium += amount * food.Sodium
+							day.Calcium += amount * food.Calcium
+							day.Phosphorus += amount * food.Phosphorus
+							day.Magnesium += amount * food.Magnesium
+							day.Iron += amount * food.Iron
+							day.Zinc += amount * food.Zinc
+							day.Manganse += amount * food.Manganse
+							day.Copper += amount * food.Copper
+							day.Iodine += amount * food.Iodine
+							day.Chromium += amount * food.Chromium
+							day.Molybdenum += amount * food.Molybdenum
+							day.Selenium += amount * food.Selenium
+
+							day.VitA += amount * food.VitA
+							day.VitB1 += amount * food.VitB1
+							day.VitB2 += amount * food.VitB2
+							day.VitB3 += amount * food.VitB3
+							day.VitB5 += amount * food.VitB5
+							day.VitB6 += amount * food.VitB6
+							day.VitB7 += amount * food.VitB7
+							day.VitB9 += amount * food.VitB9
+							day.VitB12 += amount * food.VitB12
+							day.VitC += amount * food.VitC
+							day.VitD += amount * food.VitD
+							day.VitE += amount * food.VitE
+							day.VitK += amount * food.VitK
 							break
 						}
 					}
 
 					if !exists {
 						b.db.days[k][year][month] = append(b.db.days[k][year][month], core.DiaryDay{
-							Date:    date,
-							KCal:    food.KCal * amount,
-							Fat:     food.Fat * amount,
-							Carbs:   food.Carbs * amount,
-							Protein: food.Protein * amount,
+							Date:     date,
+							KCal:     amount * food.KCal,
+							Fat:      amount * food.Fat,
+							FatSat:   amount * food.FatSat,
+							FatO3:    amount * food.FatO3,
+							FatO6:    amount * food.FatO6,
+							Carbs:    amount * food.Carbs,
+							Sugar:    amount * food.Sugar,
+							Fructose: amount * food.Fructose,
+							Glucose:  amount * food.Glucose,
+							Sucrose:  amount * food.Sucrose,
+							Fiber:    amount * food.Fiber,
+							Protein:  amount * food.Protein,
+							Salt:     amount * food.Salt,
+
+							Potassium:  amount * food.Potassium,
+							Chlorine:   amount * food.Chlorine,
+							Sodium:     amount * food.Sodium,
+							Calcium:    amount * food.Calcium,
+							Phosphorus: amount * food.Phosphorus,
+							Magnesium:  amount * food.Magnesium,
+							Iron:       amount * food.Iron,
+							Zinc:       amount * food.Zinc,
+							Manganse:   amount * food.Manganse,
+							Copper:     amount * food.Copper,
+							Iodine:     amount * food.Iodine,
+							Chromium:   amount * food.Chromium,
+							Molybdenum: amount * food.Molybdenum,
+							Selenium:   amount * food.Selenium,
+
+							VitA:   amount * food.VitA,
+							VitB1:  amount * food.VitB1,
+							VitB2:  amount * food.VitB2,
+							VitB3:  amount * food.VitB3,
+							VitB5:  amount * food.VitB5,
+							VitB6:  amount * food.VitB6,
+							VitB7:  amount * food.VitB7,
+							VitB9:  amount * food.VitB9,
+							VitB12: amount * food.VitB12,
+							VitC:   amount * food.VitC,
+							VitD:   amount * food.VitD,
+							VitE:   amount * food.VitE,
+							VitK:   amount * food.VitK,
 						})
 					}
 				}

@@ -350,28 +350,73 @@ func Diary220302() core.DiaryDay {
 
 func Diary220312() core.DiaryDay {
 	return core.DiaryDay{
-		Date:    "2022-03-12",
-		KCal:    Food2.KCal*1.5 + Food1.KCal*0.5,
-		Fat:     Food2.Fat*1.5 + Food1.Fat*0.5,
-		Carbs:   Food2.Carbs*1.5 + Food1.Carbs*0.5,
-		Protein: Food2.Protein*1.5 + Food1.Protein*0.5,
+		Date:       "2022-03-12",
+		KCal:       Food1.KCal*0.5 + Food2.KCal*1.5,
+		Fat:        Food1.Fat*0.5 + Food2.Fat*1.5,
+		Carbs:      Food1.Carbs*0.5 + Food2.Carbs*1.5,
+		Sugar:      Food1.Sugar*0.5 + Food2.Sugar*1.5,
+		Fructose:   Food1.Fructose*0.5 + Food2.Fructose*1.5,
+		Glucose:    Food1.Glucose*0.5 + Food2.Glucose*1.5,
+		Sucrose:    Food1.Sucrose*0.5 + Food2.Sucrose*1.5,
+		Protein:    Food1.Protein*0.5 + Food2.Protein*1.5,
+		Fiber:      Food1.Fiber*0.5 + Food2.Fiber*1.5,
+		Iron:       Food1.Iron*0.5 + Food2.Iron*1.5,
+		Zinc:       Food1.Zinc*0.5 + Food2.Zinc*1.5,
+		Magnesium:  Food1.Magnesium*0.5 + Food2.Magnesium*1.5,
+		Chlorine:   Food1.Chlorine*0.5 + Food2.Chlorine*1.5,
+		Sodium:     Food1.Sodium*0.5 + Food2.Sodium*1.5,
+		Calcium:    Food1.Calcium*0.5 + Food2.Calcium*1.5,
+		Potassium:  Food1.Potassium*0.5 + Food2.Potassium*1.5,
+		Phosphorus: Food1.Phosphorus*0.5 + Food2.Phosphorus*1.5,
+		Copper:     Food1.Copper*0.5 + Food2.Copper*1.5,
+		Iodine:     Food1.Iodine*0.5 + Food2.Iodine*1.5,
+		Manganse:   Food1.Manganse*0.5 + Food2.Manganse*1.5,
+		VitA:       Food1.VitA*0.5 + Food2.VitA*1.5,
+		VitB1:      Food1.VitB1*0.5 + Food2.VitB1*1.5,
+		VitB2:      Food1.VitB2*0.5 + Food2.VitB2*1.5,
+		VitB6:      Food1.VitB6*0.5 + Food2.VitB6*1.5,
+		VitC:       Food1.VitC*0.5 + Food2.VitC*1.5,
+		VitE:       Food1.VitE*0.5 + Food2.VitE*1.5,
 	}
 }
 
 func Diary220313() core.DiaryDay {
 	return core.DiaryDay{
-		Date:    "2022-03-13",
-		KCal:    Food1.KCal * 0.5,
-		Fat:     Food1.Fat * 0.5,
-		Carbs:   Food1.Carbs * 0.5,
-		Protein: Food1.Protein * 0.5,
+		Date:       "2022-03-13",
+		KCal:       Food1.KCal * 0.5,
+		Fat:        Food1.Fat * 0.5,
+		Carbs:      Food1.Carbs * 0.5,
+		Sugar:      Food1.Sugar * 0.5,
+		Fructose:   Food1.Fructose * 0.5,
+		Glucose:    Food1.Glucose * 0.5,
+		Sucrose:    Food1.Sucrose * 0.5,
+		Protein:    Food1.Protein * 0.5,
+		Fiber:      Food1.Fiber * 0.5,
+		Iron:       Food1.Iron * 0.5,
+		Zinc:       Food1.Zinc * 0.5,
+		Magnesium:  Food1.Magnesium * 0.5,
+		Chlorine:   Food1.Chlorine * 0.5,
+		Sodium:     Food1.Sodium * 0.5,
+		Calcium:    Food1.Calcium * 0.5,
+		Potassium:  Food1.Potassium * 0.5,
+		Phosphorus: Food1.Phosphorus * 0.5,
+		Copper:     Food1.Copper * 0.5,
+		Iodine:     Food1.Iodine * 0.5,
+		Manganse:   Food1.Manganse * 0.5,
+		VitA:       Food1.VitA * 0.5,
+		VitB1:      Food1.VitB1 * 0.5,
+		VitB2:      Food1.VitB2 * 0.5,
+		VitB6:      Food1.VitB6 * 0.5,
+		VitC:       Food1.VitC * 0.5,
+		VitE:       Food1.VitE * 0.5,
 	}
 }
 
 const (
-	Diary210101Json = `{"date":"2021-01-01","kcal":0,"fat":0,"carb":0,"prot":0}`
-	Diary210102Json = `{"date":"2021-01-02","kcal":0,"fat":0,"carb":0,"prot":0}`
-	Diary220301Json = `{"date":"2022-03-01","kcal":0,"fat":0,"carb":0,"prot":0}`
+	Diary210101Json = `{"date":"2021-01-01","kcal":0,"fat":0,"fatsat":0,"fato3":0,"fato6":0,"carb":0,"sug":0,"fruc":0,"gluc":0,"suc":0,"fib":0,"prot":0,"salt":0,"pot":0,"chl":0,"sod":0,"calc":0,"phos":0,"mag":0,"iron":0,"zinc":0,"mang":0,"cop":0,"iod":0,"chr":0,"mol":0,"sel":0,"vita":0,"vitb1":0,"vitb2":0,"vitb3":0,"vitb5":0,"vitb6":0,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0,"vitd":0,"vite":0,"vitk":0}`
+	Diary210102Json = `{"date":"2021-01-02","kcal":0,"fat":0,"fatsat":0,"fato3":0,"fato6":0,"carb":0,"sug":0,"fruc":0,"gluc":0,"suc":0,"fib":0,"prot":0,"salt":0,"pot":0,"chl":0,"sod":0,"calc":0,"phos":0,"mag":0,"iron":0,"zinc":0,"mang":0,"cop":0,"iod":0,"chr":0,"mol":0,"sel":0,"vita":0,"vitb1":0,"vitb2":0,"vitb3":0,"vitb5":0,"vitb6":0,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0,"vitd":0,"vite":0,"vitk":0}`
+	Diary220301Json = `{"date":"2022-03-01","kcal":0,"fat":0,"fatsat":0,"fato3":0,"fato6":0,"carb":0,"sug":0,"fruc":0,"gluc":0,"suc":0,"fib":0,"prot":0,"salt":0,"pot":0,"chl":0,"sod":0,"calc":0,"phos":0,"mag":0,"iron":0,"zinc":0,"mang":0,"cop":0,"iod":0,"chr":0,"mol":0,"sel":0,"vita":0,"vitb1":0,"vitb2":0,"vitb3":0,"vitb5":0,"vitb6":0,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":0,"vitd":0,"vite":0,"vitk":0}`
+	Diary220312Json = `{"date":"2022-03-12","kcal":166.5,"fat":0.35000002,"fatsat":0,"fato3":0,"fato6":0,"carb":37.2,"sug":30.65,"fruc":17.5,"gluc":7.5,"suc":5.65,"fib":4,"prot":1.65,"salt":0,"pot":610,"chl":164.6,"sod":2,"calc":13.15,"phos":38.5,"mag":47.5,"iron":0.70000005,"zinc":0.35000002,"mang":0.45000002,"cop":0.2,"iod":0.0085,"chr":0,"mol":0,"sel":0,"vita":0.02,"vitb1":0.08,"vitb2":0.105,"vitb3":0,"vitb5":0,"vitb6":0.59000003,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":22.5,"vitd":0,"vite":0.65000004,"vitk":0}`
 )
 
 func List1() []core.ShopItem {

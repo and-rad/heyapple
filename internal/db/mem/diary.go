@@ -181,10 +181,48 @@ func (db *DB) refreshDiaryDay(id int, date time.Time) {
 	for _, e := range entries {
 		if f, ok := db.food[e.Food.ID]; ok {
 			amount := e.Food.Amount * 0.01
-			day.KCal += f.KCal * amount
-			day.Fat += f.Fat * amount
-			day.Carbs += f.Carbs * amount
-			day.Protein += f.Protein * amount
+			day.KCal += amount * f.KCal
+			day.Fat += amount * f.Fat
+			day.FatSat += amount * f.FatSat
+			day.FatO3 += amount * f.FatO3
+			day.FatO6 += amount * f.FatO6
+			day.Carbs += amount * f.Carbs
+			day.Sugar += amount * f.Sugar
+			day.Fructose += amount * f.Fructose
+			day.Glucose += amount * f.Glucose
+			day.Sucrose += amount * f.Sucrose
+			day.Fiber += amount * f.Fiber
+			day.Protein += amount * f.Protein
+			day.Salt += amount * f.Salt
+
+			day.Potassium += amount * f.Potassium
+			day.Chlorine += amount * f.Chlorine
+			day.Sodium += amount * f.Sodium
+			day.Calcium += amount * f.Calcium
+			day.Phosphorus += amount * f.Phosphorus
+			day.Magnesium += amount * f.Magnesium
+			day.Iron += amount * f.Iron
+			day.Zinc += amount * f.Zinc
+			day.Manganse += amount * f.Manganse
+			day.Copper += amount * f.Copper
+			day.Iodine += amount * f.Iodine
+			day.Chromium += amount * f.Chromium
+			day.Molybdenum += amount * f.Molybdenum
+			day.Selenium += amount * f.Selenium
+
+			day.VitA += amount * f.VitA
+			day.VitB1 += amount * f.VitB1
+			day.VitB2 += amount * f.VitB2
+			day.VitB3 += amount * f.VitB3
+			day.VitB5 += amount * f.VitB5
+			day.VitB6 += amount * f.VitB6
+			day.VitB7 += amount * f.VitB7
+			day.VitB9 += amount * f.VitB9
+			day.VitB12 += amount * f.VitB12
+			day.VitC += amount * f.VitC
+			day.VitD += amount * f.VitD
+			day.VitE += amount * f.VitE
+			day.VitK += amount * f.VitK
 		}
 	}
 

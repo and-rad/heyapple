@@ -21,7 +21,6 @@ package mem
 import (
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -63,7 +62,7 @@ func TestDB_WithBackup(t *testing.T) {
 		time.Sleep(time.Millisecond * 500)
 		db.Close()
 
-		file, _ := ioutil.ReadFile(filepath.Join(data.dir, storageFile+".json"))
+		file, _ := os.ReadFile(filepath.Join(data.dir, storageFile+".json"))
 		if contents := string(file); contents != data.file {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, contents, data.file)
 		}

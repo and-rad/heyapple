@@ -22,7 +22,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"flag"
-	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
@@ -48,7 +47,7 @@ func (c *cli) convert(in, out, format string, cat int) {
 		log.Fatal(err.Error())
 	}
 
-	data, err := ioutil.ReadFile(path)
+	data, err := os.ReadFile(path)
 	if err != nil {
 		log.Fatal(err.Error())
 	}
@@ -85,7 +84,7 @@ func (c *cli) convert(in, out, format string, cat int) {
 	data = bytes.ReplaceAll(data, []byte("[{"), []byte("[\n\t{"))
 	data = bytes.ReplaceAll(data, []byte("}]"), []byte("}\n]"))
 
-	err = ioutil.WriteFile(path, data, 0644)
+	err = os.WriteFile(path, data, 0644)
 	if err != nil {
 		log.Fatal(err.Error())
 	}

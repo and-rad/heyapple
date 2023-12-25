@@ -21,7 +21,6 @@ package mem
 import (
 	"fmt"
 	"io/fs"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -88,13 +87,13 @@ func Test_backup_Run(t *testing.T) {
 
 		(&backup{db: data.db, log: mock.NewLog()}).Run()
 
-		file, _ := ioutil.ReadFile(filepath.Join(data.dir, storageFile+".json"))
+		file, _ := os.ReadFile(filepath.Join(data.dir, storageFile+".json"))
 		if contents := string(file); contents != data.file {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, contents, data.file)
 		}
 
 		now := time.Now().Format("2006-01-02")
-		file, _ = ioutil.ReadFile(filepath.Join(data.dir, backupFile+now+".json"))
+		file, _ = os.ReadFile(filepath.Join(data.dir, backupFile+now+".json"))
 		if contents := string(file); contents != data.file {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, contents, data.file)
 		}
@@ -175,7 +174,7 @@ func Test_backup_save(t *testing.T) {
 		}
 
 		if err == nil {
-			file, err := ioutil.ReadFile(filepath.Join(data.dir, storageFile+".json"))
+			file, err := os.ReadFile(filepath.Join(data.dir, storageFile+".json"))
 			if err != nil {
 				t.Errorf("test case %d: couldn't read storage file", idx)
 			}
@@ -224,7 +223,7 @@ func Test_backup_backUp(t *testing.T) {
 
 		if err == nil {
 			now := time.Now().Format("2006-01-02")
-			file, err := ioutil.ReadFile(filepath.Join(data.dir, backupFile+now+".json"))
+			file, err := os.ReadFile(filepath.Join(data.dir, backupFile+now+".json"))
 			if err != nil {
 				t.Errorf("test case %d: couldn't read storage file", idx)
 			}

@@ -203,8 +203,7 @@ onMounted(() => {
 					v-for="day in currentWeek"
 					:data-date="day.date"
 					:class="{ today: day.today, active: day.active }"
-					@click="calendar.onDay"
-				>
+					@click="calendar.onDay">
 					<PieChart range="360" :value="day.value" :max="prefs.rdi.kcal">
 						<template #details>
 							<span>{{ day.weekday }}</span>
@@ -222,8 +221,7 @@ onMounted(() => {
 					:label="t('food.energy')"
 					:unit="t('unit.cal')"
 					:value="current ? current.kcal : 0"
-					:max="prefs.rdi.kcal"
-				/>
+					:max="prefs.rdi.kcal" />
 				<PieChart
 					class="fat"
 					start="225"
@@ -232,8 +230,7 @@ onMounted(() => {
 					:label="t('food.fat')"
 					:unit="t('unit.g')"
 					:value="current ? current.fat : 0"
-					:max="prefs.rdi.fat"
-				/>
+					:max="prefs.rdi.fat" />
 				<PieChart
 					class="carb"
 					start="225"
@@ -242,8 +239,7 @@ onMounted(() => {
 					:label="t('food.carbs2')"
 					:unit="t('unit.g')"
 					:value="current ? current.carb : 0"
-					:max="prefs.rdi.carb"
-				/>
+					:max="prefs.rdi.carb" />
 				<PieChart
 					class="prot"
 					start="225"
@@ -252,8 +248,109 @@ onMounted(() => {
 					:label="t('food.protein')"
 					:unit="t('unit.g')"
 					:value="current ? current.prot : 0"
-					:max="prefs.rdi.prot"
-				/>
+					:max="prefs.rdi.prot" />
+			</section>
+			<h2>{{ t("aria.headcarbcomp") }}</h2>
+			<section class="charts-nutrient">
+				<PieChart
+					class="carb"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.sugar')"
+					:unit="t('unit.g')"
+					:value="current ? current.sug : 0"
+					:max="current ? current.carb : 0" />
+				<PieChart
+					class="carb"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.fiber')"
+					:unit="t('unit.g')"
+					:value="current ? current.fib : 0"
+					:max="current ? current.carb : 0"
+					start2="180"
+					range2="360"
+					:label2="t('food.rdi')"
+					:value2="current ? current.fib : 0"
+					:max2="prefs.rdi.fib" />
+			</section>
+			<h3>{{ t("aria.headsugcomp") }}</h3>
+			<section class="charts-nutrient">
+				<PieChart
+					class="carb"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.fruc')"
+					:unit="t('unit.g')"
+					:value="current ? current.fruc : 0"
+					:max="current ? current.sug : 0" />
+				<PieChart
+					class="carb"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.gluc')"
+					:unit="t('unit.g')"
+					:value="current ? current.gluc : 0"
+					:max="current ? current.sug : 0" />
+				<PieChart
+					class="carb"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.suc')"
+					:unit="t('unit.g')"
+					:value="current ? current.suc : 0"
+					:max="current ? current.sug : 0" />
+			</section>
+			<h2>{{ t("aria.headfatcomp") }}</h2>
+			<section class="charts-nutrient">
+				<PieChart
+					class="fat"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.fatsat2')"
+					:unit="t('unit.g')"
+					:value="current ? current.fatsat : 0"
+					:max="current ? current.fat : 0"
+					start2="180"
+					range2="360"
+					:label2="t('food.rdm')"
+					:value2="current ? current.fatsat : 0"
+					:max2="prefs.rdi.fatsat" />
+				<PieChart
+					class="fat"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.fato3')"
+					:unit="t('unit.g')"
+					:value="current ? current.fato3 : 0"
+					:max="current ? current.fat : 0"
+					start2="180"
+					range2="360"
+					:label2="t('food.rdi')"
+					:value2="current ? current.fato3 : 0"
+					:max2="prefs.rdi.fato3" />
+				<PieChart
+					class="fat"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.fato6')"
+					:unit="t('unit.g')"
+					:value="current ? current.fato6 : 0"
+					:max="current ? current.fat : 0"
+					start2="180"
+					range2="360"
+					:label2="t('food.rdi')"
+					:value2="current ? current.fato6 : 0"
+					:max2="prefs.rdi.fato6" />
+			</section>
 			</section>
 		</template>
 
@@ -296,8 +393,7 @@ onMounted(() => {
 					v-if="current.entries"
 					:entries="current.entries"
 					:nutrient="currentNutrient"
-					:disabled="!editMode"
-				/>
+					:disabled="!editMode" />
 			</section>
 		</template>
 	</Main>
@@ -316,7 +412,13 @@ onMounted(() => {
 	--color-vit: #ff4fdc;
 	--color-vit-light: #ffc8f4;
 	--color-mins: #b77400;
-	--color-mins-light: #d7b276;
+	--color-mins-light: #e6c58f;
+}
+
+main.diary .content > h2,
+main.diary .content > h3 {
+	text-align: center;
+	margin-top: 1em;
 }
 
 #charts-week {

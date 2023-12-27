@@ -34,6 +34,8 @@
 		},
 		"aria": {
 			"headcal": "Calendar",
+			"headcarbcomp": "Carb Composition",
+			"headfatcomp": "Fat Composition",
 			"headingred": "Ingredients",
 			"headlog": "Log",
 			"headmacro1": "Primary Macronutrients",
@@ -44,6 +46,7 @@
 			"headnutrients": "Nutrients",
 			"headprep": "Preparation",
 			"headsearch": "Search and filter",
+			"headsugcomp": "Sugar Composition",
 			"headtrack": "Tracking",
 			"headvits": "Vitamins"
 		},
@@ -128,6 +131,7 @@
 			"fato3": "Fat, Ω-3",
 			"fato6": "Fat, Ω-6",
 			"fatsat": "Fat, saturated",
+			"fatsat2": "Fat, sat.",
 			"fiber": "Fiber",
 			"fruc": "Fructose",
 			"gluc": "Glucose",
@@ -143,6 +147,8 @@
 			"phos": "Phosphorus",
 			"pot": "Potassium",
 			"protein": "Protein",
+			"rdi": "RDI",
+			"rdm": "RDM",
 			"salt": "Salt",
 			"sel": "Selenium",
 			"sod": "Sodium",

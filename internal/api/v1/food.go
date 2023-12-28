@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 //
-// Copyright (C) 2021-2022 The HeyApple Authors.
+// Copyright (C) 2021-2024 The HeyApple Authors.
 //
 // Use of this source code is governed by the GNU Affero General
 // Public License as published by the Free Software Foundation,
@@ -41,20 +41,29 @@ import (
 // the maximum valid amount.
 //
 // Endpoint:
-//   /api/v1/foods
+//
+//	/api/v1/foods
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   500 - Internal server error
+//
+//	200 - OK
+//	500 - Internal server error
+//
 // Example input:
-//   kcal=32&kcal=120&prot=12
+//
+//	kcal=32&kcal=120&prot=12
+//
 // Example output:
-//   [
-//     { "id": 1, "kcal": 230, ... },
-//     { "id": 6, "kcal": 522, ... },
-//     ...
-//   ]
+//
+//	[
+//	  { "id": 1, "kcal": 230, ... },
+//	  { "id": 6, "kcal": 522, ... },
+//	  ...
+//	]
 func Foods(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.GetFoods{Filter: getFoodFilter(r)}
@@ -72,16 +81,23 @@ func Foods(env *handler.Environment) httprouter.Handle {
 // and will be a single JSON object on success.
 //
 // Endpoint:
-//   /api/v1/food/{id}
+//
+//	/api/v1/food/{id}
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   400 - Missing or malformed id
-//   404 - Food item doesn't exist
-//   500 - Internal server error
+//
+//	200 - OK
+//	400 - Missing or malformed id
+//	404 - Food item doesn't exist
+//	500 - Internal server error
+//
 // Example output:
-//   { "id": 1, "kcal": 230, ... }
+//
+//	{ "id": 1, "kcal": 230, ... }
 func Food(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.GetFood{}
@@ -107,15 +123,22 @@ func Food(env *handler.Environment) httprouter.Handle {
 // body will be empty if any errors occur.
 //
 // Endpoint:
-//   /api/v1/food
+//
+//	/api/v1/food
+//
 // Methods:
-//   POST
+//
+//	POST
+//
 // Possible status codes:
-//   201 - Creation successful
-//   401 - Insufficient permissions
-//   500 - Internal server error
+//
+//	201 - Creation successful
+//	401 - Insufficient permissions
+//	500 - Internal server error
+//
 // Example output:
-//   { "id": 2, "kcal": 0, "fat": 0, ... }
+//
+//	{ "id": 2, "kcal": 0, "fat": 0, ... }
 func NewFood(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		var hasPermission bool
@@ -152,17 +175,24 @@ func NewFood(env *handler.Environment) httprouter.Handle {
 // stored.
 //
 // Endpoint:
-//   /api/v1/food/{id}
+//
+//	/api/v1/food/{id}
+//
 // Methods:
-//   PUT
+//
+//	PUT
+//
 // Possible status codes:
-//   204 - Update successful
-//   400 - Malformed form data
-//   401 - Insufficient permissions
-//   404 - Food item doesn't exist
-//   500 - Internal server error
+//
+//	204 - Update successful
+//	400 - Malformed form data
+//	401 - Insufficient permissions
+//	404 - Food item doesn't exist
+//	500 - Internal server error
+//
 // Example input:
-//   kcal=123&fat=4.5&vitb1=0.06
+//
+//	kcal=123&fat=4.5&vitb1=0.06
 func SaveFood(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		var hasPermission bool

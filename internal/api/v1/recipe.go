@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 //
-// Copyright (C) 2021-2022 The HeyApple Authors.
+// Copyright (C) 2021-2024 The HeyApple Authors.
 //
 // Use of this source code is governed by the GNU Affero General
 // Public License as published by the Free Software Foundation,
@@ -34,19 +34,28 @@ import (
 // errors occur.
 //
 // Endpoint:
-//   /api/v1/recipe
+//
+//	/api/v1/recipe
+//
 // Methods:
-//   POST
+//
+//	POST
+//
 // Possible status codes:
-//   201 - Creation successful
-//   202 - Partial success
-//   400 - Missing form data
-//   401 - Insufficient permission
-//   500 - Internal server error
+//
+//	201 - Creation successful
+//	202 - Partial success
+//	400 - Missing form data
+//	401 - Insufficient permission
+//	500 - Internal server error
+//
 // Example input:
-//   name=Pie
+//
+//	name=Pie
+//
 // Example output:
-//   { "id": 1, "size": 0, "items": [] }
+//
+//	{ "id": 1, "size": 0, "items": [] }
 func NewRecipe(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.CreateRecipe{Name: r.FormValue("name")}
@@ -83,17 +92,24 @@ func NewRecipe(env *handler.Environment) httprouter.Handle {
 // stored.
 //
 // Endpoint:
-//   /api/v1/recipe/{id}
+//
+//	/api/v1/recipe/{id}
+//
 // Methods:
-//   PUT
+//
+//	PUT
+//
 // Possible status codes:
-//   204 - Update successful
-//   400 - Malformed or missing form data
-//   401 - Insufficient permission
-//   404 - Recipe doesn't exist
-//   500 - Internal server error
+//
+//	204 - Update successful
+//	400 - Malformed or missing form data
+//	401 - Insufficient permission
+//	404 - Recipe doesn't exist
+//	500 - Internal server error
+//
 // Example input:
-//   size=12&name=Butterscotch
+//
+//	size=12&name=Butterscotch
 func SaveRecipe(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		recID, err := strconv.Atoi(ps.ByName("id"))
@@ -154,20 +170,29 @@ func SaveRecipe(env *handler.Environment) httprouter.Handle {
 // the maximum valid amount.
 //
 // Endpoint:
-//   /api/v1/recipes
+//
+//	/api/v1/recipes
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   500 - Internal server error
+//
+//	200 - OK
+//	500 - Internal server error
+//
 // Example input:
-//   name=Pie&kcal=32&kcal=120&prot=12
+//
+//	name=Pie&kcal=32&kcal=120&prot=12
+//
 // Example output:
-//   [
-//     { "id": 1, "name": "Pie", "size": 6, ... },
-//     { "id": 6, "name": "Omelette", "size": 1, ... },
-//     ...
-//   ]
+//
+//	[
+//	  { "id": 1, "name": "Pie", "size": 6, ... },
+//	  { "id": 6, "name": "Omelette", "size": 1, ... },
+//	  ...
+//	]
 func Recipes(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.Recipes{Filter: getRecipeFilter(r)}
@@ -189,16 +214,23 @@ func Recipes(env *handler.Environment) httprouter.Handle {
 // and will be a single JSON object on success.
 //
 // Endpoint:
-//   /api/v1/recipe/{id}
+//
+//	/api/v1/recipe/{id}
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   400 - Missing or malformed id
-//   404 - Recipe doesn't exist
-//   500 - Internal server error
+//
+//	200 - OK
+//	400 - Missing or malformed id
+//	404 - Recipe doesn't exist
+//	500 - Internal server error
+//
 // Example output:
-//   { "id": 1, "name": "Pie", "size": 6, ... }
+//
+//	{ "id": 1, "name": "Pie", "size": 6, ... }
 func Recipe(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		recID, err := strconv.Atoi(ps.ByName("id"))
@@ -238,16 +270,23 @@ func Recipe(env *handler.Environment) httprouter.Handle {
 // on success.
 //
 // Endpoint:
-//   /api/v1/recipe/{id}/owner
+//
+//	/api/v1/recipe/{id}/owner
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   400 - Missing or malformed id
-//   404 - Recipe doesn't exist
-//   500 - Internal server error
+//
+//	200 - OK
+//	400 - Missing or malformed id
+//	404 - Recipe doesn't exist
+//	500 - Internal server error
+//
 // Example output:
-//   { "isowner": false, "owner": "NastyOrange" }
+//
+//	{ "isowner": false, "owner": "NastyOrange" }
 func RecipeOwner(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		// TODO this function is structured a little odd because
@@ -295,17 +334,24 @@ func RecipeOwner(env *handler.Environment) httprouter.Handle {
 // PUT replaces it.
 //
 // Endpoint:
-//   /api/v1/recipe/{id}/ingredient/{ing}
+//
+//	/api/v1/recipe/{id}/ingredient/{ing}
+//
 // Methods:
-//   POST, PUT
+//
+//	POST, PUT
+//
 // Possible status codes:
-//   204 - Update successful
-//   400 - Malformed or missing form data
-//   401 - Insufficient permission
-//   404 - Recipe doesn't exist
-//   500 - Internal server error
+//
+//	204 - Update successful
+//	400 - Malformed or missing form data
+//	401 - Insufficient permission
+//	404 - Recipe doesn't exist
+//	500 - Internal server error
+//
 // Example input:
-//   amount=125
+//
+//	amount=125
 func SaveIngredient(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		recID, err := strconv.Atoi(ps.ByName("id"))

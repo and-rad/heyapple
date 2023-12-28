@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 //
-// Copyright (C) 2021-2022 The HeyApple Authors.
+// Copyright (C) 2021-2024 The HeyApple Authors.
 //
 // Use of this source code is governed by the GNU Affero General
 // Public License as published by the Free Software Foundation,
@@ -36,16 +36,23 @@ import (
 // status codes.
 //
 // Endpoint:
-//   /api/v1/list/{name}/done
+//
+//	/api/v1/list/{name}/done
+//
 // Methods:
-//   Put
+//
+//	Put
+//
 // Possible status codes:
-//   204 - Update successful
-//   400 - Malformed or missing input data
-//   401 - Insufficient permission
-//   500 - Internal server error
+//
+//	204 - Update successful
+//	400 - Malformed or missing input data
+//	401 - Insufficient permission
+//	500 - Internal server error
+//
 // Example input:
-//   id=1&done=true&id=23&done=false
+//
+//	id=1&done=true&id=23&done=false
 func SaveListDone(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		cmd := &app.SaveShoppingListDone{
@@ -93,15 +100,22 @@ func SaveListDone(env *handler.Environment) httprouter.Handle {
 // the names of a user's custom shopping lists.
 //
 // Endpoint:
-//   /api/v1/lists
+//
+//	/api/v1/lists
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   401 - Insufficient permission
-//   500 - Internal server error
+//
+//	200 - OK
+//	401 - Insufficient permission
+//	500 - Internal server error
+//
 // Example output:
-//   [ "Dinner", "Cleaning Stuff", ... ]
+//
+//	[ "Dinner", "Cleaning Stuff", ... ]
 func ShoppingLists(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		if id := env.Session.GetInt(r.Context(), "id"); id == 0 {
@@ -121,23 +135,32 @@ func ShoppingLists(env *handler.Environment) httprouter.Handle {
 // are no entries in the database.
 //
 // Endpoint:
-//   /api/v1/list/{name}
+//
+//	/api/v1/list/{name}
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   400 - Malformed or missing query parameters
-//   401 - Insufficient permission
-//   404 - Shopping list doesn't exist
-//   500 - Internal server error
+//
+//	200 - OK
+//	400 - Malformed or missing query parameters
+//	401 - Insufficient permission
+//	404 - Shopping list doesn't exist
+//	500 - Internal server error
+//
 // Example input:
-//   date=2022-03-12&date=2022-03-13
+//
+//	date=2022-03-12&date=2022-03-13
+//
 // Example output:
-//   [
-//     "id": "1", "amount": 150, "aisle": 12, "done": false, ...
-//     "id": "4", "amount": 620, "aisle": 9, "done": true, ...
-//     ...
-//   ]
+//
+//	[
+//	  "id": "1", "amount": 150, "aisle": 12, "done": false, ...
+//	  "id": "4", "amount": 620, "aisle": 9, "done": true, ...
+//	  ...
+//	]
 func ShoppingList(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.ShoppingList{

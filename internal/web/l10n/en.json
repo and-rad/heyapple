@@ -15,7 +15,7 @@
 			"1": "Activate Account",
 			"3": "Reset Password"
 		},
-		"foot": "&copy; 2021-2022 the HeyApple development team",
+		"foot": "&copy; 2021-2024 the HeyApple development team",
 		"info": {
 			"3": "<p>If you did not ask to reset your password, you might want to review your recent account access for any unusual activity. You can do so in your profile settings.</p>"
 		},
@@ -42,8 +42,8 @@
 		}
 	},
 	"home": {
-		"betawarn": "HeyApple is still in its beta phase. As such, many features are incomplete or missing. A full release is planned for 2023.",
-		"copy": "&copy; 2021-2022 the HeyApple developers",
+		"betawarn": "HeyApple is still in its beta phase. As such, many features are incomplete or missing. A full release is planned for 2024.",
+		"copy": "&copy; 2021-2024 the HeyApple developers",
 		"legal": "Legal Notice",
 		"login": "Sign in",
 		"privacy": "Privacy Policy",

@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 //
-// Copyright (C) 2021-2022 The HeyApple Authors.
+// Copyright (C) 2021-2024 The HeyApple Authors.
 //
 // Use of this source code is governed by the GNU Affero General
 // Public License as published by the Free Software Foundation,

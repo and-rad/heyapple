@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////
 //
-// Copyright (C) 2021-2022 The HeyApple Authors.
+// Copyright (C) 2021-2024 The HeyApple Authors.
 //
 // Use of this source code is governed by the GNU Affero General
 // Public License as published by the Free Software Foundation,
@@ -46,17 +46,24 @@ import (
 // that does not conform to this will be ignored.
 //
 // Endpoint:
-//   /api/v1/diary/{date}
+//
+//	/api/v1/diary/{date}
+//
 // Methods:
-//   POST, PUT
+//
+//	POST, PUT
+//
 // Possible status codes:
-//   204 - Update successful
-//   400 - Malformed or missing form data
-//   401 - Insufficient permission
-//   404 - Diary doesn't exist
-//   500 - Internal server error
+//
+//	204 - Update successful
+//	400 - Malformed or missing form data
+//	401 - Insufficient permission
+//	404 - Diary doesn't exist
+//	500 - Internal server error
+//
 // Example input:
-//   recipe=Pie&id=1&amount=125&date=2022-03-12T12:45:00
+//
+//	recipe=Pie&id=1&amount=125&date=2022-03-12T12:45:00
 func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		day, err := time.Parse("2006-01-02", ps.ByName("date"))
@@ -129,21 +136,28 @@ func SaveDiaryEntry(env *handler.Environment) httprouter.Handle {
 // no entries in the database.
 //
 // Endpoint:
-//   /api/v1/diary/{year}/{month}
+//
+//	/api/v1/diary/{year}/{month}
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   400 - Malformed query parameters
-//   401 - Insufficient permission
-//   400 - Diary doesn't exist
-//   500 - Internal server error
+//
+//	200 - OK
+//	400 - Malformed query parameters
+//	401 - Insufficient permission
+//	400 - Diary doesn't exist
+//	500 - Internal server error
+//
 // Example output:
-//   [
-//     { "date": "2022-03-12", "kcal": 1987, ... },
-//     { "date": "2022-03-13", "kcal": 2150, ... },
-//     ...
-//   ]
+//
+//	[
+//	  { "date": "2022-03-12", "kcal": 1987, ... },
+//	  { "date": "2022-03-13", "kcal": 2150, ... },
+//	  ...
+//	]
 func Diary(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		query := &app.DiaryDays{}
@@ -198,20 +212,27 @@ func Diary(env *handler.Environment) httprouter.Handle {
 // even when there are no entries in the database.
 //
 // Endpoint:
-//   /api/v1/diary/{year}/{month}/{day}/entries
+//
+//	/api/v1/diary/{year}/{month}/{day}/entries
+//
 // Methods:
-//   GET
+//
+//	GET
+//
 // Possible status codes:
-//   200 - OK
-//   400 - Malformed query parameters
-//   401 - Insufficient permission
-//   500 - Internal server error
+//
+//	200 - OK
+//	400 - Malformed query parameters
+//	401 - Insufficient permission
+//	500 - Internal server error
+//
 // Example output:
-//   [
-//     "date": "2022-03-12T08:43:00Z", "food":{"id": 2, "amount": 150}, ...
-//     "date": "2022-03-12T13:05:00Z", "food":{"id": 1, "amount": 240}, ...
-//     ...
-//   ]
+//
+//	[
+//	  "date": "2022-03-12T08:43:00Z", "food":{"id": 2, "amount": 150}, ...
+//	  "date": "2022-03-12T13:05:00Z", "food":{"id": 1, "amount": 240}, ...
+//	  ...
+//	]
 func DiaryEntries(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 		year, err := strconv.Atoi(ps.ByName("year"))

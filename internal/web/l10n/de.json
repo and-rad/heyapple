@@ -15,7 +15,7 @@
 			"1": "Konto aktivieren",
 			"3": "Passwort zurücksetzen"
 		},
-		"foot": "&copy; 2021-2022 das HeyApple Entwicklerteam",
+		"foot": "&copy; 2021-2024 das HeyApple Entwicklerteam",
 		"info": {
 			"3": "<p>Falls du dein Passwort gar nicht zurücksetzen wolltest, solltest du deinen Anmeldeverlauf auf verdächtige Vorgänge prüfen. Eine Übersicht über die letzten Anmeldeversuche findest du in deinen Profileinstellungen.</p>"
 		},
@@ -42,8 +42,8 @@
 		}
 	},
 	"home": {
-		"betawarn": "HeyApple befindet sich momentan in der Beta-Phase. Viele Funktionen fehlen noch oder sind unvollständig. Der offizielle Start ist für 2023 geplant.",
-		"copy": "&copy; 2021-2022 die HeyApple Entwickler",
+		"betawarn": "HeyApple befindet sich momentan in der Beta-Phase. Viele Funktionen fehlen noch oder sind unvollständig. Der offizielle Start ist für 2024 geplant.",
+		"copy": "&copy; 2021-2024 die HeyApple Entwickler",
 		"legal": "Impressum",
 		"login": "Anmelden",
 		"privacy": "Datenschutz",

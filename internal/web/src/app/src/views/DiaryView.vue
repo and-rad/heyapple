@@ -351,6 +351,254 @@ onMounted(() => {
 					:value2="current ? current.fato6 : 0"
 					:max2="prefs.rdi.fato6" />
 			</section>
+			<h2>{{ t("aria.headvits") }}</h2>
+			<section class="charts-nutrient">
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.vitashort')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vita : 0"
+					:max="prefs.rdi.vita" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.vitb1short')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitb1 : 0"
+					:max="prefs.rdi.vitb1" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.vitb2short')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitb2 : 0"
+					:max="prefs.rdi.vitb2" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.vitb3short')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitb3 : 0"
+					:max="prefs.rdi.vitb3" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.vitb5short')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitb5 : 0"
+					:max="prefs.rdi.vitb5" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.vitb6short')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitb6 : 0"
+					:max="prefs.rdi.vitb6" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="2"
+					:label="t('food.vitb7short')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitb7 : 0"
+					:max="prefs.rdi.vitb7" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="2"
+					:label="t('food.vitb9short')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitb9 : 0"
+					:max="prefs.rdi.vitb9" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="2"
+					:label="t('food.vitb12short')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitb12 : 0"
+					:max="prefs.rdi.vitb12" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.vitcshort')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitc : 0"
+					:max="prefs.rdi.vitc" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="3"
+					:label="t('food.vitdshort')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitd : 0"
+					:max="prefs.rdi.vitd" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.vitdshort')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitd : 0"
+					:max="prefs.rdi.vitd" />
+				<PieChart
+					class="vit"
+					start="225"
+					range="270"
+					frac="2"
+					:label="t('food.vitkshort')"
+					:unit="t('unit.mg')"
+					:value="current ? current.vitk : 0"
+					:max="prefs.rdi.vitk" />
+			</section>
+			<h2>{{ t("aria.headminerals") }}</h2>
+			<section class="charts-nutrient">
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.calc')"
+					:unit="t('unit.mg')"
+					:value="current ? current.calc : 0"
+					:max="prefs.rdi.calc" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.pot')"
+					:unit="t('unit.mg')"
+					:value="current ? current.pot : 0"
+					:max="prefs.rdi.pot" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.sod')"
+					:unit="t('unit.mg')"
+					:value="current ? current.sod : 0"
+					:max="prefs.rdi.sod" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.mag')"
+					:unit="t('unit.mg')"
+					:value="current ? current.mag : 0"
+					:max="prefs.rdi.mag" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.iron')"
+					:unit="t('unit.mg')"
+					:value="current ? current.iron : 0"
+					:max="prefs.rdi.iron" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.zinc')"
+					:unit="t('unit.mg')"
+					:value="current ? current.zinc : 0"
+					:max="prefs.rdi.zinc" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.chl')"
+					:unit="t('unit.mg')"
+					:value="current ? current.chl : 0"
+					:max="prefs.rdi.chl" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="0"
+					:label="t('food.phos')"
+					:unit="t('unit.mg')"
+					:value="current ? current.phos : 0"
+					:max="prefs.rdi.phos" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.mang')"
+					:unit="t('unit.mg')"
+					:value="current ? current.mang : 0"
+					:max="prefs.rdi.mang" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="2"
+					:label="t('food.cop')"
+					:unit="t('unit.mg')"
+					:value="current ? current.cop : 0"
+					:max="prefs.rdi.cop" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="3"
+					:label="t('food.iod')"
+					:unit="t('unit.mg')"
+					:value="current ? current.iod : 0"
+					:max="prefs.rdi.iod" />
+				<!--<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="3"
+					:label="t('food.chr')"
+					:unit="t('unit.mg')"
+					:value="current ? current.chr : 0"
+					:max="prefs.rdi.chr" />
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="3"
+					:label="t('food.mol')"
+					:unit="t('unit.mg')"
+					:value="current ? current.mol : 0"
+					:max="prefs.rdi.mol" />-->
+				<PieChart
+					class="mins"
+					start="225"
+					range="270"
+					frac="3"
+					:label="t('food.sel')"
+					:unit="t('unit.mg')"
+					:value="current ? current.sel : 0"
+					:max="prefs.rdi.sel" />
 			</section>
 		</template>
 

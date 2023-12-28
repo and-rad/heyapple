@@ -21,6 +21,7 @@ const perms = inject("perms");
 const foods = inject("food");
 const recipes = inject("recipes");
 const diary = inject("diary");
+const prefs = inject("prefs");
 
 const filtered = ref([]);
 const current = ref(null);
@@ -305,14 +306,6 @@ function onSort(evt) {
 							min="0"
 							max="100"
 							frac="0" />
-						<Slider
-							:label="t('food.salt')"
-							@input="slotProps.confirm"
-							name="salt"
-							unit="g"
-							min="0"
-							max="100"
-							frac="0" />
 					</fieldset>
 					<fieldset>
 						<legend>{{ t("aria.headvits") }}</legend>
@@ -442,10 +435,20 @@ function onSort(evt) {
 						<Slider
 							:label="t('food.sod')"
 							@input="slotProps.confirm"
+							v-if="prefs.ui.trackSaltAsSodium"
 							name="sod"
 							unit="mg"
 							min="0"
 							max="5000"
+							frac="0" />
+						<Slider
+							:label="t('food.salt')"
+							@input="slotProps.confirm"
+							v-if="!prefs.ui.trackSaltAsSodium"
+							name="salt"
+							unit="g"
+							min="0"
+							max="100"
 							frac="0" />
 						<Slider
 							:label="t('food.mag')"
@@ -633,11 +636,6 @@ function onSort(evt) {
 								<input type="number" :value="current.fib" name="fib" @change="onInput" />
 								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
-							<div>
-								<label>{{ t("food.salt") }}</label>
-								<input type="number" :value="current.salt" name="salt" @change="onInput" />
-								<span class="unit">{{ t("unit.g") }}</span>
-							</div>
 						</fieldset>
 						<fieldset :disabled="!editMode" class="col50">
 							<div>
@@ -755,10 +753,15 @@ function onSort(evt) {
 								<input type="number" :value="current.pot" name="pot" @change="onInput" />
 								<span class="unit">{{ t("unit.mg") }}</span>
 							</div>
-							<div>
+							<div v-if="prefs.ui.trackSaltAsSodium">
 								<label>{{ t("food.sod") }}</label>
 								<input type="number" :value="current.sod" name="sod" @change="onInput" />
 								<span class="unit">{{ t("unit.mg") }}</span>
+							</div>
+							<div v-if="!prefs.ui.trackSaltAsSodium">
+								<label>{{ t("food.salt") }}</label>
+								<input type="number" :value="current.salt" name="salt" @change="onInput" />
+								<span class="unit">{{ t("unit.g") }}</span>
 							</div>
 							<div>
 								<label>{{ t("food.mag") }}</label>

@@ -457,10 +457,10 @@ onMounted(() => {
 					start="225"
 					range="270"
 					frac="0"
-					:label="t('food.vitdshort')"
+					:label="t('food.viteshort')"
 					:unit="t('unit.mg')"
-					:value="current ? current.vitd : 0"
-					:max="prefs.rdi.vitd" />
+					:value="current ? current.vite : 0"
+					:max="prefs.rdi.vite" />
 				<PieChart
 					class="vit"
 					start="225"
@@ -492,6 +492,7 @@ onMounted(() => {
 					:value="current ? current.pot : 0"
 					:max="prefs.rdi.pot" />
 				<PieChart
+					v-if="prefs.ui.trackSaltAsSodium"
 					class="mins"
 					start="225"
 					range="270"
@@ -500,6 +501,16 @@ onMounted(() => {
 					:unit="t('unit.mg')"
 					:value="current ? current.sod : 0"
 					:max="prefs.rdi.sod" />
+				<PieChart
+					v-if="!prefs.ui.trackSaltAsSodium"
+					class="mins"
+					start="225"
+					range="270"
+					frac="1"
+					:label="t('food.salt')"
+					:unit="t('unit.g')"
+					:value="current ? current.salt : 0"
+					:max="prefs.rdi.salt" />
 				<PieChart
 					class="mins"
 					start="225"

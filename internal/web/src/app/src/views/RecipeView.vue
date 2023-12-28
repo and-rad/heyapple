@@ -21,6 +21,7 @@ const csrf = inject("csrfToken");
 const perms = inject("perms");
 const recipes = inject("recipes");
 const diary = inject("diary");
+const prefs = inject("prefs");
 
 const filtered = ref([]);
 const current = ref(null);
@@ -383,14 +384,6 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							name="suc"
 							unit="g"
 							frac="0" />
-						<Slider
-							:label="t('food.salt')"
-							:min="minSearchAttr('salt')"
-							:max="maxSearchAttr('salt')"
-							@input="slotProps.confirm"
-							name="salt"
-							unit="g"
-							frac="0" />
 					</fieldset>
 					<fieldset>
 						<legend>{{ t("aria.headvits") }}</legend>
@@ -518,6 +511,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							unit="mg"
 							frac="0" />
 						<Slider
+							v-if="prefs.ui.trackSaltAsSodium"
 							:label="t('food.sod')"
 							:min="minSearchAttr('sod')"
 							:max="maxSearchAttr('sod')"
@@ -525,6 +519,15 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							name="sod"
 							unit="mg"
 							frac="0" />
+						<Slider
+							v-if="!prefs.ui.trackSaltAsSodium"
+							:label="t('food.salt')"
+							:min="minSearchAttr('salt')"
+							:max="maxSearchAttr('salt')"
+							@input="slotProps.confirm"
+							name="salt"
+							unit="g"
+							frac="1" />
 						<Slider
 							:label="t('food.mag')"
 							:min="minSearchAttr('mag')"
@@ -707,11 +710,6 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							<span>{{ perServing(current.fib, 1) }}</span>
 							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
-						<div>
-							<label>{{ t("food.salt") }}</label>
-							<span>{{ perServing(current.salt, 1) }}</span>
-							<span class="unit">{{ t("unit.g") }}</span>
-						</div>
 					</div>
 					<div class="col50">
 						<div>
@@ -829,10 +827,15 @@ onMounted(() => (filtered.value = [...recipes.value]));
 							<span>{{ perServing(current.pot, 1) }}</span>
 							<span class="unit">{{ t("unit.mg") }}</span>
 						</div>
-						<div>
+						<div v-if="prefs.ui.trackSaltAsSodium">
 							<label>{{ t("food.sod") }}</label>
 							<span>{{ perServing(current.sod, 1) }}</span>
 							<span class="unit">{{ t("unit.mg") }}</span>
+						</div>
+						<div v-if="!prefs.ui.trackSaltAsSodium">
+							<label>{{ t("food.salt") }}</label>
+							<span>{{ perServing(current.salt, 1) }}</span>
+							<span class="unit">{{ t("unit.g") }}</span>
 						</div>
 						<div>
 							<label>{{ t("food.mag") }}</label>

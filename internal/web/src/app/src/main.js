@@ -194,6 +194,7 @@ fetch("/api/v1/prefs")
 			},
 			ui: {
 				neutralCharts: false,
+				trackSaltAsSodium: false,
 			},
 		});
 	});

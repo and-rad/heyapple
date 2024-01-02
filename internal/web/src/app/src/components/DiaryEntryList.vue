@@ -60,6 +60,32 @@ const nutrientUnit = computed(() => {
 	}
 });
 
+const nutrientFraction = computed(() => {
+	switch (prop.nutrient) {
+		case "kcal":
+		case "fat":
+		case "carb":
+		case "prot":
+		case "sug":
+		case "fib":
+			return 0;
+		case "fatsat":
+		case "fato3":
+		case "fato6":
+		case "fruc":
+		case "gluc":
+		case "suc":
+		case "salt":
+			return 1;
+		case "vitb12":
+		case "vitd":
+		case "sel":
+			return 3;
+		default:
+			return 2;
+	}
+});
+
 /**
  * True if there is a nutrient value to display in the
  * list of logged meals. This is generally the case, but
@@ -143,7 +169,7 @@ function getNutrient(food) {
 	let amount = data[prop.nutrient] * food.amount * 0.01;
 
 	if (nutrientMode.value == "metric") {
-		return Math.round(amount);
+		return +amount.toFixed(nutrientFraction.value);
 	}
 
 	let rdi = prefs.value.rdi[prop.nutrient];

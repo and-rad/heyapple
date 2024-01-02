@@ -43,12 +43,33 @@ const nutrientUnit = computed(() => {
 		case "kcal":
 			return " " + t("unit.cal");
 		case "fat":
+		case "fatsat":
+		case "fato3":
+		case "fato6":
 		case "carb":
+		case "sug":
+		case "fruc":
+		case "gluc":
+		case "suc":
+		case "fib":
 		case "prot":
+		case "salt":
 			return " " + t("unit.g");
 		default:
 			return " " + t("unit.mg");
 	}
+});
+
+/**
+ * True if there is a nutrient value to display in the
+ * list of logged meals. This is generally the case, but
+ * might not be if there is no RDI for a given nutrient.
+ */
+const hasNutrientValue = computed(() => {
+	if (nutrientMode.value == "relative") {
+		return prefs.value.rdi[prop.nutrient] != undefined;
+	}
+	return true;
 });
 
 /**
@@ -201,7 +222,8 @@ defineExpose({ getDiff });
 					<span>{{ entry.amount }}</span>
 					<span class="unit">{{ t("unit.g") }}</span>
 					<span class="nutrient" :class="[nutrient, nutrientMode]">
-						{{ entry.nutrient }}{{ nutrientUnit }}
+						<span v-if="hasNutrientValue">{{ entry.nutrient }}{{ nutrientUnit }}</span>
+						<span v-else>-</span>
 					</span>
 					<fieldset :disabled="disabled" :style="{ '--max-height': entry.entries.length * 41 + 'px' }">
 						<div v-for="food in entry.entries" :key="food.id">
@@ -211,11 +233,11 @@ defineExpose({ getDiff });
 								name="amount"
 								:value="food.amount"
 								@keydown="onKeydown"
-								@change="onInput"
-							/>
+								@change="onInput" />
 							<span class="unit">{{ t("unit.g") }}</span>
 							<span class="nutrient" :class="[nutrient, nutrientMode]">
-								{{ food.nutrient }}{{ nutrientUnit }}
+								<span v-if="hasNutrientValue">{{ food.nutrient }}{{ nutrientUnit }}</span>
+								<span v-else>-</span>
 							</span>
 							<input type="hidden" name="id" :value="food.id" />
 							<input type="hidden" name="recipe" :value="food.recipe" />
@@ -231,11 +253,11 @@ defineExpose({ getDiff });
 						:value="entry.amount"
 						:disabled="disabled"
 						@keydown="onKeydown"
-						@change="onInput"
-					/>
+						@change="onInput" />
 					<span class="unit">{{ t("unit.g") }}</span>
 					<span class="nutrient" :class="[nutrient, nutrientMode]">
-						{{ entry.nutrient }}{{ nutrientUnit }}
+						<span v-if="hasNutrientValue">{{ entry.nutrient }}{{ nutrientUnit }}</span>
+						<span v-else>-</span>
 					</span>
 					<input type="hidden" name="id" :value="entry.id" />
 					<input type="hidden" name="recipe" :value="entry.recipe" />
@@ -318,10 +340,11 @@ defineExpose({ getDiff });
 	margin-left: 1em;
 	min-width: 3em;
 	text-align: right;
+	transition: min-width 0.15s ease-in;
 }
 
 .diary-entry-list .nutrient.metric {
-	min-width: 4em;
+	min-width: 5em;
 }
 
 button.nutrient-mode-switch {

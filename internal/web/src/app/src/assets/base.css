@@ -204,6 +204,14 @@ select:active {
 	}
 }
 
+select optgroup {
+	font-size: 0.66rem;
+}
+
+select optgroup option {
+	font-size: 1rem;
+}
+
 input[type="submit"],
 input[type="button"],
 button {

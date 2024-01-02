@@ -24,6 +24,7 @@ const editMode = ref(false);
 const calendar = ref(null);
 const entries = ref(null);
 const main = ref(null);
+const select = ref(null);
 
 const daysWithEntries = computed(() => Object.keys(diary.value));
 
@@ -94,6 +95,10 @@ function onTabClick(evt) {
 	if (!hasTabDrag) {
 		currentNutrient.value = evt.target.dataset.name;
 	}
+}
+
+function onTabSelect(evt) {
+	currentNutrient.value = evt.target.value;
 }
 
 function onEditMode() {
@@ -636,6 +641,55 @@ onMounted(() => {
 						<li :class="{ active: currentNutrient == 'prot' }">
 							<button data-name="prot" @click="onTabClick">{{ t("food.protein") }}</button>
 						</li>
+						<li :class="{ active: currentNutrient == (select ? select.value : '') }">
+							<select ref="select" @change="onTabSelect">
+								<option value="" selected disabled>{{ t("food.hintnut") }}</option>
+								<optgroup :label="t('aria.headmacro3')">
+									<option value="fib">{{ t("food.fiber") }}</option>
+									<option value="sug">{{ t("food.sugar") }}</option>
+									<option value="fruc">{{ t("food.fruc") }}</option>
+									<option value="gluc">{{ t("food.gluc") }}</option>
+									<option value="suc">{{ t("food.suc") }}</option>
+									<option value="fatsat">{{ t("food.fatsat") }}</option>
+									<option value="fato3">{{ t("food.fato3") }}</option>
+									<option value="fato6">{{ t("food.fato6") }}</option>
+								</optgroup>
+								<optgroup :label="t('aria.headvits')">
+									<option value="vita">{{ t("food.vita") }}</option>
+									<option value="vitb1">{{ t("food.vitb1") }}</option>
+									<option value="vitb2">{{ t("food.vitb2") }}</option>
+									<option value="vitb3">{{ t("food.vitb3") }}</option>
+									<option value="vitb5">{{ t("food.vitb5") }}</option>
+									<option value="vitb6">{{ t("food.vitb6") }}</option>
+									<option value="vitb7">{{ t("food.vitb7") }}</option>
+									<option value="vitb9">{{ t("food.vitb9") }}</option>
+									<option value="vitb12">{{ t("food.vitb12") }}</option>
+									<option value="vitc">{{ t("food.vitc") }}</option>
+									<option value="vitd">{{ t("food.vitd") }}</option>
+									<option value="vite">{{ t("food.vite") }}</option>
+									<option value="vitk">{{ t("food.vitk") }}</option>
+								</optgroup>
+								<optgroup :label="t('aria.headminerals')">
+									<option value="calc">{{ t("food.calc") }}</option>
+									<option value="pot">{{ t("food.pot") }}</option>
+									<option v-if="prefs.ui.trackSaltAsSodium" value="sod">
+										{{ t("food.sod") }}
+									</option>
+									<option v-if="!prefs.ui.trackSaltAsSodium" value="salt">
+										{{ t("food.salt") }}
+									</option>
+									<option value="mag">{{ t("food.mag") }}</option>
+									<option value="iron">{{ t("food.iron") }}</option>
+									<option value="zinc">{{ t("food.zinc") }}</option>
+									<option value="chl">{{ t("food.chl") }}</option>
+									<option value="phos">{{ t("food.phos") }}</option>
+									<option value="mang">{{ t("food.mang") }}</option>
+									<option value="cop">{{ t("food.cop") }}</option>
+									<option value="iod">{{ t("food.iod") }}</option>
+									<option value="sel">{{ t("food.sel") }}</option>
+								</optgroup>
+							</select>
+						</li>
 					</ul>
 				</div>
 				<button class="icon async" :disabled="disableSave" @click="onEditMode">
@@ -950,28 +1004,37 @@ main.neutral-charts #charts-macro .pie-chart.prot circle.bad {
 
 #details section.tabs li {
 	display: inline-block;
+	vertical-align: bottom;
 	min-width: 8em;
 }
 
-#details section.tabs li button {
+#details section.tabs li:last-child {
+	padding-right: 1rem;
+}
+
+#details section.tabs li button,
+#details section.tabs li select {
 	background: none;
 	box-shadow: none !important;
 	color: var(--color-placeholder);
 	border-radius: 0;
 	padding: 0.5em 0.5em 0.35em;
+	border: none;
 	border-bottom: 2px solid transparent;
 	transition: color var(--transition-style), border-color var(--transition-style);
 }
 
 @media (hover: hover) {
-	#details section.tabs li button:hover {
+	#details section.tabs li button:hover,
+	#details section.tabs li select:hover {
 		border-color: var(--color-text-light);
 		box-shadow: none;
 		color: var(--color-text-light);
 	}
 }
 
-#details section.tabs li.active button {
+#details section.tabs li.active button,
+#details section.tabs li.active select {
 	border-color: var(--color-secondary);
 	color: var(--color-text);
 }

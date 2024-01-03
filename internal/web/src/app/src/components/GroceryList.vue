@@ -23,15 +23,10 @@ const categories = [
 ];
 
 const sortedItems = computed(() => {
-	if (sortDir.value == "asc") {
-		return [...prop.items].sort((a, b) => {
-			return collator.compare(a[sortBy.value], b[sortBy.value]);
-		});
-	} else {
-		return [...prop.items].sort((a, b) => {
-			return -collator.compare(a[sortBy.value], b[sortBy.value]);
-		});
-	}
+	const factor = sortDir.value == "asc" ? 1 : -1;
+	return [...prop.items].sort((a, b) => {
+		return collator.compare(a[sortBy.value], b[sortBy.value]) * factor;
+	});
 });
 
 const allChecked = computed(() => {

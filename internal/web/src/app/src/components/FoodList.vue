@@ -20,15 +20,19 @@ const categories = [
 ];
 
 const sortedItems = computed(() => {
-	if (sortDir.value == "asc") {
+	const factor = sortDir.value == "asc" ? 1 : -1;
+	const val = sortBy.value;
+	if (val == "name") {
 		return [...prop.items].sort((a, b) => {
-			return collator.compare(a[sortBy.value], b[sortBy.value]);
-		});
-	} else {
-		return [...prop.items].sort((a, b) => {
-			return -collator.compare(a[sortBy.value], b[sortBy.value]);
+			return collator.compare(a[val], b[val]) * factor;
 		});
 	}
+
+	return [...prop.items].sort((a, b) => {
+		let amountA = a[val] / (a.size || 1);
+		let amountB = b[val] / (b.size || 1);
+		return collator.compare(amountA, amountB) * factor;
+	});
 });
 
 function perServing(val, size, frac = 1) {

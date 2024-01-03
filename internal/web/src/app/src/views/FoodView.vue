@@ -10,7 +10,7 @@ import TagList from "../components/TagList.vue";
 import SortMenu from "../components/SortMenu.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
-import { ref, inject } from "vue";
+import { ref, inject, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { DateTime } from "luxon";
 
@@ -192,6 +192,8 @@ function onSort(evt) {
 	list.value.setSortCategory(cat, dir);
 	evt.target.selectedIndex = 0;
 }
+
+onMounted(() => (filtered.value = [...foods.value]));
 </script>
 
 <template>

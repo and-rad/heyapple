@@ -55,7 +55,11 @@ type CreateUser struct {
 }
 
 func (c *CreateUser) Execute(db DB) error {
-	// Doing this first comes with a performance penalty
+	if !NewValidator().MatchPass(c.Pass) {
+		return ErrWeakPass
+	}
+
+	// Doing this early comes with a performance penalty
 	// that is actually desirable here since it helps
 	// making user enumeration attacks a little harder.
 	hash := NewCrypter().Encrypt(c.Pass)
@@ -203,6 +207,10 @@ type ChangePassword struct {
 }
 
 func (c *ChangePassword) Execute(db DB) error {
+	if !NewValidator().MatchPass(c.Pass) {
+		return ErrWeakPass
+	}
+
 	if c.Token == "" && c.ID < 1 {
 		return ErrNotFound
 	}

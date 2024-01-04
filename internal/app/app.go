@@ -49,6 +49,7 @@ var (
 	ErrMissing     = errors.New("missing")
 	ErrNotFound    = errors.New("notfound")
 	ErrPermission  = errors.New("permission")
+	ErrWeakPass    = errors.New("weakpass")
 )
 
 // DB provides access to persistent storage.

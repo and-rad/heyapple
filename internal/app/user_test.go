@@ -117,25 +117,37 @@ func TestCreateUser_Execute(t *testing.T) {
 
 		err error
 	}{
-		{ //00// database failure
-			db:  mock.NewDB().WithError(mock.ErrDOS),
-			err: mock.ErrDOS,
+		{ //00// weak password
+			db:   mock.NewDB(),
+			pass: "",
+			err:  app.ErrWeakPass,
 		},
-		{ //01// username already exists
+		{ //01// weak password
+			db:   mock.NewDB(),
+			pass: "topsecret",
+			err:  app.ErrWeakPass,
+		},
+		{ //02// database failure
+			db:   mock.NewDB().WithError(mock.ErrDOS),
+			pass: "correcthorsebatterystaple",
+			err:  mock.ErrDOS,
+		},
+		{ //03// username already exists
 			db:    mock.NewDB().WithUser(app.User{Email: "a@a.a"}),
 			email: "a@a.a",
+			pass:  "correcthorsebatterystaple",
 			err:   app.ErrExists,
 		},
-		{ //02// deferred database failure
+		{ //04// deferred database failure
 			db:    mock.NewDB().WithError(nil, mock.ErrDOS),
 			email: "b@b.b",
-			pass:  "topsecret",
+			pass:  "correcthorsebatterystaple",
 			err:   mock.ErrDOS,
 		},
-		{ //03// success
+		{ //05// success
 			db:    mock.NewDB().WithUser(app.User{Email: "a@a.a"}),
 			email: "b@b.b",
-			pass:  "topsecret",
+			pass:  "correcthorsebatterystaple",
 		},
 	} {
 		cmd := &app.CreateUser{Email: data.email, Pass: data.pass}
@@ -314,45 +326,57 @@ func TestChangePassword_Execute(t *testing.T) {
 		err error
 	}{
 		{ //00// empty data
-			db:  mock.NewDB(),
-			err: app.ErrNotFound,
+			db:   mock.NewDB(),
+			pass: "supersecret",
+			err:  app.ErrNotFound,
 		},
 		{ //01// token doesn't exist
 			db:    mock.NewDB(),
+			pass:  "supersecret",
 			token: "abcd",
 			err:   app.ErrNotFound,
 		},
 		{ //02// missing token data
 			db:    mock.NewDB().WithToken(app.Token{ID: 1}),
+			pass:  "supersecret",
 			token: "abcd",
 			err:   app.ErrNotFound,
 		},
 		{ //03// wrong token data
 			db:    mock.NewDB().WithToken(app.Token{ID: 1, Data: "wrong"}),
+			pass:  "supersecret",
 			token: "abcd",
 			err:   app.ErrNotFound,
 		},
 		{ //04// user doesn't exist
 			db:    mock.NewDB().WithToken(app.Token{ID: 1, Data: "reset"}),
+			pass:  "supersecret",
 			token: "abcd",
 			err:   app.ErrNotFound,
 		},
 		{ //05// user doesn't exist
-			db:  mock.NewDB(),
-			id:  1,
-			err: app.ErrNotFound,
+			db:   mock.NewDB(),
+			pass: "supersecret",
+			id:   1,
+			err:  app.ErrNotFound,
 		},
 		{ //06// deferred failure
-			db:  mock.NewDB().WithUser(mock.User1).WithError(nil, mock.ErrDOS),
-			id:  1,
-			err: mock.ErrDOS,
+			db:   mock.NewDB().WithUser(mock.User1).WithError(nil, mock.ErrDOS),
+			pass: "supersecret",
+			id:   1,
+			err:  mock.ErrDOS,
 		},
-		{ //07// success for id path
+		{ //07// password too weak
+			db:   mock.NewDB(),
+			pass: "tooweak",
+			err:  app.ErrWeakPass,
+		},
+		{ //08// success for id path
 			db:   mock.NewDB().WithUser(mock.User1),
 			pass: "supersecret",
 			id:   1,
 		},
-		{ //08// success for token path
+		{ //09// success for token path
 			db:    mock.NewDB().WithUser(mock.User1).WithToken(app.Token{ID: mock.User1.ID, Data: "reset"}),
 			pass:  "supersecret",
 			token: "abcd",

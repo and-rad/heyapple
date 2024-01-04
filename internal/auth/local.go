@@ -216,6 +216,7 @@ func ResetRequest(env *handler.Environment) httprouter.Handle {
 //	200 - Password reset successful
 //	400 - Malformed or missing form data
 //	404 - User or token doesn't exist
+//	422 - New password is too weak
 //	500 - Internal server error
 //
 // Example input:
@@ -232,6 +233,8 @@ func ResetConfirm(env *handler.Environment) httprouter.Handle {
 			w.WriteHeader(http.StatusBadRequest)
 		} else if err := env.DB.Execute(cmd); err == app.ErrNotFound {
 			w.WriteHeader(http.StatusNotFound)
+		} else if err == app.ErrWeakPass {
+			w.WriteHeader(http.StatusUnprocessableEntity)
 		} else if err != nil {
 			w.WriteHeader(http.StatusInternalServerError)
 		} else {

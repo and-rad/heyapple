@@ -46,7 +46,7 @@ import (
 //
 //	202 - Creation request accepted
 //	400 - Malformed or missing form data
-//	401 - The provided password is not strong enough
+//	422 - The provided password is not strong enough
 //	500 - Internal server error
 //
 // Example input:
@@ -67,6 +67,10 @@ func NewUser(env *handler.Environment) httprouter.Handle {
 		err := env.DB.Execute(cmd)
 		if err == app.ErrExists {
 			w.WriteHeader(http.StatusAccepted)
+			return
+		}
+		if err == app.ErrWeakPass {
+			w.WriteHeader(http.StatusUnprocessableEntity)
 			return
 		}
 		if err != nil {

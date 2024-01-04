@@ -48,24 +48,29 @@ func TestNewUser(t *testing.T) {
 			db:     mock.NewDB(),
 			status: http.StatusBadRequest,
 		},
-		{ //01// connection failure
+		{ //01// weak password
+			db:     mock.NewDB(),
+			in:     url.Values{"email": {"a@a.a"}, "pass": {"topsecret"}},
+			status: http.StatusUnprocessableEntity,
+		},
+		{ //02// connection failure
 			db:     mock.NewDB().WithError(mock.ErrDOS),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
 			status: http.StatusInternalServerError,
 		},
-		{ //02// notification failure
+		{ //03// notification failure
 			db:     mock.NewDB(),
 			nf:     mock.NewNotifier().WithError(mock.ErrDOS),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
 			status: http.StatusAccepted,
 			err:    mock.ErrDOS.Error(),
 		},
-		{ //03// username exists
+		{ //04// username exists
 			db:     mock.NewDB().WithError(app.ErrExists),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},
 			status: http.StatusAccepted,
 		},
-		{ //04// success
+		{ //05// success
 			db:     mock.NewDB(),
 			nf:     mock.NewNotifier(),
 			in:     url.Values{"email": {"a@a.a"}, "pass": {"password123"}},

@@ -252,7 +252,12 @@ func TestResetConfirm(t *testing.T) {
 			in:     url.Values{"token": {"abcd"}, "pass": {"password123"}},
 			status: http.StatusNotFound,
 		},
-		{ //03// success
+		{ //03// weak password
+			db:     mock.NewDB(),
+			in:     url.Values{"token": {"abcd"}, "pass": {"weakpass"}},
+			status: http.StatusUnprocessableEntity,
+		},
+		{ //04// success
 			db:     mock.NewDB().WithUser(app.User{ID: 1}).WithToken(app.Token{ID: 1, Data: "reset"}),
 			in:     url.Values{"token": {"abcd"}, "pass": {"password123"}},
 			status: http.StatusOK,

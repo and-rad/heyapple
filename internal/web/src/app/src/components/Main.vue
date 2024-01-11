@@ -2,7 +2,7 @@
 import MenuImage from "./images/ImageMenu.vue";
 import DetailsImage from "./images/ImageHeaderMono.vue";
 import MoreImage from "./images/ImageMore.vue";
-import BackArrow from "./images/ImageRightArrow.vue";
+import BackImage from "./images/ImageRightArrow.vue";
 import { ref, inject, computed } from "vue";
 import { useI18n } from "vue-i18n";
 
@@ -28,16 +28,6 @@ function toggleFilter() {
 	}
 }
 
-function toggleDetails() {
-	emit("detailVisibility");
-	if (!details.value) {
-		details.value = true;
-		filter.value = false;
-	} else {
-		details.value = false;
-	}
-}
-
 function showDetails() {
 	emit("detailVisibility");
 	if (!details.value) {
@@ -46,7 +36,14 @@ function showDetails() {
 	}
 }
 
-defineExpose({ showDetails });
+function hideDetails() {
+	emit("detailVisibility");
+	if (details.value) {
+		details.value = false;
+	}
+}
+
+defineExpose({ showDetails, hideDetails });
 </script>
 
 <template>
@@ -59,7 +56,7 @@ defineExpose({ showDetails });
 			<div class="controls">
 				<button @click="toggleFilter" class="open-filter icon"><MenuImage /></button>
 				<slot name="controls"><span class="spacer"></span></slot>
-				<button @click="toggleDetails" class="open-details icon"><MoreImage /></button>
+				<button @click="showDetails" class="open-details icon"><MoreImage /></button>
 			</div>
 			<div class="content">
 				<slot name="main">This is the main area</slot>
@@ -67,12 +64,11 @@ defineExpose({ showDetails });
 		</div>
 
 		<div id="details">
-			<div class="controls">
-				<slot name="head-details"></slot>
-				<span class="spacer"></span>
-				<button @click="toggleDetails" class="open-details icon"><BackArrow /></button>
-			</div>
 			<slot name="details">
+				<div class="controls">
+					<span class="spacer"></span>
+					<button @click="hideDetails" class="open-details icon"><BackImage /></button>
+				</div>
 				<div class="placeholder">
 					<DetailsImage />
 					<p>{{ t("details.noitem") }}</p>
@@ -300,6 +296,14 @@ main.edit-mode .no-edit-mode {
 	opacity: 0.2;
 }
 
+button.cancel-edit-mode > svg {
+	transition: fill 0.25s ease-in;
+}
+
+main.edit-mode button.cancel-edit-mode > svg {
+	fill: var(--color-bad);
+}
+
 main .controls {
 	display: flex;
 	align-items: center;
@@ -509,6 +513,10 @@ main .controls .sort-menu .options {
 
 	main .controls button.open-details {
 		display: none;
+	}
+
+	main.edit-mode .controls button.cancel-edit-mode {
+		display: block;
 	}
 }
 </style>

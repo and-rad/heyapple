@@ -5,6 +5,7 @@ import EntryList from "../components/DiaryEntryList.vue";
 import PieChart from "../components/PieChart.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
+import BackImage from "../components/images/ImageRightArrow.vue";
 import { ref, computed, inject, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
 import { DateTime, Duration } from "luxon";
@@ -107,6 +108,14 @@ function onEditMode() {
 	}
 }
 
+function onBack() {
+	main.value.hideDetails();
+}
+
+function onDetailVisibility() {
+	editMode.value = false;
+}
+
 function saveEntries() {
 	let items = entries.value.getDiff();
 	if (items.length == 0) {
@@ -192,7 +201,7 @@ onMounted(() => {
 </script>
 
 <template>
-	<Main ref="main" class="diary" :class="{ 'edit-mode': editMode }" @detailVisibility="editMode = false">
+	<Main ref="main" class="diary" :class="{ 'edit-mode': editMode }" @detailVisibility="onDetailVisibility">
 		<template #filter>
 			<section>
 				<h2>{{ t("aria.headcal") }}</h2>
@@ -618,11 +627,12 @@ onMounted(() => {
 			</section>
 		</template>
 
-		<template #head-details>
-			<h2 class="no-edit-mode">{{ currentDate.weekdayLong }}</h2>
-		</template>
-
 		<template #details>
+			<div class="controls">
+				<h2 class="no-edit-mode">{{ currentDate.weekdayLong }}</h2>
+				<span class="spacer"></span>
+				<button @click="onBack" class="open-details icon cancel-edit-mode"><BackImage /></button>
+			</div>
 			<section class="subtitle no-edit-mode">
 				{{ currentDate.toLocaleString(DateTime.DATE_FULL) }}
 			</section>

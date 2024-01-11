@@ -10,6 +10,7 @@ import TagList from "../components/TagList.vue";
 import SortMenu from "../components/SortMenu.vue";
 import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
+import BackImage from "../components/images/ImageRightArrow.vue";
 import ListImage from "../components/images/ImageList.vue";
 import { ref, inject, onMounted } from "vue";
 import { useI18n } from "vue-i18n";
@@ -256,6 +257,14 @@ function onEditMode() {
 	editMode.value ? saveRecipe() : (editMode.value = true);
 }
 
+function onBack() {
+	main.value.hideDetails();
+}
+
+function onDetailVisibility() {
+	editMode.value = false;
+}
+
 function onInput(evt) {
 	evt.target.blur();
 	if (isNaN(parseFloat(evt.target.value))) {
@@ -273,7 +282,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 </script>
 
 <template>
-	<Main ref="main" @detailVisibility="editMode = false" :class="{ 'edit-mode': editMode }">
+	<Main ref="main" @detailVisibility="onDetailVisibility" :class="{ 'edit-mode': editMode }">
 		<template #filter>
 			<section class="new-item">
 				<h2>{{ t("aria.headnewrec") }}</h2>
@@ -632,15 +641,16 @@ onMounted(() => (filtered.value = [...recipes.value]));
 			<FoodList class="m" ref="list" :items="filtered" @selected="showDetails" />
 		</template>
 
-		<template #head-details v-if="current">
-			<form ref="form" autocomplete="off" id="form-recipe">
-				<fieldset :disabled="!editMode">
-					<input type="text" name="name" :value="current.name" />
-				</fieldset>
-			</form>
-		</template>
-
 		<template #details v-if="current">
+			<div class="controls">
+				<form ref="form" autocomplete="off" id="form-recipe">
+					<fieldset :disabled="!editMode">
+						<input type="text" name="name" :value="current.name" />
+					</fieldset>
+				</form>
+				<span class="spacer"></span>
+				<button @click="onBack" class="open-details icon cancel-edit-mode"><BackImage /></button>
+			</div>
 			<section class="subtitle no-edit-mode" v-html="ownerInfo"></section>
 			<section class="tags">
 				<TagList :item="current" />

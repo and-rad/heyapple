@@ -109,7 +109,11 @@ function onEditMode() {
 }
 
 function onBack() {
-	main.value.hideDetails();
+	if (editMode.value) {
+		editMode.value = false;
+	} else {
+		main.value.hideDetails();
+	}
 }
 
 function onDetailVisibility() {

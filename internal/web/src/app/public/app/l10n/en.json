@@ -224,11 +224,16 @@
 			"isowner": "Your recipe",
 			"ispublic": "Public recipe",
 			"misctime": "Additional",
+			"noinst": "No instructions for this recipe",
 			"noitems": "This recipe is currently empty.<br>Time to add some <a href='#/food'>food</a>!",
 			"owner": "<strong>{name}</strong>'s recipe",
 			"preptime": "Preparation",
 			"size": "Serving|Servings",
 			"time": "Total time"
+		},
+		"recinst": {
+			"err400": "Malformed or missing input data.",
+			"err500": "Internal server error. This shouldn't happen."
 		},
 		"recowner": {
 			"err": "Could not determine recipe ownership."
@@ -281,9 +286,6 @@
 			"1024": "peanuts",
 			"2048": "wheat",
 			"4096": "soy"
-		},
-		"todo": {
-			"instructions": "Instructions coming soon"
 		},
 		"unit": {
 			"cal": "kcal",

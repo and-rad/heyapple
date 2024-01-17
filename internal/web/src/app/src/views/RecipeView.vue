@@ -208,6 +208,10 @@ function showDetails(id) {
 	current.value = filtered.value.filter((r) => r.id == id)[0];
 	main.value.showDetails();
 
+	if (!("inst" in current.value)) {
+		fetchInstructions();
+	}
+
 	if ("isowner" in current.value) {
 		updateOwnerInfo();
 	} else {
@@ -242,6 +246,24 @@ function updateOwnerInfo() {
 	} else {
 		ownerInfo.value = t("recipe.ispublic");
 	}
+}
+
+function fetchInstructions() {
+	fetch(`/api/v1/recipe/${current.value.id}/instructions`)
+		.then((response) => {
+			if (!response.ok) {
+				throw response.status;
+			}
+			return response.json();
+		})
+		.then((data) => {
+			current.value.inst = data.inst;
+		})
+		.catch((status) => {
+			if (status != 404) {
+				log.err(t("recinst.err" + status));
+			}
+		});
 }
 
 function updateList(items) {
@@ -958,9 +980,12 @@ onMounted(() => (filtered.value = [...recipes.value]));
 						</div>
 					</fieldset>
 				</div>
-				<div class="placeholder">
+				<div v-if="!current.inst" class="placeholder">
 					<ListImage />
-					<p>{{ t("todo.instructions") }}</p>
+					<p>{{ t("recipe.noinst") }}</p>
+				</div>
+				<div v-if="current.inst" id="instructions">
+					<p>{{ current.inst }}</p>
 				</div>
 			</section>
 		</template>
@@ -984,6 +1009,10 @@ onMounted(() => (filtered.value = [...recipes.value]));
 
 #details .ingredients label {
 	color: var(--color-text);
+}
+
+#details #instructions {
+	margin-top: 2em;
 }
 
 @media only screen and (min-width: 400px) {

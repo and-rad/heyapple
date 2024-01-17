@@ -224,11 +224,16 @@
 			"isowner": "Dein Rezept",
 			"ispublic": "Öffentliches Rezept",
 			"misctime": "Zusätzlich",
+			"noinst": "Keine Anleitung für diese Rezept",
 			"noitems": "Dieses Rezept ist noch leer.<br>Zeit, ein paar <a href='#/food'>Lebensmittel</a> hinzuzufügen!",
 			"owner": "<strong>{name}</strong>s Rezept",
 			"preptime": "Vorbereitung",
 			"size": "Portion|Portionen",
 			"time": "Gesamtzeit"
+		},
+		"recinst": {
+			"err400": "Fehlerhafte oder fehlende Eingabe.",
+			"err500": "Interner Serverfehler. Das sollte nicht passieren."
 		},
 		"recowner": {
 			"err": "Konnte Rezeptbesitzer nicht ermitteln."
@@ -281,9 +286,6 @@
 			"1024": "Erdnüsse",
 			"2048": "Getreide",
 			"4096": "Soja"
-		},
-		"todo": {
-			"instructions": "Anleitungen bald verfügbar"
 		},
 		"unit": {
 			"cal": "kcal",

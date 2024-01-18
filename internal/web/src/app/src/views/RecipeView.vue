@@ -984,9 +984,7 @@ onMounted(() => (filtered.value = [...recipes.value]));
 					<ListImage />
 					<p>{{ t("recipe.noinst") }}</p>
 				</div>
-				<div v-if="current.inst" id="instructions">
-					<p>{{ current.inst }}</p>
-				</div>
+				<div v-if="current.inst" id="instructions" v-html="current.inst"></div>
 			</section>
 		</template>
 	</Main>
@@ -1013,6 +1011,21 @@ onMounted(() => (filtered.value = [...recipes.value]));
 
 #details #instructions {
 	margin-top: 2em;
+	margin-bottom: 1em;
+	padding: 0 0.5em;
+	display: block;
+}
+
+#details #instructions h2 {
+	margin-bottom: 0.25rem;
+	font-size: 12px;
+	font-weight: 700;
+	color: var(--color-text-light);
+	text-transform: uppercase;
+}
+
+#details #instructions h2:not(:first-child) {
+	margin-top: 1.25rem;
 }
 
 @media only screen and (min-width: 400px) {

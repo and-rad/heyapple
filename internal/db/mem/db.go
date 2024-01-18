@@ -36,7 +36,7 @@ import (
 // entryMap   uid     day           entries
 type entryMap map[int]map[time.Time][]core.DiaryEntry
 
-// dayMap   uid     yr      mon     entries
+// dayMap   uid     year    mon     entries
 type dayMap map[int]map[int]map[int][]core.DiaryDay
 
 // aisleMap   uid     food    aisle
@@ -59,6 +59,8 @@ type DB struct {
 	entries entryMap
 	days    dayMap
 
+	instructions map[int]string
+
 	userRec map[int]map[int]int
 	recUser map[int]map[int]int
 
@@ -75,18 +77,19 @@ type DB struct {
 
 func NewDB() *DB {
 	return &DB{
-		users:   make(map[int]app.User),
-		tokens:  make(map[string]app.Token),
-		emails:  make(map[string]int),
-		food:    make(map[int]core.Food),
-		recipes: make(map[int]core.Recipe),
-		userRec: make(map[int]map[int]int),
-		recUser: make(map[int]map[int]int),
-		entries: make(entryMap),
-		days:    make(dayMap),
-		aisles:  make(aisleMap),
-		prices:  make(priceMap),
-		done:    make(doneMap),
+		users:        make(map[int]app.User),
+		tokens:       make(map[string]app.Token),
+		emails:       make(map[string]int),
+		food:         make(map[int]core.Food),
+		recipes:      make(map[int]core.Recipe),
+		instructions: make(map[int]string),
+		userRec:      make(map[int]map[int]int),
+		recUser:      make(map[int]map[int]int),
+		entries:      make(entryMap),
+		days:         make(dayMap),
+		aisles:       make(aisleMap),
+		prices:       make(priceMap),
+		done:         make(doneMap),
 	}
 }
 

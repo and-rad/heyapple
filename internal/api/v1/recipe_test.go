@@ -404,6 +404,93 @@ func TestRecipeOwner(t *testing.T) {
 	}
 }
 
+func TestRecipeInstructions(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// missing id
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// wrong data type for id
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "someone"}},
+			status: http.StatusBadRequest,
+		},
+		{ //02// connection failure
+			db:        mock.NewDB().WithError(mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "42"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //03// missing access rights
+			db:        mock.NewDB(),
+			params:    httprouter.Params{{Key: "id", Value: "42"}},
+			setCookie: true,
+			status:    http.StatusUnauthorized,
+		},
+		{ //04// recipe doesn't exist
+			db: mock.NewDB().
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermRead}).
+				WithError(nil, app.ErrNotFound),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //05// no instructions for this recipe
+			db: mock.NewDB().
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermRead}).
+				WithInstructions(23, "Cook it"),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //06// server error
+			db: mock.NewDB().
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermRead}).
+				WithError(nil, mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //07// success
+			db: mock.NewDB().
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermRead}).
+				WithInstructions(2, "Cook it"),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusOK,
+			out:       `{"id":2,"inst":"Cook it"}`,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.RecipeInstructions(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}
+
 func TestSaveIngredient(t *testing.T) {
 	for idx, data := range []struct {
 		db        *mock.DB

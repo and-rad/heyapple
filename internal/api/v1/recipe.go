@@ -225,6 +225,7 @@ func Recipes(env *handler.Environment) httprouter.Handle {
 //
 //	200 - OK
 //	400 - Missing or malformed id
+//	401 - Insufficient permission
 //	404 - Recipe doesn't exist
 //	500 - Internal server error
 //
@@ -260,6 +261,68 @@ func Recipe(env *handler.Environment) httprouter.Handle {
 		} else {
 			w.WriteHeader(http.StatusOK)
 			sendResponse(query.Item, w)
+		}
+	}
+}
+
+// RecipeInstructions returns instructions on preparing the
+// recipe identified by {id}. The function body is empty
+// when errors occur and will be a single JSON object
+// on success.
+//
+// Endpoint:
+//
+//	/api/v1/recipe/{id}/instructions
+//
+// Methods:
+//
+//	GET
+//
+// Possible status codes:
+//
+//	200 - OK
+//	400 - Missing or malformed id
+//	401 - Insufficient permission
+//	404 - Instructions don't exist
+//	500 - Internal server error
+//
+// Example output:
+//
+//	{ "inst": "Chop it all, put it in a bowl, heat up, eat." }
+func RecipeInstructions(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		rid, err := strconv.Atoi(ps.ByName("id"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		var hasPermission bool
+		if uid, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			query := &app.RecipeAccess{UserID: uid, RecID: rid}
+			if err = env.DB.Fetch(query); err == nil {
+				hasPermission = query.HasPerms(app.PermRead)
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+		}
+
+		if !hasPermission {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		query := &app.RecipeInstructions{RecID: rid}
+		if err = env.DB.Fetch(query); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else if query.Instructions == "" {
+			w.WriteHeader(http.StatusNotFound)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(query, w)
 		}
 	}
 }

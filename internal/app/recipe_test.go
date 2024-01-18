@@ -250,6 +250,47 @@ func TestRecipeAccess_HasPerms(t *testing.T) {
 	}
 }
 
+func TestRecipeInstructions_Fetch(t *testing.T) {
+	for idx, data := range []struct {
+		db  *mock.DB
+		rec int
+
+		inst string
+		err  error
+	}{
+		{ //00// id missing or invalid
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// connection failed
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			rec: 1,
+			err: mock.ErrDOS,
+		},
+		{ //02// success
+			db:   mock.NewDB().WithInstructions(1, "Cook it well"),
+			rec:  1,
+			inst: "Cook it well",
+		},
+		{ //03// no instructions for this recipe
+			db:   mock.NewDB().WithInstructions(2, "Cook it well"),
+			rec:  1,
+			inst: "",
+		},
+	} {
+		qry := &app.RecipeInstructions{RecID: data.rec}
+		err := qry.Fetch(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if qry.Instructions != data.inst {
+			t.Errorf("test case %d: text mismatch \nhave: %v \nwant: %v", idx, qry.Instructions, data.inst)
+		}
+	}
+}
+
 func TestRecipes_Fetch(t *testing.T) {
 	for idx, data := range []struct {
 		db     *mock.DB

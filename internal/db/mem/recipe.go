@@ -79,6 +79,13 @@ func (db *DB) RecipeAccess(user, rec int) (int, error) {
 	return combined, nil
 }
 
+func (db *DB) RecipeInstructions(id int) (string, error) {
+	if inst, ok := db.instructions[id]; ok {
+		return inst, nil
+	}
+	return "", nil
+}
+
 func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {
 	ids := map[int]struct{}{}
 	recs := []core.Recipe{}

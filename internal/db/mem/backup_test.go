@@ -33,27 +33,28 @@ import (
 )
 
 var (
-	backup0 = `{"users":{},"tokens":{},"food":{},"recipes":{},"recaccess":{},"entries":{},"aisles":{},"prices":{},"done":{},"userid":0,"foodid":0,"recid":0}`
-	backup1 = fmt.Sprintf(`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"recaccess":{"1":[{"res":1,"perms":3840}]},"entries":{"1":[%s,%s,%s]},"aisles":{"0":{"1":1,"2":12}},"prices":{"1":{"2":[1.5,2.5]}},"done":{"1":{"1":true}},"userid":1,"foodid":2,"recid":1}`,
-		mock.User1Json, mock.Food1Json, mock.Food2Json, mock.Recipe1Json, mock.Entry1Json, mock.Entry2Json, mock.Entry3Json,
+	backup0 = `{"users":{},"tokens":{},"food":{},"recipes":{},"inst":{},"recaccess":{},"entries":{},"aisles":{},"prices":{},"done":{},"userid":0,"foodid":0,"recid":0}`
+	backup1 = fmt.Sprintf(`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"inst":{"1":"%s"},"recaccess":{"1":[{"res":1,"perms":3840}]},"entries":{"1":[%s,%s,%s]},"aisles":{"0":{"1":1,"2":12}},"prices":{"1":{"2":[1.5,2.5]}},"done":{"1":{"1":true}},"userid":1,"foodid":2,"recid":1}`,
+		mock.User1Json, mock.Food1Json, mock.Food2Json, mock.Recipe1Json, mock.Instructions1, mock.Entry1Json, mock.Entry2Json, mock.Entry3Json,
 	)
 
 	database1 = &DB{
-		users:   map[int]app.User{mock.User1.ID: mock.User1},
-		emails:  map[string]int{mock.User1.Email: mock.User1.ID},
-		tokens:  map[string]app.Token{"abcd": {ID: mock.User1.ID}},
-		food:    map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},
-		recipes: map[int]core.Recipe{mock.Recipe1().ID: mock.Recipe1()},
-		recUser: map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
-		userRec: map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
-		entries: entryMap{mock.User1.ID: {mock.Date1.Truncate(time.Hour * 24): {mock.Entry1(), mock.Entry2()}, mock.Day2: {mock.Entry3()}}},
-		days:    dayMap{mock.User1.ID: {2022: {3: {mock.Diary220312(), mock.Diary220313()}}}},
-		aisles:  aisleMap{0: {mock.Food1.ID: 1, mock.Food2.ID: 12}},
-		prices:  priceMap{mock.User1.ID: {mock.Food2.ID: [2]float32{1.5, 2.5}}},
-		done:    doneMap{mock.User1.ID: {mock.Food1.ID: true}},
-		userID:  1,
-		foodID:  2,
-		recID:   1,
+		users:        map[int]app.User{mock.User1.ID: mock.User1},
+		emails:       map[string]int{mock.User1.Email: mock.User1.ID},
+		tokens:       map[string]app.Token{"abcd": {ID: mock.User1.ID}},
+		food:         map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},
+		recipes:      map[int]core.Recipe{mock.Recipe1().ID: mock.Recipe1()},
+		instructions: map[int]string{mock.Recipe1().ID: mock.Instructions1},
+		recUser:      map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
+		userRec:      map[int]map[int]int{1: {1: app.PermCreate | app.PermEdit | app.PermRead | app.PermDelete}},
+		entries:      entryMap{mock.User1.ID: {mock.Date1.Truncate(time.Hour * 24): {mock.Entry1(), mock.Entry2()}, mock.Day2: {mock.Entry3()}}},
+		days:         dayMap{mock.User1.ID: {2022: {3: {mock.Diary220312(), mock.Diary220313()}}}},
+		aisles:       aisleMap{0: {mock.Food1.ID: 1, mock.Food2.ID: 12}},
+		prices:       priceMap{mock.User1.ID: {mock.Food2.ID: [2]float32{1.5, 2.5}}},
+		done:         doneMap{mock.User1.ID: {mock.Food1.ID: true}},
+		userID:       1,
+		foodID:       2,
+		recID:        1,
 	}
 )
 

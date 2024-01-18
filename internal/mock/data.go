@@ -222,6 +222,10 @@ const (
 	Recipe2Json = `{"name":"Fruit Cake","items":[{"id":1,"amount":300},{"id":2,"amount":250}],"id":2,"size":3,"flags":3,"preptime":0,"cooktime":0,"misctime":0,"kcal":394.5,"fat":0.8,"fatsat":0,"fato3":0,"fato6":0,"carb":93.2,"sug":73.4,"fruc":40,"gluc":19,"suc":14.4,"fib":11,"prot":3.4,"salt":0,"pot":1274.5,"chl":279.1,"sod":5.5,"calc":33.4,"phos":88,"mag":90,"iron":1.6,"zinc":0.8,"mang":0.75,"cop":0.55,"iod":0.0315,"chr":0,"mol":0,"sel":0,"vita":0.055,"vitb1":0.22,"vitb2":0.23999998,"vitb3":0,"vitb5":0,"vitb6":1.2,"vitb7":0,"vitb9":0,"vitb12":0,"vitc":63.5,"vitd":0,"vite":2.145,"vitk":0}`
 )
 
+const (
+	Instructions1 = "Cook it well."
+)
+
 var (
 	User1 = app.User{
 		ID:    1,

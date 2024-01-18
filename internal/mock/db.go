@@ -44,17 +44,23 @@ type Access struct {
 	Perms    int
 }
 
+type Instructions struct {
+	Recipe       int
+	Instructions string
+}
+
 type DB struct {
-	User        app.User
-	Tok         app.Token
-	FoodItem    core.Food
-	FoodItems   []core.Food
-	RecipeItem  core.Recipe
-	RecipeItems []core.Recipe
-	Entries     []core.DiaryEntry
-	Days        []core.DiaryDay
-	ShopList    []core.ShopItem
-	Access      Access
+	User         app.User
+	Tok          app.Token
+	FoodItem     core.Food
+	FoodItems    []core.Food
+	RecipeItem   core.Recipe
+	RecipeItems  []core.Recipe
+	Entries      []core.DiaryEntry
+	Days         []core.DiaryDay
+	ShopList     []core.ShopItem
+	Access       Access
+	Instructions Instructions
 
 	Err  []error
 	ID   int
@@ -126,6 +132,11 @@ func (db *DB) WithRecipes(recs ...core.Recipe) *DB {
 
 func (db *DB) WithAccess(a Access) *DB {
 	db.Access = a
+	return db
+}
+
+func (db *DB) WithInstructions(id int, text string) *DB {
+	db.Instructions = Instructions{Recipe: id, Instructions: text}
 	return db
 }
 
@@ -313,6 +324,16 @@ func (db *DB) RecipeAccess(user, rec int) (int, error) {
 		return db.Access.Perms, nil
 	}
 	return 0, nil
+}
+
+func (db *DB) RecipeInstructions(id int) (string, error) {
+	if err := db.popError(); err != nil {
+		return "", err
+	}
+	if db.Instructions.Recipe == id {
+		return db.Instructions.Instructions, nil
+	}
+	return "", nil
 }
 
 func (db *DB) Recipes(uid int, f core.Filter) ([]core.Recipe, error) {

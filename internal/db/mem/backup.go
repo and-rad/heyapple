@@ -47,18 +47,19 @@ type backup struct {
 }
 
 type backupData struct {
-	Users   map[int]app.User          `json:"users"`
-	Tokens  map[string]app.Token      `json:"tokens"`
-	Food    map[int]core.Food         `json:"food"`
-	Recipes map[int]core.Recipe       `json:"recipes"`
-	UserRec map[int][]access          `json:"recaccess"`
-	Entries map[int][]core.DiaryEntry `json:"entries"`
-	Aisles  aisleMap                  `json:"aisles"`
-	Prices  priceMap                  `json:"prices"`
-	Done    doneMap                   `json:"done"`
-	UserID  int                       `json:"userid"`
-	FoodID  int                       `json:"foodid"`
-	RecID   int                       `json:"recid"`
+	Users        map[int]app.User          `json:"users"`
+	Tokens       map[string]app.Token      `json:"tokens"`
+	Food         map[int]core.Food         `json:"food"`
+	Recipes      map[int]core.Recipe       `json:"recipes"`
+	Instructions map[int]string            `json:"inst"`
+	UserRec      map[int][]access          `json:"recaccess"`
+	Entries      map[int][]core.DiaryEntry `json:"entries"`
+	Aisles       aisleMap                  `json:"aisles"`
+	Prices       priceMap                  `json:"prices"`
+	Done         doneMap                   `json:"done"`
+	UserID       int                       `json:"userid"`
+	FoodID       int                       `json:"foodid"`
+	RecID        int                       `json:"recid"`
 }
 
 func (b *backup) Run() {
@@ -87,6 +88,7 @@ func (b *backup) load() {
 			b.db.food = db.Food
 			b.db.foodID = db.FoodID
 			b.db.recipes = db.Recipes
+			b.db.instructions = db.Instructions
 			b.db.recID = db.RecID
 			b.db.aisles = db.Aisles
 			b.db.prices = db.Prices
@@ -287,18 +289,19 @@ func (b *backup) bytes() []byte {
 	}
 
 	data, _ := json.Marshal(backupData{
-		Users:   b.db.users,
-		UserID:  b.db.userID,
-		Food:    b.db.food,
-		FoodID:  b.db.foodID,
-		Recipes: b.db.recipes,
-		Entries: entries,
-		Aisles:  b.db.aisles,
-		Prices:  b.db.prices,
-		Done:    b.db.done,
-		RecID:   b.db.recID,
-		Tokens:  b.db.tokens,
-		UserRec: recAccess,
+		Users:        b.db.users,
+		UserID:       b.db.userID,
+		Food:         b.db.food,
+		FoodID:       b.db.foodID,
+		Recipes:      b.db.recipes,
+		Instructions: b.db.instructions,
+		Entries:      entries,
+		Aisles:       b.db.aisles,
+		Prices:       b.db.prices,
+		Done:         b.db.done,
+		RecID:        b.db.recID,
+		Tokens:       b.db.tokens,
+		UserRec:      recAccess,
 	})
 
 	return data

@@ -127,6 +127,28 @@ func (q *RecipeAccess) HasPerms(perms int) bool {
 	return q.Permission&perms == perms
 }
 
+// RecipeInstructions is a query that fetches preparation
+// instructions for a given recipe. If successful, the text
+// is stored in the query.
+type RecipeInstructions struct {
+	RecID        int    `json:"id"`
+	Instructions string `json:"inst"`
+}
+
+func (q *RecipeInstructions) Fetch(db DB) error {
+	if q.RecID == 0 {
+		return ErrNotFound
+	}
+
+	if inst, err := db.RecipeInstructions(q.RecID); err != nil {
+		return err
+	} else {
+		q.Instructions = inst
+	}
+
+	return nil
+}
+
 // Recipes is a query to retrieve all recipes from
 // the food database.
 type Recipes struct {

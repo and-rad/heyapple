@@ -294,6 +294,41 @@ func TestDB_SetRecipeAccess(t *testing.T) {
 	}
 }
 
+func TestDB_RecipeInstructions(t *testing.T) {
+	for idx, data := range []struct {
+		db  *DB
+		rec int
+
+		inst string
+		err  error
+	}{
+		{ //00// empty database
+			db:   NewDB(),
+			inst: "",
+		},
+		{ //01// instructions don't exist
+			db:   &DB{instructions: map[int]string{12: "Just do it"}},
+			rec:  5,
+			inst: "",
+		},
+		{ //02// success
+			db:   &DB{instructions: map[int]string{5: "Cook it"}},
+			rec:  5,
+			inst: "Cook it",
+		},
+	} {
+		inst, err := data.db.RecipeInstructions(data.rec)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if inst != data.inst {
+			t.Errorf("test case %d: text mismatch \nhave: %v\nwant: %v", idx, inst, data.inst)
+		}
+	}
+}
+
 func TestDB_Recipes(t *testing.T) {
 	for idx, data := range []struct {
 		db     *DB

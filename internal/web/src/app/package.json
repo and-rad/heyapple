@@ -4,7 +4,9 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "postbuild": "mv ../../static/index.html ../../templates/web/app.html",
+    "postbuild": "run-script-os",
+    "postbuild:linux": "mv ../../static/index.html ../../templates/web/app.html",
+    "postbuild:windows": "move ..\\..\\static\\index.html ..\\..\\templates\\web\\app.html",
     "preview": "vite preview --port 5050"
   },
   "dependencies": {
@@ -15,6 +17,7 @@
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^2.1.0",
+    "run-script-os": "^1.1.6",
     "vite": "^2.7.13"
   }
 }

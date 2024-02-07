@@ -1,7 +1,5 @@
 NUM_TESTS := `find -name "*_test.go"|xargs grep "{ //"|wc -l`
 TEST_PACKAGES := `go list ./internal/... | grep -v -e /defaults/ -e /mock -e /web`
-INSTALL_DIR := /tmp/heyapple
-CONFIG_DIR := /tmp/heyapple
 
 build-server:
 	@rm -rf ./out/server
@@ -13,7 +11,7 @@ build-server:
 			--enable-comment-stripping \
 			--strip-xml-prolog \
 			--strip-xml-space; fi
-	@CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o ./out/server/heyapple-linux-amd64 github.com/and-rad/heyapple/cmd/web
+	@CGO_ENABLED=0 GOOS=${DEV_OS} GOARCH=${DEV_ARCH} go build -o ./out/server/heyapple-${DEV_OS}-${DEV_ARCH} github.com/and-rad/heyapple/cmd/web
 
 run-server:
 	@./out/server/heyapple-${DEV_OS}-${DEV_ARCH}

@@ -9,6 +9,7 @@
 
 # client-specific build environment
 .make/env.mk
+.make/env.bat
 .env
 
 # intermediate build files

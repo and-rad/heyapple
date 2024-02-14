@@ -1,3 +1,6 @@
+DEV_ARCH := amd64
+DEV_OS := linux
+
 include .make/web.mk
 include .make/cli.mk
 include .make/server.mk

@@ -88,7 +88,7 @@ func NewRecipe(env *handler.Environment) httprouter.Handle {
 //
 // Invalid form data does not trigger an error and will
 // just be dropped silently. As long as data is valid and
-// corresponds to an existing food item, it's parsed and
+// corresponds to an existing recipe, it's parsed and
 // stored.
 //
 // Endpoint:

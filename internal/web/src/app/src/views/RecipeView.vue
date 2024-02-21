@@ -12,9 +12,10 @@ import EditImage from "../components/images/ImageEdit.vue";
 import SaveImage from "../components/images/ImageSave.vue";
 import BackImage from "../components/images/ImageRightArrow.vue";
 import ListImage from "../components/images/ImageList.vue";
-import { ref, inject, onMounted } from "vue";
+import { ref, inject, onMounted, nextTick } from "vue";
 import { useI18n } from "vue-i18n";
 import { DateTime } from "luxon";
+import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 
 const { t } = useI18n();
 const log = inject("log");
@@ -38,6 +39,8 @@ const main = ref(null);
 const form = ref(null);
 const ingredients = ref(null);
 const list = ref(null);
+
+let editor = null;
 
 function perServing(val, frac = 2) {
 	return +parseFloat(val / (current.value.size || 1)).toFixed(frac);
@@ -89,6 +92,9 @@ function saveRecipe() {
 	let owner = current.value.owner;
 	let isowner = current.value.isowner;
 
+	let oldInst = current.value.inst;
+	let newInst = editor ? editor.getData() : oldInst;
+
 	fetch("/api/v1/recipe/" + id, {
 		method: "PUT",
 		headers: {
@@ -103,11 +109,13 @@ function saveRecipe() {
 			}
 			return saveIngredients(id);
 		})
+		.then(() => saveInstructions(id, oldInst, newInst))
 		.then(() => fetch("/api/v1/recipe/" + id))
 		.then((response) => response.json())
 		.then((data) => {
 			data.owner = owner;
 			data.isowner = isowner;
+			data.inst = newInst;
 			recipes.value = recipes.value.map((r) => (data.id == r.id ? data : r));
 			filtered.value = filtered.value.map((r) => (data.id == r.id ? data : r));
 			current.value = current.value.id == data.id ? data : current.value;
@@ -161,6 +169,14 @@ function saveIngredients(id) {
 				});
 		});
 	});
+}
+
+function saveInstructions(id, newInstructions, oldInstructions) {
+	if (true || newInstructions == oldInstructions) {
+		return new Promise((resolve) => {
+			resolve();
+		});
+	}
 }
 
 function addToDiary(date, time) {
@@ -276,7 +292,33 @@ function updateList(items) {
 }
 
 function onEditMode() {
-	editMode.value ? saveRecipe() : (editMode.value = true);
+	if (editMode.value) {
+		saveRecipe();
+		return;
+	}
+
+	editMode.value = true;
+	nextTick(() =>
+		ClassicEditor.create(document.querySelector("#editor"), {
+			toolbar: {
+				items: [
+					"heading",
+					"|",
+					"bold",
+					"italic",
+					"link",
+					"bulletedList",
+					"numberedList",
+					"|",
+					"indent",
+					"outdent",
+					"|",
+					"undo",
+					"redo",
+				],
+			},
+		}).then((ed) => (editor = ed))
+	);
 }
 
 function onBack() {
@@ -980,11 +1022,14 @@ onMounted(() => (filtered.value = [...recipes.value]));
 						</div>
 					</fieldset>
 				</div>
-				<div v-if="!current.inst" class="placeholder">
+				<div v-if="editMode" id="instructions">
+					<textarea name="inst" id="editor">{{ current.inst }}</textarea>
+				</div>
+				<div v-else-if="current.inst" v-html="current.inst" id="instructions"></div>
+				<div v-else class="placeholder">
 					<ListImage />
 					<p>{{ t("recipe.noinst") }}</p>
 				</div>
-				<div v-if="current.inst" id="instructions" v-html="current.inst"></div>
 			</section>
 		</template>
 	</Main>
@@ -1012,7 +1057,6 @@ onMounted(() => (filtered.value = [...recipes.value]));
 #details #instructions {
 	margin-top: 2em;
 	margin-bottom: 1em;
-	padding: 0 0.5em;
 	display: block;
 }
 
@@ -1026,6 +1070,18 @@ onMounted(() => (filtered.value = [...recipes.value]));
 
 #details #instructions h2:not(:first-child) {
 	margin-top: 1.25rem;
+}
+
+.ck.ck-balloon-panel {
+	display: none !important;
+}
+
+.ck-focused {
+	border-color: var(--ck-color-base-border) !important;
+}
+
+.ck-editor__editable_inline {
+	height: 300px;
 }
 
 @media only screen and (min-width: 400px) {

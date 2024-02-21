@@ -10,6 +10,7 @@
     "preview": "vite preview --port 5050"
   },
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^41.0.0",
     "luxon": "^2.3.1",
     "vue": "^3.2.29",
     "vue-i18n": "^9.1.9",

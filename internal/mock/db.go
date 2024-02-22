@@ -221,7 +221,7 @@ func (db *DB) NewToken(id int, hash string, data interface{}) error {
 	return nil
 }
 
-func (db *DB) DeleteToken(string) error {
+func (db *DB) DelToken(string) error {
 	db.Tok = app.Token{}
 	return nil
 }

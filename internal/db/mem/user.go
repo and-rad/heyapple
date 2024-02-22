@@ -78,7 +78,7 @@ func (db *DB) NewToken(id int, hash string, data interface{}) error {
 	return nil
 }
 
-func (db *DB) DeleteToken(hash string) error {
+func (db *DB) DelToken(hash string) error {
 	delete(db.tokens, hash)
 	return nil
 }

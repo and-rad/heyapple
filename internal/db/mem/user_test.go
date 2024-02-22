@@ -250,7 +250,7 @@ func TestDB_Token(t *testing.T) {
 	}
 }
 
-func TestDB_DeleteToken(t *testing.T) {
+func TestDB_DelToken(t *testing.T) {
 	for idx, data := range []struct {
 		db   *DB
 		hash string
@@ -273,7 +273,7 @@ func TestDB_DeleteToken(t *testing.T) {
 			},
 		},
 	} {
-		err := data.db.DeleteToken(data.hash)
+		err := data.db.DelToken(data.hash)
 
 		if err != data.err {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)

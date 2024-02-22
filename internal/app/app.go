@@ -62,7 +62,7 @@ type DB interface {
 	UserByName(name string) (User, error)
 	UserByID(id int) (User, error)
 	NewToken(id int, hash string, data interface{}) error
-	DeleteToken(string) error
+	DelToken(string) error
 	Token(string) (Token, error)
 
 	NewFood() (int, error)

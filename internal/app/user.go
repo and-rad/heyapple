@@ -142,7 +142,7 @@ func (c *Activate) Execute(db DB) error {
 	}
 
 	if err = db.SetUser(user); err == nil {
-		err = db.DeleteToken(c.Token)
+		err = db.DelToken(c.Token)
 	}
 
 	return err
@@ -235,7 +235,7 @@ func (c *ChangePassword) Execute(db DB) error {
 	user.Pass = NewCrypter().Encrypt(c.Pass)
 	if err = db.SetUser(user); err == nil {
 		if c.Token != "" {
-			err = db.DeleteToken(c.Token)
+			err = db.DelToken(c.Token)
 		}
 	}
 

@@ -327,6 +327,18 @@ func RecipeInstructions(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+func SaveRecipeInstructions(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		w.WriteHeader(http.StatusNoContent)
+	}
+}
+
+func DeleteRecipeInstructions(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		w.WriteHeader(http.StatusNoContent)
+	}
+}
+
 // RecipeOwner returns ownership information about the
 // recipe identified by {id}. The function body is empty
 // when errors occur and will be a single JSON object

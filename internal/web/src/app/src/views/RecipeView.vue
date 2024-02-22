@@ -86,16 +86,14 @@ function newRecipe(name) {
 }
 
 function saveRecipe() {
-	isSaving.value = true;
-
 	let id = current.value.id;
 	let owner = current.value.owner;
 	let isowner = current.value.isowner;
 
-	let oldInst = current.value.inst;
-	let newInst = editor ? editor.getData() : oldInst;
+	let oldInst = current.value.inst || "";
+	let newInst = editor ? editor.getData().trim() : oldInst;
 
-	fetch("/api/v1/recipe/" + id, {
+	return fetch("/api/v1/recipe/" + id, {
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/x-www-form-urlencoded",
@@ -107,9 +105,9 @@ function saveRecipe() {
 			if (!response.ok) {
 				throw t("saverec.err" + response.status);
 			}
-			return saveIngredients(id);
 		})
 		.then(() => saveInstructions(id, oldInst, newInst))
+		.then(() => saveIngredients(id))
 		.then(() => fetch("/api/v1/recipe/" + id))
 		.then((response) => response.json())
 		.then((data) => {
@@ -121,26 +119,19 @@ function saveRecipe() {
 			current.value = current.value.id == data.id ? data : current.value;
 			log.msg(t("saverec.ok"));
 		})
-		.catch((err) => log.err(err))
-		.finally(() => {
-			setTimeout(function () {
-				isSaving.value = false;
-			}, 500);
-		});
+		.catch((err) => log.err(err));
 }
 
 function saveIngredients(id) {
 	let items = ingredients.value.getDiff();
 	if (items.length == 0) {
 		return new Promise((resolve) => {
-			editMode.value = false;
 			resolve();
 		});
 	}
 
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		let count = 0;
-		let error = undefined;
 		items.forEach((item) => {
 			fetch(`/api/v1/recipe/${id}/ingredient/${item.id}`, {
 				method: "PUT",
@@ -156,27 +147,37 @@ function saveIngredients(id) {
 						throw t("saverec.err" + response.status);
 					}
 				})
-				.catch((err) => (error = err))
+				.catch((err) => log.err(err))
 				.finally(() => {
 					if (count == items.length) {
-						if (error) {
-							reject(error);
-						} else {
-							editMode.value = false;
-							resolve();
-						}
+						resolve();
 					}
 				});
 		});
 	});
 }
 
-function saveInstructions(id, newInstructions, oldInstructions) {
-	if (true || newInstructions == oldInstructions) {
+function saveInstructions(id, oldInstructions, newInstructions) {
+	if (newInstructions == oldInstructions) {
 		return new Promise((resolve) => {
 			resolve();
 		});
 	}
+
+	return fetch(`/api/v1/recipe/${id}/instructions`, {
+		method: newInstructions ? "POST" : "DELETE",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+		body: new URLSearchParams({ inst: newInstructions }),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("saverec.err" + response.status);
+			}
+		})
+		.catch((err) => log.err(err));
 }
 
 function addToDiary(date, time) {
@@ -293,7 +294,13 @@ function updateList(items) {
 
 function onEditMode() {
 	if (editMode.value) {
-		saveRecipe();
+		isSaving.value = true;
+		saveRecipe().then(() => {
+			setTimeout(function(){
+				editMode.value = false;
+				isSaving.value = false;
+			}, 500);
+		});
 		return;
 	}
 

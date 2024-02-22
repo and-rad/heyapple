@@ -1,5 +1,5 @@
 @echo off
-::setlocal EnableDelayedExpansion
+setlocal EnableDelayedExpansion
 
 set DEV_OS=windows
 set DEV_ARCH=amd64

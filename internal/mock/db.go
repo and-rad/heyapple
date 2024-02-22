@@ -306,6 +306,32 @@ func (db *DB) SetRecipeAccess(user, rec, perms int) error {
 	return nil
 }
 
+func (db *DB) SetRecipeInstructions(id int, text string) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+
+	if db.Instructions.Recipe != id {
+		return app.ErrNotFound
+	}
+
+	db.Instructions.Instructions = text
+	return nil
+}
+
+func (db *DB) DelRecipeInstructions(id int) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+
+	if db.Instructions.Recipe != id {
+		return app.ErrNotFound
+	}
+
+	db.Instructions = Instructions{}
+	return nil
+}
+
 func (db *DB) Recipe(id int) (core.Recipe, error) {
 	if err := db.popError(); err != nil {
 		return core.Recipe{}, err

@@ -74,6 +74,8 @@ type DB interface {
 	NewRecipe(string) (int, error)
 	SetRecipe(core.Recipe) error
 	SetRecipeAccess(user, rec, perms int) error
+	SetRecipeInstructions(id int, text string) error
+	DelRecipeInstructions(id int) error
 	Recipe(id int) (core.Recipe, error)
 	Recipes(uid int, f core.Filter) ([]core.Recipe, error)
 	RecipeAccess(user, rec int) (int, error)

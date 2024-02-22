@@ -59,6 +59,22 @@ func (db *DB) SetRecipeAccess(user, rec, perms int) error {
 	return nil
 }
 
+func (db *DB) SetRecipeInstructions(id int, text string) error {
+	if _, ok := db.recipes[id]; !ok {
+		return app.ErrNotFound
+	}
+
+	db.instructions[id] = text
+	return nil
+}
+
+func (db *DB) DelRecipeInstructions(id int) error {
+	if _, ok := db.instructions[id]; ok {
+		delete(db.instructions, id)
+	}
+	return app.ErrNotFound
+}
+
 func (db *DB) Recipe(id int) (core.Recipe, error) {
 	if r, ok := db.recipes[id]; ok {
 		rec := r

@@ -135,6 +135,30 @@ type RecipeInstructions struct {
 	Instructions string `json:"inst"`
 }
 
+// SaveRecipeInstructions is a command to make changes to
+// a recipe's preparation instructions. An empty instructions
+// string will delete the instructions for this recipe along
+// with all associated data like images and videos.
+//
+// NOTE: images and video storage for recipe instructions
+// is not yet implemented as of 2024-02-22.
+type SaveRecipeInstructions struct {
+	RecipeID     int
+	Instructions string
+}
+
+func (c *SaveRecipeInstructions) Execute(db DB) error {
+	if c.RecipeID == 0 {
+		return ErrNotFound
+	}
+
+	if c.Instructions == "" {
+		return db.DelRecipeInstructions(c.RecipeID)
+	}
+
+	return db.SetRecipeInstructions(c.RecipeID, c.Instructions)
+}
+
 func (q *RecipeInstructions) Fetch(db DB) error {
 	if q.RecID == 0 {
 		return ErrNotFound

@@ -327,15 +327,133 @@ func RecipeInstructions(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// SaveRecipeInstructions updates the preparation
+// instructions for the recipe identified by the {id}
+// parameter. The data is passed in the request body. The
+// response body will always be empty, success or failure
+// is communicated by the status codes.
+//
+// Passing an empty string is not allowed and will return
+// an error. If you want to remove or reset instructions,
+// use DeleteRecipeInstructions.
+//
+// Endpoint:
+//
+//	/api/v1/recipe/{id}/instructions
+//
+// Methods:
+//
+//	POST
+//
+// Possible status codes:
+//
+//	204 - Update successful
+//	400 - Malformed or missing form data
+//	401 - Insufficient permission
+//	404 - Recipe doesn't exist
+//	500 - Internal server error
+//
+// Example input:
+//
+//	inst=Cook+it+well!
 func SaveRecipeInstructions(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		w.WriteHeader(http.StatusNoContent)
+		rid, err := strconv.Atoi(ps.ByName("id"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		inst := r.FormValue("inst")
+		if inst == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		var hasPermission bool
+		if uid, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			query := &app.RecipeAccess{UserID: uid, RecID: rid}
+			if env.DB.Fetch(query) == nil {
+				hasPermission = query.HasPerms(app.PermEdit)
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+		}
+
+		if !hasPermission {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		cmd := &app.SaveRecipeInstructions{RecipeID: rid, Instructions: inst}
+		if err := env.DB.Execute(cmd); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusNoContent)
+		}
 	}
 }
 
+// DeleteRecipeInstructions removes the preparation
+// instructions for the recipe identified by the {id}
+// parameter along with all associated static files, like
+// images and video. Any data in the request body is ignored.
+// The response body will always be empty, success or
+// failure is communicated by the status codes.
+//
+// No error will be returned if the recipe or instructions
+// for the recipe don't exist.
+//
+// Endpoint:
+//
+//	/api/v1/recipe/{id}/instructions
+//
+// Methods:
+//
+//	DELETE
+//
+// Possible status codes:
+//
+//	204 - Deletion successful
+//	401 - Insufficient permission
+//	500 - Internal server error
+//
+// Example input:
+//
+//	inst=Cook+it+well!
 func DeleteRecipeInstructions(env *handler.Environment) httprouter.Handle {
 	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
-		w.WriteHeader(http.StatusNoContent)
+		rid, err := strconv.Atoi(ps.ByName("id"))
+		if err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		var hasPermission bool
+		if uid, ok := env.Session.Get(r.Context(), "id").(int); ok {
+			query := &app.RecipeAccess{UserID: uid, RecID: rid}
+			if env.DB.Fetch(query) == nil {
+				hasPermission = query.HasPerms(app.PermEdit)
+			} else {
+				w.WriteHeader(http.StatusInternalServerError)
+				return
+			}
+		}
+
+		if !hasPermission {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		cmd := &app.SaveRecipeInstructions{RecipeID: rid, Instructions: ""}
+		if err := env.DB.Execute(cmd); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusNoContent)
+		}
 	}
 }
 

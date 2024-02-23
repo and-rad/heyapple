@@ -69,10 +69,8 @@ func (db *DB) SetRecipeInstructions(id int, text string) error {
 }
 
 func (db *DB) DelRecipeInstructions(id int) error {
-	if _, ok := db.instructions[id]; ok {
-		delete(db.instructions, id)
-	}
-	return app.ErrNotFound
+	delete(db.instructions, id)
+	return nil
 }
 
 func (db *DB) Recipe(id int) (core.Recipe, error) {

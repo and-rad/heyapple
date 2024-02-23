@@ -291,6 +291,48 @@ func TestRecipeInstructions_Fetch(t *testing.T) {
 	}
 }
 
+func TestSaveRecipeInstructions_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db  *mock.DB
+		rec int
+		in  string
+
+		out string
+		err error
+	}{
+		{ //00// id missing or invalid
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// connection failed
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			rec: 1,
+			err: mock.ErrDOS,
+		},
+		{ //02// success setting instructions
+			db:  mock.NewDB().WithInstructions(1, "Cook it well"),
+			rec: 1,
+			in:  "Eat it raw.",
+		},
+		{ //03// success deleting instructions
+			db:  mock.NewDB().WithInstructions(2, "Cook it well"),
+			rec: 2,
+			in:  "",
+		},
+	} {
+		cmd := &app.SaveRecipeInstructions{RecipeID: data.rec, Instructions: data.in}
+		err := cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if out := data.db.Instructions.Instructions; out != data.in {
+			t.Errorf("test case %d: text mismatch \nhave: %v \nwant: %v", idx, out, data.in)
+		}
+	}
+}
+
 func TestRecipes_Fetch(t *testing.T) {
 	for idx, data := range []struct {
 		db     *mock.DB

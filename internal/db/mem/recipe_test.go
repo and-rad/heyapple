@@ -294,6 +294,91 @@ func TestDB_SetRecipeAccess(t *testing.T) {
 	}
 }
 
+func TestDB_SetRecipeInstructions(t *testing.T) {
+	for idx, data := range []struct {
+		db  *DB
+		rec int
+		in  string
+
+		out string
+		err error
+	}{
+		{ //00// empty database
+			db:  NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// recipe doesn't exist
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1()},
+			},
+			rec: 2,
+			err: app.ErrNotFound,
+		},
+		{ //02// create instructions
+			db: &DB{
+				recipes:      map[int]core.Recipe{2: mock.Recipe2()},
+				instructions: make(map[int]string),
+			},
+			rec: 2,
+			in:  "Cook it well",
+			out: "Cook it well",
+		},
+		{ //03// update existing instructions
+			db: &DB{
+				recipes:      map[int]core.Recipe{2: mock.Recipe2()},
+				instructions: map[int]string{2: "Eat it raw"},
+			},
+			rec: 2,
+			in:  "Don't eat it raw",
+			out: "Don't eat it raw",
+		},
+	} {
+		err := data.db.SetRecipeInstructions(data.rec, data.in)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if out, _ := data.db.RecipeInstructions(data.rec); out != data.out {
+			t.Errorf("test case %d: text mismatch \nhave: %v\nwant: %v", idx, out, data.out)
+		}
+	}
+}
+
+func TestDB_DelRecipeInstructions(t *testing.T) {
+	for idx, data := range []struct {
+		db  *DB
+		rec int
+	}{
+		{ //00// empty database
+			db: NewDB(),
+		},
+		{ //01// recipe exists, but instructions don't
+			db: &DB{
+				recipes: map[int]core.Recipe{1: mock.Recipe1()},
+			},
+			rec: 1,
+		},
+		{ //02// delete instructions
+			db: &DB{
+				recipes:      map[int]core.Recipe{2: mock.Recipe2()},
+				instructions: map[int]string{2: "Cook it well"},
+			},
+			rec: 2,
+		},
+	} {
+		err := data.db.DelRecipeInstructions(data.rec)
+
+		if err != nil {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, nil)
+		}
+
+		if out, _ := data.db.RecipeInstructions(data.rec); out != "" {
+			t.Errorf("test case %d: text mismatch \nhave: %v\nwant: %v", idx, out, "")
+		}
+	}
+}
+
 func TestDB_RecipeInstructions(t *testing.T) {
 	for idx, data := range []struct {
 		db  *DB

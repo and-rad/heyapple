@@ -491,6 +491,197 @@ func TestRecipeInstructions(t *testing.T) {
 	}
 }
 
+func TestSaveRecipeInstructions(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		in        url.Values
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// missing mandatory path values
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// missing mandatory form values
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "2"}},
+			status: http.StatusBadRequest,
+		},
+		{ //02// no session
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "2"}},
+			in:     url.Values{"inst": {"Cook it well!"}},
+			status: http.StatusUnauthorized,
+		},
+		{ //03// insufficient access rights
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermRead}),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			in:        url.Values{"inst": {"Cook it well!"}},
+			setCookie: true,
+			status:    http.StatusUnauthorized,
+		},
+		{ //04// server error
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermEdit}).
+				WithError(mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			in:        url.Values{"inst": {"Cook it well!"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //05// recipe doesn't exist
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermEdit}),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			in:        url.Values{"inst": {"Cook it well!"}},
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //06// delayed server error
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermEdit}).
+				WithInstructions(2, "").
+				WithError(nil, mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			in:        url.Values{"inst": {"Cook it well!"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //07// success
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 1, Perms: app.PermEdit}).
+				WithInstructions(1, ""),
+			params:    httprouter.Params{{Key: "id", Value: "1"}},
+			in:        url.Values{"inst": {"Cook it well!"}},
+			setCookie: true,
+			out:       "Cook it well!",
+			status:    http.StatusNoContent,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(data.in.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
+			}
+		}
+
+		api.SaveRecipeInstructions(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if out := data.db.Instructions.Instructions; out != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, out, data.out)
+		}
+	}
+}
+
+func TestDeleteRecipeInstructions(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		params    httprouter.Params
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// missing mandatory path values
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// no session
+			db:     mock.NewDB(),
+			params: httprouter.Params{{Key: "id", Value: "2"}},
+			status: http.StatusUnauthorized,
+		},
+		{ //02// insufficient access rights
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermRead}).
+				WithInstructions(2, "Cook it well!"),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			out:       "Cook it well!",
+			status:    http.StatusUnauthorized,
+		},
+		{ //03// server error
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermEdit}).
+				WithError(mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //04// recipe doesn't exist
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermEdit}),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			status:    http.StatusNoContent,
+		},
+		{ //05// delayed server error
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermEdit}).
+				WithInstructions(2, "Cook it well!").
+				WithError(nil, mock.ErrDOS),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			out:       "Cook it well!",
+			status:    http.StatusInternalServerError,
+		},
+		{ //06// success
+			db: mock.NewDB().
+				WithUser(mock.User1).
+				WithAccess(mock.Access{User: 1, Resource: 2, Perms: app.PermEdit}).
+				WithInstructions(2, "Cook it well!"),
+			params:    httprouter.Params{{Key: "id", Value: "2"}},
+			setCookie: true,
+			out:       "",
+			status:    http.StatusNoContent,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodDelete, "/", strings.NewReader(""))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
+			}
+		}
+
+		api.DeleteRecipeInstructions(env)(res, req, data.params)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if out := data.db.Instructions.Instructions; out != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, out, data.out)
+		}
+	}
+}
+
 func TestSaveIngredient(t *testing.T) {
 	for idx, data := range []struct {
 		db        *mock.DB

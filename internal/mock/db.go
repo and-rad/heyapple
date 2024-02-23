@@ -325,7 +325,7 @@ func (db *DB) DelRecipeInstructions(id int) error {
 	}
 
 	if db.Instructions.Recipe != id {
-		return app.ErrNotFound
+		return nil
 	}
 
 	db.Instructions = Instructions{}

@@ -57,7 +57,7 @@ exit
     set CGO_ENABLED=0
     set GOOS=%DEV_OS%
     set GOARCH=%DEV_ARCH%
-    go build -o ./out/server/heyapple-%DEV_OS%-%DEV_ARCH%%DEV_EXT% github.com/and-rad/heyapple/cmd/web
+    go build -o ./out/server/heyapple-%DEV_OS%-%DEV_ARCH%%DEV_EXT% github.com/and-rad/heyapple/cmd/server
     exit /B 0
 
 :BuildCLI

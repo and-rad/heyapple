@@ -11,7 +11,7 @@ build-server:
 			--enable-comment-stripping \
 			--strip-xml-prolog \
 			--strip-xml-space; fi
-	@CGO_ENABLED=0 GOOS=${DEV_OS} GOARCH=${DEV_ARCH} go build -o ./out/server/heyapple-${DEV_OS}-${DEV_ARCH} github.com/and-rad/heyapple/cmd/web
+	@CGO_ENABLED=0 GOOS=${DEV_OS} GOARCH=${DEV_ARCH} go build -o ./out/server/heyapple-${DEV_OS}-${DEV_ARCH} github.com/and-rad/heyapple/cmd/server
 
 run-server:
 	@./out/server/heyapple-${DEV_OS}-${DEV_ARCH}

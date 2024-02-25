@@ -8,7 +8,7 @@ const path = require("path");
 // https://vitejs.dev/config/
 export default defineConfig({
 	build: {
-		outDir: "../../static",
+		outDir: "../../../internal/web/static",
 		rollupOptions: {
 			output: {
 				entryFileNames: `login/[name].js`,

@@ -43,8 +43,8 @@ exit
     exit /B 0
 
 :BuildWeb
-    call npm run build --prefix ./internal/web/src/login
-	call npm run build --prefix ./internal/web/src/app
+    call npm run build --prefix ./cmd/web/login
+	call npm run build --prefix ./cmd/web/app
     exit /B 0
 
 :BuildServer

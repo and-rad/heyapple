@@ -5,8 +5,8 @@
     "dev": "vite",
     "build": "vite build",
     "postbuild": "run-script-os",
-    "postbuild:linux": "mv ../../static/index.html ../../templates/web/login.html",
-    "postbuild:windows": "move ..\\..\\static\\index.html ..\\..\\templates\\web\\login.html",
+    "postbuild:linux": "mv ../../../internal/web//static/index.html ../../../internal/web/templates/web/login.html",
+    "postbuild:windows": "move ..\\..\\..\\internal\\web\\static\\index.html ..\\..\\..\\internal\\web\\templates\\web\\login.html",
     "preview": "vite preview --port 5050"
   },
   "dependencies": {

@@ -83,6 +83,15 @@ defineExpose({ showDetails, hideDetails });
 	--icon-sort: url(data:image/svg+xml;base64,PHN2ZyBpZD0ic3ZnODc1IiB2ZXJzaW9uPSIxLjEiIHZpZXdCb3g9IjAgMCAyNCAyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KIDxwYXRoIGlkPSJwYXRoMTA0NyIgZD0ibTAgM3YyaDI0di0yaC0yNHptMCA4djJoMTZ2LTJoLTE2em0wIDh2Mmg4di0yaC04eiIgZmlsbD0iIzEzYWQ3MyIvPgo8L3N2Zz4=);
 }
 
+main.no-dt #details,
+main.no-dt button.open-details {
+	display: none;
+}
+
+main.no-ctrl #main > .controls {
+	display: none;
+}
+
 #filter,
 #details,
 #main {

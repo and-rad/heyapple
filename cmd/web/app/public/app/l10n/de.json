@@ -53,7 +53,9 @@
 		},
 		"btn": {
 			"add": "Okay",
-			"new": "Neu"
+			"changepass": "Passwort ändern",
+			"new": "Neu",
+			"save": "Änderungen speichern"
 		},
 		"cat": {
 			"0": "",
@@ -208,6 +210,8 @@
 			"12": "Dezember"
 		},
 		"nav": {
+			"account": "Konto",
+			"body": "Körperdaten",
 			"diary": "Tagebuch",
 			"food": "Lebensmittel",
 			"help": "Hilfe",
@@ -216,6 +220,11 @@
 			"settings": "Einstellungen",
 			"shopping": "Einkaufen",
 			"signout": "Abmelden"
+		},
+		"profile": {
+			"email": "E-Mail-Adresse",
+			"passold": "Aktuelles Passwort",
+			"passnew": "Neues Passwort"
 		},
 		"recipe": {
 			"cooktime": "Kochen",

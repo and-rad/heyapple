@@ -24,6 +24,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"testing"
 	"time"
 
@@ -66,8 +67,14 @@ func Test_backup_Run(t *testing.T) {
 		file string
 	}{
 		{ //00// no directory permission
-			dir: "/opt/tmp/heyapple",
-			db:  NewDB(),
+			dir: func() string {
+				if runtime.GOOS == "windows" {
+					return "C:/Program Files/Temp/HeyApple"
+				} else {
+					return "/opt/tmp/heyapple"
+				}
+			}(),
+			db: NewDB(),
 		},
 		{ //01// empty database
 			dir:  testStorageDir,
@@ -149,7 +156,13 @@ func Test_backup_save(t *testing.T) {
 		err  error
 	}{
 		{ //00// no directory permission
-			dir: "/opt/tmp/heyapple",
+			dir: func() string {
+				if runtime.GOOS == "windows" {
+					return "C:/Program Files/Temp/HeyApple"
+				} else {
+					return "/opt/tmp/heyapple"
+				}
+			}(),
 			db:  NewDB(),
 			err: &fs.PathError{},
 		},
@@ -196,7 +209,13 @@ func Test_backup_backUp(t *testing.T) {
 		err  error
 	}{
 		{ //00// no directory permission
-			dir: "/opt/tmp/heyapple",
+			dir: func() string {
+				if runtime.GOOS == "windows" {
+					return "C:/Program Files/Temp/HeyApple"
+				} else {
+					return "/opt/tmp/heyapple"
+				}
+			}(),
 			db:  NewDB(),
 			err: &fs.PathError{},
 		},

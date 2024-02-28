@@ -24,6 +24,7 @@ import (
 	"os"
 	"path/filepath"
 	"reflect"
+	"runtime"
 	"testing"
 	"testing/fstest"
 	"time"
@@ -46,7 +47,13 @@ func TestDB_WithBackup(t *testing.T) {
 		file string
 	}{
 		{ //00// no write permission
-			dir:  "/opt/tmp/heyapple",
+			dir: func() string {
+				if runtime.GOOS == "windows" {
+					return "C:/Program Files/Temp/HeyApple"
+				} else {
+					return "/opt/tmp/heyapple"
+				}
+			}(),
 			file: "",
 		},
 		{ //01// job scheduler successful

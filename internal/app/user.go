@@ -119,6 +119,44 @@ func (q *Authenticate) Fetch(db DB) error {
 	return nil
 }
 
+// Authorize is a query that issues a challenge to pass
+// in order to make sure a user identified by ID has the
+// right to perform a given action. It is intentionally
+// not tied to a specific action or resource. The type
+// of challenge is expressed through the fields of the
+// query.
+//
+// If successful, the Ok field will be set to true. There
+// is no error if the challenge itself fails, so you
+// still have to check Ok to ultimately know the final
+// result.
+//
+// Supported types of challenges are:
+//   - Password: Make sure the user is still the same
+//     user by asking for the password again. This type
+//     of challenge is often issued before dangerous
+//     actions or those with far-reaching consequences.
+type Authorize struct {
+	ID   int
+	Pass string
+	Ok   bool
+}
+
+func (q *Authorize) Fetch(db DB) error {
+	if q.ID == 0 {
+		return ErrNotFound
+	}
+
+	user, err := db.UserByID(q.ID)
+	if err != nil {
+
+		return err
+	}
+
+	q.Ok = NewCrypter().Match(user.Pass, q.Pass)
+	return nil
+}
+
 // Activate is a command to unlock a user's ability
 // to log into the application and to change their
 // e-mail address after a change request was issued.

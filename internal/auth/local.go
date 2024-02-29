@@ -243,6 +243,72 @@ func ResetConfirm(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// ChangePassword sets a new password for the logged-in user.
+// Unlike ResetConfirm, it doesn't require a token, but it
+// checks the requesting user's identity and expects the user's
+// current password. If successful, the  password is changed.
+// The response body is always empty.
+//
+// This is the route that should be called when users try to
+// change their passwords from within their profile settings.
+//
+// Endpoint:
+//
+//	/auth/pass
+//
+// Methods:
+//
+//	PUT
+//
+// Possible status codes:
+//
+//	200 - Password change successful
+//	400 - Malformed or missing form data
+//	401 - Insufficient permission
+//	404 - User doesn't exist
+//	422 - New password is too weak
+//	500 - Internal server error
+//
+// Example input:
+//
+//	passold=topsecret&passnew=topsecret123
+func ChangePassword(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		old := r.FormValue("passold")
+		new := r.FormValue("passnew")
+		if old == "" || new == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		uid, ok := env.Session.Get(r.Context(), "id").(int)
+		if !ok {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		query := &app.Authorize{ID: uid, Pass: old}
+		if err := env.DB.Fetch(query); err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else if !query.Ok {
+			w.WriteHeader(http.StatusUnauthorized)
+		}
+
+		if !query.Ok {
+			return
+		}
+
+		cmd := &app.ChangePassword{ID: uid, Pass: new}
+		if err := env.DB.Execute(cmd); err == app.ErrWeakPass {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
+	}
+}
+
 // logOut can be used to invalidate the session that
 // belongs to the user identified by id. It should be
 // called after making permission changes on that user

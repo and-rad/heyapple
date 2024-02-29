@@ -230,12 +230,13 @@ var (
 	User1 = app.User{
 		ID:    1,
 		Email: "a@a.a",
-		Pass:  "$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC",
+		Pass:  "$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC", // plaintext: Tr0ub4dor&3
 		Lang:  "en",
 		Perm:  app.PermLogin,
 	}
 
 	User1Json = `{"email":"a@a.a","pass":"$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC","lang":"en","perm":1,"id":1}`
+	User1Pass = "Tr0ub4dor&3"
 )
 
 func Entry1() core.DiaryEntry {

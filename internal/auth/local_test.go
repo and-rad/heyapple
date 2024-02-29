@@ -275,3 +275,83 @@ func TestResetConfirm(t *testing.T) {
 		}
 	}
 }
+
+func TestChangePassword(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		in        url.Values
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// no data
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// connection failure
+			db:        mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS),
+			in:        url.Values{"passold": {"password123"}, "passnew": {"password456"}},
+			setCookie: true,
+			out:       mock.User1Pass,
+			status:    http.StatusInternalServerError,
+		},
+		{ //02// anonymous user
+			db:     mock.NewDB(),
+			in:     url.Values{"passold": {"password123"}, "passnew": {"password456"}},
+			status: http.StatusUnauthorized,
+		},
+		{ //03// password challenge failed
+			db:        mock.NewDB().WithUser(mock.User1),
+			in:        url.Values{"passold": {"password123"}, "passnew": {"password456"}},
+			setCookie: true,
+			out:       mock.User1Pass,
+			status:    http.StatusUnauthorized,
+		},
+		{ //04// weak password
+			db:        mock.NewDB().WithUser(mock.User1),
+			in:        url.Values{"passold": {mock.User1Pass}, "passnew": {"tooweak"}},
+			setCookie: true,
+			out:       mock.User1Pass,
+			status:    http.StatusUnprocessableEntity,
+		},
+		{ //05// delayed error
+			db:        mock.NewDB().WithUser(mock.User1).WithError(nil, mock.ErrDOS),
+			in:        url.Values{"passold": {mock.User1Pass}, "passnew": {"dh295mxch19ghr"}},
+			setCookie: true,
+			out:       mock.User1Pass,
+			status:    http.StatusInternalServerError,
+		},
+		{ //06// success
+			db:        mock.NewDB().WithUser(mock.User1),
+			in:        url.Values{"passold": {mock.User1Pass}, "passnew": {"dh295mxch19ghr"}},
+			setCookie: true,
+			out:       "dh295mxch19ghr",
+			status:    http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
+			}
+		}
+
+		auth.ChangePassword(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if data.db.User.Pass != "" {
+			if !app.NewCrypter().Match(data.db.User.Pass, data.out) {
+				t.Errorf("test case %d: password mismatch \nhash: %v\nplaintext: %v", idx, data.db.User.Pass, data.out)
+			}
+		}
+	}
+}

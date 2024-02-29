@@ -109,6 +109,55 @@ func TestAuthenticate_Fetch(t *testing.T) {
 	}
 }
 
+func TestAuthorize_Fetch(t *testing.T) {
+	for idx, data := range []struct {
+		id   int
+		pass string
+		db   *mock.DB
+
+		ok  bool
+		err error
+	}{
+		{ //00// invalid user id
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// user doesn't exist
+			id:  2,
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //02// connection failed
+			id:  2,
+			db:  mock.NewDB().WithError(mock.ErrDOS),
+			err: mock.ErrDOS,
+		},
+		{ //03// passwords don't match
+			id:   1,
+			db:   mock.NewDB().WithUser(mock.User1),
+			pass: "topsecret",
+			ok:   false,
+		},
+		{ //04// challenge passed successfully
+			id:   1,
+			db:   mock.NewDB().WithUser(mock.User1),
+			pass: "Tr0ub4dor&3",
+			ok:   true,
+		},
+	} {
+		qry := &app.Authorize{ID: data.id, Pass: data.pass}
+		err := qry.Fetch(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if qry.Ok != data.ok {
+			t.Errorf("test case %d: result mismatch \nhave: %v\nwant: %v", idx, qry.Ok, data.ok)
+		}
+	}
+}
+
 func TestCreateUser_Execute(t *testing.T) {
 	for idx, data := range []struct {
 		db    *mock.DB

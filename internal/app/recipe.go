@@ -31,13 +31,13 @@ type CreateRecipe struct {
 }
 
 func (c *CreateRecipe) Execute(db DB) error {
-	if id, err := db.NewRecipe(c.Name); err != nil {
+	id, err := db.NewRecipe(c.Name)
+	if err != nil {
 		return err
-	} else {
-		c.Recipe = core.NewRecipe(id)
-		c.Recipe.Name = c.Name
 	}
 
+	c.Recipe = core.NewRecipe(id)
+	c.Recipe.Name = c.Name
 	return nil
 }
 
@@ -114,12 +114,12 @@ func (q *RecipeAccess) Fetch(db DB) error {
 		return ErrNotFound
 	}
 
-	if perm, err := db.RecipeAccess(q.UserID, q.RecID); err != nil {
+	perm, err := db.RecipeAccess(q.UserID, q.RecID)
+	if err != nil {
 		return err
-	} else {
-		q.Permission = perm
 	}
 
+	q.Permission = perm
 	return nil
 }
 
@@ -164,12 +164,12 @@ func (q *RecipeInstructions) Fetch(db DB) error {
 		return ErrNotFound
 	}
 
-	if inst, err := db.RecipeInstructions(q.RecID); err != nil {
+	inst, err := db.RecipeInstructions(q.RecID)
+	if err != nil {
 		return err
-	} else {
-		q.Instructions = inst
 	}
 
+	q.Instructions = inst
 	return nil
 }
 
@@ -186,12 +186,12 @@ func (q *Recipes) Fetch(db DB) error {
 		return ErrNotFound
 	}
 
-	if recs, err := db.Recipes(q.UserID, q.Filter); err != nil {
+	recs, err := db.Recipes(q.UserID, q.Filter)
+	if err != nil {
 		return err
-	} else {
-		q.Items = recs
 	}
 
+	q.Items = recs
 	return nil
 }
 
@@ -207,12 +207,12 @@ func (q *Recipe) Fetch(db DB) error {
 		return ErrNotFound
 	}
 
-	if rec, err := db.Recipe(q.Item.ID); err != nil {
+	rec, err := db.Recipe(q.Item.ID)
+	if err != nil {
 		return err
-	} else {
-		q.Item = rec
 	}
 
+	q.Item = rec
 	return nil
 }
 

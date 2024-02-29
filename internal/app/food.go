@@ -32,12 +32,12 @@ type CreateFood struct {
 }
 
 func (c *CreateFood) Execute(db DB) error {
-	if id, err := db.NewFood(); err != nil {
+	id, err := db.NewFood()
+	if err != nil {
 		return err
-	} else {
-		c.Food.ID = id
 	}
 
+	c.Food.ID = id
 	return nil
 }
 
@@ -87,12 +87,12 @@ func (q *GetFood) Fetch(db DB) error {
 		return ErrNotFound
 	}
 
-	if food, err := db.Food(q.Item.ID); err != nil {
+	food, err := db.Food(q.Item.ID)
+	if err != nil {
 		return err
-	} else {
-		q.Item = food
 	}
 
+	q.Item = food
 	return nil
 }
 
@@ -104,11 +104,11 @@ type GetFoods struct {
 }
 
 func (q *GetFoods) Fetch(db DB) error {
-	if foods, err := db.Foods(q.Filter); err != nil {
+	foods, err := db.Foods(q.Filter)
+	if err != nil {
 		return err
-	} else {
-		q.Items = foods
 	}
 
+	q.Items = foods
 	return nil
 }

@@ -65,19 +65,22 @@ func (c *CreateUser) Execute(db DB) error {
 	hash := NewCrypter().Encrypt(c.Pass)
 	token := NewTokenizer().Create()
 
-	if _, err := db.UserByName(c.Email); err == nil {
+	_, err := db.UserByName(c.Email)
+	if err == nil {
 		return ErrExists
-	} else if err != ErrNotFound {
+	}
+	if err != ErrNotFound {
 		return err
 	}
 
-	if id, err := db.NewUser(c.Email, hash, token); err != nil {
+	id, err := db.NewUser(c.Email, hash, token)
+	if err != nil {
 		return err
-	} else {
-		c.ID = id
-		c.Pass = ""
-		c.Token = token
 	}
+
+	c.ID = id
+	c.Pass = ""
+	c.Token = token
 
 	return nil
 }
@@ -95,18 +98,23 @@ type Authenticate struct {
 }
 
 func (q *Authenticate) Fetch(db DB) error {
-	if user, err := db.UserByName(q.Email); err != nil {
+	user, err := db.UserByName(q.Email)
+	if err != nil {
 		return err
-	} else if !NewCrypter().Match(user.Pass, q.Pass) {
-		return ErrCredentials
-	} else if user.Perm&PermLogin != PermLogin {
-		return ErrCredentials
-	} else {
-		q.ID = user.ID
-		q.Perm = user.Perm
-		q.Lang = user.Lang
-		q.Pass = ""
 	}
+
+	if !NewCrypter().Match(user.Pass, q.Pass) {
+		return ErrCredentials
+	}
+
+	if user.Perm&PermLogin != PermLogin {
+		return ErrCredentials
+	}
+
+	q.ID = user.ID
+	q.Perm = user.Perm
+	q.Lang = user.Lang
+	q.Pass = ""
 
 	return nil
 }
@@ -216,15 +224,21 @@ func (c *ChangePassword) Execute(db DB) error {
 	}
 
 	if c.Token != "" {
-		if tok, err := db.Token(c.Token); err != nil {
+		tok, err := db.Token(c.Token)
+		if err != nil {
 			return err
-		} else if data, ok := tok.Data.(string); !ok {
-			return ErrNotFound
-		} else if data != "reset" {
-			return ErrNotFound
-		} else {
-			c.ID = tok.ID
 		}
+
+		data, ok := tok.Data.(string)
+		if !ok {
+			return ErrNotFound
+		}
+
+		if data != "reset" {
+			return ErrNotFound
+		}
+
+		c.ID = tok.ID
 	}
 
 	user, err := db.UserByID(c.ID)

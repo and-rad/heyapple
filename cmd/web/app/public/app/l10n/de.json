@@ -223,8 +223,10 @@
 		},
 		"profile": {
 			"email": "E-Mail-Adresse",
-			"passold": "Aktuelles Passwort",
-			"passnew": "Neues Passwort"
+			"emailhint": "Wenn du deine E-Mail-Adresse änderst, wird ein Aktivierungslink an diese neue Adresse gesendet. Erst, wenn diese Aktivierung abgeschlossen ist, kann die neue Adresse zur Anmeldung genutzt werden.",
+			"passhint": "Passwörter müssen <strong>mindestens 10 Zeichen</strong> lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten.",
+			"passnew": "Neues Passwort",
+			"passold": "Aktuelles Passwort"
 		},
 		"recipe": {
 			"cooktime": "Kochen",
@@ -262,6 +264,14 @@
 			"err404": "Dieses Lebensmittel existiert nicht.",
 			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
 			"ok": "Erfolg! Alle Änderungen gespeichert."
+		},
+		"savepass": {
+			"err400": "Das Passwort darf nicht leer sein.",
+			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err404": "Das Benutzerkonto existiert nicht.",
+			"err422": "Das Passwort ist zu schwach.",
+			"err500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
+			"ok": "Dein Passwort wurde erfolgreich geändert."
 		},
 		"saverec": {
 			"err400": "Fehlerhafte oder fehlende Eingabe.",

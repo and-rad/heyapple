@@ -223,8 +223,10 @@
 		},
 		"profile": {
 			"email": "E-Mail Address",
-			"passold": "Current Password",
-			"passnew": "New Password"
+			"emailhint": "When you change your e-mail address, a link to activate it will be sent to the new address. The change becomes effective only after the steps outlined in that message are completed.",
+			"passhint": "Passwords must be <strong>at least 10 characters</strong> long and should contain a mix of letters, numbers, and special characters.",
+			"passnew": "New Password",
+			"passold": "Current Password"
 		},
 		"recipe": {
 			"cooktime": "Cooking",
@@ -262,6 +264,14 @@
 			"err404": "The requested food item does not exist.",
 			"err500": "Internal server error. This shouldn't happen.",
 			"ok": "Success! All edits saved."
+		},
+		"savepass": {
+			"err400": "The password must not be empty.",
+			"err401": "It doesn't look like you're allowed to do that.",
+			"err404": "The user account doesn't exist.",
+			"err422": "The password is too weak.",
+			"err500": "There was an internal server problem, something's wrong on our end. Please try again later.",
+			"ok": "Your password was updated successfully."
 		},
 		"saverec": {
 			"err400": "Malformed or missing input data.",

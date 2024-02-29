@@ -5,6 +5,10 @@ import { ref, inject } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
+const csrf = inject("csrfToken");
+const log = inject("log");
+
+const isSaving = ref(false);
 
 const main = ref(null);
 
@@ -15,7 +19,27 @@ function onNavItem(id) {
 
 function onSaveEmail(evt) {}
 
-function onChangePassword(evt) {}
+function onChangePassword(evt) {
+	isSaving.value = true;
+	let form = evt.target.form;
+
+	fetch("/auth/pass", {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+		body: new URLSearchParams(new FormData(form)),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("savepass.err" + response.status);
+			}
+			log.msg(t("savepass.ok"));
+		})
+		.catch((err) => log.err(err))
+		.finally(() => isSaving.value = false);
+}
 </script>
 
 <template>
@@ -37,16 +61,18 @@ function onChangePassword(evt) {}
 			<section>
 				<h2 id="head-account">{{ t("nav.account") }}</h2>
 				<form>
+					<p v-html="t('profile.emailhint')"></p>
 					<label>{{ t("profile.email") }}</label>
 					<input type="email" name="email" />
-					<button type="submit" @click="onSaveEmail" class="async">{{ t("btn.save") }}</button>
+					<button type="button" :disabled="isSaving" @click="onSaveEmail" class="async">{{ t("btn.save") }}</button>
 				</form>
 				<form>
+					<p v-html="t('profile.passhint')"></p>
 					<label>{{ t("profile.passold") }}</label>
-					<PasswordField ref="passField" name="pass1" />
+					<PasswordField ref="passField" name="passold" />
 					<label>{{ t("profile.passnew") }}</label>
-					<PasswordField ref="passField" name="pass2" withBar="true" />
-					<button type="submit" @click="onChangePassword" class="async">{{ t("btn.changepass") }}</button>
+					<PasswordField ref="passField" name="passnew" withBar="true" />
+					<button type="button" :disabled="isSaving" @click="onChangePassword" class="async">{{ t("btn.changepass") }}</button>
 				</form>
 			</section>
 

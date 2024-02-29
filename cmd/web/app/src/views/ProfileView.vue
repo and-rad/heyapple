@@ -118,12 +118,12 @@ main.settings .content label {
 	display: block;
 }
 
-main.settings .content button[type="submit"] {
+main.settings .content form > button {
 	margin: 1em 0 1em;
 }
 
 @media only screen and (min-width: 500px) {
-	main.settings .content button[type="submit"] {
+	main.settings .content form > button {
 		margin-left: auto;
 		width: 240px;
 		min-width: 240px;
@@ -131,12 +131,14 @@ main.settings .content button[type="submit"] {
 }
 
 @media only screen and (min-width: 800px) {
-	main.settings .content section {
-		margin: 0;
-	}
-
 	main.settings #main .controls {
 		display: none;
+	}
+}
+
+@media only screen and (min-width: 1280px) {
+	main.settings #main {
+		right: 300px;
 	}
 }
 </style>

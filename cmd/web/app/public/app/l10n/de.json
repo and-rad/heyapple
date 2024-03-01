@@ -224,7 +224,7 @@
 		"profile": {
 			"email": "E-Mail-Adresse",
 			"emailhint": "Wenn du deine E-Mail-Adresse änderst, wird ein Aktivierungslink an diese neue Adresse gesendet. Erst, wenn diese Aktivierung abgeschlossen ist, kann die neue Adresse zur Anmeldung genutzt werden.",
-			"passhint": "Passwörter müssen <strong>mindestens 10 Zeichen</strong> lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten.",
+			"passhint": "Passwörter müssen mindestens 10 Zeichen lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten.",
 			"passnew": "Neues Passwort",
 			"passold": "Aktuelles Passwort"
 		},

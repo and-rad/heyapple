@@ -38,7 +38,7 @@ function onChangePassword(evt) {
 			log.msg(t("savepass.ok"));
 		})
 		.catch((err) => log.err(err))
-		.finally(() => isSaving.value = false);
+		.finally(() => (isSaving.value = false));
 }
 </script>
 
@@ -61,18 +61,22 @@ function onChangePassword(evt) {
 			<section>
 				<h2 id="head-account">{{ t("nav.account") }}</h2>
 				<form>
-					<p v-html="t('profile.emailhint')"></p>
 					<label>{{ t("profile.email") }}</label>
 					<input type="email" name="email" />
-					<button type="button" :disabled="isSaving" @click="onSaveEmail" class="async">{{ t("btn.save") }}</button>
+					<p v-html="t('profile.emailhint')"></p>
+					<button type="button" :disabled="isSaving" @click="onSaveEmail" class="async">
+						{{ t("btn.save") }}
+					</button>
 				</form>
 				<form>
-					<p v-html="t('profile.passhint')"></p>
 					<label>{{ t("profile.passold") }}</label>
 					<PasswordField ref="passField" name="passold" />
 					<label>{{ t("profile.passnew") }}</label>
 					<PasswordField ref="passField" name="passnew" withBar="true" />
-					<button type="button" :disabled="isSaving" @click="onChangePassword" class="async">{{ t("btn.changepass") }}</button>
+					<p v-html="t('profile.passhint')"></p>
+					<button type="button" :disabled="isSaving" @click="onChangePassword" class="async">
+						{{ t("btn.changepass") }}
+					</button>
 				</form>
 			</section>
 
@@ -164,7 +168,11 @@ main.settings .content form > button {
 
 @media only screen and (min-width: 1280px) {
 	main.settings #main {
-		right: 300px;
+		right: 0;
+	}
+
+	main.settings .content {
+		padding-right: calc(300px + 1em);
 	}
 }
 </style>

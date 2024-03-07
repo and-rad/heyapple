@@ -55,8 +55,13 @@ type CreateUser struct {
 }
 
 func (c *CreateUser) Execute(db DB) error {
-	if !NewValidator().MatchPass(c.Pass) {
+	validator := NewValidator()
+	if !validator.MatchPass(c.Pass) {
 		return ErrWeakPass
+	}
+
+	if !validator.MatchEmail(c.Email) {
+		return ErrNoEmail
 	}
 
 	// Doing this early comes with a performance penalty

@@ -177,9 +177,10 @@ func TestCreateUser_Execute(t *testing.T) {
 			err:  app.ErrWeakPass,
 		},
 		{ //02// database failure
-			db:   mock.NewDB().WithError(mock.ErrDOS),
-			pass: "correcthorsebatterystaple",
-			err:  mock.ErrDOS,
+			db:    mock.NewDB().WithError(mock.ErrDOS),
+			email: "a@a.a",
+			pass:  "correcthorsebatterystaple",
+			err:   mock.ErrDOS,
 		},
 		{ //03// username already exists
 			db:    mock.NewDB().WithUser(app.User{Email: "a@a.a"}),
@@ -197,6 +198,12 @@ func TestCreateUser_Execute(t *testing.T) {
 			db:    mock.NewDB().WithUser(app.User{Email: "a@a.a"}),
 			email: "b@b.b",
 			pass:  "correcthorsebatterystaple",
+		},
+		{ //06// invalid e-mail address
+			db:    mock.NewDB().WithUser(app.User{Email: "a@a.a"}),
+			email: "noemailaddress",
+			pass:  "correcthorsebatterystaple",
+			err:   app.ErrNoEmail,
 		},
 	} {
 		cmd := &app.CreateUser{Email: data.email, Pass: data.pass}

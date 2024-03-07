@@ -47,6 +47,7 @@ var (
 	ErrCredentials = errors.New("nomatch")
 	ErrExists      = errors.New("exists")
 	ErrMissing     = errors.New("missing")
+	ErrNoEmail     = errors.New("noemail")
 	ErrNotFound    = errors.New("notfound")
 	ErrPermission  = errors.New("permission")
 	ErrWeakPass    = errors.New("weakpass")

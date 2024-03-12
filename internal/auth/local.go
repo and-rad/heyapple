@@ -309,6 +309,73 @@ func ChangePassword(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// ChangeEmail starts the process of setting a new e-mail
+// address for the logged-in user. The change needs to be
+// confirmed before it takes effect. The response body is
+// always empty.
+//
+// Endpoint:
+//
+//	/auth/email
+//
+// Methods:
+//
+//	PUT
+//
+// Possible status codes:
+//
+//	202 - Request was accepted
+//	400 - Malformed or missing form data
+//	401 - Insufficient permission
+//	422 - Not a valid e-mail address
+//	500 - Internal server error
+//
+// Example input:
+//
+//	email=new@email.address
+func ChangeEmail(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		email := r.FormValue("email")
+		if email == "" {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		uid, ok := env.Session.Get(r.Context(), "id").(int)
+		if !ok {
+			w.WriteHeader(http.StatusUnauthorized)
+			return
+		}
+
+		cmd := &app.RequestEmailChange{ID: uid, Email: email}
+
+		err := env.DB.Execute(cmd)
+		if err == app.ErrExists {
+			w.WriteHeader(http.StatusAccepted)
+			return
+		}
+		if err == app.ErrNoEmail {
+			w.WriteHeader(http.StatusUnprocessableEntity)
+			return
+		}
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return
+		}
+
+		w.WriteHeader(http.StatusAccepted)
+
+		data := app.NotificationData{
+			"lang":  "en",
+			"token": cmd.Token,
+		}
+		err = env.Msg.Send(cmd.Email, app.RenameNotification, data)
+		if err != nil {
+			env.Log.Error(err)
+		}
+	}
+}
+
 // logOut can be used to invalidate the session that
 // belongs to the user identified by id. It should be
 // called after making permission changes on that user

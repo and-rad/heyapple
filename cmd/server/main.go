@@ -68,6 +68,7 @@ func main() {
 	router.POST("/auth/local", auth.LocalLogin(env))
 	router.POST("/auth/reset", auth.ResetRequest(env))
 	router.PUT("/auth/confirm", auth.Confirm(env))
+	router.PUT("/auth/email", auth.ChangeEmail(env))
 	router.PUT("/auth/pass", auth.ChangePassword(env))
 	router.PUT("/auth/reset", auth.ResetConfirm(env))
 	router.DELETE("/auth/local", auth.LocalLogout(env))

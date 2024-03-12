@@ -13,19 +13,23 @@
 	"email": {
 		"action": {
 			"1": "Konto aktivieren",
+			"2": "E-Mail-Adresse bestätigen",
 			"3": "Passwort zurücksetzen"
 		},
 		"foot": "&copy; 2021-2024 das HeyApple Entwicklerteam",
 		"info": {
+			"2": "<p>Falls du deine E-Mail-Adresse gar nicht ändern wolltest, solltest du deinen Anmeldeverlauf auf verdächtige Vorgänge prüfen. Eine Übersicht über die letzten Anmeldeversuche findest du in deinen Profileinstellungen. Deine E-Mail-Adresse wird erst geändert, wenn du auf den Link oben klickst.</p><p>Falls du keinen Account bei HeyApple hast und gar nicht verstehst, wass das alles hier soll, hat wahrscheinlich jemand aus Versehen deine Adresse angegeben bei dem Versuch, die eigene zu ändern. In dem Fall kannst du diese Nachricht einfach ignorieren.</p>",
 			"3": "<p>Falls du dein Passwort gar nicht zurücksetzen wolltest, solltest du deinen Anmeldeverlauf auf verdächtige Vorgänge prüfen. Eine Übersicht über die letzten Anmeldeversuche findest du in deinen Profileinstellungen.</p>"
 		},
 		"msg": {
 			"1": "<h2>Hallo und willkommen bei HeyApple,<h2><p>deine Registrierung ist fast abgeschlossen. Klicke auf den Link, um deine E-Mail-Adresse zu bestätigen und das Benutzerkonto für die Anmeldung freizuschalten:</p>",
+			"2": "<p>Hallo,</p><p>du möchtest die E-Mail-Adresse für deinen heyApple-Account ändern? Klicke auf den Link, um die neue Adresse zu bestätigen:",
 			"3": "<p>Hallo,</p><p>du benötigst Hilfe, weil du nicht mehr in dein HeyApple-Konto kommst? Klicke auf den Link, um dein Passwort zurückzusetzen:"
 		},
 		"plain": "Sollte der Link nicht funktionieren, kopiere die folgende Adresse in die Adresszeile deines Internet-Browsers:",
 		"sub": {
 			"1": "Willkommen bei HeyApple!",
+			"2": "E-Mail-Adresse ändern",
 			"3": "Vergessenes Passwort zurücksetzen"
 		}
 	},

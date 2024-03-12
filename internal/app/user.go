@@ -298,3 +298,42 @@ func (c *ChangePassword) Execute(db DB) error {
 
 	return err
 }
+
+// RequestEmailChange is a command to start the process of
+// changing a user's e-mail address. When successful, the
+// Token field contains a token that can be used to confirm
+// and complete the request.
+type RequestEmailChange struct {
+	ID    int
+	Email string
+	Token string
+}
+
+func (c *RequestEmailChange) Execute(db DB) error {
+	if c.ID == 0 {
+		return ErrNotFound
+	}
+
+	if !NewValidator().MatchEmail(c.Email) {
+		return ErrNoEmail
+	}
+
+	_, err := db.UserByName(c.Email)
+	if err == nil {
+		return ErrExists
+	}
+
+	_, err = db.UserByID(c.ID)
+	if err != nil {
+		return err
+	}
+
+	token := NewTokenizer().Create()
+	err = db.NewToken(c.ID, token, c.Email)
+	if err != nil {
+		return err
+	}
+	c.Token = token
+
+	return nil
+}

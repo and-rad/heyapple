@@ -236,8 +236,9 @@ func TestActivate_Execute(t *testing.T) {
 		db    *mock.DB
 		token string
 
-		perm int
-		err  error
+		perm  int
+		email string
+		err   error
 	}{
 		{ //00// database failure
 			db:  mock.NewDB().WithError(mock.ErrDOS),
@@ -260,11 +261,13 @@ func TestActivate_Execute(t *testing.T) {
 			err: app.ErrNotFound,
 		},
 		{ //05// not a valid email address
-			db:  mock.NewDB().WithToken(app.Token{ID: 1, Data: "noemail"}).WithUser(app.User{ID: 1}),
-			err: app.ErrNotFound,
+			db:    mock.NewDB().WithToken(app.Token{ID: 1, Data: "noemail"}).WithUser(app.User{ID: 1, Email: "old@email.address"}),
+			email: "old@email.address",
+			err:   app.ErrNotFound,
 		},
 		{ //06// apply email token
-			db: mock.NewDB().WithToken(app.Token{ID: 1, Data: "a@a.a"}).WithUser(app.User{ID: 1}),
+			db:    mock.NewDB().WithToken(app.Token{ID: 1, Data: "new@address.email"}).WithUser(app.User{ID: 1, Email: "old@email.address"}),
+			email: "new@address.email",
 		},
 	} {
 		cmd := &app.Activate{Token: data.token}
@@ -276,6 +279,10 @@ func TestActivate_Execute(t *testing.T) {
 
 		if data.db.User.Perm != data.perm {
 			t.Errorf("test case %d: permission mismatch \nhave: %v\nwant: %v", idx, data.db.User.Perm, data.perm)
+		}
+
+		if data.db.User.Email != data.email {
+			t.Errorf("test case %d: email mismatch \nhave: %v\nwant: %v", idx, data.db.User.Email, data.email)
 		}
 
 		if err == nil && data.db.Tok != (app.Token{}) {
@@ -455,5 +462,66 @@ func TestChangePassword_Execute(t *testing.T) {
 			}
 		}
 
+	}
+}
+
+func TestRequestEmailChange_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db    *mock.DB
+		id    int
+		email string
+
+		token app.Token
+		err   error
+	}{
+		{ //00// missing user id
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// user doesn't exist
+			db:    mock.NewDB().WithUser(mock.User1),
+			id:    2,
+			email: "new@address.mail",
+			err:   app.ErrNotFound,
+		},
+		{ //02// email address already exists
+			db:    mock.NewDB().WithUser(mock.User1),
+			id:    1,
+			email: mock.User1.Email,
+			err:   app.ErrExists,
+		},
+		{ //03// database error
+			db:    mock.NewDB().WithUser(mock.User1).WithError(nil, nil, mock.ErrDOS),
+			id:    1,
+			email: "new@address.mail",
+			err:   mock.ErrDOS,
+		},
+		{ //04// success
+			db:    mock.NewDB().WithUser(mock.User1),
+			id:    1,
+			email: "new@address.mail",
+			token: app.Token{ID: 1, Data: "new@address.mail"},
+		},
+		{ //05// not a valid e-mail address
+			db:    mock.NewDB().WithUser(mock.User1),
+			id:    1,
+			email: "noemailaddress",
+			err:   app.ErrNoEmail,
+		},
+	} {
+		cmd := &app.RequestEmailChange{ID: data.id, Email: data.email}
+		err := cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if data.token != data.db.Tok {
+			t.Errorf("test case %d: token mismatch \nhave: %v\nwant: %v", idx, data.db.Tok, data.token)
+		}
+
+		if err == nil && cmd.Token == "" {
+			t.Errorf("test case %d: token hash mismatch \nhave: %v\nwant: %v", idx, cmd.Token, "somerandomstring")
+		}
 	}
 }

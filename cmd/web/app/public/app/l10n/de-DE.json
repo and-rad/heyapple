@@ -265,6 +265,13 @@
 			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
 			"ok": "Erfolg! Alle Änderungen gespeichert."
 		},
+		"savemail": {
+			"err400": "Die E-Mail-Adresse darf nicht leer sein.",
+			"err401": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",
+			"err422": "Das scheint keine gültige E-Mail-Adresse zu sein.",
+			"err500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
+			"ok": "Auftrag angenommen. Im Posteingang der neuen E-Mail-Adresse findest du den nächsten Schritt."
+		},
 		"savepass": {
 			"err400": "Das Passwort darf nicht leer sein.",
 			"err403": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",

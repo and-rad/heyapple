@@ -265,6 +265,13 @@
 			"err500": "Internal server error. This shouldn't happen.",
 			"ok": "Success! All edits saved."
 		},
+		"savemail": {
+			"err400": "The e-mail address must not be empty.",
+			"err401": "It doesn't look like you're allowed to do that.",
+			"err422": "This doesn't seem to be a valid e-mail address.",
+			"err500": "There was an internal server problem, something's wrong on our end. Please try again later.",
+			"ok": "Request accepted. Check your inbox at the new e-mail address for the next step."
+		},
 		"savepass": {
 			"err400": "The password must not be empty.",
 			"err401": "It doesn't look like you're allowed to do that.",

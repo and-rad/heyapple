@@ -355,3 +355,93 @@ func TestChangePassword(t *testing.T) {
 		}
 	}
 }
+
+func TestChangeEmail(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		in        url.Values
+		nf        *mock.Notifier
+		setCookie bool
+
+		err    string
+		status int
+	}{
+		{ //00// no data
+			db:     mock.NewDB(),
+			status: http.StatusBadRequest,
+		},
+		{ //01// anonymous user
+			db:     mock.NewDB(),
+			in:     url.Values{"email": {"new@email.address"}},
+			status: http.StatusUnauthorized,
+		},
+		{ //02// connection failure
+			db:        mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS, mock.ErrDOS),
+			in:        url.Values{"email": {"new@email.address"}},
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //03// e-mail address exists
+			db:        mock.NewDB().WithUser(mock.User1),
+			in:        url.Values{"email": {mock.User1.Email}},
+			setCookie: true,
+			status:    http.StatusAccepted,
+		},
+		{ //04// not a valid e-mail address
+			db:        mock.NewDB().WithUser(mock.User1),
+			in:        url.Values{"email": {"invalidemail"}},
+			setCookie: true,
+			status:    http.StatusUnprocessableEntity,
+		},
+		{ //05// notifier error
+			db:        mock.NewDB().WithUser(mock.User1),
+			in:        url.Values{"email": {"new@email.address"}},
+			nf:        mock.NewNotifier().WithError(mock.ErrDOS),
+			setCookie: true,
+			status:    http.StatusAccepted,
+			err:       mock.ErrDOS.Error(),
+		},
+		{ //06// success
+			db:        mock.NewDB().WithUser(mock.User1),
+			in:        url.Values{"email": {"new@email.address"}},
+			nf:        mock.NewNotifier(),
+			setCookie: true,
+			status:    http.StatusAccepted,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in.Encode()))
+		req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New(), Msg: data.nf, Log: mock.NewLog()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", data.db.User.ID)
+			}
+		}
+
+		auth.ChangeEmail(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		err := env.Log.(*mock.Log).Err
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if data.nf != nil && err == "" {
+			if data.nf.Msg != app.RenameNotification {
+				t.Errorf("test case %d: message mismatch \nhave: %v\nwant: %v", idx, data.nf.Msg, app.RenameNotification)
+			}
+			if data.nf.To != data.in["email"][0] {
+				t.Errorf("test case %d: recipient mismatch \nhave: %v\nwant: %v", idx, data.nf.To, data.in["email"][0])
+			}
+			if data.nf.Data["lang"] != "en" {
+				t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.nf.Data["lang"], "en")
+			}
+		}
+	}
+}

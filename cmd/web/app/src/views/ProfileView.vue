@@ -17,7 +17,27 @@ function onNavItem(id) {
 	target.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
-function onSaveEmail(evt) {}
+function onSaveEmail(evt) {
+	isSaving.value = true;
+	let form = evt.target.form;
+
+	fetch("/auth/email", {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/x-www-form-urlencoded",
+			"X-CSRF-Token": csrf,
+		},
+		body: new URLSearchParams(new FormData(form)),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("savemail.err" + response.status);
+			}
+			log.msg(t("savemail.ok"));
+		})
+		.catch((err) => log.err(err))
+		.finally(() => (isSaving.value = false));
+}
 
 function onChangePassword(evt) {
 	isSaving.value = true;

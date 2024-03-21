@@ -7,6 +7,7 @@ import { useI18n } from "vue-i18n";
 const { t } = useI18n();
 const csrf = inject("csrfToken");
 const log = inject("log");
+const prefs = inject("prefs");
 
 const isSaving = ref(false);
 
@@ -80,15 +81,15 @@ function onChangePassword(evt) {
 		<template #main>
 			<section>
 				<h2 id="head-account">{{ t("nav.account") }}</h2>
-				<form>
+				<form @submit.prevent>
 					<label>{{ t("profile.email") }}</label>
-					<input type="email" name="email" />
+					<input type="email" name="email" :value="prefs.account.email" />
 					<p v-html="t('profile.emailhint')"></p>
 					<button type="button" :disabled="isSaving" @click="onSaveEmail" class="async">
 						{{ t("btn.save") }}
 					</button>
 				</form>
-				<form>
+				<form @submit.prevent>
 					<label>{{ t("profile.passold") }}</label>
 					<PasswordField ref="passField" name="passold" />
 					<label>{{ t("profile.passnew") }}</label>

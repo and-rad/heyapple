@@ -121,3 +121,47 @@ func L10n(env *handler.Environment) httprouter.Handle {
 		sendResponse(tr, w)
 	}
 }
+
+// Preferences returns the account and app settings
+// for the session user.
+//
+// Endpoint:
+//
+//	/api/v1/prefs
+//
+// Methods:
+//
+//	GET
+//
+// Possible status codes:
+//
+//	200 - OK
+//	404 - User doesn't exist
+//	500 - Internal server error
+//
+// Example output:
+//
+//	{
+//	  "account": { "email": "user@example.com", ... },
+//	  "rdi": { "kcal": 2000, "fat": 60, ... },
+//	  ...
+//	}
+func Preferences(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		uid, ok := env.Session.Get(r.Context(), "id").(int)
+		if !ok {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		query := &app.Preferences{ID: uid}
+		if err := env.DB.Fetch(query); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(query.Prefs, w)
+		}
+	}
+}

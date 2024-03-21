@@ -31,6 +31,7 @@ import (
 	"github.com/and-rad/heyapple/internal/app"
 	"github.com/and-rad/heyapple/internal/handler"
 	"github.com/and-rad/heyapple/internal/mock"
+	"github.com/and-rad/scs/v2"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -147,6 +148,58 @@ func TestL10n(t *testing.T) {
 		json.Unmarshal(body, &out)
 		if !reflect.DeepEqual(out, data.out) {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, out, data.out)
+		}
+	}
+}
+
+func TestPreferences(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// missing session id
+			db:     mock.NewDB(),
+			status: http.StatusNotFound,
+		},
+		{ //01// user doesn't exist
+			db:        mock.NewDB(),
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //02// connection failure
+			db:        mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS),
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //03// success
+			db:        mock.NewDB().WithUser(mock.User1),
+			setCookie: true,
+			status:    http.StatusOK,
+			out:       mock.Prefs1Json,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodGet, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.Preferences(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
 		}
 	}
 }

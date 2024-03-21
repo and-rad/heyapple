@@ -148,53 +148,6 @@ fetch("/api/v1/diary")
 	.then((response) => response.json())
 	.then(initDiary);
 
-// TODO this needs an actual implementation
 fetch("/api/v1/prefs")
 	.then((response) => response.json())
-	.then(initPrefs)
-	.catch(() => {
-		initPrefs({
-			rdi: {
-				kcal: 2000,
-				fat: 60,
-				carb: 270,
-				prot: 80,
-				fib: 32,
-				salt: 5.8,
-				fatsat: 22,
-				fato3: 1.6,
-				fato6: 3.2,
-				vita: 0.9,
-				vitb1: 1.2,
-				vitb2: 1.3,
-				vitb3: 16,
-				vitb5: 5,
-				vitb6: 1.7,
-				vitb7: 0.03,
-				vitb9: 0.4,
-				vitb12: 0.003,
-				vitc: 90,
-				vitd: 0.015,
-				vite: 15,
-				vitk: 0.12,
-				pot: 3400,
-				chl: 2300,
-				sod: 2300,
-				calc: 1000,
-				phos: 700,
-				mag: 400,
-				iron: 8,
-				zinc: 11,
-				mang: 2.3,
-				cop: 0.9,
-				iod: 0.15,
-				chr: 0.035,
-				mol: 0.045,
-				sel: 0.055,
-			},
-			ui: {
-				neutralCharts: false,
-				trackSaltAsSodium: false,
-			},
-		});
-	});
+	.then(initPrefs);

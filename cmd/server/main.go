@@ -74,6 +74,7 @@ func main() {
 	router.DELETE("/auth/local", auth.LocalLogout(env))
 
 	router.GET("/api/v1/l10n/:lang", chain(api.L10n(env), mw.JSON()))
+	router.GET("/api/v1/prefs", chain(api.Preferences(env), mw.JSON()))
 	router.POST("/api/v1/user", chain(api.NewUser(env), mw.JSON()))
 
 	router.GET("/api/v1/foods", chain(api.Foods(env), mw.JSON()))

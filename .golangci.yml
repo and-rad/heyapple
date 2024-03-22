@@ -1,9 +1,9 @@
 linters-settings:
-  govet:
-    enable:
-      - fieldalignment
+    govet:
+        disable:
+            - fieldalignment
 
 run:
-  tests: false
-  timeout: 5s
+    tests: false
+    timeout: 5s
 

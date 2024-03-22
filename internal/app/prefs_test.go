@@ -90,7 +90,7 @@ func TestPreferences_Fetch(t *testing.T) {
 			db:   mock.NewDB().WithUser(mock.User1),
 			user: mock.User1.ID,
 			prefs: app.Prefs{
-				Account: app.AccountPrefs{Email: mock.User1.Email},
+				Account: app.AccountPrefs{Email: mock.User1.Email, Name: mock.User1.Name},
 				RDI:     baseRDI,
 			},
 		},

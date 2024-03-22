@@ -38,6 +38,7 @@ const (
 // stored as an encrypted hash.
 type User struct {
 	Email string `json:"email"`
+	Name  string `json:"name"`
 	Pass  string `json:"pass"`
 	Lang  string `json:"lang"`
 	Perm  int    `json:"perm"`

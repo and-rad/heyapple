@@ -153,7 +153,10 @@ func (q *Preferences) Fetch(db DB) error {
 		return err
 	}
 
-	q.Prefs.Account.Email = user.Email
+	q.Prefs.Account = AccountPrefs{
+		Email: user.Email,
+		Name:  user.Name,
+	}
 	q.Prefs.RDI = baseRDIPrefs
 
 	return nil

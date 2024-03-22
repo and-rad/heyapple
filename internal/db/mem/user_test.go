@@ -26,10 +26,10 @@ import (
 	"github.com/and-rad/heyapple/internal/mock"
 )
 
-func TestDB_UserByName(t *testing.T) {
+func TestDB_UserByEmail(t *testing.T) {
 	for idx, data := range []struct {
-		db   *DB
-		name string
+		db    *DB
+		email string
 
 		user app.User
 		err  error
@@ -43,8 +43,8 @@ func TestDB_UserByName(t *testing.T) {
 				users:  map[int]app.User{1: {ID: 1, Email: "a@a.a"}},
 				emails: map[string]int{"a@a.a": 1},
 			},
-			name: "b@b.b",
-			err:  app.ErrNotFound,
+			email: "b@b.b",
+			err:   app.ErrNotFound,
 		},
 		{ //02// success
 			db: &DB{
@@ -57,11 +57,11 @@ func TestDB_UserByName(t *testing.T) {
 					"b@b.b": 2,
 				},
 			},
-			name: "b@b.b",
-			user: app.User{ID: 2, Email: "b@b.b"},
+			email: "b@b.b",
+			user:  app.User{ID: 2, Email: "b@b.b"},
 		},
 	} {
-		user, err := data.db.UserByName(data.name)
+		user, err := data.db.UserByEmail(data.email)
 
 		if err != data.err {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
@@ -76,7 +76,7 @@ func TestDB_UserByName(t *testing.T) {
 func TestDB_NewUser(t *testing.T) {
 	for idx, data := range []struct {
 		db    *DB
-		name  string
+		email string
 		hash  string
 		token string
 
@@ -84,10 +84,10 @@ func TestDB_NewUser(t *testing.T) {
 		err  error
 	}{
 		{ //00// empty database
-			db:   NewDB(),
-			name: "a@a.a",
-			hash: "djwrifkgh",
-			user: app.User{ID: 1, Email: "a@a.a", Pass: "djwrifkgh", Lang: getConfig().defaultLang},
+			db:    NewDB(),
+			email: "a@a.a",
+			hash:  "djwrifkgh",
+			user:  app.User{ID: 1, Email: "a@a.a", Pass: "djwrifkgh", Lang: getConfig().defaultLang},
 		},
 		{ //01// username already exists
 			db: &DB{
@@ -95,10 +95,10 @@ func TestDB_NewUser(t *testing.T) {
 				users:  map[int]app.User{1: {ID: 1, Email: "a@a.a", Pass: "qpwoeirutz"}},
 				userID: 1,
 			},
-			name: "a@a.a",
-			hash: "djwrifkgh",
-			user: app.User{ID: 1, Email: "a@a.a", Pass: "qpwoeirutz"},
-			err:  app.ErrExists,
+			email: "a@a.a",
+			hash:  "djwrifkgh",
+			user:  app.User{ID: 1, Email: "a@a.a", Pass: "qpwoeirutz"},
+			err:   app.ErrExists,
 		},
 		{ //02// success
 			db: &DB{
@@ -107,13 +107,13 @@ func TestDB_NewUser(t *testing.T) {
 				tokens: map[string]app.Token{},
 				userID: 1,
 			},
-			name:  "b@b.b",
+			email: "b@b.b",
 			hash:  "djwrifkgh",
 			token: "aabbccdd",
 			user:  app.User{ID: 2, Email: "b@b.b", Pass: "djwrifkgh", Lang: getConfig().defaultLang},
 		},
 	} {
-		id, err := data.db.NewUser(data.name, data.hash, data.token)
+		id, err := data.db.NewUser(data.email, data.hash, data.token)
 
 		if err == nil && id != data.db.userID {
 			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, id, data.db.userID)
@@ -127,7 +127,7 @@ func TestDB_NewUser(t *testing.T) {
 			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
 		}
 
-		if u, _ := data.db.UserByName(data.name); u != data.user {
+		if u, _ := data.db.UserByEmail(data.email); u != data.user {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, u, data.user)
 		}
 	}

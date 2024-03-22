@@ -58,9 +58,9 @@ type DB interface {
 	Execute(Command) error
 	Fetch(Query) error
 
-	NewUser(name, hash, token string) (int, error)
+	NewUser(email, hash, token string) (int, error)
 	SetUser(User) error
-	UserByName(name string) (User, error)
+	UserByEmail(email string) (User, error)
 	UserByID(id int) (User, error)
 	NewToken(id int, hash string, data interface{}) error
 	DelToken(string) error

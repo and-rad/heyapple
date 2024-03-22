@@ -193,11 +193,11 @@ func (db *DB) UserByID(id int) (app.User, error) {
 	return db.User, nil
 }
 
-func (db *DB) UserByName(name string) (app.User, error) {
+func (db *DB) UserByEmail(email string) (app.User, error) {
 	if err := db.popError(); err != nil {
 		return app.User{}, err
 	}
-	if db.User.Email != name {
+	if db.User.Email != email {
 		return app.User{}, app.ErrNotFound
 	}
 	return db.User, nil

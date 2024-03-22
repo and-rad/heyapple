@@ -22,17 +22,17 @@ import (
 	"github.com/and-rad/heyapple/internal/app"
 )
 
-func (db *DB) NewUser(name, hash, token string) (int, error) {
-	if _, ok := db.emails[name]; ok {
+func (db *DB) NewUser(email, hash, token string) (int, error) {
+	if _, ok := db.emails[email]; ok {
 		return 0, app.ErrExists
 	}
 
 	db.userID++
-	db.emails[name] = db.userID
+	db.emails[email] = db.userID
 	db.tokens[token] = app.Token{ID: db.userID}
 	db.users[db.userID] = app.User{
 		ID:    db.userID,
-		Email: name,
+		Email: email,
 		Pass:  hash,
 		Lang:  getConfig().defaultLang,
 	}
@@ -50,8 +50,8 @@ func (db *DB) SetUser(user app.User) error {
 	return app.ErrNotFound
 }
 
-func (db *DB) UserByName(name string) (app.User, error) {
-	if id, ok := db.emails[name]; ok {
+func (db *DB) UserByEmail(email string) (app.User, error) {
+	if id, ok := db.emails[email]; ok {
 		if user, ok := db.users[id]; ok {
 			return user, nil
 		}

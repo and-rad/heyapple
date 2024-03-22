@@ -70,7 +70,7 @@ func (c *CreateUser) Execute(db DB) error {
 	hash := NewCrypter().Encrypt(c.Pass)
 	token := NewTokenizer().Create()
 
-	_, err := db.UserByName(c.Email)
+	_, err := db.UserByEmail(c.Email)
 	if err == nil {
 		return ErrExists
 	}
@@ -103,7 +103,7 @@ type Authenticate struct {
 }
 
 func (q *Authenticate) Fetch(db DB) error {
-	user, err := db.UserByName(q.Email)
+	user, err := db.UserByEmail(q.Email)
 	if err != nil {
 		return err
 	}
@@ -233,7 +233,7 @@ func (c *ResetPassword) Execute(db DB) error {
 		return ErrNotFound
 	}
 
-	user, err := db.UserByName(c.Email)
+	user, err := db.UserByEmail(c.Email)
 	if err != nil {
 		return err
 	}
@@ -318,7 +318,7 @@ func (c *RequestEmailChange) Execute(db DB) error {
 		return ErrNoEmail
 	}
 
-	_, err := db.UserByName(c.Email)
+	_, err := db.UserByEmail(c.Email)
 	if err == nil {
 		return ErrExists
 	}

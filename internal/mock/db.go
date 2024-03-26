@@ -203,6 +203,16 @@ func (db *DB) UserByEmail(email string) (app.User, error) {
 	return db.User, nil
 }
 
+func (db *DB) UserByName(name string) (app.User, error) {
+	if err := db.popError(); err != nil {
+		return app.User{}, err
+	}
+	if db.User.Name != name {
+		return app.User{}, app.ErrNotFound
+	}
+	return db.User, nil
+}
+
 func (db *DB) Token(string) (app.Token, error) {
 	if err := db.popError(); err != nil {
 		return app.Token{}, err

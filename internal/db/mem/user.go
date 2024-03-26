@@ -59,6 +59,15 @@ func (db *DB) UserByEmail(email string) (app.User, error) {
 	return app.User{}, app.ErrNotFound
 }
 
+func (db *DB) UserByName(name string) (app.User, error) {
+	for _, user := range db.users {
+		if user.Name == name {
+			return user, nil
+		}
+	}
+	return app.User{}, app.ErrNotFound
+}
+
 func (db *DB) UserByID(id int) (app.User, error) {
 	if user, ok := db.users[id]; ok {
 		return user, nil

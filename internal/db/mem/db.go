@@ -19,6 +19,10 @@
 // package mem provides an implementation of the app.DB interface
 // that lives entirely in the application's runtime memory. It can be
 // saved to and loaded from JSON files for persistence.
+//
+// It performs well, but it's absolutely not intended to be used on a
+// large user base. Deployments with more than 50 to 100 users should
+// be set up with a proper database management system.
 package mem
 
 import (

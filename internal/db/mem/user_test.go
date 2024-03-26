@@ -73,6 +73,53 @@ func TestDB_UserByEmail(t *testing.T) {
 	}
 }
 
+func TestDB_UserByName(t *testing.T) {
+	for idx, data := range []struct {
+		db   *DB
+		name string
+
+		user app.User
+		err  error
+	}{
+		{ //00// empty database
+			db:  NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// username doesn't exist
+			db: &DB{
+				users:  map[int]app.User{1: {ID: 1, Email: "a@a.a"}, 2: {ID: 2, Email: "b@b.b", Name: "BadApple"}},
+				emails: map[string]int{"a@a.a": 1, "b@b.b": 2},
+			},
+			name: "AnnoyingOrange",
+			err:  app.ErrNotFound,
+		},
+		{ //02// success
+			db: &DB{
+				users: map[int]app.User{
+					1: {ID: 1, Email: "a@a.a", Name: "GoodOrange"},
+					2: {ID: 2, Email: "b@b.b", Name: "BadApple"},
+				},
+				emails: map[string]int{
+					"a@a.a": 1,
+					"b@b.b": 2,
+				},
+			},
+			name: "BadApple",
+			user: app.User{ID: 2, Email: "b@b.b", Name: "BadApple"},
+		},
+	} {
+		user, err := data.db.UserByName(data.name)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if user != data.user {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, user, data.user)
+		}
+	}
+}
+
 func TestDB_NewUser(t *testing.T) {
 	for idx, data := range []struct {
 		db    *DB

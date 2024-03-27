@@ -74,17 +74,66 @@ func (c *ChangeName) Execute(db DB) error {
 	return err
 }
 
-// TODO: add more names
+// We're trying to go for 10 entries per letter, which would
+// give us about 67,000 unique combinations. Combined with
+// number suffixes, this is easily enough for any number of
+// users the app will ever realistically have.
 var (
 	adjectives = []string{
-		"Adamant", "Angry", "Annoying", "Artful",
-		"Beautiful", "Bespectacled", "Boneheaded", "Bumpy",
-		"Cantankerous", "Charming", "Crosseyed", "Cunning",
+		"Able", "Adventurous", "Adorable", "Adroit", "Adaptable", "Annoying", "Auspicious", "Artful", "Adamant", "Angry",
+		"Brave", "Bright", "Beautiful", "Bountiful", "Blissful", "Bad", "Brilliant", "Benevolent", "Bespectacled", "Bumpy",
+		"Calm", "Creative", "Clever", "Cheerful", "Curious", "Courageous", "Charming", "Cantankerous", "Crosseyed", "Cunning",
+		"Daring", "Dazzling", "Delightful", "Dynamic", "Determined", "Diligent",
+		"Eager", "Elegant", "Enthusiastic", "Energetic", "Efficient", "Eloquent",
+		"Fabulous", "Friendly", "Funny", "Fierce", "Flexible",
+		"Gentle", "Generous", "Graceful", "Genuine", "Glorious",
+		"Happy", "Helpful", "Honest", "Humble", "Healthy",
+		"Innovative", "Intelligent", "Impressive", "Ingenious", "Inspiring",
+		"Jolly", "Joyful", "Jubilant", "Just", "Jovial",
+		"Kind", "Keen", "Knowledgeable", "Kooky", "Kaleidoscopic",
+		"Lively", "Loyal", "Luminous", "Lucky", "Lovely",
+		"Magnificent", "Majestic", "Mindful", "Magical", "Merry", "Marvelous",
+		"Nice", "Noble", "Neat", "Nurturing", "Natural",
+		"Optimistic", "Outstanding", "Optimal", "Original", "Observant",
+		"Peaceful", "Passionate", "Patient", "Polite", "Positive",
+		"Quick", "Quiet", "Quirky", "Qualified", "Quaint", "Quixotic",
+		"Radiant", "Resilient", "Resourceful", "Reliable", "Remarkable",
+		"Sincere", "Spirited", "Strong", "Stellar", "Sensible",
+		"Talented", "Thoughtful", "Trustworthy", "Thrilling", "Tenacious",
+		"Unique", "Understanding", "Upbeat", "Unwavering", "Uplifting",
+		"Vibrant", "Valiant", "Vivacious", "Virtuous", "Versatile",
+		"Witty", "Warm", "Wise", "Wonderful", "Welcoming",
+		"Xenial", "Xenodochial", "Xylophonic", "Xenogenetic",
+		"Youthful", "Yummy", "Yearning", "Yare",
+		"Zesty", "Zealous", "Zany", "Zippy", "Zestful",
 	}
 	nouns = []string{
-		"Apple", "Apricot", "Aubergine", "Avocado",
-		"Bacon", "Baguette", "Banana", "Blueberry",
-		"Carrot", "Cheese", "Chicken", "Croissant",
+		"Apple", "Apricot", "Avocado", "Artichoke", "Asparagus", "Almond",
+		"Banana", "Blueberry", "Blackberry", "Broccoli", "Bean", "Barley", "Beet",
+		"Carrot", "Cucumber", "Cantaloupe", "Celery", "Cherry", "Cabbage", "Coconut", "Cauliflower",
+		"Date", "Dragonfruit", "Durian", "Daikon", "Dill",
+		"Eggplant", "Endive", "Escarole", "Edamame", "Enoki",
+		"Fig", "Fennel", "Flax", "Feijoa",
+		"Grape", "Guava", "Garlic", "Ginger", "Gooseberry",
+		"Honeydew", "Huckleberry", "Honey",
+		"Imbe",
+		"Jackfruit",
+		"Kiwi", "Kale", "Kumquat",
+		"Lemon", "Lime", "Lettuce", "Lychee", "Leek",
+		"Mango", "Melon", "Mulberry", "Mushroom", "Mustard",
+		"Nectarine",
+		"Orange", "Onion", "Okra", "Oats", "Olive",
+		"Papaya", "Pear", "Pineapple", "Peach", "Pea", "Potato", "Plum",
+		"Quince", "Quinoa",
+		"Raspberry", "Rhubarb", "Radish",
+		"Strawberry", "Spinach", "Squash", "Starfruit",
+		"Tomato", "Tangerine", "Turnip", "Tamarillo", "Taro",
+		"Ulluco", "Ugni",
+		"Vanilla", "Vidalia",
+		"Watermelon", "Wasabi",
+		"Xigua", "Xylocarp", "Xylopia", "Xylitol",
+		"Yam", "Yautia", "Yuzu", "Yacon",
+		"Zucchini", "Zebu", "Ziziphus", "Zuiki",
 	}
 )
 

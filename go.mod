@@ -1,6 +1,6 @@
 module github.com/and-rad/heyapple
 
-go 1.17
+go 1.21
 
 require (
 	github.com/and-rad/scs/v2 v2.6.0

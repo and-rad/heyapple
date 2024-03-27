@@ -193,6 +193,16 @@ func (db *DB) UserByID(id int) (app.User, error) {
 	return db.User, nil
 }
 
+func (db *DB) UserNames(prefix string) ([]string, error) {
+	if err := db.popError(); err != nil {
+		return nil, err
+	}
+	if db.User.Name == "" {
+		return []string{}, nil
+	}
+	return []string{db.User.Name}, nil
+}
+
 func (db *DB) UserByEmail(email string) (app.User, error) {
 	if err := db.popError(); err != nil {
 		return app.User{}, err

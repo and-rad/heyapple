@@ -20,6 +20,7 @@ package mem
 
 import (
 	"reflect"
+	"sort"
 	"testing"
 
 	"github.com/and-rad/heyapple/internal/app"
@@ -116,6 +117,67 @@ func TestDB_UserByName(t *testing.T) {
 
 		if user != data.user {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, user, data.user)
+		}
+	}
+}
+
+func TestDB_UserNames(t *testing.T) {
+	for idx, data := range []struct {
+		db     *DB
+		prefix string
+
+		names []string
+	}{
+		{ //00// empty database
+			db:     NewDB(),
+			prefix: "BadApple",
+			names:  []string{},
+		},
+		{ //01// non-empty database
+			db: &DB{
+				users: map[int]app.User{
+					1: {ID: 1, Email: "a@a.a", Name: "GoodOrange"},
+					2: {ID: 2, Email: "b@b.b", Name: "BadApple"},
+					3: {ID: 3, Email: "c@c.c", Name: "BadApple4"},
+				},
+			},
+			prefix: "BadApple",
+			names:  []string{"BadApple", "BadApple4"},
+		},
+		{ //02// prefix not among existing names
+			db: &DB{
+				users: map[int]app.User{
+					1: {ID: 1, Email: "a@a.a", Name: "GoodOrange"},
+					2: {ID: 2, Email: "b@b.b", Name: "BadApple"},
+					3: {ID: 3, Email: "c@c.c", Name: "BadApple4"},
+				},
+			},
+			prefix: "GoodApple",
+			names:  []string{},
+		},
+		{ //03// empty prefix returns all names
+			db: &DB{
+				users: map[int]app.User{
+					1: {ID: 1, Email: "a@a.a", Name: "GoodOrange"},
+					2: {ID: 2, Email: "b@b.b", Name: "BadApple"},
+					3: {ID: 3, Email: "c@c.c", Name: "BadApple4"},
+				},
+			},
+			prefix: "",
+			names:  []string{"BadApple", "BadApple4", "GoodOrange"},
+		},
+	} {
+		names, err := data.db.UserNames(data.prefix)
+
+		// sort names for consistent test results
+		sort.Strings(names)
+
+		if err != nil {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, nil)
+		}
+
+		if !reflect.DeepEqual(names, data.names) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, names, data.names)
 		}
 	}
 }

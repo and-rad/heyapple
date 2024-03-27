@@ -19,6 +19,8 @@
 package mem
 
 import (
+	"strings"
+
 	"github.com/and-rad/heyapple/internal/app"
 )
 
@@ -73,6 +75,16 @@ func (db *DB) UserByID(id int) (app.User, error) {
 		return user, nil
 	}
 	return app.User{}, app.ErrNotFound
+}
+
+func (db *DB) UserNames(prefix string) ([]string, error) {
+	names := []string{}
+	for _, user := range db.users {
+		if strings.HasPrefix(user.Name, prefix) {
+			names = append(names, user.Name)
+		}
+	}
+	return names, nil
 }
 
 func (db *DB) Token(hash string) (app.Token, error) {

@@ -63,6 +63,7 @@ type DB interface {
 	UserByEmail(email string) (User, error)
 	UserByName(name string) (User, error)
 	UserByID(id int) (User, error)
+	UserNames(prefix string) ([]string, error)
 	NewToken(id int, hash string, data interface{}) error
 	DelToken(string) error
 	Token(string) (Token, error)

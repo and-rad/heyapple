@@ -40,6 +40,28 @@ function onSaveEmail(evt) {
 		.finally(() => (isSaving.value = false));
 }
 
+function onRollUsername(evt) {
+	isSaving.value = true;
+	let form = evt.target.form;
+
+	fetch("/api/v1/name", {
+		method: "PUT",
+		headers: { "X-CSRF-Token": csrf },
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("savename.err" + response.status);
+			}
+			return response.json();
+		})
+		.then((data) => {
+			prefs.value.account.name = data.name;
+			log.msg(t("savename.ok"));
+		})
+		.catch((err) => log.err(err))
+		.finally(() => (isSaving.value = false));
+}
+
 function onChangePassword(evt) {
 	isSaving.value = true;
 	let form = evt.target.form;
@@ -87,6 +109,16 @@ function onChangePassword(evt) {
 					<p v-html="t('profile.emailhint')"></p>
 					<button type="button" :disabled="isSaving" @click="onSaveEmail" class="async">
 						{{ t("btn.save") }}
+					</button>
+				</form>
+				<form @submit.prevent>
+					<label>
+						{{ t("profile.name") }} <a href="#">{{ t("profile.namelink") }}</a>
+					</label>
+					<input readonly type="text" name="name" :value="prefs.account.name" />
+					<p v-html="t('profile.namehint')"></p>
+					<button type="button" :disabled="isSaving" @click="onRollUsername" class="async">
+						{{ t("btn.reroll") }}
 					</button>
 				</form>
 				<form @submit.prevent>
@@ -171,6 +203,15 @@ main.settings .content label {
 
 main.settings .content form > button {
 	margin: 1em 0 1em;
+}
+
+main.settings label > a {
+	float: right;
+}
+
+main.settings input + p,
+main.settings span.password + p {
+	margin-top: 1em;
 }
 
 @media only screen and (min-width: 500px) {

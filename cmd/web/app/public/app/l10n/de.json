@@ -55,6 +55,7 @@
 			"add": "Okay",
 			"changepass": "Passwort ändern",
 			"new": "Neu",
+			"reroll": "Neuen Benutzernamen würfeln",
 			"save": "Änderungen speichern"
 		},
 		"cat": {
@@ -224,6 +225,9 @@
 		"profile": {
 			"email": "E-Mail-Adresse",
 			"emailhint": "Wenn du deine E-Mail-Adresse änderst, wird ein Aktivierungslink an diese neue Adresse gesendet. Erst, wenn diese Aktivierung abgeschlossen ist, kann die neue Adresse zur Anmeldung genutzt werden.",
+			"name": "Benutzername",
+			"namehint": "Dein Benutzername wird dir zufällig zugewiesen, wenn du ihn das erste Mal \"würfelst\". Wenn du ihn ändern möchtest, klick auf die Schaltfläche unten.",
+			"namelink": "Was ist das?",
 			"passhint": "Passwörter müssen mindestens 10 Zeichen lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten.",
 			"passnew": "Neues Passwort",
 			"passold": "Aktuelles Passwort"
@@ -271,6 +275,11 @@
 			"err422": "Das scheint keine gültige E-Mail-Adresse zu sein.",
 			"err500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
 			"ok": "Auftrag angenommen. Im Posteingang der neuen E-Mail-Adresse findest du den nächsten Schritt."
+		},
+		"savename": {
+			"err404": "Das Benutzerkonto existiert nicht.",
+			"err500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
+			"ok": "Dein Benutzername wurde erfolgreich geändert."
 		},
 		"savepass": {
 			"err400": "Das Passwort darf nicht leer sein.",

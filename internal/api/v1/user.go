@@ -91,6 +91,48 @@ func NewUser(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// ChangeName creates a new username for the user identified
+// by the current session. The request body is empty, all
+// the username logic is performed on the server. The new
+// name is returned on success.
+//
+// Endpoint:
+//
+//	/api/v1/name
+//
+// Methods:
+//
+//	PUT
+//
+// Possible status codes:
+//
+//	200 - Success
+//	404 - User doesn't exist or session is invalid
+//	500 - Internal server error
+//
+// Example output:
+//
+//	{ "id": 1, "name": "BadApple" }
+func ChangeName(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		uid, ok := env.Session.Get(r.Context(), "id").(int)
+		if !ok {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		cmd := &app.ChangeName{ID: uid}
+		if err := env.DB.Execute(cmd); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(cmd, w)
+		}
+	}
+}
+
 // L10n returns all localized strings for the language
 // {lang}. The response body will be a JSON-formatted
 // collection of key-value pairs.

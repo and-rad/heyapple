@@ -55,6 +55,7 @@
 			"add": "Add",
 			"changepass": "Change password",
 			"new": "New",
+			"reroll": "Re-roll username",
 			"save": "Save changes"
 		},
 		"cat": {
@@ -224,6 +225,9 @@
 		"profile": {
 			"email": "E-Mail Address",
 			"emailhint": "When you change your e-mail address, a link to activate it will be sent to the new address. The change becomes effective only after the steps outlined in that message are completed.",
+			"name": "Username",
+			"namehint": "Your username is randomly assigned to you the first time you \"roll\" for it. If you want to change it, click the button below.",
+			"namelink": "What's this?",
 			"passhint": "Passwords must be at least 10 characters long and should contain a mix of letters, numbers, and special characters.",
 			"passnew": "New Password",
 			"passold": "Current Password"
@@ -271,6 +275,11 @@
 			"err422": "This doesn't seem to be a valid e-mail address.",
 			"err500": "There was an internal server problem, something's wrong on our end. Please try again later.",
 			"ok": "Request accepted. Check your inbox at the new e-mail address for the next step."
+		},
+		"savename": {
+			"err404": "The user account doesn't exist.",
+			"err500": "There was an internal server problem, something's wrong on our end. Please try again later.",
+			"ok": "Your username was updated successfully."
 		},
 		"savepass": {
 			"err400": "The password must not be empty.",

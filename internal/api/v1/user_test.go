@@ -108,6 +108,56 @@ func TestNewUser(t *testing.T) {
 	}
 }
 
+func TestChangeName(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		setCookie bool
+
+		status int
+	}{
+		{ //00// missing session id
+			db:     mock.NewDB(),
+			status: http.StatusNotFound,
+		},
+		{ //01// user doesn't exist
+			db:        mock.NewDB(),
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //02// connection failure
+			db:        mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS),
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //03// success
+			db:        mock.NewDB().WithUser(mock.User1),
+			setCookie: true,
+			status:    http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.ChangeName(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if res.Result().StatusCode == http.StatusOK && res.Body.String() == "" {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, res.Body.String(), "non-empty response body")
+		}
+	}
+}
+
 func TestL10n(t *testing.T) {
 	for idx, data := range []struct {
 		tr     *mock.Translator

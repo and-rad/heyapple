@@ -28,8 +28,8 @@ import (
 // user identified by ID. The name is randomly generated.
 // If successful, Name contains the new name.
 type ChangeName struct {
-	ID   int
-	Name string
+	ID   int    `json:"id"`
+	Name string `json:"name"`
 }
 
 func (c *ChangeName) Execute(db DB) error {

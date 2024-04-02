@@ -36,6 +36,7 @@ type database struct {
 func (d *database) Execute(Command) error                                           { return nil }
 func (d *database) Fetch(Query) error                                               { return nil }
 func (d *database) NewUser(email, hash, token string) (int, error)                  { return 0, nil }
+func (d *database) DelUser(id int) error                                            { return nil }
 func (d *database) UserByEmail(email string) (User, error)                          { return User{}, nil }
 func (d *database) NewToken(id int, hash string, data interface{}) error            { return nil }
 func (d *database) DelToken(string) error                                           { return nil }

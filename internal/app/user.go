@@ -91,6 +91,20 @@ func (c *CreateUser) Execute(db DB) error {
 	return nil
 }
 
+// DeleteUser is a command to delete an existing user from
+// the system. No error is returned if the user doesn't
+// exist.
+type DeleteUser struct {
+	ID int
+}
+
+func (c *DeleteUser) Execute(db DB) error {
+	if c.ID == 0 {
+		return ErrNotFound
+	}
+	return db.DelUser(c.ID)
+}
+
 // Authenticate is a query that authenticates a user by
 // checking against e-mail and password. If successful,
 // the user's id, language, and permissions are stored

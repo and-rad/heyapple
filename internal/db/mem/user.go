@@ -52,6 +52,35 @@ func (db *DB) SetUser(user app.User) error {
 	return app.ErrNotFound
 }
 
+func (db *DB) DelUser(id int) error {
+	user, ok := db.users[id]
+	if !ok {
+		return nil
+	}
+
+	delete(db.emails, user.Email)
+	delete(db.users, id)
+	delete(db.entries, id)
+	delete(db.days, id)
+	delete(db.aisles, id)
+	delete(db.prices, id)
+	delete(db.done, id)
+
+	recs, ok := db.userRec[id]
+	if !ok {
+		return nil
+	}
+
+	delete(db.userRec, id)
+	for r := range recs {
+		if rec, ok := db.recUser[r]; ok {
+			delete(rec, id)
+		}
+	}
+
+	return nil
+}
+
 func (db *DB) UserByEmail(email string) (app.User, error) {
 	if id, ok := db.emails[email]; ok {
 		if user, ok := db.users[id]; ok {

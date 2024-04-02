@@ -24,6 +24,7 @@ import (
 	"testing"
 
 	"github.com/and-rad/heyapple/internal/app"
+	"github.com/and-rad/heyapple/internal/core"
 	"github.com/and-rad/heyapple/internal/mock"
 )
 
@@ -278,6 +279,111 @@ func TestDB_SetUser(t *testing.T) {
 
 		if err == nil && data.db.emails[data.user.Email] != data.user.ID {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.emails, data.user.Email)
+		}
+	}
+}
+
+func TestDB_DelUser(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+
+		out *DB
+		err error
+	}{
+		{ //00// empty database, no error
+			db:  NewDB(),
+			out: NewDB(),
+			err: nil,
+		},
+		{ //01// user doesn't exist, no error
+			db:  &DB{users: map[int]app.User{2: {ID: 2}}},
+			id:  1,
+			out: &DB{users: map[int]app.User{2: {ID: 2}}},
+			err: nil,
+		},
+		{ //02// success, simple
+			db: &DB{
+				users:  map[int]app.User{1: mock.User1},
+				emails: map[string]int{mock.User1.Email: 1},
+			},
+			id: 1,
+			out: &DB{
+				users:  map[int]app.User{},
+				emails: map[string]int{},
+			},
+		},
+		{ //03// success, complex
+			db: &DB{
+				users:   map[int]app.User{1: mock.User1, 2: mock.User2},
+				emails:  map[string]int{mock.User1.Email: 1, mock.User2.Email: 2},
+				recipes: map[int]core.Recipe{mock.Recipe1().ID: mock.Recipe1(), mock.Recipe2().ID: mock.Recipe2()},
+				userRec: map[int]map[int]int{
+					mock.User1.ID: {mock.Recipe1().ID: app.PermOwner, mock.Recipe2().ID: app.PermRead},
+					mock.User2.ID: {mock.Recipe1().ID: app.PermRead, mock.Recipe2().ID: app.PermOwner},
+				},
+				recUser: map[int]map[int]int{
+					mock.Recipe1().ID: {mock.User1.ID: app.PermOwner, mock.User2.ID: app.PermRead},
+					mock.Recipe2().ID: {mock.User1.ID: app.PermRead, mock.User2.ID: app.PermOwner},
+				},
+				entries: entryMap{
+					mock.User1.ID: {mock.Day1: {mock.Entry1(), mock.Entry2()}},
+					mock.User2.ID: {mock.Day2: {mock.Entry3(), mock.Entry4()}},
+				},
+				days: dayMap{
+					mock.User1.ID: {2022: {3: {mock.Diary220312()}}},
+				},
+				aisles: aisleMap{
+					0:             {1: 0, 4: 0, 26: 0},
+					mock.User1.ID: {1: 2, 4: 4, 26: 1},
+					mock.User2.ID: {3: 9, 4: 12, 26: 2},
+				},
+				prices: priceMap{
+					mock.User1.ID: {2: [2]float32{1.2, 3.5}},
+					mock.User2.ID: {1: [2]float32{32, 45}},
+				},
+				done: doneMap{
+					mock.User1.ID: {2: true, 3: true},
+					mock.User2.ID: {12: false, 45: true},
+				},
+			},
+			id: 1,
+			out: &DB{
+				users:   map[int]app.User{2: mock.User2},
+				emails:  map[string]int{mock.User2.Email: 2},
+				recipes: map[int]core.Recipe{mock.Recipe1().ID: mock.Recipe1(), mock.Recipe2().ID: mock.Recipe2()},
+				userRec: map[int]map[int]int{
+					mock.User2.ID: {mock.Recipe1().ID: app.PermRead, mock.Recipe2().ID: app.PermOwner},
+				},
+				recUser: map[int]map[int]int{
+					mock.Recipe1().ID: {mock.User2.ID: app.PermRead},
+					mock.Recipe2().ID: {mock.User2.ID: app.PermOwner},
+				},
+				entries: entryMap{
+					mock.User2.ID: {mock.Day2: {mock.Entry3(), mock.Entry4()}},
+				},
+				days: dayMap{},
+				aisles: aisleMap{
+					0:             {1: 0, 4: 0, 26: 0},
+					mock.User2.ID: {3: 9, 4: 12, 26: 2},
+				},
+				prices: priceMap{
+					mock.User2.ID: {1: [2]float32{32, 45}},
+				},
+				done: doneMap{
+					mock.User2.ID: {12: false, 45: true},
+				},
+			},
+		},
+	} {
+		err := data.db.DelUser(data.id)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if !reflect.DeepEqual(data.db, data.out) {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db, data.out)
 		}
 	}
 }

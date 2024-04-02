@@ -183,6 +183,17 @@ func (db *DB) SetUser(user app.User) error {
 	return nil
 }
 
+func (db *DB) DelUser(id int) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+	if db.User.ID != id {
+		return nil
+	}
+	db.User = app.User{}
+	return nil
+}
+
 func (db *DB) UserByID(id int) (app.User, error) {
 	if err := db.popError(); err != nil {
 		return app.User{}, err

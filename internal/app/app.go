@@ -60,6 +60,7 @@ type DB interface {
 
 	NewUser(email, hash, token string) (int, error)
 	SetUser(User) error
+	DelUser(id int) error
 	UserByEmail(email string) (User, error)
 	UserByName(name string) (User, error)
 	UserByID(id int) (User, error)

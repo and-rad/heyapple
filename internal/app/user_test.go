@@ -231,6 +231,50 @@ func TestCreateUser_Execute(t *testing.T) {
 	}
 }
 
+func TestDeleteUser_Execute(t *testing.T) {
+	for idx, data := range []struct {
+		db *mock.DB
+		id int
+
+		err error
+	}{
+		{ //00// invalid ID
+			db:  mock.NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// empty database, no error
+			db: mock.NewDB(),
+			id: 1,
+		},
+		{ //02// database failure
+			db:  mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS),
+			id:  mock.User1.ID,
+			err: mock.ErrDOS,
+		},
+		{ //03// success
+			db: mock.NewDB().WithUser(mock.User1),
+			id: mock.User1.ID,
+		},
+	} {
+		user := data.db.User
+
+		cmd := &app.DeleteUser{ID: data.id}
+		err := cmd.Execute(data.db)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if err == nil && data.db.User != (app.User{}) {
+			t.Errorf("test case %d: id mismatch \nhave: %v\nwant: %v", idx, data.db.User, app.User{})
+		}
+
+		if err != nil && data.db.User != user {
+			t.Errorf("test case %d: user mismatch \nhave: %v\nwant: %v", idx, data.db.User, user)
+		}
+	}
+}
+
 func TestActivate_Execute(t *testing.T) {
 	for idx, data := range []struct {
 		db    *mock.DB

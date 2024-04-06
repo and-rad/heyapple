@@ -91,6 +91,46 @@ func NewUser(env *handler.Environment) httprouter.Handle {
 	}
 }
 
+// DeleteUser deletes the user account identified by the
+// current session. If successful, the session cookie will
+// also be deleted following an instant logout.
+//
+// Endpoint:
+//
+//	/api/v1/user
+//
+// Methods:
+//
+//	DELETE
+//
+// Possible status codes:
+//
+//	200 - Success
+//	404 - User is not logged in
+//	500 - Internal server error
+func DeleteUser(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		uid, ok := env.Session.Get(r.Context(), "id").(int)
+		if !ok {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		cmd := &app.DeleteUser{ID: uid}
+		if err := env.DB.Execute(cmd); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+		}
+
+		if err := env.Session.Destroy(r.Context()); err != nil {
+			sendResponse(http.StatusInternalServerError, w)
+		}
+	}
+}
+
 // ChangeName creates a new username for the user identified
 // by the current session. The request body is empty, all
 // the username logic is performed on the server. The new

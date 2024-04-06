@@ -32,6 +32,7 @@ import (
 	"github.com/and-rad/heyapple/internal/handler"
 	"github.com/and-rad/heyapple/internal/mock"
 	"github.com/and-rad/scs/v2"
+	"github.com/and-rad/scs/v2/memstore"
 
 	"github.com/julienschmidt/httprouter"
 )
@@ -103,6 +104,87 @@ func TestNewUser(t *testing.T) {
 			}
 			if data.nf.Data["lang"] != "en" {
 				t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.nf.Data["lang"], "en")
+			}
+		}
+	}
+}
+
+func TestDeleteUser(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		store     scs.Store
+		id        int
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// missing session id
+			db:     mock.NewDB(),
+			status: http.StatusNotFound,
+		},
+		{ //01// invalid user id
+			db:        mock.NewDB(),
+			store:     memstore.New(),
+			id:        0,
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //02// user doesn't exist
+			db:        mock.NewDB(),
+			store:     memstore.New(),
+			id:        1,
+			setCookie: true,
+			status:    http.StatusOK,
+		},
+		{ //03// connection failure
+			db:        mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS),
+			store:     memstore.New(),
+			id:        mock.User1.ID,
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //04// success
+			db:        mock.NewDB().WithUser(mock.User1),
+			store:     memstore.New(),
+			id:        mock.User1.ID,
+			setCookie: true,
+			status:    http.StatusOK,
+		},
+		{ //05// success, but logout failed
+			db:        mock.NewDB().WithUser(mock.User1),
+			store:     mock.NewSessionStore().WithFailDestroy(),
+			id:        mock.User1.ID,
+			setCookie: true,
+			out:       "500",
+			status:    http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodDelete, "/", strings.NewReader(""))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			env.Session.Store = data.store
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", data.id)
+			}
+		}
+
+		api.DeleteUser(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v\nwant: %v", idx, status, data.status)
+		}
+
+		if out := res.Body.String(); out != data.out {
+			t.Errorf("test case %d: body mismatch \nhave: %v\nwant: %v", idx, out, data.out)
+		}
+
+		if status := res.Result().StatusCode; status == http.StatusOK {
+			if data.db.User != (app.User{}) {
+				t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, data.db.User, app.User{})
 			}
 		}
 	}

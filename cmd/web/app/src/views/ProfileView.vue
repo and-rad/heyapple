@@ -42,7 +42,6 @@ function onSaveEmail(evt) {
 
 function onRollUsername(evt) {
 	isSaving.value = true;
-	let form = evt.target.form;
 
 	fetch("/api/v1/name", {
 		method: "PUT",
@@ -83,6 +82,26 @@ function onChangePassword(evt) {
 		.catch((err) => log.err(err))
 		.finally(() => (isSaving.value = false));
 }
+
+function onDeleteUser(evt) {
+	isSaving.value = true;
+
+	fetch("/api/v1/user", {
+		method: "DELETE",
+		headers: { "X-CSRF-Token": csrf },
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("deluser.err" + response.status);
+			}
+			log.msg(t("deluser.ok"));
+			setTimeout(() => {
+				window.location = "/";
+			}, 3000);
+		})
+		.catch((err) => log.err(err))
+		.finally(() => (isSaving.value = false));
+}
 </script>
 
 <template>
@@ -95,6 +114,9 @@ function onChangePassword(evt) {
 					</li>
 					<li>
 						<a @click="onNavItem('head-body')"> {{ t("nav.body") }} </a>
+					</li>
+					<li>
+						<a @click="onNavItem('head-danger')"> {{ t("nav.danger") }} </a>
 					</li>
 				</ul>
 			</nav>
@@ -135,6 +157,16 @@ function onChangePassword(evt) {
 
 			<section>
 				<h2 id="head-body">{{ t("nav.body") }}</h2>
+			</section>
+
+			<section class="danger">
+				<h2 id="head-danger">{{ t("nav.danger") }}</h2>
+				<form @submit.prevent>
+					<p v-html="t('profile.deletehint')"></p>
+					<button type="button" :disabled="isSaving" @click="onDeleteUser" class="async">
+						{{ t("btn.deleteuser") }}
+					</button>
+				</form>
 			</section>
 		</template>
 	</Main>
@@ -188,8 +220,27 @@ main.settings .content section {
 	margin: auto;
 }
 
+main.settings .content section.danger {
+	background-color: var(--color-warn-light);
+	border: 1px solid var(--color-warn);
+	border-radius: 8px;
+	padding: 1em;
+}
+
+main.settings .content section.danger form:last-child {
+	margin-bottom: 0;
+}
+
+main.settings .content section.danger h2 {
+	color: var(--color-secondary);
+}
+
+main.settings .content section.danger button {
+	background-color: var(--color-secondary);
+}
+
 main.settings .content form {
-	margin: 2em 0;
+	margin: 2em 0 4em;
 }
 
 main.settings .content label {

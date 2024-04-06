@@ -54,6 +54,7 @@
 		"btn": {
 			"add": "Okay",
 			"changepass": "Passwort ändern",
+			"deleteuser": "Konto löschen",
 			"new": "Neu",
 			"reroll": "Neuen Benutzernamen würfeln",
 			"save": "Änderungen speichern"
@@ -111,6 +112,11 @@
 			"cal5": "Fr",
 			"cal6": "Sa",
 			"cal7": "So"
+		},
+		"deluser": {
+			"err404": "Das Benutzerkonto existiert nicht.",
+			"err500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
+			"ok": "Dein Konto wurde erfolgreich gelöscht. Du wirst in einem Moment weitergeleitet."
 		},
 		"details": {
 			"noitem": "Für Details Eintrag auswählen"
@@ -213,6 +219,7 @@
 		"nav": {
 			"account": "Konto",
 			"body": "Körperdaten",
+			"danger": "Danger Zone",
 			"diary": "Tagebuch",
 			"food": "Lebensmittel",
 			"help": "Hilfe",
@@ -223,6 +230,7 @@
 			"signout": "Abmelden"
 		},
 		"profile": {
+			"deletehint": "Wenn du HeyApple nicht mehr benutzen möchtest, kannst du dein Konto hier löschen. Alle Rezepte, die nu mit Anderen teilst, werden öffentlich zugänglich gemacht. <strong>Diese Aktion kann nicht rückgängig gemacht werden!</strong>",
 			"email": "E-Mail-Adresse",
 			"emailhint": "Wenn du deine E-Mail-Adresse änderst, wird ein Aktivierungslink an diese neue Adresse gesendet. Erst, wenn diese Aktivierung abgeschlossen ist, kann die neue Adresse zur Anmeldung genutzt werden.",
 			"name": "Benutzername",

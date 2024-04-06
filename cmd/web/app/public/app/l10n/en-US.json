@@ -54,6 +54,7 @@
 		"btn": {
 			"add": "Add",
 			"changepass": "Change password",
+			"deleteuser": "Delete Account",
 			"new": "New",
 			"reroll": "Re-roll username",
 			"save": "Save changes"
@@ -111,6 +112,11 @@
 			"cal5": "Fr",
 			"cal6": "Sa",
 			"cal7": "Su"
+		},
+		"deluser": {
+			"err404": "The user account doesn't exist.",
+			"err500": "There was an internal server problem, something's wrong on our end. Please try again later.",
+			"ok": "Your account was deleted successfully. You will be redirected in a moment."
 		},
 		"details": {
 			"noitem": "Select an item for details"
@@ -213,6 +219,7 @@
 		"nav": {
 			"account": "Account",
 			"body": "Body Stats",
+			"danger": "Danger Zone",
 			"diary": "Diary",
 			"food": "Food",
 			"help": "Help",
@@ -223,6 +230,7 @@
 			"signout": "Sign out"
 		},
 		"profile": {
+			"deletehint": "If you don't want to use HeyApple any longer, you can delete your user account here. Any recipe you share with at least one other person will become public. <strong>This action cannot be undone!</strong>",
 			"email": "E-Mail Address",
 			"emailhint": "When you change your e-mail address, a link to activate it will be sent to the new address. The change becomes effective only after the steps outlined in that message are completed.",
 			"name": "Username",

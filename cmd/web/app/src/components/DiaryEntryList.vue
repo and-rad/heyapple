@@ -89,11 +89,14 @@ const nutrientFraction = computed(() => {
 /**
  * True if there is a nutrient value to display in the
  * list of logged meals. This is generally the case, but
- * might not be if there is no RDI for a given nutrient.
+ * might not be if there is no RDI for a given nutrient
+ * and we want to display it as a percentage of the RDI.
  */
 const hasNutrientValue = computed(() => {
 	if (nutrientMode.value == "relative") {
-		return prefs.value.rdi[prop.nutrient] != undefined;
+		if (prefs.value.rdi[prop.nutrient] === undefined) {
+			return prefs.value.macros[0][prop.nutrient] !== undefined;
+		}
 	}
 	return true;
 });
@@ -172,7 +175,7 @@ function getNutrient(food) {
 		return +amount.toFixed(nutrientFraction.value);
 	}
 
-	let rdi = prefs.value.rdi[prop.nutrient];
+	let rdi = prefs.value.rdi[prop.nutrient] || prefs.value.macros[0][prop.nutrient];
 	return Math.round((amount * 100) / rdi);
 }
 

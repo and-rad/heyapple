@@ -33,25 +33,23 @@ type UIPrefs struct {
 	TrackSaltAsSodium bool `json:"trackSaltAsSodium"`
 }
 
+// MacroPrefs holds all user settings related to personal
+// macronutrient targets.
+type MacroPrefs struct {
+	KCal    float32 `json:"kcal"`
+	Fat     float32 `json:"fat"`
+	Carbs   float32 `json:"carb"`
+	Protein float32 `json:"prot"`
+}
+
 // RDIPrefs holds all user settings related to the
 // recommended daily intake of various nutrients.
-//
-// TODO: primary macros should not be in here because
-// users can select different targets for different days.
 type RDIPrefs struct {
-	KCal     float32 `json:"kcal"`
-	Fat      float32 `json:"fat"`
-	FatSat   float32 `json:"fatsat"`
-	FatO3    float32 `json:"fato3"`
-	FatO6    float32 `json:"fato6"`
-	Carbs    float32 `json:"carb"`
-	Sugar    float32 `json:"sug"`
-	Fructose float32 `json:"fruc"`
-	Glucose  float32 `json:"gluc"`
-	Sucrose  float32 `json:"suc"`
-	Fiber    float32 `json:"fib"`
-	Protein  float32 `json:"prot"`
-	Salt     float32 `json:"salt"`
+	FatSat float32 `json:"fatsat"`
+	FatO3  float32 `json:"fato3"`
+	FatO6  float32 `json:"fato6"`
+	Fiber  float32 `json:"fib"`
+	Salt   float32 `json:"salt"`
 
 	Potassium  float32 `json:"pot"`
 	Chlorine   float32 `json:"chl"`
@@ -86,9 +84,19 @@ type RDIPrefs struct {
 // Prefs holds all individual preferences types and is the
 // object that gets passed around the application.
 type Prefs struct {
-	Account AccountPrefs `json:"account"`
-	RDI     RDIPrefs     `json:"rdi"`
-	UI      UIPrefs      `json:"ui"`
+	Account AccountPrefs  `json:"account"`
+	Macros  [7]MacroPrefs `json:"macros"`
+	RDI     RDIPrefs      `json:"rdi"`
+	UI      UIPrefs       `json:"ui"`
+}
+
+// This contains the average recommended macro targets for
+// an average human being.
+var baseMacroPrefs = MacroPrefs{
+	KCal:    2000,
+	Fat:     60,
+	Carbs:   270,
+	Protein: 80,
 }
 
 // This contains an average person's recommended daily intake
@@ -97,10 +105,6 @@ type Prefs struct {
 // body composition and living circumstances in order to
 // represent a correct estimation of their actual needs.
 var baseRDIPrefs = RDIPrefs{
-	KCal:       2000,
-	Fat:        60,
-	Carbs:      270,
-	Protein:    80,
 	Fiber:      32,
 	Salt:       5.8,
 	FatSat:     22,
@@ -158,6 +162,10 @@ func (q *Preferences) Fetch(db DB) error {
 		Name:  user.Name,
 	}
 	q.Prefs.RDI = baseRDIPrefs
+
+	for i := range q.Prefs.Macros {
+		q.Prefs.Macros[i] = baseMacroPrefs
+	}
 
 	return nil
 }

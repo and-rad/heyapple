@@ -222,7 +222,7 @@ onMounted(() => {
 					:data-date="day.date"
 					:class="{ today: day.today, active: day.active }"
 					@click="calendar.onDay">
-					<PieChart range="360" :value="day.value" :max="prefs.rdi.kcal">
+					<PieChart range="360" :value="day.value" :max="prefs.macros[0].kcal">
 						<template #details>
 							<span>{{ day.weekday }}</span>
 							<span>{{ day.calday }}</span>
@@ -239,7 +239,7 @@ onMounted(() => {
 					:label="t('food.energy')"
 					:unit="t('unit.cal')"
 					:value="current ? current.kcal : 0"
-					:max="prefs.rdi.kcal" />
+					:max="prefs.macros[0].kcal" />
 				<PieChart
 					class="fat"
 					start="225"
@@ -248,7 +248,7 @@ onMounted(() => {
 					:label="t('food.fat')"
 					:unit="t('unit.g')"
 					:value="current ? current.fat : 0"
-					:max="prefs.rdi.fat" />
+					:max="prefs.macros[0].fat" />
 				<PieChart
 					class="carb"
 					start="225"
@@ -257,7 +257,7 @@ onMounted(() => {
 					:label="t('food.carbs2')"
 					:unit="t('unit.g')"
 					:value="current ? current.carb : 0"
-					:max="prefs.rdi.carb" />
+					:max="prefs.macros[0].carb" />
 				<PieChart
 					class="prot"
 					start="225"
@@ -266,7 +266,7 @@ onMounted(() => {
 					:label="t('food.protein')"
 					:unit="t('unit.g')"
 					:value="current ? current.prot : 0"
-					:max="prefs.rdi.prot" />
+					:max="prefs.macros[0].prot" />
 			</section>
 			<h2>{{ t("aria.headcarbcomp") }}</h2>
 			<section class="charts-nutrient">

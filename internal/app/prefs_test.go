@@ -25,11 +25,17 @@ import (
 	"github.com/and-rad/heyapple/internal/mock"
 )
 
+var baseMacro = [7]app.MacroPrefs{
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+}
+
 var baseRDI = app.RDIPrefs{
-	KCal:       2000,
-	Fat:        60,
-	Carbs:      270,
-	Protein:    80,
 	Fiber:      32,
 	Salt:       5.8,
 	FatSat:     22,
@@ -91,6 +97,7 @@ func TestPreferences_Fetch(t *testing.T) {
 			user: mock.User1.ID,
 			prefs: app.Prefs{
 				Account: app.AccountPrefs{Email: mock.User1.Email, Name: mock.User1.Name},
+				Macros:  baseMacro,
 				RDI:     baseRDI,
 			},
 		},

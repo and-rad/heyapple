@@ -56,6 +56,7 @@ type DB struct {
 	jobs *job.Scheduler
 
 	users   map[int]app.User
+	prefs   map[int]app.StoredPrefs
 	emails  map[string]int
 	tokens  map[string]app.Token
 	food    map[int]core.Food
@@ -84,6 +85,7 @@ func NewDB() *DB {
 		users:        make(map[int]app.User),
 		tokens:       make(map[string]app.Token),
 		emails:       make(map[string]int),
+		prefs:        make(map[int]app.StoredPrefs),
 		food:         make(map[int]core.Food),
 		recipes:      make(map[int]core.Recipe),
 		instructions: make(map[int]string),

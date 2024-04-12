@@ -48,6 +48,7 @@ type backup struct {
 
 type backupData struct {
 	Users        map[int]app.User          `json:"users"`
+	Prefs        map[int]app.StoredPrefs   `json:"prefs"`
 	Tokens       map[string]app.Token      `json:"tokens"`
 	Food         map[int]core.Food         `json:"food"`
 	Recipes      map[int]core.Recipe       `json:"recipes"`
@@ -84,6 +85,7 @@ func (b *backup) load() {
 		if err = json.Unmarshal(data, &db); err == nil {
 			b.db.userID = db.UserID
 			b.db.users = db.Users
+			b.db.prefs = db.Prefs
 			b.db.tokens = db.Tokens
 			b.db.food = db.Food
 			b.db.foodID = db.FoodID
@@ -290,6 +292,7 @@ func (b *backup) bytes() []byte {
 
 	data, _ := json.Marshal(backupData{
 		Users:        b.db.users,
+		Prefs:        b.db.prefs,
 		UserID:       b.db.userID,
 		Food:         b.db.food,
 		FoodID:       b.db.foodID,

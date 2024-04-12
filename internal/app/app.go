@@ -65,6 +65,7 @@ type DB interface {
 	UserByName(name string) (User, error)
 	UserByID(id int) (User, error)
 	UserNames(prefix string) ([]string, error)
+	UserPrefs(id int) (StoredPrefs, error)
 	NewToken(id int, hash string, data interface{}) error
 	DelToken(string) error
 	Token(string) (Token, error)

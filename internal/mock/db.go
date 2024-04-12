@@ -51,6 +51,7 @@ type Instructions struct {
 
 type DB struct {
 	User         app.User
+	Prefs        app.StoredPrefs
 	Tok          app.Token
 	FoodItem     core.Food
 	FoodItems    []core.Food
@@ -102,6 +103,11 @@ func (db *DB) WithFoods(foods ...core.Food) *DB {
 
 func (db *DB) WithUser(user app.User) *DB {
 	db.User = user
+	return db
+}
+
+func (db *DB) WithPrefs(prefs app.StoredPrefs) *DB {
+	db.Prefs = prefs
 	return db
 }
 
@@ -232,6 +238,17 @@ func (db *DB) UserByName(name string) (app.User, error) {
 		return app.User{}, app.ErrNotFound
 	}
 	return db.User, nil
+}
+
+func (db *DB) UserPrefs(id int) (app.StoredPrefs, error) {
+	if err := db.popError(); err != nil {
+		return app.StoredPrefs{}, err
+	}
+	if db.User.ID != id {
+		return app.StoredPrefs{}, app.ErrNotFound
+	}
+	prefs := db.Prefs
+	return prefs, nil
 }
 
 func (db *DB) Token(string) (app.Token, error) {

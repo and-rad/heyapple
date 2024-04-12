@@ -236,9 +236,8 @@ var (
 		Perm:  app.PermLogin,
 	}
 
-	User1Pass  = "Tr0ub4dor&3"
-	User1Json  = `{"email":"a@a.a","name":"AnnoyingOrange","pass":"$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC","lang":"en","perm":1,"id":1}`
-	Prefs1Json = `{"account":{"email":"a@a.a","name":"AnnoyingOrange"},"macros":[{"kcal":2000,"fat":60,"carb":270,"prot":80},{"kcal":2000,"fat":60,"carb":270,"prot":80},{"kcal":2000,"fat":60,"carb":270,"prot":80},{"kcal":2000,"fat":60,"carb":270,"prot":80},{"kcal":2000,"fat":60,"carb":270,"prot":80},{"kcal":2000,"fat":60,"carb":270,"prot":80},{"kcal":2000,"fat":60,"carb":270,"prot":80}],"rdi":{"fatsat":22,"fato3":1.6,"fato6":3.2,"fib":32,"salt":5.8,"pot":3400,"chl":2300,"sod":2300,"calc":1000,"phos":700,"mag":400,"iron":8,"zinc":11,"mang":2.3,"cop":0.9,"iod":0.15,"chr":0.035,"mol":0.045,"sel":0.055,"vita":0.9,"vitb1":1.2,"vitb2":1.3,"vitb3":16,"vitb5":5,"vitb6":1.7,"vitb7":0.03,"vitb9":0.4,"vitb12":0.003,"vitc":90,"vitd":0.015,"vite":15,"vitk":0.12},"ui":{"neutralCharts":false,"trackSaltAsSodium":false}}`
+	User1Pass = "Tr0ub4dor&3"
+	User1Json = `{"email":"a@a.a","name":"AnnoyingOrange","pass":"$2a$10$CpVy94BcePvhBH3QS/mMnOtFVrfN0DvwdooEUc0T8tWdKNi3ayFXC","lang":"en","perm":1,"id":1}`
 
 	User2 = app.User{
 		ID:    2,
@@ -249,6 +248,125 @@ var (
 		Perm:  app.PermAdmin,
 	}
 )
+
+var (
+	Prefs1 = app.Prefs{
+		Account: app.AccountPrefs{
+			Email: User1.Email,
+			Name:  User1.Name,
+		},
+		Macros: [7]app.MacroPrefs{
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2600, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2600, Fat: 60, Carbs: 270, Protein: 80},
+		},
+		RDI: app.RDIPrefs{
+			Fiber:      32,
+			Salt:       5.8,
+			FatSat:     22,
+			FatO3:      1.6,
+			FatO6:      3.2,
+			VitA:       0.9,
+			VitB1:      1.2,
+			VitB2:      1.3,
+			VitB3:      16,
+			VitB5:      5,
+			VitB6:      1.7,
+			VitB7:      0.03,
+			VitB9:      0.4,
+			VitB12:     0.003,
+			VitC:       90,
+			VitD:       0.015,
+			VitE:       15,
+			VitK:       0.12,
+			Potassium:  3400,
+			Chlorine:   2300,
+			Sodium:     2300,
+			Calcium:    1000,
+			Phosphorus: 700,
+			Magnesium:  400,
+			Iron:       8,
+			Zinc:       11,
+			Manganse:   2.3,
+			Copper:     0.9,
+			Iodine:     0.15,
+			Chromium:   0.035,
+			Molybdenum: 0.045,
+			Selenium:   0.055,
+		},
+	}
+
+	StoredPrefs1 = app.StoredPrefs{
+		Macros: [7]app.MacroPrefs{
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2600, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2200, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2600, Fat: 60, Carbs: 270, Protein: 80},
+		},
+	}
+
+	Prefs1Json       = `{"account":{"email":"a@a.a","name":"AnnoyingOrange"},"macros":[{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2600,"fat":60,"carb":270,"prot":80},{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2600,"fat":60,"carb":270,"prot":80}],"rdi":{"fatsat":22,"fato3":1.6,"fato6":3.2,"fib":32,"salt":5.8,"pot":3400,"chl":2300,"sod":2300,"calc":1000,"phos":700,"mag":400,"iron":8,"zinc":11,"mang":2.3,"cop":0.9,"iod":0.15,"chr":0.035,"mol":0.045,"sel":0.055,"vita":0.9,"vitb1":1.2,"vitb2":1.3,"vitb3":16,"vitb5":5,"vitb6":1.7,"vitb7":0.03,"vitb9":0.4,"vitb12":0.003,"vitc":90,"vitd":0.015,"vite":15,"vitk":0.12},"ui":{"neutralCharts":false,"trackSaltAsSodium":false}}`
+	StoredPrefs1Json = `{"macros":[{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2600,"fat":60,"carb":270,"prot":80},{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2200,"fat":60,"carb":270,"prot":80},{"kcal":2600,"fat":60,"carb":270,"prot":80}],"neutralCharts":false,"trackSaltAsSodium":false}`
+)
+
+func Prefs0(user app.User) app.Prefs {
+	return app.Prefs{
+		Account: app.AccountPrefs{
+			Email: user.Email,
+			Name:  user.Name,
+		},
+		Macros: [7]app.MacroPrefs{
+			{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+			{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+		},
+		RDI: app.RDIPrefs{
+			Fiber:      32,
+			Salt:       5.8,
+			FatSat:     22,
+			FatO3:      1.6,
+			FatO6:      3.2,
+			VitA:       0.9,
+			VitB1:      1.2,
+			VitB2:      1.3,
+			VitB3:      16,
+			VitB5:      5,
+			VitB6:      1.7,
+			VitB7:      0.03,
+			VitB9:      0.4,
+			VitB12:     0.003,
+			VitC:       90,
+			VitD:       0.015,
+			VitE:       15,
+			VitK:       0.12,
+			Potassium:  3400,
+			Chlorine:   2300,
+			Sodium:     2300,
+			Calcium:    1000,
+			Phosphorus: 700,
+			Magnesium:  400,
+			Iron:       8,
+			Zinc:       11,
+			Manganse:   2.3,
+			Copper:     0.9,
+			Iodine:     0.15,
+			Chromium:   0.035,
+			Molybdenum: 0.045,
+			Selenium:   0.055,
+		},
+	}
+}
 
 func Entry1() core.DiaryEntry {
 	return core.DiaryEntry{

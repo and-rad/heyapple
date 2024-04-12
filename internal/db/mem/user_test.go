@@ -316,6 +316,7 @@ func TestDB_DelUser(t *testing.T) {
 		{ //03// success, complex
 			db: &DB{
 				users:   map[int]app.User{1: mock.User1, 2: mock.User2},
+				prefs:   map[int]app.StoredPrefs{1: mock.StoredPrefs1, 2: mock.StoredPrefs1},
 				emails:  map[string]int{mock.User1.Email: 1, mock.User2.Email: 2},
 				recipes: map[int]core.Recipe{mock.Recipe1().ID: mock.Recipe1(), mock.Recipe2().ID: mock.Recipe2()},
 				userRec: map[int]map[int]int{
@@ -350,6 +351,7 @@ func TestDB_DelUser(t *testing.T) {
 			id: 1,
 			out: &DB{
 				users:   map[int]app.User{2: mock.User2},
+				prefs:   map[int]app.StoredPrefs{2: mock.StoredPrefs1},
 				emails:  map[string]int{mock.User2.Email: 2},
 				recipes: map[int]core.Recipe{mock.Recipe1().ID: mock.Recipe1(), mock.Recipe2().ID: mock.Recipe2()},
 				userRec: map[int]map[int]int{
@@ -426,6 +428,64 @@ func TestDB_UserByID(t *testing.T) {
 
 		if user != data.user {
 			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, user, data.user)
+		}
+	}
+}
+
+func TestDB_UserPrefs(t *testing.T) {
+	for idx, data := range []struct {
+		db *DB
+		id int
+
+		prefs app.StoredPrefs
+		err   error
+	}{
+		{ //00// empty database
+			db:  NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// user doesn't exist
+			db: &DB{
+				users: map[int]app.User{1: {ID: 1, Email: "a@a.a"}},
+			},
+			id:  2,
+			err: app.ErrNotFound,
+		},
+		{ //02// success
+			db: &DB{
+				users: map[int]app.User{
+					1: mock.User1,
+					2: mock.User2,
+				},
+				prefs: map[int]app.StoredPrefs{
+					1: mock.StoredPrefs1,
+				},
+			},
+			id:    1,
+			prefs: mock.StoredPrefs1,
+		},
+		{ //03// success, but no user-specific prefs yet
+			db: &DB{
+				users: map[int]app.User{
+					1: mock.User1,
+					2: mock.User2,
+				},
+				prefs: map[int]app.StoredPrefs{
+					2: mock.StoredPrefs1,
+				},
+			},
+			id:    1,
+			prefs: app.StoredPrefs{},
+		},
+	} {
+		prefs, err := data.db.UserPrefs(data.id)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if prefs != data.prefs {
+			t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, prefs, data.prefs)
 		}
 	}
 }

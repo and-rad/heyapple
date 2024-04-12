@@ -25,51 +25,6 @@ import (
 	"github.com/and-rad/heyapple/internal/mock"
 )
 
-var baseMacro = [7]app.MacroPrefs{
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-}
-
-var baseRDI = app.RDIPrefs{
-	Fiber:      32,
-	Salt:       5.8,
-	FatSat:     22,
-	FatO3:      1.6,
-	FatO6:      3.2,
-	VitA:       0.9,
-	VitB1:      1.2,
-	VitB2:      1.3,
-	VitB3:      16,
-	VitB5:      5,
-	VitB6:      1.7,
-	VitB7:      0.03,
-	VitB9:      0.4,
-	VitB12:     0.003,
-	VitC:       90,
-	VitD:       0.015,
-	VitE:       15,
-	VitK:       0.12,
-	Potassium:  3400,
-	Chlorine:   2300,
-	Sodium:     2300,
-	Calcium:    1000,
-	Phosphorus: 700,
-	Magnesium:  400,
-	Iron:       8,
-	Zinc:       11,
-	Manganse:   2.3,
-	Copper:     0.9,
-	Iodine:     0.15,
-	Chromium:   0.035,
-	Molybdenum: 0.045,
-	Selenium:   0.055,
-}
-
 func TestPreferences_Fetch(t *testing.T) {
 	for idx, data := range []struct {
 		db   *mock.DB
@@ -88,18 +43,24 @@ func TestPreferences_Fetch(t *testing.T) {
 			err:  app.ErrNotFound,
 		},
 		{ //02// database error
-			db:   mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS),
-			user: mock.User1.ID,
+			db:   mock.NewDB().WithError(mock.ErrDOS),
+			user: 1,
 			err:  mock.ErrDOS,
 		},
-		{ //03// success
-			db:   mock.NewDB().WithUser(mock.User1),
-			user: mock.User1.ID,
-			prefs: app.Prefs{
-				Account: app.AccountPrefs{Email: mock.User1.Email, Name: mock.User1.Name},
-				Macros:  baseMacro,
-				RDI:     baseRDI,
-			},
+		{ //03// delayed database error
+			db:   mock.NewDB().WithUser(mock.User1).WithError(nil, mock.ErrDOS),
+			user: 1,
+			err:  mock.ErrDOS,
+		},
+		{ //04// success
+			db:    mock.NewDB().WithUser(mock.User1).WithPrefs(mock.StoredPrefs1),
+			user:  mock.User1.ID,
+			prefs: mock.Prefs1,
+		},
+		{ //05// success, user doesn't have stored prefs yet
+			db:    mock.NewDB().WithUser(mock.User1),
+			user:  mock.User1.ID,
+			prefs: mock.Prefs0(mock.User1),
 		},
 	} {
 		qry := &app.Preferences{ID: data.user}

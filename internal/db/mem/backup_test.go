@@ -34,13 +34,14 @@ import (
 )
 
 var (
-	backup0 = `{"users":{},"tokens":{},"food":{},"recipes":{},"inst":{},"recaccess":{},"entries":{},"aisles":{},"prices":{},"done":{},"userid":0,"foodid":0,"recid":0}`
-	backup1 = fmt.Sprintf(`{"users":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"inst":{"1":"%s"},"recaccess":{"1":[{"res":1,"perms":3840}]},"entries":{"1":[%s,%s,%s]},"aisles":{"0":{"1":1,"2":12}},"prices":{"1":{"2":[1.5,2.5]}},"done":{"1":{"1":true}},"userid":1,"foodid":2,"recid":1}`,
-		mock.User1Json, mock.Food1Json, mock.Food2Json, mock.Recipe1Json, mock.Instructions1, mock.Entry1Json, mock.Entry2Json, mock.Entry3Json,
+	backup0 = `{"users":{},"prefs":{},"tokens":{},"food":{},"recipes":{},"inst":{},"recaccess":{},"entries":{},"aisles":{},"prices":{},"done":{},"userid":0,"foodid":0,"recid":0}`
+	backup1 = fmt.Sprintf(`{"users":{"1":%s},"prefs":{"1":%s},"tokens":{"abcd":{"id":1}},"food":{"1":%s,"2":%s},"recipes":{"1":%s},"inst":{"1":"%s"},"recaccess":{"1":[{"res":1,"perms":3840}]},"entries":{"1":[%s,%s,%s]},"aisles":{"0":{"1":1,"2":12}},"prices":{"1":{"2":[1.5,2.5]}},"done":{"1":{"1":true}},"userid":1,"foodid":2,"recid":1}`,
+		mock.User1Json, mock.StoredPrefs1Json, mock.Food1Json, mock.Food2Json, mock.Recipe1Json, mock.Instructions1, mock.Entry1Json, mock.Entry2Json, mock.Entry3Json,
 	)
 
 	database1 = &DB{
 		users:        map[int]app.User{mock.User1.ID: mock.User1},
+		prefs:        map[int]app.StoredPrefs{mock.User1.ID: mock.StoredPrefs1},
 		emails:       map[string]int{mock.User1.Email: mock.User1.ID},
 		tokens:       map[string]app.Token{"abcd": {ID: mock.User1.ID}},
 		food:         map[int]core.Food{mock.Food1.ID: mock.Food1, mock.Food2.ID: mock.Food2},

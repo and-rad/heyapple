@@ -81,6 +81,19 @@ type RDIPrefs struct {
 	VitK   float32 `json:"vitk"`
 }
 
+// StoredPrefs contains preferences that cannot be inferred
+// from other objects. These are the absolute minimum that
+// need to be stored in persistent storage in order to
+// reconstruct a complete set of user preferences.
+//
+// Most notably, we really don't want to store individual
+// RDI values because doing so would bloat the stored data
+// size with largely the same values for most users.
+type StoredPrefs struct {
+	Macros [7]MacroPrefs `json:"macros"`
+	UIPrefs
+}
+
 // Prefs holds all individual preferences types and is the
 // object that gets passed around the application.
 type Prefs struct {
@@ -90,13 +103,20 @@ type Prefs struct {
 	UI      UIPrefs       `json:"ui"`
 }
 
+// This contains all zeroed-out macro targets and represents
+// the weekly macro prefs' zero value.
+var emptyMacroPrefs = [7]MacroPrefs{}
+
 // This contains the average recommended macro targets for
 // an average human being.
-var baseMacroPrefs = MacroPrefs{
-	KCal:    2000,
-	Fat:     60,
-	Carbs:   270,
-	Protein: 80,
+var baseMacroPrefs = [7]MacroPrefs{
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
 }
 
 // This contains an average person's recommended daily intake
@@ -141,7 +161,12 @@ var baseRDIPrefs = RDIPrefs{
 
 // Preferences is a query to collect all user preferences
 // from the database. If successful, the Prefs field will
-// contains all preferences that were found.
+// contain all preferences that were found.
+//
+// As long as the user exists, a valid set of preferences
+// will be generated. For users who never changed their
+// settings in any way, this is identical to the set of
+// default preferences.
 type Preferences struct {
 	ID    int
 	Prefs Prefs
@@ -157,15 +182,22 @@ func (q *Preferences) Fetch(db DB) error {
 		return err
 	}
 
-	q.Prefs.Account = AccountPrefs{
-		Email: user.Email,
-		Name:  user.Name,
+	prefs, err := db.UserPrefs(q.ID)
+	if err != nil {
+		return err
 	}
-	q.Prefs.RDI = baseRDIPrefs
 
-	for i := range q.Prefs.Macros {
-		q.Prefs.Macros[i] = baseMacroPrefs
+	q.Prefs.Account.Email = user.Email
+	q.Prefs.Account.Name = user.Name
+	q.Prefs.UI = prefs.UIPrefs
+
+	if prefs.Macros == emptyMacroPrefs {
+		q.Prefs.Macros = baseMacroPrefs
+	} else {
+		q.Prefs.Macros = prefs.Macros
 	}
+
+	q.Prefs.RDI = baseRDIPrefs
 
 	return nil
 }

@@ -307,7 +307,7 @@ func TestPreferences(t *testing.T) {
 			status:    http.StatusInternalServerError,
 		},
 		{ //03// success
-			db:        mock.NewDB().WithUser(mock.User1),
+			db:        mock.NewDB().WithUser(mock.User1).WithPrefs(mock.StoredPrefs1),
 			setCookie: true,
 			status:    http.StatusOK,
 			out:       mock.Prefs1Json,

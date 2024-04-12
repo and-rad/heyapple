@@ -60,6 +60,7 @@ func (db *DB) DelUser(id int) error {
 
 	delete(db.emails, user.Email)
 	delete(db.users, id)
+	delete(db.prefs, id)
 	delete(db.entries, id)
 	delete(db.days, id)
 	delete(db.aisles, id)
@@ -114,6 +115,13 @@ func (db *DB) UserNames(prefix string) ([]string, error) {
 		}
 	}
 	return names, nil
+}
+
+func (db *DB) UserPrefs(id int) (app.StoredPrefs, error) {
+	if _, ok := db.users[id]; !ok {
+		return app.StoredPrefs{}, app.ErrNotFound
+	}
+	return db.prefs[id], nil
 }
 
 func (db *DB) Token(hash string) (app.Token, error) {

@@ -53,6 +53,8 @@
 		},
 		"btn": {
 			"add": "Okay",
+			"changemacro": "Ziele speichern",
+			"changemail": "Adresse ändern",
 			"changepass": "Passwort ändern",
 			"deleteuser": "Konto löschen",
 			"new": "Neu",
@@ -105,6 +107,7 @@
 			"ok": "Erfolg! Neues Rezept erstellt."
 		},
 		"day": {
+			"all": "Täglich",
 			"cal1": "Mo",
 			"cal2": "Di",
 			"cal3": "Mi",
@@ -227,12 +230,14 @@
 			"recipes": "Rezepte",
 			"settings": "Einstellungen",
 			"shopping": "Einkaufen",
-			"signout": "Abmelden"
+			"signout": "Abmelden",
+			"targets": "Makro-Ziele"
 		},
 		"profile": {
 			"deletehint": "Wenn du HeyApple nicht mehr benutzen möchtest, kannst du dein Konto hier löschen. Alle Rezepte, die nu mit Anderen teilst, werden öffentlich zugänglich gemacht. <strong>Diese Aktion kann nicht rückgängig gemacht werden!</strong>",
 			"email": "E-Mail-Adresse",
 			"emailhint": "Wenn du deine E-Mail-Adresse änderst, wird ein Aktivierungslink an diese neue Adresse gesendet. Erst, wenn diese Aktivierung abgeschlossen ist, kann die neue Adresse zur Anmeldung genutzt werden.",
+			"macrohint": "Die Ziele für Makronährstoffe können für jeden Tag einzeln gesetzt werden. Du kannst den Wert entweder direkt eingeben oder prozentuale Angaben verwenden.",
 			"name": "Benutzername",
 			"namehint": "Dein Benutzername wird dir zufällig zugewiesen, wenn du ihn das erste Mal \"würfelst\". Wenn du ihn ändern möchtest, klick auf die Schaltfläche unten.",
 			"namelink": "Was ist das?",

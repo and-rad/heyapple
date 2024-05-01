@@ -53,6 +53,8 @@
 		},
 		"btn": {
 			"add": "Add",
+			"changemacro": "Save targets",
+			"changemail": "Change address",
 			"changepass": "Change password",
 			"deleteuser": "Delete Account",
 			"new": "New",
@@ -105,6 +107,7 @@
 			"ok": "Success! New recipe created."
 		},
 		"day": {
+			"all": "Daily",
 			"cal1": "Mo",
 			"cal2": "Tu",
 			"cal3": "We",
@@ -227,12 +230,14 @@
 			"recipes": "Recipes",
 			"settings": "Settings",
 			"shopping": "Shopping",
-			"signout": "Sign out"
+			"signout": "Sign out",
+			"targets": "Macro Targets"
 		},
 		"profile": {
 			"deletehint": "If you don't want to use HeyApple any longer, you can delete your user account here. Any recipe you share with at least one other person will become public. <strong>This action cannot be undone!</strong>",
 			"email": "E-Mail Address",
 			"emailhint": "When you change your e-mail address, a link to activate it will be sent to the new address. The change becomes effective only after the steps outlined in that message are completed.",
+			"macrohint": "Macronutrient targets can be set for each individual day of the week. You can enter the amount directly or use percentages.",
 			"name": "Username",
 			"namehint": "Your username is randomly assigned to you the first time you \"roll\" for it. If you want to change it, click the button below.",
 			"namelink": "What's this?",

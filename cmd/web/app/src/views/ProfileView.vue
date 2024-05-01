@@ -1,7 +1,7 @@
 <script setup>
 import Main from "../components/Main.vue";
 import PasswordField from "../../../login/src/components/Password.vue";
-import { ref, inject } from "vue";
+import { ref, computed, inject } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -12,6 +12,15 @@ const prefs = inject("prefs");
 const isSaving = ref(false);
 
 const main = ref(null);
+
+const macros = computed(() => {
+	let arr = prefs.value.macros;
+	let allEqual = arr.every((elem) => JSON.stringify(elem) == JSON.stringify(arr[0]));
+	if (allEqual) {
+		return arr.slice(0, 1).map((elem) => ({ ...elem, l10nKey: "day.all", weekend: false }));
+	}
+	return arr.map((elem, idx) => ({ ...elem, l10nKey: `day.cal${idx + 1}`, weekend: idx > 4 }));
+});
 
 function onNavItem(id) {
 	let target = document.getElementById(id);
@@ -116,6 +125,9 @@ function onDeleteUser(evt) {
 						<a @click="onNavItem('head-body')"> {{ t("nav.body") }} </a>
 					</li>
 					<li>
+						<a @click="onNavItem('head-macro')"> {{ t("nav.targets") }} </a>
+					</li>
+					<li>
 						<a @click="onNavItem('head-danger')"> {{ t("nav.danger") }} </a>
 					</li>
 				</ul>
@@ -130,7 +142,7 @@ function onDeleteUser(evt) {
 					<input type="email" name="email" :value="prefs.account.email" />
 					<p v-html="t('profile.emailhint')"></p>
 					<button type="button" :disabled="isSaving" @click="onSaveEmail" class="async">
-						{{ t("btn.save") }}
+						{{ t("btn.changemail") }}
 					</button>
 				</form>
 				<form @submit.prevent>
@@ -157,6 +169,50 @@ function onDeleteUser(evt) {
 
 			<section>
 				<h2 id="head-body">{{ t("nav.body") }}</h2>
+			</section>
+
+			<section>
+				<h2 id="head-macro">{{ t("nav.targets") }}</h2>
+				<p v-html="t('profile.macrohint')"></p>
+				<form>
+					<table>
+						<thead>
+							<tr>
+								<th class="name"></th>
+								<th class="num">{{ t("food.energy") }}</th>
+								<th class="num">{{ t("food.fat") }}</th>
+								<th class="num">{{ t("food.carbs2") }}</th>
+								<th class="num">{{ t("food.protein") }}</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr v-for="macro in macros">
+								<td class="name" :class="macro.weekend ? 'wknd' : ''">
+									<div>{{ t(macro.l10nKey) }}</div>
+								</td>
+								<td class="num">
+									<input type="text" name="kcal" :value="macro.kcal" />
+									<span class="unit">&nbsp;{{ t("unit.cal") }}</span>
+								</td>
+								<td class="num">
+									<input type="text" name="fat" :value="macro.fat" />
+									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
+								</td>
+								<td class="num">
+									<input type="text" name="carb" :value="macro.carb" />
+									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
+								</td>
+								<td class="num">
+									<input type="text" name="prot" :value="macro.prot" />
+									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+					<button type="button" :disabled="isSaving" @click="onChangePassword" class="async">
+						{{ t("btn.changemacro") }}
+					</button>
+				</form>
 			</section>
 
 			<section class="danger">
@@ -204,7 +260,7 @@ main.settings #main .controls {
 }
 
 main.settings .content {
-	padding: 1em;
+	padding: 0 1em 1em;
 }
 
 main.settings .content h2 {
@@ -212,7 +268,7 @@ main.settings .content h2 {
 }
 
 main.settings .content h2:first-child {
-	margin-top: 0em;
+	margin-top: 1rem;
 }
 
 main.settings .content section {
@@ -258,6 +314,52 @@ main.settings .content form > button {
 
 main.settings label > a {
 	float: right;
+}
+
+main.settings #main .content td.name {
+	color: var(--color-text-light);
+	width: 3em;
+	vertical-align: middle;
+	padding: 0;
+}
+
+main.settings .content td.name div {
+	border: 1px solid var(--color-primary);
+	background: var(--color-primary-lighter);
+	border-radius: 1.25em;
+	color: var(--color-primary-dark);
+	padding: 0.5em;
+	min-height: 2.5em;
+	min-width: 4em;
+	text-align: center;
+}
+
+main.settings .content td.name.wknd div {
+	background: var(--color-primary-light);
+}
+
+main.settings #main .content table td.num {
+	width: unset;
+	max-width: unset;
+}
+
+main.settings .content table td.num input {
+	text-align: right;
+	border-radius: 0;
+	border: none;
+	border-bottom: var(--border);
+	display: inline-block;
+	width: 3em;
+	padding: 0;
+}
+
+main.settings .content table span.unit {
+	border-bottom: var(--border);
+	display: inline-block;
+}
+
+main.settings .content table td.num input:focus + span.unit {
+	border-color: var(--color-primary);
 }
 
 main.settings input + p,

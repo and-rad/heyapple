@@ -240,6 +240,17 @@ func (db *DB) UserByName(name string) (app.User, error) {
 	return db.User, nil
 }
 
+func (db *DB) SetUserPrefs(id int, prefs app.StoredPrefs) error {
+	if err := db.popError(); err != nil {
+		return err
+	}
+	if db.User.ID != id {
+		return app.ErrNotFound
+	}
+	db.Prefs = prefs
+	return nil
+}
+
 func (db *DB) UserPrefs(id int) (app.StoredPrefs, error) {
 	if err := db.popError(); err != nil {
 		return app.StoredPrefs{}, err

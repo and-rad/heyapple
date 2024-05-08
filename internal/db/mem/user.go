@@ -117,6 +117,15 @@ func (db *DB) UserNames(prefix string) ([]string, error) {
 	return names, nil
 }
 
+func (db *DB) SetUserPrefs(id int, prefs app.StoredPrefs) error {
+	if _, ok := db.users[id]; !ok {
+		return app.ErrNotFound
+	}
+
+	db.prefs[id] = prefs
+	return nil
+}
+
 func (db *DB) UserPrefs(id int) (app.StoredPrefs, error) {
 	if _, ok := db.users[id]; !ok {
 		return app.StoredPrefs{}, app.ErrNotFound

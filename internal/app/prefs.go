@@ -104,19 +104,25 @@ type Prefs struct {
 }
 
 // This contains all zeroed-out macro targets and represents
-// the weekly macro prefs' zero value.
-var emptyMacroPrefs = [7]MacroPrefs{}
+// the weekly macro prefs' zero value. Implemented as a function
+// to ensure constness.
+func EmptyMacroPrefs() [7]MacroPrefs {
+	return [7]MacroPrefs{}
+}
 
 // This contains the average recommended macro targets for
-// an average human being.
-var baseMacroPrefs = [7]MacroPrefs{
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
-	{KCal: 2000, Fat: 60, Carbs: 270, Protein: 80},
+// an average human being. Implemented as a function to
+// ensure constness.
+func BaseMacroPrefs() [7]MacroPrefs {
+	return [7]MacroPrefs{
+		{KCal: 2000, Fat: 60, Carbs: 270, Protein: 95},
+		{KCal: 2000, Fat: 60, Carbs: 270, Protein: 95},
+		{KCal: 2000, Fat: 60, Carbs: 270, Protein: 95},
+		{KCal: 2000, Fat: 60, Carbs: 270, Protein: 95},
+		{KCal: 2000, Fat: 60, Carbs: 270, Protein: 95},
+		{KCal: 2000, Fat: 60, Carbs: 270, Protein: 95},
+		{KCal: 2000, Fat: 60, Carbs: 270, Protein: 95},
+	}
 }
 
 // This contains an average person's recommended daily intake
@@ -124,39 +130,42 @@ var baseMacroPrefs = [7]MacroPrefs{
 // multiplied by values computed from a person's specific
 // body composition and living circumstances in order to
 // represent a correct estimation of their actual needs.
-var baseRDIPrefs = RDIPrefs{
-	Fiber:      32,
-	Salt:       5.8,
-	FatSat:     22,
-	FatO3:      1.6,
-	FatO6:      3.2,
-	VitA:       0.9,
-	VitB1:      1.2,
-	VitB2:      1.3,
-	VitB3:      16,
-	VitB5:      5,
-	VitB6:      1.7,
-	VitB7:      0.03,
-	VitB9:      0.4,
-	VitB12:     0.003,
-	VitC:       90,
-	VitD:       0.015,
-	VitE:       15,
-	VitK:       0.12,
-	Potassium:  3400,
-	Chlorine:   2300,
-	Sodium:     2300,
-	Calcium:    1000,
-	Phosphorus: 700,
-	Magnesium:  400,
-	Iron:       8,
-	Zinc:       11,
-	Manganse:   2.3,
-	Copper:     0.9,
-	Iodine:     0.15,
-	Chromium:   0.035,
-	Molybdenum: 0.045,
-	Selenium:   0.055,
+// Implemented as a function to ensure constness.
+func BaseRDIPrefs() RDIPrefs {
+	return RDIPrefs{
+		Fiber:      32,
+		Salt:       5.8,
+		FatSat:     22,
+		FatO3:      1.6,
+		FatO6:      3.2,
+		VitA:       0.9,
+		VitB1:      1.2,
+		VitB2:      1.3,
+		VitB3:      16,
+		VitB5:      5,
+		VitB6:      1.7,
+		VitB7:      0.03,
+		VitB9:      0.4,
+		VitB12:     0.003,
+		VitC:       90,
+		VitD:       0.015,
+		VitE:       15,
+		VitK:       0.12,
+		Potassium:  3400,
+		Chlorine:   2300,
+		Sodium:     2300,
+		Calcium:    1000,
+		Phosphorus: 700,
+		Magnesium:  400,
+		Iron:       8,
+		Zinc:       11,
+		Manganse:   2.3,
+		Copper:     0.9,
+		Iodine:     0.15,
+		Chromium:   0.035,
+		Molybdenum: 0.045,
+		Selenium:   0.055,
+	}
 }
 
 // Preferences is a query to collect all user preferences
@@ -191,13 +200,45 @@ func (q *Preferences) Fetch(db DB) error {
 	q.Prefs.Account.Name = user.Name
 	q.Prefs.UI = prefs.UIPrefs
 
-	if prefs.Macros == emptyMacroPrefs {
-		q.Prefs.Macros = baseMacroPrefs
+	if prefs.Macros == EmptyMacroPrefs() {
+		q.Prefs.Macros = BaseMacroPrefs()
 	} else {
 		q.Prefs.Macros = prefs.Macros
 	}
 
-	q.Prefs.RDI = baseRDIPrefs
+	q.Prefs.RDI = BaseRDIPrefs()
 
+	return nil
+}
+
+// SavePreferences is a command to store all user
+// preferences in the database. If successful, the
+// Prefs field will contain an updated set of preferences.
+// When the command fails, the value of Prefs is undefined
+// and should not be relied on!
+type SavePreferences struct {
+	ID    int
+	Prefs Prefs
+}
+
+func (c *SavePreferences) Execute(db DB) error {
+	if c.ID == 0 {
+		return ErrNotFound
+	}
+
+	prefs := StoredPrefs{
+		Macros:  c.Prefs.Macros,
+		UIPrefs: c.Prefs.UI,
+	}
+	if err := db.SetUserPrefs(c.ID, prefs); err != nil {
+		return err
+	}
+
+	query := Preferences{ID: c.ID}
+	if err := query.Fetch(db); err != nil {
+		return err
+	}
+
+	c.Prefs = query.Prefs
 	return nil
 }

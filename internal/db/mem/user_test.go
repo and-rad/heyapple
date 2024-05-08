@@ -432,6 +432,53 @@ func TestDB_UserByID(t *testing.T) {
 	}
 }
 
+func TestDB_SetUserPrefs(t *testing.T) {
+	for idx, data := range []struct {
+		db    *DB
+		id    int
+		prefs app.StoredPrefs
+
+		err error
+	}{
+		{ //00// empty database
+			db:  NewDB(),
+			err: app.ErrNotFound,
+		},
+		{ //01// user doesn't exist
+			db: &DB{
+				users: map[int]app.User{1: {ID: 1, Email: "a@a.a"}},
+			},
+			id:  2,
+			err: app.ErrNotFound,
+		},
+		{ //02// success
+			db: &DB{
+				users: map[int]app.User{
+					1: mock.User1,
+					2: mock.User2,
+				},
+				prefs: map[int]app.StoredPrefs{
+					1: mock.StoredPrefs1,
+				},
+			},
+			id:    1,
+			prefs: mock.StoredPrefs2,
+		},
+	} {
+		err := data.db.SetUserPrefs(data.id, data.prefs)
+
+		if err != data.err {
+			t.Errorf("test case %d: error mismatch \nhave: %v\nwant: %v", idx, err, data.err)
+		}
+
+		if prefs, err := data.db.UserPrefs(data.id); err != nil {
+			if prefs != data.prefs {
+				t.Errorf("test case %d: data mismatch \nhave: %v\nwant: %v", idx, prefs, data.prefs)
+			}
+		}
+	}
+}
+
 func TestDB_UserPrefs(t *testing.T) {
 	for idx, data := range []struct {
 		db *DB

@@ -284,6 +284,73 @@ func TestL10n(t *testing.T) {
 	}
 }
 
+func TestSavePreferences(t *testing.T) {
+	for idx, data := range []struct {
+		db        *mock.DB
+		in        string
+		setCookie bool
+
+		out    string
+		status int
+	}{
+		{ //00// missing session id
+			db:     mock.NewDB(),
+			status: http.StatusNotFound,
+		},
+		{ //01// missing input data
+			db:        mock.NewDB(),
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //02// input can't be converted to app.Prefs object
+			db:        mock.NewDB(),
+			in:        `{"derp": true, "murf": "narf"}`,
+			setCookie: true,
+			status:    http.StatusBadRequest,
+		},
+		{ //03// user doesn't exist
+			db:        mock.NewDB(),
+			in:        mock.Prefs1Json,
+			setCookie: true,
+			status:    http.StatusNotFound,
+		},
+		{ //04// internal server error
+			db:        mock.NewDB().WithUser(mock.User1).WithError(mock.ErrDOS),
+			in:        mock.Prefs1Json,
+			setCookie: true,
+			status:    http.StatusInternalServerError,
+		},
+		{ //05// success
+			db:        mock.NewDB().WithUser(mock.User1),
+			in:        mock.Prefs1Json,
+			setCookie: true,
+			out:       mock.Prefs1Json,
+			status:    http.StatusOK,
+		},
+	} {
+		req := httptest.NewRequest(http.MethodPut, "/", strings.NewReader(data.in))
+		res := httptest.NewRecorder()
+		env := &handler.Environment{DB: data.db, Session: scs.New()}
+
+		if data.setCookie {
+			if ctx, err := env.Session.Load(req.Context(), "abc"); err == nil {
+				req = req.WithContext(ctx)
+				env.Session.Put(req.Context(), "id", 1)
+			}
+		}
+
+		api.SavePreferences(env)(res, req, nil)
+
+		if status := res.Result().StatusCode; status != data.status {
+			t.Errorf("test case %d: status mismatch \nhave: %v \nwant: %v", idx, status, data.status)
+		}
+
+		if body := res.Body.String(); body != data.out {
+			t.Errorf("test case %d: data mismatch \nhave: %v \nwant: %v", idx, body, data.out)
+		}
+	}
+}
+
 func TestPreferences(t *testing.T) {
 	for idx, data := range []struct {
 		db        *mock.DB

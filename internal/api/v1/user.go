@@ -19,6 +19,9 @@
 package api
 
 import (
+	"bytes"
+	"encoding/json"
+	"io"
 	"net/http"
 
 	"github.com/and-rad/heyapple/internal/app"
@@ -244,6 +247,66 @@ func Preferences(env *handler.Environment) httprouter.Handle {
 		} else {
 			w.WriteHeader(http.StatusOK)
 			sendResponse(query.Prefs, w)
+		}
+	}
+}
+
+// SavePreferences saves the account and app settings for the
+// session user. When successful, it returns the updated settings
+// because changes to some settings can have an effect on others.
+//
+// Endpoint:
+//
+//	/api/v1/prefs
+//
+// Methods:
+//
+//	PUT
+//
+// Possible status codes:
+//
+//	200 - OK
+//	400 - Malformed or missing form data
+//	404 - User doesn't exist
+//	500 - Internal server error
+//
+// Example output:
+//
+//	{
+//	  "account": { "email": "user@example.com", ... },
+//	  "rdi": { "kcal": 2000, "fat": 60, ... },
+//	  ...
+//	}
+func SavePreferences(env *handler.Environment) httprouter.Handle {
+	return func(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+		uid, ok := env.Session.Get(r.Context(), "id").(int)
+		if !ok {
+			w.WriteHeader(http.StatusNotFound)
+			return
+		}
+
+		body, err := io.ReadAll(r.Body)
+		if err != nil || len(body) == 0 {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		prefs := app.Prefs{}
+		dec := json.NewDecoder(bytes.NewReader(body))
+		dec.DisallowUnknownFields()
+		if err = dec.Decode(&prefs); err != nil {
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+
+		cmd := &app.SavePreferences{ID: uid, Prefs: prefs}
+		if err = env.DB.Execute(cmd); err == app.ErrNotFound {
+			w.WriteHeader(http.StatusNotFound)
+		} else if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+		} else {
+			w.WriteHeader(http.StatusOK)
+			sendResponse(cmd.Prefs, w)
 		}
 	}
 }

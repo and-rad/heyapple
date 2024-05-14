@@ -282,6 +282,12 @@
 			"err500": "Internal server error. This shouldn't happen.",
 			"ok": "Success! All edits saved."
 		},
+		"savemacro": {
+			"err400": "The input data is invalid.",
+			"err404": "The user account doesn't exist.",
+			"err500": "There was an internal server problem, something's wrong on our end. Please try again later.",
+			"ok": "Macro targets were updated successfully."
+		},
 		"savemail": {
 			"err400": "The e-mail address must not be empty.",
 			"err401": "It doesn't look like you're allowed to do that.",

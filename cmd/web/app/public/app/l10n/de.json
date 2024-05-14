@@ -282,6 +282,12 @@
 			"err500": "Interner Serverfehler. Das sollte nicht passieren.",
 			"ok": "Erfolg! Alle Änderungen gespeichert."
 		},
+		"savemacro": {
+			"err400": "Die Eingabedaten sind ungültig.",
+			"err404": "Das Benutzerkonto existiert nicht.",
+			"err500": "Ein internes Serverproblem ist aufgetreten, irgend etwas läuft schief bei uns. Bitte versuche es später noch einmal.",
+			"ok": "Deine Makroziele wurden erfolgreich geändert."
+		},
 		"savemail": {
 			"err400": "Die E-Mail-Adresse darf nicht leer sein.",
 			"err401": "Es sieht so aus, als hättest du keine Rechte, das zu tun.",

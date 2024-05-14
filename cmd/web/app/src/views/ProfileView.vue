@@ -9,8 +9,6 @@ const csrf = inject("csrfToken");
 const log = inject("log");
 const prefs = inject("prefs");
 
-const isSaving = ref(false);
-
 const main = ref(null);
 
 const macros = computed(() => {
@@ -28,7 +26,7 @@ function onNavItem(id) {
 }
 
 function onSaveEmail(evt) {
-	isSaving.value = true;
+	evt.target.disabled = true;
 	let form = evt.target.form;
 
 	fetch("/auth/email", {
@@ -46,11 +44,15 @@ function onSaveEmail(evt) {
 			log.msg(t("savemail.ok"));
 		})
 		.catch((err) => log.err(err))
-		.finally(() => (isSaving.value = false));
+		.finally(() => {
+			setTimeout(function () {
+				evt.target.disabled = false;
+			}, 500);
+		});
 }
 
 function onRollUsername(evt) {
-	isSaving.value = true;
+	evt.target.disabled = true;
 
 	fetch("/api/v1/name", {
 		method: "PUT",
@@ -67,11 +69,15 @@ function onRollUsername(evt) {
 			log.msg(t("savename.ok"));
 		})
 		.catch((err) => log.err(err))
-		.finally(() => (isSaving.value = false));
+		.finally(() => {
+			setTimeout(function () {
+				evt.target.disabled = false;
+			}, 500);
+		});
 }
 
 function onChangePassword(evt) {
-	isSaving.value = true;
+	evt.target.disabled = true;
 	let form = evt.target.form;
 
 	fetch("/auth/pass", {
@@ -89,11 +95,55 @@ function onChangePassword(evt) {
 			log.msg(t("savepass.ok"));
 		})
 		.catch((err) => log.err(err))
-		.finally(() => (isSaving.value = false));
+		.finally(() => {
+			setTimeout(function () {
+				evt.target.disabled = false;
+			}, 500);
+		});
+}
+
+function onChangeMacros(evt) {
+	evt.target.disabled = true;
+	let form = new FormData(evt.target.form);
+
+	for (let macro of ["kcal", "fat", "carb", "prot"]) {
+		let arr = form.getAll(macro);
+		if (arr.length == 1) {
+			arr = Array(7).fill(parseInt(arr[0]));
+		}
+		for (let i = 0; i < arr.length; ++i) {
+			prefs.value.macros[i][macro] = parseInt(arr[i]);
+		}
+	}
+
+	fetch("/api/v1/prefs", {
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			"X-CSRF-Token": csrf,
+		},
+		body: JSON.stringify(prefs.value),
+	})
+		.then((response) => {
+			if (!response.ok) {
+				throw t("savemacro.err" + response.status);
+			}
+			return response.json();
+		})
+		.then((data) => {
+			prefs.value = data;
+			log.msg(t("savemacro.ok"));
+		})
+		.catch((err) => log.err(err))
+		.finally(() => {
+			setTimeout(function () {
+				evt.target.disabled = false;
+			}, 500);
+		});
 }
 
 function onDeleteUser(evt) {
-	isSaving.value = true;
+	evt.target.disabled = true;
 
 	fetch("/api/v1/user", {
 		method: "DELETE",
@@ -109,7 +159,11 @@ function onDeleteUser(evt) {
 			}, 3000);
 		})
 		.catch((err) => log.err(err))
-		.finally(() => (isSaving.value = false));
+		.finally(() => {
+			setTimeout(function () {
+				evt.target.disabled = false;
+			}, 500);
+		});
 }
 </script>
 
@@ -121,9 +175,9 @@ function onDeleteUser(evt) {
 					<li>
 						<a @click="onNavItem('head-account')"> {{ t("nav.account") }} </a>
 					</li>
-					<li>
+					<!--<li>
 						<a @click="onNavItem('head-body')"> {{ t("nav.body") }} </a>
-					</li>
+					</li>-->
 					<li>
 						<a @click="onNavItem('head-macro')"> {{ t("nav.targets") }} </a>
 					</li>
@@ -141,7 +195,7 @@ function onDeleteUser(evt) {
 					<label>{{ t("profile.email") }}</label>
 					<input type="email" name="email" :value="prefs.account.email" />
 					<p v-html="t('profile.emailhint')"></p>
-					<button type="button" :disabled="isSaving" @click="onSaveEmail" class="async">
+					<button type="button" @click="onSaveEmail" class="async">
 						{{ t("btn.changemail") }}
 					</button>
 				</form>
@@ -151,7 +205,7 @@ function onDeleteUser(evt) {
 					</label>
 					<input readonly type="text" name="name" :value="prefs.account.name" />
 					<p v-html="t('profile.namehint')"></p>
-					<button type="button" :disabled="isSaving" @click="onRollUsername" class="async">
+					<button type="button" @click="onRollUsername" class="async">
 						{{ t("btn.reroll") }}
 					</button>
 				</form>
@@ -161,15 +215,15 @@ function onDeleteUser(evt) {
 					<label>{{ t("profile.passnew") }}</label>
 					<PasswordField ref="passField" name="passnew" withBar="true" />
 					<p v-html="t('profile.passhint')"></p>
-					<button type="button" :disabled="isSaving" @click="onChangePassword" class="async">
+					<button type="button" @click="onChangePassword" class="async">
 						{{ t("btn.changepass") }}
 					</button>
 				</form>
 			</section>
 
-			<section>
+			<!--<section>
 				<h2 id="head-body">{{ t("nav.body") }}</h2>
-			</section>
+			</section>-->
 
 			<section>
 				<h2 id="head-macro">{{ t("nav.targets") }}</h2>
@@ -191,25 +245,25 @@ function onDeleteUser(evt) {
 									<div>{{ t(macro.l10nKey) }}</div>
 								</td>
 								<td class="num">
-									<input type="text" name="kcal" :value="macro.kcal" />
+									<input type="number" name="kcal" :value="macro.kcal" />
 									<span class="unit">&nbsp;{{ t("unit.cal") }}</span>
 								</td>
 								<td class="num">
-									<input type="text" name="fat" :value="macro.fat" />
+									<input type="number" name="fat" :value="macro.fat" />
 									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
 								</td>
 								<td class="num">
-									<input type="text" name="carb" :value="macro.carb" />
+									<input type="number" name="carb" :value="macro.carb" />
 									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
 								</td>
 								<td class="num">
-									<input type="text" name="prot" :value="macro.prot" />
+									<input type="number" name="prot" :value="macro.prot" />
 									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
 								</td>
 							</tr>
 						</tbody>
 					</table>
-					<button type="button" :disabled="isSaving" @click="onChangePassword" class="async">
+					<button type="button" @click="onChangeMacros" class="async">
 						{{ t("btn.changemacro") }}
 					</button>
 				</form>
@@ -219,7 +273,7 @@ function onDeleteUser(evt) {
 				<h2 id="head-danger">{{ t("nav.danger") }}</h2>
 				<form @submit.prevent>
 					<p v-html="t('profile.deletehint')"></p>
-					<button type="button" :disabled="isSaving" @click="onDeleteUser" class="async">
+					<button type="button" @click="onDeleteUser" class="async">
 						{{ t("btn.deleteuser") }}
 					</button>
 				</form>

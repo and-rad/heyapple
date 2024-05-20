@@ -12,18 +12,24 @@ function onClick(evt) {
 </script>
 
 <template>
-	<label>
+	<label class="checkbox">
 		<input type="checkbox" :checked="checked" @change="onChange" @click="onClick" />
 		<div></div>
+		<slot></slot>
 	</label>
 </template>
 
 <style>
-label > input[type="checkbox"] {
+label.checkbox {
+	display: flex;
+	align-items: center;
+}
+
+label.checkbox > input {
 	display: none;
 }
 
-label > input[type="checkbox"] + div {
+label.checkbox > input + div {
 	width: 1.1em;
 	height: 1.1em;
 	border: var(--border);
@@ -35,12 +41,12 @@ label > input[type="checkbox"] + div {
 }
 
 @media (hover: hover) {
-	label:hover > input[type="checkbox"] + div {
+	label.checkbox:hover > input + div {
 		border-color: var(--color-primary);
 	}
 }
 
-label > input:checked + div {
+label.checkbox > input:checked + div {
 	border-color: var(--color-primary);
 	background-color: var(--color-primary);
 	background-image: var(--icon-check);

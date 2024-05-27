@@ -1,5 +1,6 @@
 <script setup>
 import Main from "../components/Main.vue";
+import Checkbox from "../components/Checkbox.vue";
 import PasswordField from "../../../login/src/components/Password.vue";
 import { ref, computed, inject } from "vue";
 import { useI18n } from "vue-i18n";
@@ -9,15 +10,37 @@ const csrf = inject("csrfToken");
 const log = inject("log");
 const prefs = inject("prefs");
 
-const main = ref(null);
+/**
+ * If true, the table for entering macronutrient targets displays
+ * all seven weekdays, regardless of whether they all contain
+ * the same values for each nutrient.
+ */
+const forceDisplayFullMacroWeek = ref(false);
 
-const macros = computed(() => {
+/**
+ * True if all macronutrient targets for all days of the week
+ * are the same.
+ */
+const allMacrosEqual = computed(() => {
 	let arr = prefs.value.macros;
-	let allEqual = arr.every((elem) => JSON.stringify(elem) == JSON.stringify(arr[0]));
-	if (allEqual) {
-		return arr.slice(0, 1).map((elem) => ({ ...elem, l10nKey: "day.all", weekend: false }));
+	return arr.every((elem) => JSON.stringify(elem) == JSON.stringify(arr[0]));
+});
+
+/**
+ * True if macro targets for individual days are different or
+ * all days of the table are forced to be visible.
+ */
+const shouldShowFullMacroTable = computed(() => !allMacrosEqual.value || forceDisplayFullMacroWeek.value);
+
+/**
+ * Returns the user's macronutrient targets, fomratted for display
+ * in the macro target settings table.
+ */
+const formattedMacros = computed(() => {
+	if (shouldShowFullMacroTable.value) {
+		return prefs.value.macros.map((elem, idx) => ({ ...elem, l10nKey: `day.cal${idx + 1}`, weekend: idx > 4 }));
 	}
-	return arr.map((elem, idx) => ({ ...elem, l10nKey: `day.cal${idx + 1}`, weekend: idx > 4 }));
+	return prefs.value.macros.slice(0, 1).map((elem) => ({ ...elem, l10nKey: "day.all", weekend: false }));
 });
 
 function onNavItem(id) {
@@ -102,6 +125,16 @@ function onChangePassword(evt) {
 		});
 }
 
+function onCheckedMacroDaily(evt) {
+	forceDisplayFullMacroWeek.value = evt.target.checked;
+	if (!evt.target.checked) {
+		let arr = prefs.value.macros;
+		for (let i = 0; i < arr.length; ++i) {
+			arr[i] = arr[0];
+		}
+	}
+}
+
 function onChangeMacros(evt) {
 	evt.target.disabled = true;
 	let form = new FormData(evt.target.form);
@@ -168,7 +201,7 @@ function onDeleteUser(evt) {
 </script>
 
 <template>
-	<Main ref="main" class="settings no-dt">
+	<Main class="settings no-dt">
 		<template #filter>
 			<nav>
 				<ul>
@@ -228,6 +261,13 @@ function onDeleteUser(evt) {
 			<section>
 				<h2 id="head-macro">{{ t("nav.targets") }}</h2>
 				<p v-html="t('profile.macrohint')"></p>
+
+				<div class="checkbox-group">
+					<Checkbox :checked="shouldShowFullMacroTable" @click="onCheckedMacroDaily">
+						<span>{{ t("profile.macroeachday") }}</span>
+					</Checkbox>
+				</div>
+
 				<form>
 					<table>
 						<thead>
@@ -240,7 +280,7 @@ function onDeleteUser(evt) {
 							</tr>
 						</thead>
 						<tbody>
-							<tr v-for="macro in macros">
+							<tr v-for="macro in formattedMacros">
 								<td class="name" :class="macro.weekend ? 'wknd' : ''">
 									<div>{{ t(macro.l10nKey) }}</div>
 								</td>
@@ -360,6 +400,23 @@ main.settings .content label {
 	color: var(--color-text-light);
 	margin-top: 1em;
 	display: block;
+}
+
+main.settings .content .checkbox-group {
+	margin: 2em 0;
+}
+
+main.settings .content label.checkbox {
+	display: flex;
+	margin: 1em 0;
+}
+
+main.settings .content label.checkbox > input + div {
+	margin-right: 0.5em;
+}
+
+main.settings .content label.checkbox > input:checked ~ * {
+	color: var(--color-text);
 }
 
 main.settings .content form > button {

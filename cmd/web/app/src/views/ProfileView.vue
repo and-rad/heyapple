@@ -11,6 +11,14 @@ const log = inject("log");
 const prefs = inject("prefs");
 
 /**
+ * We don't work on the prefs object directly, but cache the
+ * macro targets instead. This is a UX improvement because
+ * it allows us to easily reset the values in the table without
+ * reloading the page.
+ */
+const macros = ref([...prefs.value.macros]);
+
+/**
  * If true, the table for entering macronutrient targets displays
  * all seven weekdays, regardless of whether they all contain
  * the same values for each nutrient.
@@ -22,7 +30,7 @@ const forceDisplayFullMacroWeek = ref(false);
  * are the same.
  */
 const allMacrosEqual = computed(() => {
-	let arr = prefs.value.macros;
+	let arr = macros.value;
 	return arr.every((elem) => JSON.stringify(elem) == JSON.stringify(arr[0]));
 });
 
@@ -38,9 +46,9 @@ const shouldShowFullMacroTable = computed(() => !allMacrosEqual.value || forceDi
  */
 const formattedMacros = computed(() => {
 	if (shouldShowFullMacroTable.value) {
-		return prefs.value.macros.map((elem, idx) => ({ ...elem, l10nKey: `day.cal${idx + 1}`, weekend: idx > 4 }));
+		return macros.value.map((elem, idx) => ({ ...elem, l10nKey: `day.cal${idx + 1}`, weekend: idx > 4 }));
 	}
-	return prefs.value.macros.slice(0, 1).map((elem) => ({ ...elem, l10nKey: "day.all", weekend: false }));
+	return macros.value.slice(0, 1).map((elem) => ({ ...elem, l10nKey: "day.all", weekend: false }));
 });
 
 function onNavItem(id) {
@@ -125,13 +133,23 @@ function onChangePassword(evt) {
 		});
 }
 
+/**
+ * Event listener for the checkbox that controls whether to
+ * display the full week in the table for macro targets. When
+ * the checkbox is unchecked, all macros are set to the values
+ * in the first table row.
+ */
 function onCheckedMacroDaily(evt) {
 	forceDisplayFullMacroWeek.value = evt.target.checked;
-	if (!evt.target.checked) {
-		let arr = prefs.value.macros;
-		for (let i = 0; i < arr.length; ++i) {
-			arr[i] = arr[0];
-		}
+
+	if (evt.target.checked) {
+		macros.value = [...prefs.value.macros];
+		return;
+	}
+
+	let arr = macros.value;
+	for (let i = 0; i < arr.length; ++i) {
+		arr[i] = arr[0];
 	}
 }
 
@@ -145,9 +163,12 @@ function onChangeMacros(evt) {
 			arr = Array(7).fill(parseInt(arr[0]));
 		}
 		for (let i = 0; i < arr.length; ++i) {
-			prefs.value.macros[i][macro] = parseInt(arr[i]);
+			macros.value[i][macro] = parseInt(arr[i]);
 		}
 	}
+
+	let data = { ...prefs.value };
+	data.macros = macros.value;
 
 	fetch("/api/v1/prefs", {
 		method: "PUT",
@@ -155,7 +176,7 @@ function onChangeMacros(evt) {
 			"Content-Type": "application/json",
 			"X-CSRF-Token": csrf,
 		},
-		body: JSON.stringify(prefs.value),
+		body: JSON.stringify(data),
 	})
 		.then((response) => {
 			if (!response.ok) {
@@ -165,6 +186,7 @@ function onChangeMacros(evt) {
 		})
 		.then((data) => {
 			prefs.value = data;
+			macros.value = [...prefs.value.macros];
 			log.msg(t("savemacro.ok"));
 		})
 		.catch((err) => log.err(err))

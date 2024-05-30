@@ -51,6 +51,17 @@ const currentWeek = computed(() => {
 	return result;
 });
 
+/**
+ * Returns the macronutrient targets for the day that's currently
+ * selected in the diary.
+ */
+const currentMacroTargets = computed(() => {
+	if (!current.value) {
+		return prefs.value.macros[0];
+	}
+	return prefs.value.macros[currentDate.value.weekday - 1];
+});
+
 let hasTabDrag = false;
 
 function onTabSlide(evt) {
@@ -218,11 +229,11 @@ onMounted(() => {
 		<template #main>
 			<section id="charts-week">
 				<button
-					v-for="day in currentWeek"
+					v-for="(day, idx) in currentWeek"
 					:data-date="day.date"
 					:class="{ today: day.today, active: day.active }"
 					@click="calendar.onDay">
-					<PieChart range="360" :value="day.value" :max="prefs.macros[0].kcal">
+					<PieChart range="360" :value="day.value" :max="prefs.macros[idx].kcal">
 						<template #details>
 							<span>{{ day.weekday }}</span>
 							<span>{{ day.calday }}</span>
@@ -239,7 +250,7 @@ onMounted(() => {
 					:label="t('food.energy')"
 					:unit="t('unit.cal')"
 					:value="current ? current.kcal : 0"
-					:max="prefs.macros[0].kcal" />
+					:max="currentMacroTargets.kcal" />
 				<PieChart
 					class="fat"
 					start="225"
@@ -248,7 +259,7 @@ onMounted(() => {
 					:label="t('food.fat')"
 					:unit="t('unit.g')"
 					:value="current ? current.fat : 0"
-					:max="prefs.macros[0].fat" />
+					:max="currentMacroTargets.fat" />
 				<PieChart
 					class="carb"
 					start="225"
@@ -257,7 +268,7 @@ onMounted(() => {
 					:label="t('food.carbs2')"
 					:unit="t('unit.g')"
 					:value="current ? current.carb : 0"
-					:max="prefs.macros[0].carb" />
+					:max="currentMacroTargets.carb" />
 				<PieChart
 					class="prot"
 					start="225"
@@ -266,7 +277,7 @@ onMounted(() => {
 					:label="t('food.protein')"
 					:unit="t('unit.g')"
 					:value="current ? current.prot : 0"
-					:max="prefs.macros[0].prot" />
+					:max="currentMacroTargets.prot" />
 			</section>
 			<h2>{{ t("aria.headcarbcomp") }}</h2>
 			<section class="charts-nutrient">

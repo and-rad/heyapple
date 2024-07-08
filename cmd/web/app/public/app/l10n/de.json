@@ -239,6 +239,7 @@
 			"emailhint": "Wenn du deine E-Mail-Adresse änderst, wird ein Aktivierungslink an diese neue Adresse gesendet. Erst, wenn diese Aktivierung abgeschlossen ist, kann die neue Adresse zur Anmeldung genutzt werden.",
 			"macroeachday": "Makroziele für jeden Tag einzeln setzen",
 			"macrohint": "Die Ziele für Makronährstoffe können für jeden Tag einzeln gesetzt werden. Du kannst den Wert entweder direkt eingeben oder prozentuale Angaben verwenden. Je nachdem, welcher Modus aktiv ist, werden die Werte, die du nicht gerade bearbeitest, automatisch angepasst. <a href='#'>Lern mehr darüber, wie das funktioniert</a>.",
+			"macropercent": "Makroziele prozentual ermitteln",
 			"name": "Benutzername",
 			"namehint": "Dein Benutzername wird dir zufällig zugewiesen, wenn du ihn das erste Mal \"würfelst\". Wenn du ihn ändern möchtest, klick auf die Schaltfläche unten.",
 			"namelink": "Was ist das?",

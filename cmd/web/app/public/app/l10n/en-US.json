@@ -239,6 +239,7 @@
 			"emailhint": "When you change your e-mail address, a link to activate it will be sent to the new address. The change becomes effective only after the steps outlined in that message are completed.",
 			"macroeachday": "Set macro targets for each day individually",
 			"macrohint": "Macronutrient targets can be set for each individual day of the week. You can enter the amount directly or use percentages. Depending on which of these modes is active, the values that you don't enter are adjusted automatically. <a href='#'>Learn more about how this works</a>.",
+			"macropercent": "Track macro targets as percentage of total calories",
 			"name": "Username",
 			"namehint": "Your username is randomly assigned to you the first time you \"roll\" for it. If you want to change it, click the button below.",
 			"namelink": "What's this?",

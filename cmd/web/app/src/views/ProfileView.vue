@@ -26,6 +26,19 @@ const macros = ref([...prefs.value.macros]);
 const forceDisplayFullMacroWeek = ref(false);
 
 /**
+ * Shows macro target values as percentage of the total kcal
+ * goal. This is only an aid for editing values and won't be
+ * saved between visits to the page.
+ */
+const displayMacroPercentage = ref(false);
+
+/**
+ * The unit that macronutrient targets are displayed in. Can be
+ * grams or percentage, depending on the display settings.
+ */
+const macroUnit = computed(() => (displayMacroPercentage.value ? "%" : t("unit.g")));
+
+/**
  * True if all macronutrient targets for all days of the week
  * are the same.
  */
@@ -45,10 +58,33 @@ const shouldShowFullMacroTable = computed(() => !allMacrosEqual.value || forceDi
  * in the macro target settings table.
  */
 const formattedMacros = computed(() => {
+	let result = [];
+
+	// Prepare additional display elements
 	if (shouldShowFullMacroTable.value) {
-		return macros.value.map((elem, idx) => ({ ...elem, l10nKey: `day.cal${idx + 1}`, weekend: idx > 4 }));
+		result = macros.value.map((elem, idx) => ({ ...elem, l10nKey: `day.cal${idx + 1}`, weekend: idx > 4 }));
+	} else {
+		result = macros.value.slice(0, 1).map((elem) => ({ ...elem, l10nKey: "day.all", weekend: false }));
 	}
-	return macros.value.slice(0, 1).map((elem) => ({ ...elem, l10nKey: "day.all", weekend: false }));
+
+	// Convert to percentage of kcal if necessary
+	if (displayMacroPercentage.value) {
+		result.forEach((elem) => {
+			elem.fat *= 900.0 / elem.kcal;
+			elem.carb *= 400.0 / elem.kcal;
+			elem.prot *= 400.0 / elem.kcal;
+		});
+	}
+
+	// Format numbers to fit the input fields
+	const numFrac = displayMacroPercentage.value ? 1 : 0;
+	result.forEach((elem) => {
+		elem.fat = parseFloat(elem.fat).toFixed(numFrac);
+		elem.carb = parseFloat(elem.carb).toFixed(numFrac);
+		elem.prot = parseFloat(elem.prot).toFixed(numFrac);
+	});
+
+	return result;
 });
 
 function onNavItem(id) {
@@ -151,6 +187,15 @@ function onCheckedMacroDaily(evt) {
 	for (let i = 0; i < arr.length; ++i) {
 		arr[i] = arr[0];
 	}
+}
+
+/**
+ * Event listener for the checkbox that controls whether the
+ * macronutrient targets are displayed as percentages of the
+ * total daily calories.
+ */
+function onCheckedMacroPercentage(evt) {
+	displayMacroPercentage.value = evt.target.checked;
 }
 
 function onChangeMacros(evt) {
@@ -288,6 +333,9 @@ function onDeleteUser(evt) {
 					<Checkbox :checked="shouldShowFullMacroTable" @click="onCheckedMacroDaily">
 						<span>{{ t("profile.macroeachday") }}</span>
 					</Checkbox>
+					<Checkbox :checked="displayMacroPercentage" @click="onCheckedMacroPercentage">
+						<span>{{ t("profile.macropercent") }}</span>
+					</Checkbox>
 				</div>
 
 				<form>
@@ -312,15 +360,15 @@ function onDeleteUser(evt) {
 								</td>
 								<td class="num">
 									<input type="number" name="fat" :value="macro.fat" />
-									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
+									<span class="unit">&nbsp;{{ macroUnit }}</span>
 								</td>
 								<td class="num">
 									<input type="number" name="carb" :value="macro.carb" />
-									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
+									<span class="unit">&nbsp;{{ macroUnit }}</span>
 								</td>
 								<td class="num">
 									<input type="number" name="prot" :value="macro.prot" />
-									<span class="unit">&nbsp;{{ t("unit.g") }}</span>
+									<span class="unit">&nbsp;{{ macroUnit }}</span>
 								</td>
 							</tr>
 						</tbody>
@@ -390,6 +438,10 @@ main.settings .content h2:first-child {
 main.settings .content section {
 	max-width: 480px;
 	margin: auto;
+}
+
+main.settings .content section:last-child {
+	margin-bottom: 50vh;
 }
 
 main.settings .content section.danger {
@@ -489,6 +541,7 @@ main.settings .content table td.num input {
 main.settings .content table span.unit {
 	border-bottom: var(--border);
 	display: inline-block;
+	min-width: 1.1em;
 }
 
 main.settings .content table td.num input:focus + span.unit {

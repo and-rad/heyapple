@@ -273,13 +273,13 @@ function onDeleteUser(evt) {
 			<nav>
 				<ul>
 					<li>
-						<a @click="onNavItem('head-account')"> {{ t("nav.account") }} </a>
+						<a @click="onNavItem('head-macro')"> {{ t("nav.targets") }} </a>
 					</li>
 					<!--<li>
 						<a @click="onNavItem('head-body')"> {{ t("nav.body") }} </a>
 					</li>-->
 					<li>
-						<a @click="onNavItem('head-macro')"> {{ t("nav.targets") }} </a>
+						<a @click="onNavItem('head-account')"> {{ t("nav.account") }} </a>
 					</li>
 					<li>
 						<a @click="onNavItem('head-danger')"> {{ t("nav.danger") }} </a>
@@ -289,42 +289,6 @@ function onDeleteUser(evt) {
 		</template>
 
 		<template #main>
-			<section>
-				<h2 id="head-account">{{ t("nav.account") }}</h2>
-				<form @submit.prevent>
-					<label>{{ t("profile.email") }}</label>
-					<input type="email" name="email" :value="prefs.account.email" />
-					<p v-html="t('profile.emailhint')"></p>
-					<button type="button" @click="onSaveEmail" class="async">
-						{{ t("btn.changemail") }}
-					</button>
-				</form>
-				<form @submit.prevent>
-					<label>
-						{{ t("profile.name") }} <a href="#">{{ t("profile.namelink") }}</a>
-					</label>
-					<input readonly type="text" name="name" :value="prefs.account.name" />
-					<p v-html="t('profile.namehint')"></p>
-					<button type="button" @click="onRollUsername" class="async">
-						{{ t("btn.reroll") }}
-					</button>
-				</form>
-				<form @submit.prevent>
-					<label>{{ t("profile.passold") }}</label>
-					<PasswordField ref="passField" name="passold" />
-					<label>{{ t("profile.passnew") }}</label>
-					<PasswordField ref="passField" name="passnew" withBar="true" />
-					<p v-html="t('profile.passhint')"></p>
-					<button type="button" @click="onChangePassword" class="async">
-						{{ t("btn.changepass") }}
-					</button>
-				</form>
-			</section>
-
-			<!--<section>
-				<h2 id="head-body">{{ t("nav.body") }}</h2>
-			</section>-->
-
 			<section>
 				<h2 id="head-macro">{{ t("nav.targets") }}</h2>
 				<p v-html="t('profile.macrohint')"></p>
@@ -375,6 +339,42 @@ function onDeleteUser(evt) {
 					</table>
 					<button type="button" @click="onChangeMacros" class="async">
 						{{ t("btn.changemacro") }}
+					</button>
+				</form>
+			</section>
+
+			<!--<section>
+				<h2 id="head-body">{{ t("nav.body") }}</h2>
+			</section>-->
+
+			<section>
+				<h2 id="head-account">{{ t("nav.account") }}</h2>
+				<form @submit.prevent>
+					<label>{{ t("profile.email") }}</label>
+					<input type="email" name="email" :value="prefs.account.email" />
+					<p v-html="t('profile.emailhint')"></p>
+					<button type="button" @click="onSaveEmail" class="async">
+						{{ t("btn.changemail") }}
+					</button>
+				</form>
+				<form @submit.prevent>
+					<label>
+						{{ t("profile.name") }} <a href="#">{{ t("profile.namelink") }}</a>
+					</label>
+					<input readonly type="text" name="name" :value="prefs.account.name" />
+					<p v-html="t('profile.namehint')"></p>
+					<button type="button" @click="onRollUsername" class="async">
+						{{ t("btn.reroll") }}
+					</button>
+				</form>
+				<form @submit.prevent>
+					<label>{{ t("profile.passold") }}</label>
+					<PasswordField ref="passField" name="passold" />
+					<label>{{ t("profile.passnew") }}</label>
+					<PasswordField ref="passField" name="passnew" withBar="true" />
+					<p v-html="t('profile.passhint')"></p>
+					<button type="button" @click="onChangePassword" class="async">
+						{{ t("btn.changepass") }}
 					</button>
 				</form>
 			</section>

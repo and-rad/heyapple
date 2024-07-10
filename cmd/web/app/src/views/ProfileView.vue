@@ -33,6 +33,14 @@ const forceDisplayFullMacroWeek = ref(false);
 const displayMacroPercentage = ref(false);
 
 /**
+ * The index of the page section that is currently in view.
+ * A section is considered in view if it is the lowest section
+ * that starts above the vertical centerline of the viewport.
+ * Used for styling navigation entries.
+ */
+const selectedSection = ref(0);
+
+/**
  * The unit that macronutrient targets are displayed in. Can be
  * grams or percentage, depending on the display settings.
  */
@@ -90,6 +98,17 @@ const formattedMacros = computed(() => {
 function onNavItem(id) {
 	let target = document.getElementById(id);
 	target.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+function onScroll() {
+	const sections = document.querySelectorAll(".content > section");
+	const center = window.innerHeight * 0.5;
+	for (let i = sections.length - 1; i >= 0; --i) {
+		if (sections[i].getBoundingClientRect().top < center) {
+			selectedSection.value = i;
+			return;
+		}
+	}
 }
 
 function onSaveEmail(evt) {
@@ -268,21 +287,29 @@ function onDeleteUser(evt) {
 </script>
 
 <template>
-	<Main class="settings no-dt">
+	<Main class="settings no-dt" @scroll="onScroll">
 		<template #filter>
 			<nav>
 				<ul>
 					<li>
-						<a @click="onNavItem('head-macro')"> {{ t("nav.targets") }} </a>
+						<a @click="onNavItem('head-macro')" :class="selectedSection == 0 ? 'selected' : ''">
+							{{ t("nav.targets") }}
+						</a>
 					</li>
 					<!--<li>
-						<a @click="onNavItem('head-body')"> {{ t("nav.body") }} </a>
+						<a @click="onNavItem('head-body')" :class="selectedSection == 1 ? 'selected' : ''">
+							{{ t("nav.body") }}
+						</a>
 					</li>-->
 					<li>
-						<a @click="onNavItem('head-account')"> {{ t("nav.account") }} </a>
+						<a @click="onNavItem('head-account')" :class="selectedSection == 1 ? 'selected' : ''">
+							{{ t("nav.account") }}
+						</a>
 					</li>
 					<li>
-						<a @click="onNavItem('head-danger')"> {{ t("nav.danger") }} </a>
+						<a @click="onNavItem('head-danger')" :class="selectedSection == 2 ? 'selected' : ''">
+							{{ t("nav.danger") }}
+						</a>
 					</li>
 				</ul>
 			</nav>

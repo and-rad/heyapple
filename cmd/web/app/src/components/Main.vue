@@ -8,7 +8,7 @@ import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 const prefs = inject("prefs");
-const emit = defineEmits(["detailVisibility"]);
+const emit = defineEmits(["detailVisibility", "scroll"]);
 const filter = ref(false);
 const details = ref(false);
 
@@ -43,6 +43,10 @@ function hideDetails() {
 	}
 }
 
+function onScroll() {
+	emit("scroll");
+}
+
 defineExpose({ showDetails, hideDetails });
 </script>
 
@@ -58,7 +62,7 @@ defineExpose({ showDetails, hideDetails });
 				<slot name="controls"><span class="spacer"></span></slot>
 				<button @click="showDetails" class="open-details icon"><MoreImage /></button>
 			</div>
-			<div class="content">
+			<div class="content" @scroll.passive="onScroll">
 				<slot name="main">This is the main area</slot>
 			</div>
 		</div>

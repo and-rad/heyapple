@@ -241,8 +241,7 @@
 			"macrohint": "Macronutrient targets can be set for each individual day of the week. You can enter the amount directly or use percentages. Depending on which of these modes is active, the values that you don't enter are adjusted automatically. <a href='#'>Learn more about how this works</a>.",
 			"macropercent": "Track macro targets as percentage of total calories",
 			"name": "Username",
-			"namehint": "Your username is randomly assigned to you the first time you \"roll\" for it. If you want to change it, click the button below.",
-			"namelink": "What's this?",
+			"namehint": "Your username is randomly assigned to you the first time you \"roll\" for it. If you want to change it, click the button below. Usernames are used for <a href='#'>social features</a>.",
 			"passhint": "Passwords must be at least 10 characters long and should contain a mix of letters, numbers, and special characters.",
 			"passnew": "New Password",
 			"passold": "Current Password"

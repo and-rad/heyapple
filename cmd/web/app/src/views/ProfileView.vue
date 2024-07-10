@@ -385,9 +385,7 @@ function onDeleteUser(evt) {
 					</button>
 				</form>
 				<form @submit.prevent>
-					<label>
-						{{ t("profile.name") }} <a href="#">{{ t("profile.namelink") }}</a>
-					</label>
+					<label>{{ t("profile.name") }}</label>
 					<input readonly type="text" name="name" :value="prefs.account.name" />
 					<p v-html="t('profile.namehint')"></p>
 					<button type="button" @click="onRollUsername" class="async">

@@ -241,8 +241,7 @@
 			"macrohint": "Die Ziele für Makronährstoffe können für jeden Tag einzeln gesetzt werden. Du kannst den Wert entweder direkt eingeben oder prozentuale Angaben verwenden. Je nachdem, welcher Modus aktiv ist, werden die Werte, die du nicht gerade bearbeitest, automatisch angepasst. <a href='#'>Lern mehr darüber, wie das funktioniert</a>.",
 			"macropercent": "Makroziele prozentual ermitteln",
 			"name": "Benutzername",
-			"namehint": "Dein Benutzername wird dir zufällig zugewiesen, wenn du ihn das erste Mal \"würfelst\". Wenn du ihn ändern möchtest, klick auf die Schaltfläche unten.",
-			"namelink": "Was ist das?",
+			"namehint": "Dein Benutzername wird dir zufällig zugewiesen, wenn du ihn das erste Mal \"würfelst\". Wenn du ihn ändern möchtest, klick auf die Schaltfläche unten. Benutzernamen werden für <a href='#'>Soziale Funktionen</a> verwendet.",
 			"passhint": "Passwörter müssen mindestens 10 Zeichen lang sein und sollten eine Mischung aus Buchstaben, Ziffern und Sonderzeichen enthalten.",
 			"passnew": "Neues Passwort",
 			"passold": "Aktuelles Passwort"
